@@ -25,5 +25,5 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
-rootProject.name = "servers"
+rootProject.name = "signature_servers"
 

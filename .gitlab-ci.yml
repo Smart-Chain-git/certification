@@ -1,0 +1,92 @@
+#
+# GITLAB - CI
+#
+
+# We use a gradle image to run all stages of the pipeline.
+# Each stage runs a bare (not wrapped) `gradle ...` command.
+image: gradle:6.2
+
+# The pipeline consists of several stages. Each one is run in parallel.
+stages:
+  - compile
+  - test # runs all the tests of the application.
+  - upload
+
+# Sets the environement variables before executing scripts.
+variables:
+  # We use gradle without the deamon. It would be destroyed at each container startup anyway.
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+  TZ: "Europe/Paris"
+
+# Before each stage's script.
+before_script:
+  - echo `pwd` # debug
+  - echo "$CI_BUILD_NAME, $CI_BUILD_REF_NAME $CI_BUILD_STAGE" # debug
+  - export GRADLE_USER_HOME=`pwd`/.gradle
+
+# There use to be a `cache` key here. We removed it because it was actually
+# slower than downloading again the ressources.
+# All gradle dependencies are fetched from the Nexus. It was slower to unzip the
+# cache before the stage and rezip it after the stage.
+cache:
+  key: tezosserveurs
+
+#
+# Stage : Compile
+#
+compilation:
+  stage: compile
+
+  # We tell gitlab-ci to use a machine running the docker-runner from gitlab.
+  # Here, we need the script to be run in a docker image (using the gradle image defined above).
+  tags:
+    - docker
+
+  script:
+    - gradle compileTestKotlin
+  # We create an artifact to be passed to the next stage.
+  # Artifact contain the backend related compiled classes and ressources.
+  artifacts:
+    expire_in: 10 hrs
+    when: always
+    paths:
+      - "*/*/build"
+#
+# Stage : Test
+#
+
+test back unit:
+  stage: test
+  # We tell gitlab-ci to use a machine running the docker-runner from gitlab.
+  # Here, we need the script to be run in a docker image (using the gradle image defined above).
+  tags:
+    - docker
+  # We can use the bare gradle command here because of the gradle docker image.
+  # We use the `continue` option to display each test failure in the console instead of only the first one.
+  script:
+    - gradle test --continue
+  # We create an artifact to be passed to the next stage.
+  # Artifact contain the backend related compiled classes and ressources.
+  artifacts:
+    expire_in: 10 hrs
+    when: always
+    paths:
+      - "*/*/build"
+
+
+
+sonar:
+  stage: upload
+  tags:
+    - docker
+  # The (free) version of Sonar we use doesnt verify the branch on which the analysis is done.
+  # Because, there can be WIP on developement branches, is would destroy the graphs. Hence we run
+  # the sonar analysis only on master branch and release tags.
+  only:
+    refs:
+      - master
+      - tags
+  script:
+    # Build and upload the result of sonarqube analysis.
+    # http://sonarqube.sonar.10.20.2.179.xip.io/dashboard?id=com.kami%3Aoutside
+    - gradle check jacocoRootReport sonarqube
