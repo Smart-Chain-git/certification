@@ -14,8 +14,7 @@ stages:
 
 # Sets the environement variables before executing scripts.
 variables:
-  # We use gradle without the deamon. It would be destroyed at each container startup anyway.
-  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+  # timezone for TU that use date
   TZ: "Europe/Paris"
 
 # Before each stage's script.
