@@ -1,0 +1,22 @@
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**
+!**/src/test/**
+
+data
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+
+# Created during *postinstall*.
+frontend/public/skins
+
+# Created by the JVM
+java_pid*
+/frontend/cypress/videos/
+/frontend/cypress/screenshots/
