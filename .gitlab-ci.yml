@@ -55,7 +55,7 @@ compilation:
 # Stage : Test
 #
 
-test back unit:
+test unit:
   stage: test
   # We tell gitlab-ci to use a machine running the docker-runner from gitlab.
   # Here, we need the script to be run in a docker image (using the gradle image defined above).
