@@ -27,3 +27,5 @@ pluginManagement {
 }
 rootProject.name = "signature_servers"
 
+include (":frontend:ihm")
+

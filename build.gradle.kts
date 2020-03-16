@@ -28,6 +28,7 @@ description = "application de signature vie blockchain"
 allprojects {
     apply(plugin = "io.spring.dependency-management")
     apply(plugin = "jacoco")
+    apply(plugin = "java")
 
     val mavenProxyUrl: String by extra
 
@@ -86,32 +87,18 @@ sonarqube {
     }
 }
 
-
-tasks {
-    val jacocoMerge by creating(JacocoMerge::class) {
-        executionData = fileTree(project.projectDir) {
-            include("**/*.exec")
-            include("**/*.ec")
-        }
-        doFirst {
-            executionData = files(executionData.filter { it.exists() })
-        }
-    }
-
-    val jacocoTestReport = this.getByName("jacocoTestReport")
-    jacocoTestReport.dependsOn(subprojects.map { it.tasks["jacocoTestReport"] })
-    jacocoMerge.dependsOn(jacocoTestReport)
-
-    val jacocoRootReport by creating(JacocoReport::class) {
-        description = "Generates an aggregate report from all subprojects"
-        group = "Coverage reports"
-        dependsOn(jacocoMerge)
-        sourceDirectories.setFrom(files(subprojects.flatMap { it.sourceSets["main"].allSource.srcDirs.filter { it.exists() } } ))
-        classDirectories.setFrom(files(subprojects.flatMap { it.sourceSets["main"].output } ))
-        executionData(jacocoMerge.destinationFile)
-        reports {
-            html.isEnabled = true
-            xml.isEnabled = true
-        }
+task<JacocoReport>("jacocoRootReport") {
+    dependsOn(subprojects.map { it.tasks.withType<Test>() })
+    dependsOn(subprojects.map { it.tasks.withType<JacocoReport>() })
+    additionalSourceDirs.setFrom(subprojects.map { it.the<SourceSetContainer>()["main"].allSource.srcDirs })
+    sourceDirectories.setFrom(subprojects.map { it.project.the<SourceSetContainer>()["main"].allSource.srcDirs })
+    classDirectories.setFrom(subprojects.map { it.project.the<SourceSetContainer>()["main"].output })
+    executionData.setFrom(project.fileTree(".") {
+        include("**/build/jacoco/test.exec")
+    })
+    reports {
+        xml.isEnabled = true
+        csv.isEnabled = false
+        html.isEnabled = true
     }
 }
