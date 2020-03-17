@@ -5,6 +5,7 @@ plugins {
 }
 
 description = "serveur ihm"
+val artefactName="signature-ihm"
 dependencies {
 
     implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -43,7 +44,16 @@ springBoot {
 
 tasks {
     bootJar {
-        archiveBaseName.set("signature-ihm")
+        archiveBaseName.set(artefactName)
+    }
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            artifactId = artefactName
+            artifact(tasks["bootJar"])
+        }
     }
 }
 

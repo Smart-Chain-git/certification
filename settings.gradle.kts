@@ -25,7 +25,7 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
-rootProject.name = "signature_servers"
+rootProject.name = "com.sword.signature.servers"
 
 include (":frontend:ihm")
 

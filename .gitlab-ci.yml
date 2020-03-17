@@ -10,7 +10,7 @@ image: gradle:6.2
 stages:
   - compile
   - test # runs all the tests of the application.
-  - upload
+  - publish
 
 # Sets the environement variables before executing scripts.
 variables:
@@ -75,7 +75,7 @@ test unit:
 
 
 sonar:
-  stage: upload
+  stage: publish
   tags:
     - docker
   # The (free) version of Sonar we use doesnt verify the branch on which the analysis is done.
@@ -89,3 +89,9 @@ sonar:
     # Build and upload the result of sonarqube analysis.
     # http://sonarqube.sonar.10.20.2.179.xip.io/dashboard?id=com.kami%3Aoutside
     - gradle check jacocoRootReport sonarqube
+publishJar:
+  stage: publish
+  tags:
+    - docker
+  script:
+    - gradle publish -PmavenProxyUrl=$MAVEN_PROXY_URL -PnexusUrl=$NEXUS_URL -PnexusUser=$NEXUS_USER -PnexusPassword=$NEXUS_PASSWORD -PreleasesRepo=$RELEASES_REPO -PsnapshotsRepo=$SNAPSHOTS_REPO

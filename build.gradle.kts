@@ -20,24 +20,28 @@ plugins {
     kotlin("jvm")
     id("jacoco")
     id("org.sonarqube")
+    id("maven-publish")
 }
 
-group = "com.sword.signature"
-version = "0.0.1-SNAPSHOT"
+
 description = "application de signature vie blockchain"
 allprojects {
     apply(plugin = "io.spring.dependency-management")
     apply(plugin = "jacoco")
     apply(plugin = "java")
+    apply(plugin = "maven-publish")
+
+    group = "com.sword.signature"
+    version = "0.0.1-SNAPSHOT"
 
     val mavenProxyUrl: String by extra
 
     repositories {
         mavenLocal()
-        maven { url = uri(mavenProxyUrl) ; isAllowInsecureProtocol=true}
+        maven { url = uri(mavenProxyUrl); isAllowInsecureProtocol = true }
         maven { url = uri("https://repo.spring.io/snapshot") }
         maven { url = uri("https://repo.spring.io/milestone") }
-        maven{ url=uri("https://oss.sonatype.org/content/repositories/snapshots/")}
+        maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots/") }
         gradlePluginPortal()
     }
 
@@ -76,6 +80,33 @@ allprojects {
             }
         }
     }
+
+    publishing {
+
+        val nexusUrl: String by project.extra
+        val nexusUser: String by project.extra
+        val nexusPassword: String by project.extra
+        val releasesRepo: String by project.extra
+        val snapshotsRepo: String by project.extra
+
+
+        repositories {
+            maven {
+                credentials {
+                    username = nexusUser
+                    password = nexusPassword
+                }
+
+                val releasesRepoUrl = "${nexusUrl}/repository/${releasesRepo}"
+                val snapshotsRepoUrl = "${nexusUrl}/repository/${snapshotsRepo}"
+                url = if (version.toString().endsWith("SNAPSHOT")) {
+                    uri(snapshotsRepoUrl)
+                } else {
+                    uri(releasesRepoUrl)
+                }
+            }
+        }
+    }
 }
 
 sonarqube {
@@ -102,3 +133,5 @@ task<JacocoReport>("jacocoRootReport") {
         html.isEnabled = true
     }
 }
+
+
