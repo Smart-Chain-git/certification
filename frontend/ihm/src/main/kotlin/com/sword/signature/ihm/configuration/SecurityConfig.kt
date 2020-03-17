@@ -13,7 +13,6 @@ class KotlinSecurityConfiguration : WebSecurityConfigurerAdapter() {
 
     override fun configure(http: HttpSecurity?) {
         http {
-            httpBasic {}
             cors { disable() }
             csrf { disable() }
             authorizeRequests {
