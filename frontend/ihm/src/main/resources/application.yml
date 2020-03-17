@@ -19,6 +19,18 @@ spring:
     basename: locale/messages
     encoding : UTF-8
 
+  data:
+    mongodb:
+      #host: localhost
+      #port: 27017
+      #user: root
+      #password: password
+      auto-index-creation: false
+      #authentication-database: admin
+      #database: tezos-signature
+      uri: mongodb://root:password@localhost:27017/tezos-signature?authSource=admin&authMechanism=SCRAM-SHA-1
+  profiles:
+    active: prod
 
 logging:
   level:
