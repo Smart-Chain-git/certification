@@ -1,0 +1,31 @@
+context:
+  initializer:
+    classes: com.sword.signature.ihm.configuration.BeansInitialiser
+management:
+  endpoints:
+    web:
+     exposure:
+      include: info,health
+    health:
+      show-details: always
+
+
+spring:
+  thymeleaf:
+    cache: true
+    mode: HTML
+    encoding: UTF-8
+
+  messages:
+    basename: locale/messages
+    encoding : UTF-8
+
+
+logging:
+  level:
+    root: info
+    com:
+      sword: debug
+    org:
+      springframework:
+        security: info
