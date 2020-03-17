@@ -26,8 +26,7 @@ dependencies {
     runtimeOnly("org.webjars:bootstrap-notify:3.1.3-1")
 
 
-    runtimeOnly("org.springframework.boot:spring-boot-devtools")
-
+    compileOnly("org.springframework.boot:spring-boot-devtools")
 
     val mockKVersion: String by project.extra
     testImplementation("io.mockk:mockk:$mockKVersion")

@@ -12,7 +12,6 @@ management:
 
 spring:
   thymeleaf:
-    cache: true
     mode: HTML
     encoding: UTF-8
 
@@ -26,6 +25,7 @@ logging:
     root: info
     com:
       sword: debug
+    web : debug
     org:
       springframework:
         security: info

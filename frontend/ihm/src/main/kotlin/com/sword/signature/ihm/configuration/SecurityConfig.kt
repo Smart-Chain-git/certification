@@ -17,12 +17,17 @@ class KotlinSecurityConfiguration : WebSecurityConfigurerAdapter() {
             csrf { disable() }
             authorizeRequests {
 
-                authorize("/css/**", permitAll)
-                authorize("/webjars/**", permitAll)
-                authorize("/images/**", permitAll)
+                authorize("/css/", permitAll)
+                authorize("/webjars/", permitAll)
+                authorize("/images/", permitAll)
                 authorize("/index", permitAll)
                 authorize("/login", permitAll)
+
             }
+            exceptionHandling {
+                accessDeniedPage = "/forbidden"
+            }
+
             formLogin {
                 loginPage = "/login"
                 failureUrl = "/loginerror"

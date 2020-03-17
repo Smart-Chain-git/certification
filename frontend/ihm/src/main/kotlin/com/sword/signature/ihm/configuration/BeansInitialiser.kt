@@ -9,11 +9,13 @@ import org.springframework.http.MediaType.TEXT_HTML
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.provisioning.InMemoryUserDetailsManager
 import org.springframework.web.servlet.function.router
+import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect
 
 
 fun bean() = beans {
     bean {
-
+        //manager des utilisateur en meoire et completement pouri
+        // TODO mettre une vrai gestion des user
         fun user(user: String, pw: String, vararg roles: String) =
             User.withDefaultPasswordEncoder().username(user).password(pw).roles(*roles).build()
 
@@ -29,8 +31,12 @@ fun bean() = beans {
                 GET("/login", ref<MainHandler>()::login)
                 GET("/loginerror", ref<MainHandler>()::loginError)
             }
-            resources("/**", ClassPathResource("static/"))
+            resources("/css", ClassPathResource("/static/css"))
         }
+    }
+    bean {
+        //support spring security for thymeleaf
+        SpringSecurityDialect()
     }
 
 }
