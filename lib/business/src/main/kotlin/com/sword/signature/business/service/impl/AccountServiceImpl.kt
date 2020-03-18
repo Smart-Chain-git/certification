@@ -2,6 +2,7 @@ package com.sword.signature.business.service.impl
 
 import com.sword.signature.business.exception.AccountNotFoundException
 import com.sword.signature.business.exception.EntityNotFoundException
+import com.sword.signature.business.exception.ServiceException
 import com.sword.signature.business.model.Account
 import com.sword.signature.business.model.AccountCreate
 import com.sword.signature.business.model.AccountPatch
@@ -10,17 +11,17 @@ import com.sword.signature.business.service.AccountService
 import com.sword.signature.model.entity.AccountEntity
 import com.sword.signature.model.repository.AccountRepository
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
-import org.springframework.stereotype.Component
-import java.util.*
+import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
-@Component
+@Service
 class AccountServiceImpl(
-        @Autowired val accountRepository: AccountRepository
+        private val accountRepository: AccountRepository
 ) : AccountService {
+    @Transactional(rollbackFor = [ServiceException::class])
     override fun createAccount(accountDetails: AccountCreate): Account {
-        LOGGER.trace("Creating new account...")
+        LOGGER.trace("Creating new account.")
         val toCreate = AccountEntity(
                 login = accountDetails.login,
                 email = accountDetails.email,
@@ -33,6 +34,7 @@ class AccountServiceImpl(
         return createdAccount
     }
 
+    @Transactional(rollbackFor = [ServiceException::class])
     override fun getAccount(accountId: String): Account {
         LOGGER.trace("Retrieving account with id ({}).", accountId)
         val account: Account = accountRepository.findByIdOrNull(accountId)?.toBusiness()
@@ -41,6 +43,7 @@ class AccountServiceImpl(
         return account
     }
 
+    @Transactional(rollbackFor = [ServiceException::class])
     override fun getAccountByLoginOrEmail(loginOrEmail: String): Account {
         LOGGER.trace("Retrieving account with login or email ({}).", loginOrEmail)
         val account: Account = accountRepository.findFirstByLoginOrEmail(loginOrEmail)?.toBusiness()
@@ -49,16 +52,37 @@ class AccountServiceImpl(
         return account
     }
 
+    @Transactional(rollbackFor = [ServiceException::class])
     override fun getAccounts(): List<Account> {
-        TODO("Not yet implemented")
+        LOGGER.trace("Retrieving all accounts.")
+        val accounts: List<Account> = accountRepository.findAll().map { it.toBusiness() }
+        LOGGER.trace("{} accounts retrieved.", accounts.size)
+        return accounts
     }
 
+    @Transactional(rollbackFor = [ServiceException::class])
     override fun patchAccount(accountId: String, accountDetails: AccountPatch): Account {
-        TODO("Not yet implemented")
+        LOGGER.trace("Update account with id({}).", accountId)
+        val account: AccountEntity = accountRepository.findByIdOrNull(accountId)
+                ?: throw EntityNotFoundException("account", accountId)
+        val toPatch = account.copy(
+                login = accountDetails.login ?: account.login,
+                email = accountDetails.email ?: account.email,
+                password = accountDetails.password ?: account.password,
+                fullName = accountDetails.fullName ?: account.fullName
+        )
+        val updatedAccount = accountRepository.save(toPatch).toBusiness()
+        LOGGER.trace("Account with id ({}) updated.", accountId)
+        return updatedAccount
     }
 
+    @Transactional(rollbackFor = [ServiceException::class])
     override fun deleteAccount(accountId: String) {
-        TODO("Not yet implemented")
+        LOGGER.trace("Delete account with id ({}).", accountId)
+        val account: AccountEntity = accountRepository.findByIdOrNull(accountId)
+                ?: throw EntityNotFoundException("account", accountId)
+        accountRepository.delete(account)
+        LOGGER.trace("Account with id ({}) deleted.")
     }
 
     companion object {

@@ -12,6 +12,8 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     // Project
     implementation(project(":lib:model"))
+    // Spring
+    implementation("org.springframework.boot:spring-boot-starter")
 }
 
 tasks {

@@ -14,7 +14,7 @@ data class AccountEntity(
         @Indexed(unique = true)
         val email: String,
         val password: String,
-        val fullName: String
+        val fullName: String?
 ) {
 
 }

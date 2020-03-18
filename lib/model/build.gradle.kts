@@ -1,3 +1,5 @@
+val mongockVersion: String by project.extra
+
 plugins {
     id("kotlin")
     kotlin("plugin.spring")
@@ -12,6 +14,8 @@ dependencies {
 
     // MongoDB
     api("org.springframework.boot:spring-boot-starter-data-mongodb")
+    // Mongobee
+    implementation("com.github.cloudyrock.mongock:mongock-spring:$mongockVersion")
 }
 
 tasks {

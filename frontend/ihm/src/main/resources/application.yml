@@ -4,40 +4,27 @@ context:
 management:
   endpoints:
     web:
-     exposure:
-      include: info,health
+      exposure:
+        include: info,health
     health:
       show-details: always
-
-
 spring:
   thymeleaf:
     mode: HTML
     encoding: UTF-8
-
   messages:
     basename: locale/messages
-    encoding : UTF-8
-
+    encoding: UTF-8
   data:
     mongodb:
-      #host: localhost
-      #port: 27017
-      #user: root
-      #password: password
       auto-index-creation: false
-      #authentication-database: admin
-      #database: tezos-signature
-      uri: mongodb://root:password@localhost:27017/tezos-signature?authSource=admin&authMechanism=SCRAM-SHA-1
-  profiles:
-    active: prod
-
+      uri: mongodb://root:password@localhost:27017/tezos-signature?authSource=admin
 logging:
   level:
     root: info
     com:
       sword: debug
-    web : debug
+    web: debug
     org:
       springframework:
         security: info
