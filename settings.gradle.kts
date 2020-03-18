@@ -28,4 +28,5 @@ pluginManagement {
 rootProject.name = "com.sword.signature.servers"
 
 include (":frontend:ihm")
-
+include(":lib:business")
+include (":lib:model")

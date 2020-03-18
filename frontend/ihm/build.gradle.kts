@@ -16,7 +16,7 @@ dependencies {
     implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity5")
     implementation("org.springframework.boot:spring-boot-starter-security")
 
-
+    implementation(project(":lib:business"))
 
     implementation("org.springframework.boot:spring-boot-starter-actuator")
 
