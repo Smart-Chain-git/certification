@@ -1,9 +1,9 @@
 package com.sword.signature.business.model
 
 class AccountPatch(
-        val login: String?,
-        val email: String?,
-        val password: String?,
-        val fullName: String?
+        val login: String? = null,
+        val email: String? = null,
+        val password: String? = null,
+        val fullName: String? = null
 ) {
 }

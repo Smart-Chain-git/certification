@@ -1,3 +1,5 @@
+val flapdoodleVersion: String by project.extra
+
 plugins {
     id("kotlin")
     id("org.springframework.boot")
@@ -14,6 +16,9 @@ dependencies {
     implementation(project(":lib:model"))
     // Spring
     implementation("org.springframework.boot:spring-boot-starter")
+
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo:$flapdoodleVersion")
 }
 
 tasks {
