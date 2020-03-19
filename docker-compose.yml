@@ -1,4 +1,6 @@
 version: '3'
+volumes:
+  mongo-data:
 services:
   mongo:
     image: 'mongo:4.2.3'
@@ -9,6 +11,9 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: tezos-signature
+    volumes:
+      - 'mongo-data:/data/db'
   mongo-express:
     image: 'mongo-express:0.54.0'
     container_name: 'tezos-signature-mongodb-express'
@@ -18,5 +23,3 @@ services:
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: root
       ME_CONFIG_MONGODB_ADMINPASSWORD: password
-
-
