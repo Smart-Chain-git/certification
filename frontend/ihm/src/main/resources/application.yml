@@ -24,7 +24,7 @@ logging:
     root: info
     com:
       sword: debug
-    web: debug
+    web: warn
     org:
       springframework:
         security: info
