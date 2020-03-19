@@ -4,7 +4,7 @@
 
 # We use a gradle image to run all stages of the pipeline.
 # Each stage runs a bare (not wrapped) `gradle ...` command.
-image: gradle:6.2
+image: gradle:6.2-jdk11
 
 # The pipeline consists of several stages. Each one is run in parallel.
 stages:
