@@ -80,8 +80,8 @@ class AccountServiceImpl(
         LOGGER.trace("Delete account with id ({}).", accountId)
         val account: AccountEntity = accountRepository.findById(accountId).awaitFirstOrNull()
                 ?: throw EntityNotFoundException("account", accountId)
-        accountRepository.delete(account)
-        LOGGER.trace("Account with id ({}) deleted.")
+        accountRepository.delete(account).awaitFirstOrNull()
+        LOGGER.trace("Account with id ({}) deleted.", accountId)
     }
 
     companion object {
