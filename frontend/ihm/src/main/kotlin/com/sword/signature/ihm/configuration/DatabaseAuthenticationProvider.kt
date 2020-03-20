@@ -1,6 +1,7 @@
 package com.sword.signature.ihm.configuration
 
 import com.sword.signature.business.service.AccountService
+import kotlinx.coroutines.runBlocking
 import org.slf4j.LoggerFactory
 import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.authentication.AuthenticationServiceException
@@ -8,6 +9,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+
 
 
 class DatabaseAuthenticationProvider(
@@ -19,7 +21,10 @@ class DatabaseAuthenticationProvider(
         val name = authentication.name
         val password = authentication.credentials.toString()
 
-        val account = accountService.getAccountByLoginOrEmail(name)
+        val account =
+            runBlocking {
+                accountService.getAccountByLoginOrEmail(name)
+            }
 
         if (!bCryptPasswordEncoder.matches(password, account?.password)) {
             LOGGER.error("Bad credential for {}", name)
