@@ -6,8 +6,8 @@ import com.sword.signature.business.model.AccountPatch
 
 interface AccountService {
     fun createAccount(accountDetails: AccountCreate): Account
-    fun getAccount(accountId: String): Account
-    fun getAccountByLoginOrEmail(loginOrEmail: String): Account
+    fun getAccount(accountId: String): Account?
+    fun getAccountByLoginOrEmail(loginOrEmail: String): Account?
     fun getAccounts(): List<Account>
     fun patchAccount(accountId: String, accountDetails: AccountPatch): Account
     fun deleteAccount(accountId: String)

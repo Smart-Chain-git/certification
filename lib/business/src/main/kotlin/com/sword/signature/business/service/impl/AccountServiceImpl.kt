@@ -35,19 +35,17 @@ class AccountServiceImpl(
     }
 
     @Transactional(rollbackFor = [ServiceException::class])
-    override fun getAccount(accountId: String): Account {
+    override fun getAccount(accountId: String): Account? {
         LOGGER.trace("Retrieving account with id ({}).", accountId)
-        val account: Account = accountRepository.findByIdOrNull(accountId)?.toBusiness()
-                ?: throw EntityNotFoundException("account", accountId)
+        val account= accountRepository.findByIdOrNull(accountId)?.toBusiness()
         LOGGER.trace("Account with id ({}) retrieved.", accountId)
         return account
     }
 
     @Transactional(rollbackFor = [ServiceException::class])
-    override fun getAccountByLoginOrEmail(loginOrEmail: String): Account {
+    override fun getAccountByLoginOrEmail(loginOrEmail: String): Account? {
         LOGGER.trace("Retrieving account with login or email ({}).", loginOrEmail)
-        val account: Account = accountRepository.findFirstByLoginOrEmail(loginOrEmail)?.toBusiness()
-                ?: throw AccountNotFoundException(loginOrEmail)
+        val account = accountRepository.findFirstByLoginOrEmail(loginOrEmail)?.toBusiness()
         LOGGER.trace("Account with id ({}) retrieved.", account)
         return account
     }
