@@ -11,11 +11,13 @@ description = "Model representation of database data"
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
 
     // MongoDB
-    api("org.springframework.boot:spring-boot-starter-data-mongodb")
+    api("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
     // Mongobee
-    implementation("com.github.cloudyrock.mongock:mongock-spring:$mongockVersion")
+    //implementation("com.github.cloudyrock.mongock:mongock-spring:$mongockVersion")
 }
 
 tasks {
