@@ -1,6 +1,5 @@
 package com.sword.signature.business.service.impl
 
-import com.sword.signature.business.exception.AccountNotFoundException
 import com.sword.signature.business.exception.EntityNotFoundException
 import com.sword.signature.business.exception.ServiceException
 import com.sword.signature.business.model.Account
@@ -10,8 +9,12 @@ import com.sword.signature.business.model.mapper.toBusiness
 import com.sword.signature.business.service.AccountService
 import com.sword.signature.model.entity.AccountEntity
 import com.sword.signature.model.repository.AccountRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.reactive.asFlow
+import kotlinx.coroutines.reactive.awaitFirstOrNull
+import kotlinx.coroutines.reactive.awaitSingle
 import org.slf4j.LoggerFactory
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -20,7 +23,7 @@ class AccountServiceImpl(
         private val accountRepository: AccountRepository
 ) : AccountService {
     @Transactional(rollbackFor = [ServiceException::class])
-    override fun createAccount(accountDetails: AccountCreate): Account {
+    override suspend fun createAccount(accountDetails: AccountCreate): Account {
         LOGGER.trace("Creating new account.")
         val toCreate = AccountEntity(
                 login = accountDetails.login,
@@ -29,21 +32,21 @@ class AccountServiceImpl(
                 fullName = accountDetails.fullName
         )
 
-        val createdAccount = accountRepository.save(toCreate).toBusiness()
+        val createdAccount = accountRepository.save(toCreate).awaitSingle().toBusiness()
         LOGGER.trace("New account with id ({}) created.", createdAccount.id)
         return createdAccount
     }
 
     @Transactional(rollbackFor = [ServiceException::class])
-    override fun getAccount(accountId: String): Account? {
+    override suspend fun getAccount(accountId: String): Account? {
         LOGGER.trace("Retrieving account with id ({}).", accountId)
-        val account= accountRepository.findByIdOrNull(accountId)?.toBusiness()
+        val account= accountRepository.findById(accountId).awaitFirstOrNull()?.toBusiness()
         LOGGER.trace("Account with id ({}) retrieved.", accountId)
         return account
     }
 
     @Transactional(rollbackFor = [ServiceException::class])
-    override fun getAccountByLoginOrEmail(loginOrEmail: String): Account? {
+    override suspend fun getAccountByLoginOrEmail(loginOrEmail: String): Account? {
         LOGGER.trace("Retrieving account with login or email ({}).", loginOrEmail)
         val account = accountRepository.findFirstByLoginOrEmail(loginOrEmail)?.toBusiness()
         LOGGER.trace("Account with id ({}) retrieved.", account)
@@ -51,17 +54,15 @@ class AccountServiceImpl(
     }
 
     @Transactional(rollbackFor = [ServiceException::class])
-    override fun getAccounts(): List<Account> {
+    override fun getAccounts(): Flow<Account> {
         LOGGER.trace("Retrieving all accounts.")
-        val accounts: List<Account> = accountRepository.findAll().map { it.toBusiness() }
-        LOGGER.trace("{} accounts retrieved.", accounts.size)
-        return accounts
+        return accountRepository.findAll().asFlow().map { it.toBusiness() }
     }
 
     @Transactional(rollbackFor = [ServiceException::class])
-    override fun patchAccount(accountId: String, accountDetails: AccountPatch): Account {
+    override suspend fun patchAccount(accountId: String, accountDetails: AccountPatch): Account {
         LOGGER.trace("Update account with id({}).", accountId)
-        val account: AccountEntity = accountRepository.findByIdOrNull(accountId)
+        val account: AccountEntity = accountRepository.findById(accountId).awaitFirstOrNull()
                 ?: throw EntityNotFoundException("account", accountId)
         val toPatch = account.copy(
                 login = accountDetails.login ?: account.login,
@@ -69,15 +70,15 @@ class AccountServiceImpl(
                 password = accountDetails.password ?: account.password,
                 fullName = accountDetails.fullName ?: account.fullName
         )
-        val updatedAccount = accountRepository.save(toPatch).toBusiness()
+        val updatedAccount = accountRepository.save(toPatch).awaitSingle().toBusiness()
         LOGGER.trace("Account with id ({}) updated.", accountId)
         return updatedAccount
     }
 
     @Transactional(rollbackFor = [ServiceException::class])
-    override fun deleteAccount(accountId: String) {
+    override suspend fun deleteAccount(accountId: String) {
         LOGGER.trace("Delete account with id ({}).", accountId)
-        val account: AccountEntity = accountRepository.findByIdOrNull(accountId)
+        val account: AccountEntity = accountRepository.findById(accountId).awaitFirstOrNull()
                 ?: throw EntityNotFoundException("account", accountId)
         accountRepository.delete(account)
         LOGGER.trace("Account with id ({}) deleted.")
