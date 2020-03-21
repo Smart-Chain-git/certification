@@ -7,9 +7,9 @@ import org.springframework.core.io.ClassPathResource
 import org.springframework.http.MediaType.TEXT_HTML
 import org.springframework.security.config.web.server.ServerHttpSecurity
 import org.springframework.security.web.server.SecurityWebFilterChain
-import org.springframework.web.reactive.function.server.router
+import org.springframework.web.reactive.function.server.coRouter
 
-fun routes(mainHandler: MainHandler) = router {
+fun routes(mainHandler: MainHandler) = coRouter {
     accept(TEXT_HTML).nest {
         GET("/", mainHandler::index)
         GET("/login", mainHandler::login)
