@@ -1,42 +1,35 @@
 package com.sword.signature.ihm.configuration
 
-import com.sword.signature.business.service.AccountService
-import com.sword.signature.ihm.controller.MainHandler
+
+import com.sword.signature.ihm.webhandler.MainHandler
 import org.springframework.context.ApplicationContextInitializer
 import org.springframework.context.support.GenericApplicationContext
 import org.springframework.context.support.beans
-import org.springframework.core.io.ClassPathResource
-import org.springframework.http.MediaType.TEXT_HTML
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
-import org.springframework.web.servlet.function.router
 import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect
 
 
 fun bean() = beans {
     bean {
+        //encodage des mot de passe
         BCryptPasswordEncoder()
     }
     bean {
-        DatabaseAuthenticationProvider(ref(),ref())
+        UserDetailsService(ref())
     }
     bean {
         MainHandler()
     }
     bean {
-        router {
-            accept(TEXT_HTML).nest {
-                GET("/", ref<MainHandler>()::index)
-                GET("/login", ref<MainHandler>()::login)
-                GET("/loginerror", ref<MainHandler>()::loginError)
-            }
-            resources("/css", ClassPathResource("/static/css"))
-        }
+        routes(ref())
+    }
+    bean {
+        securityWebFilterChain(ref())
     }
     bean {
         //support spring security for thymeleaf
         SpringSecurityDialect()
     }
-
 }
 
 
