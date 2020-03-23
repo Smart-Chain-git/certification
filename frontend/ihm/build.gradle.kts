@@ -10,8 +10,10 @@ dependencies {
 
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
 
-    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity5")
     implementation("org.springframework.boot:spring-boot-starter-security")
@@ -20,7 +22,7 @@ dependencies {
 
     implementation("org.springframework.boot:spring-boot-starter-actuator")
 
-
+    runtimeOnly("org.webjars:webjars-locator-core")
     runtimeOnly("org.webjars:bootstrap:4.4.1-1")
     runtimeOnly("org.webjars:jquery:3.4.1")
     runtimeOnly("org.webjars.npm:bootstrap-table:1.16.0")

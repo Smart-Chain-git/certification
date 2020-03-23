@@ -5,19 +5,17 @@ import org.slf4j.LoggerFactory
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.event.EventListener
-import org.springframework.data.mongodb.core.MongoTemplate
-import org.springframework.data.mongodb.core.index.IndexDefinition
-import org.springframework.data.mongodb.core.index.IndexOperations
+import org.springframework.data.mongodb.core.ReactiveMongoTemplate
 import org.springframework.data.mongodb.core.index.MongoPersistentEntityIndexResolver
 import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.data.mongodb.core.mapping.MongoMappingContext
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories
+import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories
 
 
 @Configuration
-@EnableMongoRepositories(basePackages = ["com.sword.signature.model.repository"])
+@EnableReactiveMongoRepositories(basePackages = ["com.sword.signature.model.repository"])
 class MongoConfiguration(
-        private val mongoTemplate: MongoTemplate,
+        private val mongoTemplate: ReactiveMongoTemplate,
         private val mongoMappingContext: MongoMappingContext,
         private val migrationHandler: MigrationHandler
 ) {
@@ -36,8 +34,8 @@ class MongoConfiguration(
         for (entity in mongoMappingContext.persistentEntities) {
             val clazz = entity.type
             if (clazz.isAnnotationPresent(Document::class.java)) {
-                val indexOps: IndexOperations = mongoTemplate.indexOps(clazz)
-                resolver.resolveIndexFor(clazz).forEach { indexDefinition: IndexDefinition? -> indexOps.ensureIndex(indexDefinition!!) }
+                val indexOps = mongoTemplate.indexOps(clazz)
+                resolver.resolveIndexFor(clazz).forEach { indexDefinition -> indexOps.ensureIndex(indexDefinition) }
             }
         }
         LOGGER.info("Initialization of Mongo indices finished in {}ms.", System.currentTimeMillis() - init)

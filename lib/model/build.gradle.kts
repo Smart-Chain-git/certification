@@ -12,21 +12,22 @@ description = "Model representation of database data"
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
 
     // MongoDB
-    api("org.springframework.boot:spring-boot-starter-data-mongodb")
+    api("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
     // Merkle tree library
     implementation("com.sword.signature:merkle-tree:$merkleTreeVersion")
-
     // Mongock
     // implementation("com.github.cloudyrock.mongock:mongock-spring:$mongockVersion")
 }
 
 tasks {
     jar {
-        enabled=true
+        enabled = true
     }
     bootJar {
-        enabled=false
+        enabled = false
     }
 }

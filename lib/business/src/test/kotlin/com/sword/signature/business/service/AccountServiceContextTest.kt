@@ -1,22 +1,27 @@
 package com.sword.signature.business.service
 
 import com.sword.signature.business.exception.EntityNotFoundException
+import com.sword.signature.business.model.Account
 import com.sword.signature.business.model.AccountCreate
 import com.sword.signature.business.model.AccountPatch
+import kotlinx.coroutines.flow.count
+import kotlinx.coroutines.reactive.awaitSingle
+import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.dao.DuplicateKeyException
-import org.springframework.data.mongodb.core.MongoTemplate
+import org.springframework.data.mongodb.core.ReactiveMongoTemplate
 import java.nio.file.Path
 
 
 class AccountServiceContextTest @Autowired constructor(
         private val accountService: AccountService,
-        override val mongoTemplate: MongoTemplate
+        override val mongoTemplate: ReactiveMongoTemplate
 ) : AbstractServiceContextTest() {
 
     private val accountsInitialCount: Long = 3
@@ -43,17 +48,19 @@ class AccountServiceContextTest @Autowired constructor(
         val password = "secured"
         val fullName = "fullName"
         val toCreate = AccountCreate(login, email, password, fullName)
+        runBlocking {
+            val createdAccount =
+                    accountService.createAccount(toCreate)
 
-        val createdAccount = accountService.createAccount(toCreate)
 
-
-        assertAll("createdAccount",
-                { assertEquals(login, createdAccount.login) },
-                { assertEquals(email, createdAccount.email) },
-                { assertEquals(password, createdAccount.password) },
-                { assertEquals(fullName, createdAccount.fullName) }
-        )
-        assertEquals(accountsInitialCount + 1, mongoTemplate.getCollection("accounts").countDocuments())
+            assertAll("createdAccount",
+                    { assertEquals(login, createdAccount.login) },
+                    { assertEquals(email, createdAccount.email) },
+                    { assertEquals(password, createdAccount.password) },
+                    { assertEquals(fullName, createdAccount.fullName) }
+            )
+            assertEquals(accountsInitialCount + 1, mongoTemplate.getCollection("accounts").countDocuments().awaitSingle())
+        }
     }
 
     @Test
@@ -64,7 +71,7 @@ class AccountServiceContextTest @Autowired constructor(
         val fullName = "fullName"
         val toCreate = AccountCreate(login, email, password, fullName)
 
-        assertThrows<DuplicateKeyException> { accountService.createAccount(toCreate) }
+        assertThrows<DuplicateKeyException> { runBlocking { accountService.createAccount(toCreate) } }
     }
 
     @Test
@@ -75,13 +82,14 @@ class AccountServiceContextTest @Autowired constructor(
         val fullName = "fullName"
         val toCreate = AccountCreate(login, email, password, fullName)
 
-        assertThrows<DuplicateKeyException> { accountService.createAccount(toCreate) }
+        assertThrows<DuplicateKeyException> { runBlocking { accountService.createAccount(toCreate) } }
     }
 
     @Test
     fun getAccountTest() {
-        val account = accountService.getAccount(accountId1)
-
+        val account = runBlocking { accountService.getAccount(accountId1) }
+        assertNotNull(account)
+        account as Account
         assertAll("account",
                 { assertEquals(accountLogin1, account?.login) },
                 { assertEquals(accountEmail1, account?.email) },
@@ -91,9 +99,9 @@ class AccountServiceContextTest @Autowired constructor(
 
     @Test
     fun getAccountsTest() {
-        val accounts = accountService.getAccounts()
+        val accounts = runBlocking { accountService.getAccounts().count() }
 
-        assertEquals(3, accounts.size)
+        assertEquals(3, accounts)
     }
 
     @Test
@@ -101,7 +109,7 @@ class AccountServiceContextTest @Autowired constructor(
         val password = "newPassword"
         val toPatch = AccountPatch(password = password)
 
-        val patchedAccount = accountService.patchAccount(accountId1, toPatch)
+        val patchedAccount = runBlocking { accountService.patchAccount(accountId1, toPatch) }
 
         assertAll("patchedAccount",
                 { assertEquals(accountLogin1, patchedAccount.login) },
@@ -118,7 +126,7 @@ class AccountServiceContextTest @Autowired constructor(
         val fullName = "newName"
         val toPatch = AccountPatch(login, email, password, fullName)
 
-        val patchedAccount = accountService.patchAccount(accountId1, toPatch)
+        val patchedAccount = runBlocking { accountService.patchAccount(accountId1, toPatch) }
 
         assertAll("patchedAccount",
                 { assertEquals(login, patchedAccount.login) },
@@ -132,18 +140,30 @@ class AccountServiceContextTest @Autowired constructor(
         val password = "newPassword"
         val toPatch = AccountPatch(password = password)
 
-        assertThrows<EntityNotFoundException> { accountService.patchAccount(accountNonexistentId, toPatch) }
+        assertThrows<EntityNotFoundException> {
+            runBlocking {
+                accountService.patchAccount(
+                        accountNonexistentId,
+                        toPatch
+                )
+            }
+        }
     }
 
     @Test
     fun deleteAccountTest() {
-        accountService.deleteAccount(accountId1)
+        runBlocking {
+            accountService.deleteAccount(accountId1)
 
-        assertEquals(accountsInitialCount - 1, mongoTemplate.getCollection("accounts").countDocuments())
+            assertEquals(
+                    accountsInitialCount - 1,
+                    mongoTemplate.getCollection("accounts").countDocuments().awaitSingle()
+            )
+        }
     }
 
     @Test
     fun deleteNonexistentAccountTest() {
-        assertThrows<EntityNotFoundException> { accountService.deleteAccount(accountNonexistentId) }
+        assertThrows<EntityNotFoundException> { runBlocking { accountService.deleteAccount(accountNonexistentId) } }
     }
 }
