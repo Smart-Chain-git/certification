@@ -1,8 +1,10 @@
 package com.sword.signature.model.repository
 
 import com.sword.signature.model.entity.MigrationEntity
-import org.springframework.data.mongodb.repository.MongoRepository
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository
+import org.springframework.stereotype.Repository
 
-interface MigrationRepository : MongoRepository<MigrationEntity, String> {
+@Repository
+interface MigrationRepository : ReactiveMongoRepository<MigrationEntity, String> {
 
 }

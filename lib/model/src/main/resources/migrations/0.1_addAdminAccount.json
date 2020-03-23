@@ -5,7 +5,7 @@
         "_id": "5e74a073a386f170f3850b4b",
         "login": "admin",
         "email": "admin@signature.com",
-        "password": "password",
+        "password": "$2a$10$TEQbC2lNT.dWnYVLOi8L4e5VUST7zyCV6demNJCQzNG6up3dr25Se",
         "fullName": "Administrator"
       }
     ]

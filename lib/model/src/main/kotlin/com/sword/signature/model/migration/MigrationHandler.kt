@@ -4,11 +4,12 @@ import com.mongodb.client.model.Filters
 import com.sword.signature.merkletree.utils.hexStringHash
 import com.sword.signature.model.entity.MigrationEntity
 import com.sword.signature.model.repository.MigrationRepository
+import kotlinx.coroutines.reactive.awaitLast
 import org.bson.Document
 import org.slf4j.LoggerFactory
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver
 import org.springframework.data.domain.Sort
-import org.springframework.data.mongodb.core.MongoTemplate
+import org.springframework.data.mongodb.core.ReactiveMongoTemplate
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import java.io.BufferedReader
@@ -21,7 +22,7 @@ import java.security.MessageDigest
  */
 @Component
 class MigrationHandler(
-        private val mongoTemplate: MongoTemplate,
+        private val mongoTemplate: ReactiveMongoTemplate,
         private val migrationRepository: MigrationRepository
 ) {
     private val digest = MessageDigest.getInstance("SHA-256")
@@ -30,8 +31,8 @@ class MigrationHandler(
      * Check already applied migrations and apply new migrations.
      */
     @Transactional
-    fun applyMigrations() {
-        val appliedMigrations = migrationRepository.findAll(Sort.by(Sort.Direction.ASC, "name"))
+    suspend fun applyMigrations() {
+        val appliedMigrations: List<MigrationEntity> = migrationRepository.findAll(Sort.by(Sort.Direction.ASC, "name")).collectList().block()!!
         val migrations: Array<Migration> = readMigrations()
         appliedMigrations.forEachIndexed { index, appliedMigration ->
             if (index + 1 > migrations.size) {
@@ -56,7 +57,7 @@ class MigrationHandler(
             migrationRepository.insert(MigrationEntity(
                     name = migration.name,
                     hash = hashMigration(migration.content)
-            ))
+            )).block()
             LOGGER.info("New migration '{}' applied.", migration.name)
         }
         LOGGER.info("{} new migration(s) successfully applied.", migrations.size - appliedMigrations.size)
@@ -94,26 +95,27 @@ class MigrationHandler(
      * Parse and apply a migration.
      */
     @Transactional
-    fun applyMigration(migrationContent: String) {
+    suspend fun applyMigration(migrationContent: String) {
         val collections = Document.parse(migrationContent)
         for (collectionName in collections.keys) {
             val collection: Document = collections[collectionName] as Document
             // Insert operations
             val documentsToInsert = collection["insert"] as List<Document>?
-            documentsToInsert?.let { mongoTemplate.getCollection(collectionName).insertMany(it) }
+            documentsToInsert?.let { mongoTemplate.getCollection(collectionName).insertMany(it).awaitLast() }
             // Update operations
             val documentsToUpdate = collection["update"] as List<Document>?
             documentsToUpdate?.let {
                 it.forEach { document ->
-                        mongoTemplate.getCollection(collectionName).replaceOne(Filters.eq("_id", document["_id"]), document)
+                    mongoTemplate.getCollection(collectionName).replaceOne(Filters.eq("_id", document["_id"]), document).awaitLast()
                 }
             }
             // Delete
             val documentToDelete = collection["delete"] as List<Document>?
-            documentToDelete?.let {documents ->
-                mongoTemplate.getCollection(collectionName).deleteMany(Filters.`in`("_id", documents.map { it["_id"] }))
+            documentToDelete?.let { documents ->
+                mongoTemplate.getCollection(collectionName).deleteMany(Filters.`in`("_id", documents.map { it["_id"] })).awaitLast()
             }
         }
+
     }
 
     companion object {
