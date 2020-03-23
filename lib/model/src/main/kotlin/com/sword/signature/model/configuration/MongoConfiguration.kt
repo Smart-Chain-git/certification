@@ -1,11 +1,8 @@
 package com.sword.signature.model.configuration
 
-import com.github.cloudyrock.mongock.SpringBootMongock
-import com.github.cloudyrock.mongock.SpringBootMongockBuilder
+import com.sword.signature.model.migration.MigrationHandler
 import org.slf4j.LoggerFactory
 import org.springframework.boot.context.event.ApplicationReadyEvent
-import org.springframework.context.ApplicationContext
-import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.event.EventListener
 import org.springframework.data.mongodb.core.MongoTemplate
@@ -21,10 +18,17 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @EnableMongoRepositories(basePackages = ["com.sword.signature.model.repository"])
 class MongoConfiguration(
         private val mongoTemplate: MongoTemplate,
-        private val mongoMappingContext: MongoMappingContext
+        private val mongoMappingContext: MongoMappingContext,
+        private val migrationHandler: MigrationHandler
 ) {
 
     @EventListener(ApplicationReadyEvent::class)
+    fun initDatabase() {
+        initIndicesAfterStartup()
+        insertMigrationsData()
+    }
+
+
     fun initIndicesAfterStartup() {
         LOGGER.info("Initialization of Mongo indices started.")
         val init = System.currentTimeMillis()
@@ -39,15 +43,14 @@ class MongoConfiguration(
         LOGGER.info("Initialization of Mongo indices finished in {}ms.", System.currentTimeMillis() - init)
     }
 
-    /*@Bean
-    fun mongock(springContext: ApplicationContext, mongoTemplate: MongoTemplate): SpringBootMongock {
-        return SpringBootMongockBuilder(mongoTemplate, "com.sword.signature.model.changelog")
-                .setApplicationContext(springContext)
-                .setLockQuickConfig()
-                .build()
-    }*/
+    private fun insertMigrationsData() {
+        LOGGER.info("Application of migrations data started.")
+        val init = System.currentTimeMillis()
+        migrationHandler.applyMigrations()
+        LOGGER.info("Application of migrations data finished in {}ms.", System.currentTimeMillis() - init)
+    }
 
     companion object {
-        private val LOGGER = LoggerFactory.getLogger(this::class.java)
+        private val LOGGER = LoggerFactory.getLogger(MongoConfiguration::class.java)
     }
 }
