@@ -1,3 +1,4 @@
+val merkleTreeVersion: String by project.extra
 val mongockVersion: String by project.extra
 
 plugins {
@@ -16,15 +17,17 @@ dependencies {
 
     // MongoDB
     api("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
-    // Mongobee
-    //implementation("com.github.cloudyrock.mongock:mongock-spring:$mongockVersion")
+    // Merkle tree library
+    implementation("com.sword.signature:merkle-tree:$merkleTreeVersion")
+    // Mongock
+    // implementation("com.github.cloudyrock.mongock:mongock-spring:$mongockVersion")
 }
 
 tasks {
     jar {
-        enabled=true
+        enabled = true
     }
     bootJar {
-        enabled=false
+        enabled = false
     }
 }

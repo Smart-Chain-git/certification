@@ -20,8 +20,8 @@ import java.nio.file.Path
 
 
 class AccountServiceContextTest @Autowired constructor(
-    private val accountService: AccountService,
-    override val mongoTemplate: ReactiveMongoTemplate
+        private val accountService: AccountService,
+        override val mongoTemplate: ReactiveMongoTemplate
 ) : AbstractServiceContextTest() {
 
     private val accountsInitialCount: Long = 3
@@ -50,14 +50,14 @@ class AccountServiceContextTest @Autowired constructor(
         val toCreate = AccountCreate(login, email, password, fullName)
         runBlocking {
             val createdAccount =
-                accountService.createAccount(toCreate)
+                    accountService.createAccount(toCreate)
 
 
             assertAll("createdAccount",
-                { assertEquals(login, createdAccount.login) },
-                { assertEquals(email, createdAccount.email) },
-                { assertEquals(password, createdAccount.password) },
-                { assertEquals(fullName, createdAccount.fullName) }
+                    { assertEquals(login, createdAccount.login) },
+                    { assertEquals(email, createdAccount.email) },
+                    { assertEquals(password, createdAccount.password) },
+                    { assertEquals(fullName, createdAccount.fullName) }
             )
             assertEquals(accountsInitialCount + 1, mongoTemplate.getCollection("accounts").countDocuments().awaitSingle())
         }
@@ -91,10 +91,10 @@ class AccountServiceContextTest @Autowired constructor(
         assertNotNull(account)
         account as Account
         assertAll("account",
-            { assertEquals(accountLogin1, account.login) },
-            { assertEquals(accountEmail1, account.email) },
-            { assertEquals(accountPassword1, account.password) },
-            { assertEquals(accountFullName1, account.fullName) })
+                { assertEquals(accountLogin1, account?.login) },
+                { assertEquals(accountEmail1, account?.email) },
+                { assertEquals(accountPassword1, account?.password) },
+                { assertEquals(accountFullName1, account?.fullName) })
     }
 
     @Test
@@ -112,10 +112,10 @@ class AccountServiceContextTest @Autowired constructor(
         val patchedAccount = runBlocking { accountService.patchAccount(accountId1, toPatch) }
 
         assertAll("patchedAccount",
-            { assertEquals(accountLogin1, patchedAccount.login) },
-            { assertEquals(accountEmail1, patchedAccount.email) },
-            { assertEquals(password, patchedAccount.password) },
-            { assertEquals(accountFullName1, patchedAccount.fullName) })
+                { assertEquals(accountLogin1, patchedAccount.login) },
+                { assertEquals(accountEmail1, patchedAccount.email) },
+                { assertEquals(password, patchedAccount.password) },
+                { assertEquals(accountFullName1, patchedAccount.fullName) })
     }
 
     @Test
@@ -129,10 +129,10 @@ class AccountServiceContextTest @Autowired constructor(
         val patchedAccount = runBlocking { accountService.patchAccount(accountId1, toPatch) }
 
         assertAll("patchedAccount",
-            { assertEquals(login, patchedAccount.login) },
-            { assertEquals(email, patchedAccount.email) },
-            { assertEquals(password, patchedAccount.password) },
-            { assertEquals(fullName, patchedAccount.fullName) })
+                { assertEquals(login, patchedAccount.login) },
+                { assertEquals(email, patchedAccount.email) },
+                { assertEquals(password, patchedAccount.password) },
+                { assertEquals(fullName, patchedAccount.fullName) })
     }
 
     @Test
@@ -143,8 +143,8 @@ class AccountServiceContextTest @Autowired constructor(
         assertThrows<EntityNotFoundException> {
             runBlocking {
                 accountService.patchAccount(
-                    accountNonexistentId,
-                    toPatch
+                        accountNonexistentId,
+                        toPatch
                 )
             }
         }
@@ -156,8 +156,8 @@ class AccountServiceContextTest @Autowired constructor(
             accountService.deleteAccount(accountId1)
 
             assertEquals(
-                accountsInitialCount - 1,
-                mongoTemplate.getCollection("accounts").countDocuments().awaitSingle()
+                    accountsInitialCount - 1,
+                    mongoTemplate.getCollection("accounts").countDocuments().awaitSingle()
             )
         }
     }
