@@ -18,6 +18,10 @@ dependencies {
     implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity5")
     implementation("org.springframework.boot:spring-boot-starter-security")
 
+
+    implementation("org.springframework.boot:spring-boot-starter-rsocket")
+    implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
+
     implementation(project(":lib:business"))
 
     implementation("org.springframework.boot:spring-boot-starter-actuator")
@@ -36,7 +40,7 @@ dependencies {
     val springmockkVersion: String by project.extra
     testImplementation("com.ninja-squad:springmockk:$springmockkVersion")
     testImplementation("org.springframework.security:spring-security-test")
-
+    testImplementation("io.projectreactor:reactor-test")
 }
 
 

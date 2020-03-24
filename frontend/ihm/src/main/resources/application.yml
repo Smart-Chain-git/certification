@@ -19,6 +19,9 @@ spring:
     mongodb:
       auto-index-creation: false
       uri: mongodb://root:password@localhost:27017/tezos-signature?authSource=admin
+  rsocket:
+    server:
+      port: 6666
 logging:
   level:
     root: info
