@@ -1,6 +1,8 @@
 package com.sword.signature.ihm.configuration
 
+import com.sword.signature.business.model.mail.HelloAccountMail
 import com.sword.signature.business.service.AccountService
+import com.sword.signature.business.service.MailService
 import kotlinx.coroutines.reactor.mono
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService
 import org.springframework.security.core.userdetails.User
@@ -10,17 +12,20 @@ import reactor.core.publisher.Mono
 
 
 class UserDetailsService(
-    private val accountService: AccountService
+        private val accountService: AccountService,
+        private val mailService: MailService
 ) : ReactiveUserDetailsService {
 
     override fun findByUsername(username: String): Mono<UserDetails> {
         return mono {
-            val account = accountService.getAccountByLoginOrEmail(username)?: throw UsernameNotFoundException("account $username not found")
+            val account = accountService.getAccountByLoginOrEmail(username)
+                    ?: throw UsernameNotFoundException("account $username not found")
+            mailService.sendEmailAsync(HelloAccountMail(account))
             User.builder()
-                .username(username)
-                .password(account?.password)
-                .roles("Admin")
-                .build()
+                    .username(username)
+                    .password(account?.password)
+                    .roles("Admin")
+                    .build()
         }
     }
 
