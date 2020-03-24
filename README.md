@@ -22,7 +22,7 @@ Access the web server:
 * Access the web server UI: [http://localhost:8080](http://localhost:8080)
 * Access the mongoDB administration: [http://localhost:8081](http://localhost:8081)
 
-## Deployment
+## Production
 
 Build the web server:
 * Build the JAR: `./gradlew build`
