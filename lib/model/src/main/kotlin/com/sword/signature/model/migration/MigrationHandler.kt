@@ -30,18 +30,18 @@ class MigrationHandler(
      */
     @Transactional
     suspend fun applyMigrations() {
-        val appliedMigrations: List<MigrationEntity> = migrationRepository.findAll().collectList().block()!!
+        val appliedMigrations: List<MigrationEntity> = migrationRepository.findAll().collectList().awaitLast()!!
                 .sortedWith(MigrationEntity.versionComparator())
-        val migrations: Array<Migration> = readMigrations()
+        val migrations: List<Migration> = readMigrations()
         appliedMigrations.forEachIndexed { index, appliedMigration ->
             if (index + 1 > migrations.size) {
                 LOGGER.error("Missing applied migration '{}'.")
                 throw MissingAppliedMigrationException(appliedMigration.name)
             }
             val migration = migrations[index]
-            if (migration.name != appliedMigration.name) {
+            if (migration.version != appliedMigration.version) {
                 LOGGER.error("Try to apply migration '{}' before already applied migrations.")
-                throw WrongMigrationOrderException(migration.name)
+                throw WrongMigrationOrderException(migration.version)
             }
             val migrationHash = hashMigration(migration.content)
             if (migrationHash != appliedMigration.hash) {
@@ -66,9 +66,8 @@ class MigrationHandler(
     /**
      * Read the migrations in the migrations resource folder.
      */
-    private fun readMigrations(): Array<Migration> {
+    private fun readMigrations(): List<Migration> {
         val resources = PathMatchingResourcePatternResolver().getResources("classpath:migrations/*.json")
-        resources.sortBy { it.filename }
         val migrations = mutableListOf<Migration>()
         for (resource in resources) {
             val migrationContent = InputStreamReader(resource.inputStream).readText()
@@ -79,7 +78,7 @@ class MigrationHandler(
             ))
         }
         // Sort the migrations list by version and return it as an array
-        return migrations.sortedWith(Migration.versionComparator()).toTypedArray()
+        return migrations.sortedWith(Migration.versionComparator())
     }
 
     /**
