@@ -8,11 +8,9 @@ import kotlinx.coroutines.reactive.awaitLast
 import org.bson.Document
 import org.slf4j.LoggerFactory
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver
-import org.springframework.data.domain.Sort
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
-import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.security.MessageDigest
 
@@ -32,7 +30,8 @@ class MigrationHandler(
      */
     @Transactional
     suspend fun applyMigrations() {
-        val appliedMigrations: List<MigrationEntity> = migrationRepository.findAll(Sort.by(Sort.Direction.ASC, "name")).collectList().block()!!
+        val appliedMigrations: List<MigrationEntity> = migrationRepository.findAll().collectList().block()!!
+                .sortedWith(MigrationEntity.versionComparator())
         val migrations: Array<Migration> = readMigrations()
         appliedMigrations.forEachIndexed { index, appliedMigration ->
             if (index + 1 > migrations.size) {
@@ -56,6 +55,7 @@ class MigrationHandler(
             applyMigration(migration.content)
             migrationRepository.insert(MigrationEntity(
                     name = migration.name,
+                    version = migration.version,
                     hash = hashMigration(migration.content)
             )).block()
             LOGGER.info("New migration '{}' applied.", migration.name)
@@ -71,24 +71,15 @@ class MigrationHandler(
         resources.sortBy { it.filename }
         val migrations = mutableListOf<Migration>()
         for (resource in resources) {
-            val bufferedReader = BufferedReader(InputStreamReader(resource.inputStream))
-            var line: String?
-            val builder = StringBuilder()
-            bufferedReader.use { br ->
-                while (br.readLine().also { line = it } != null) {
-                    builder.append(line)
-                }
-                migrations.add(Migration(name = resource.filename!!, content = builder.toString()))
-            }
+            val migrationContent = InputStreamReader(resource.inputStream).readText()
+            migrations.add(Migration(
+                    name = resource.filename!!,
+                    version = extractVersion(resource.filename!!),
+                    content = migrationContent
+            ))
         }
-        return migrations.toTypedArray()
-    }
-
-    /**
-     * Hash the migration content.
-     */
-    private fun hashMigration(migrationContent: String): String {
-        return hexStringHash("SHA-256", migrationContent.toByteArray())
+        // Sort the migrations list by version and return it as an array
+        return migrations.sortedWith(Migration.versionComparator()).toTypedArray()
     }
 
     /**
@@ -120,5 +111,19 @@ class MigrationHandler(
 
     companion object {
         private val LOGGER = LoggerFactory.getLogger(MigrationHandler::class.java)
+
+        /**
+         * Hash the migration content.
+         */
+        private fun hashMigration(migrationContent: String): String {
+            return hexStringHash("SHA-256", migrationContent.toByteArray())
+        }
+
+        /**
+         * Extract the version from the migration file name.
+         */
+        private fun extractVersion(migrationName: String): String {
+            return migrationName.split("_")[0]
+        }
     }
 }
