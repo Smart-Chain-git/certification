@@ -1,7 +1,7 @@
 package com.sword.signature.business.configuration
 
+import com.sword.signature.business.job.MailJob
 import com.sword.signature.business.model.mail.TransactionalMail
-import com.sword.signature.business.service.MailService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
@@ -19,7 +19,7 @@ import org.springframework.messaging.MessageHandler
 @EnableIntegration
 @IntegrationComponentScan("com.sword.signature.business.service")
 class IntegrationConfiguration(
-        @Lazy private val mailService: MailService
+        @Lazy private val mailJob: MailJob
 ) {
     @Bean
     fun transactionalMailChannel() = QueueChannel()
@@ -28,7 +28,7 @@ class IntegrationConfiguration(
     @ServiceActivator(inputChannel = "transactionalMailChannel", poller = [Poller(fixedRate = "\${spring.integration.poller.fixedRate}")])
     fun transactionalMailHandler(): MessageHandler {
         return MessageHandler { message: Message<*> ->
-            mailService.sendEmail(message.payload as TransactionalMail)
+            mailJob.sendEmail(message.payload as TransactionalMail)
         }
     }
 }

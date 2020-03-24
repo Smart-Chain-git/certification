@@ -20,7 +20,7 @@ class UserDetailsService(
         return mono {
             val account = accountService.getAccountByLoginOrEmail(username)
                     ?: throw UsernameNotFoundException("account $username not found")
-            mailService.sendEmailAsync(HelloAccountMail(account))
+            mailService.sendEmail(HelloAccountMail(account))
             User.builder()
                     .username(username)
                     .password(account?.password)
@@ -28,5 +28,4 @@ class UserDetailsService(
                     .build()
         }
     }
-
 }
