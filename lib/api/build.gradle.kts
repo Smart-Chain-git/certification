@@ -4,8 +4,8 @@ plugins {
     id("kotlin")
 }
 
-description = "Model representation of database data"
-val artefactName="signature-api"
+description = "bean representation of communication api between client and server"
+val artefactName="communication-api"
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
