@@ -17,8 +17,11 @@ dependencies {
 
     // Project
     implementation(project(":lib:model"))
+
     // Spring
-    implementation("org.springframework.boot:spring-boot-starter")
+    implementation("org.springframework.boot:spring-boot-starter-mail")
+    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+    implementation("org.springframework.boot:spring-boot-starter-integration")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo:$flapdoodleVersion")

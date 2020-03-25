@@ -23,3 +23,14 @@ services:
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: root
       ME_CONFIG_MONGODB_ADMINPASSWORD: password
+  mail:
+    container_name: tezos-signature-mail
+    image: gessnerfl/fake-smtp-server:1.3.0
+    restart: unless-stopped
+    ports:
+      - "5025:5025"
+      - "5080:5080"
+      - "5081:5081"
+    environment:
+      FAKESMTP_AUTHENTICATION_USERNAME: username
+      FAKESMTP_AUTHENTICATION_PASSWORD: password
