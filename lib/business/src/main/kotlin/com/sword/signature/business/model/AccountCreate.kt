@@ -1,9 +1,8 @@
-package com.sword.signature.business.model;
+package com.sword.signature.business.model
 
 class AccountCreate(
-        val login: String,
-        val email: String,
-        val password: String,
-        val fullName: String?
-) {
-}
+    val login: String,
+    val email: String,
+    val password: String,
+    val fullName: String?
+)
