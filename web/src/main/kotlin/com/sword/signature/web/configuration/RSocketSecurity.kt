@@ -20,7 +20,7 @@ fun payloadSocketAcceptorInterceptor(security: RSocketSecurity): PayloadSocketAc
     return security
         .authorizePayload { spec: AuthorizePayloadsSpec ->
             spec
-                .route("greetings").authenticated()
+                .route("newJobs").authenticated()
                 .anyExchange().permitAll()
         }
         .simpleAuthentication(Customizer.withDefaults())
