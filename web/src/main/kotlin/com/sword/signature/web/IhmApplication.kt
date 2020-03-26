@@ -1,4 +1,4 @@
-package com.sword.signature.ihm
+package com.sword.signature.web
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

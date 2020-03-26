@@ -1,4 +1,4 @@
-package com.sword.signature.ihm.rsocketcontroler
+package com.sword.signature.web.rsocketcontroler
 
 import com.sword.signature.greeting.GreetingRequest
 import com.sword.signature.greeting.GreetingResponse

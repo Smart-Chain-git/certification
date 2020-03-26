@@ -5,7 +5,7 @@ plugins {
 }
 
 description = "serveur ihm"
-val artefactName="signature-ihm"
+val artefactName="web"
 dependencies {
 
     implementation("org.jetbrains.kotlin:kotlin-reflect")

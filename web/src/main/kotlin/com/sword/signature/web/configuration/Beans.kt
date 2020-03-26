@@ -1,7 +1,7 @@
-package com.sword.signature.ihm.configuration
+package com.sword.signature.web.configuration
 
 
-import com.sword.signature.ihm.webhandler.MainHandler
+import com.sword.signature.web.webhandler.MainHandler
 import org.springframework.context.ApplicationContextInitializer
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration

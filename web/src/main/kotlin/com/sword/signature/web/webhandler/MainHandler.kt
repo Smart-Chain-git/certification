@@ -1,10 +1,9 @@
-package com.sword.signature.ihm.webhandler
+package com.sword.signature.web.webhandler
 
 import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse
 import org.springframework.web.reactive.function.server.html
 import org.springframework.web.reactive.function.server.renderAndAwait
-import reactor.core.publisher.Mono
 
 
 class MainHandler {

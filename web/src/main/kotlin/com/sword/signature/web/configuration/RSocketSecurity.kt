@@ -1,4 +1,4 @@
-package com.sword.signature.ihm.configuration
+package com.sword.signature.web.configuration
 
 import org.springframework.messaging.rsocket.RSocketStrategies
 import org.springframework.messaging.rsocket.annotation.support.RSocketMessageHandler

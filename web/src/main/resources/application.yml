@@ -1,6 +1,6 @@
 context:
   initializer:
-    classes: com.sword.signature.ihm.configuration.BeansInitialiser
+    classes: com.sword.signature.web.configuration.BeansInitialiser
 management:
   endpoints:
     web:
