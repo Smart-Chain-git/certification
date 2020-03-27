@@ -7,5 +7,6 @@ data class SignRequest(
 )
 
 data class SignResponse(
-    val jobId: String
+    val jobId: String,
+    val files: List<String>
 )

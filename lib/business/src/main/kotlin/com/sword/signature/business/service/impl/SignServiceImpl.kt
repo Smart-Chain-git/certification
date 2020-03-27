@@ -40,7 +40,10 @@ class SignServiceImpl(
 
     private fun anchorTree(fileHashs: List<FileHash>): SignJob {
         LOGGER.debug("appel arbre pour {}", fileHashs)
-        return SignJob(id = UUID.randomUUID().toString())
+        return SignJob(
+            id = UUID.randomUUID().toString(),
+            files = fileHashs.map { it.fileName }
+        )
     }
 
 

@@ -8,7 +8,8 @@ data class FileHash(
 )
 
 data class SignJob(
-    val id:String
+    val id: String,
+    val files: List<String>? = null
 )
 //data class Node(
 //    val id: String,
