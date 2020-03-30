@@ -18,7 +18,7 @@ dependencies {
     // MongoDB
     api("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
     // Merkle tree library
-    implementation("com.sword.signature:merkle-tree:$merkleTreeVersion")
+    api("com.sword.signature:merkle-tree:$merkleTreeVersion")
     // Mongock
     // implementation("com.github.cloudyrock.mongock:mongock-spring:$mongockVersion")
 }
