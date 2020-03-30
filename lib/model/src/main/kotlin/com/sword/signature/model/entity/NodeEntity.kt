@@ -16,7 +16,7 @@ data class NodeEntity(
 
     val fileName: String,
     @Indexed
-    val parentId: String,
+    val parentId: String?,
     val position: NodePosition?,
     val jobId: String,
     val type: NodeType
