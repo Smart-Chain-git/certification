@@ -15,7 +15,7 @@ class AlgorithmServiceImpl(
 
     override suspend fun getAlgorithmByName(algorithmName: String): Algorithm {
         LOGGER.debug("Retrieving algorithm with name '{}'.", algorithmName)
-        val algorithm = algorithmRepository.findByName(algorithmName)?.toBusiness() ?: throw AlgorithmNotFoundException(algorithmName)
+        val algorithm = algorithmRepository.findByName(algorithmName.toUpperCase())?.toBusiness() ?: throw AlgorithmNotFoundException(algorithmName)
         LOGGER.debug("Retrieved algorithm with name  '{}'.", algorithm)
         return algorithm
     }
