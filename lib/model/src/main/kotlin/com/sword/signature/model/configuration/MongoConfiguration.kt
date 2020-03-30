@@ -1,6 +1,7 @@
 package com.sword.signature.model.configuration
 
 import com.sword.signature.model.migration.MigrationHandler
+import kotlinx.coroutines.reactive.awaitSingle
 import kotlinx.coroutines.runBlocking
 import org.slf4j.LoggerFactory
 import org.springframework.boot.context.event.ApplicationReadyEvent
@@ -23,12 +24,14 @@ class MongoConfiguration(
 
     @EventListener(ApplicationReadyEvent::class)
     fun initDatabase() {
-        initIndicesAfterStartup()
-        runBlocking { insertMigrationsData() }
+        runBlocking {
+            initIndicesAfterStartup()
+            insertMigrationsData()
+        }
     }
 
 
-    fun initIndicesAfterStartup() {
+    private suspend fun initIndicesAfterStartup() {
         LOGGER.info("Initialization of Mongo indices started.")
         val init = System.currentTimeMillis()
         val resolver = MongoPersistentEntityIndexResolver(mongoMappingContext)
@@ -36,7 +39,7 @@ class MongoConfiguration(
             val clazz = entity.type
             if (clazz.isAnnotationPresent(Document::class.java)) {
                 val indexOps = mongoTemplate.indexOps(clazz)
-                resolver.resolveIndexFor(clazz).forEach { indexDefinition -> indexOps.ensureIndex(indexDefinition).block() }
+                resolver.resolveIndexFor(clazz).forEach { indexDefinition -> indexOps.ensureIndex(indexDefinition).awaitSingle() }
             }
         }
         LOGGER.info("Initialization of Mongo indices finished in {}ms.", System.currentTimeMillis() - init)

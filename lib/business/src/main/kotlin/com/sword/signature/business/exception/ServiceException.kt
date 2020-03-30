@@ -24,3 +24,4 @@ open class UserServiceException : ServiceException {
 
 class EntityNotFoundException (name: String, id: String) : UserServiceException("The $name with id='$id' was not found.")
 class AccountNotFoundException(loginOrEmail: String) : UserServiceException("The account with login or email '$loginOrEmail' was not found.")
+class AlgorithmNotFoundException(algorithmName: String): UserServiceException("The algorithm with name '$algorithmName' cannot be found.")

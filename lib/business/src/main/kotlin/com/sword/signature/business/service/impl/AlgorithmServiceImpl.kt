@@ -1,5 +1,6 @@
 package com.sword.signature.business.service.impl
 
+import com.sword.signature.business.exception.AlgorithmNotFoundException
 import com.sword.signature.business.model.Algorithm
 import com.sword.signature.business.model.mapper.toBusiness
 import com.sword.signature.business.service.AlgorithmService
@@ -12,9 +13,9 @@ class AlgorithmServiceImpl(
         private val algorithmRepository: AlgorithmRepository
 ) : AlgorithmService {
 
-    override suspend fun getAlgorithmByName(algorithmName: String): Algorithm? {
+    override suspend fun getAlgorithmByName(algorithmName: String): Algorithm {
         LOGGER.debug("Retrieving algorithm with name '{}'.", algorithmName)
-        val algorithm = algorithmRepository.findByName(algorithmName)?.toBusiness()
+        val algorithm = algorithmRepository.findByName(algorithmName)?.toBusiness() ?: throw AlgorithmNotFoundException(algorithmName)
         LOGGER.debug("Retrieved algorithm with name  '{}'.", algorithm)
         return algorithm
     }

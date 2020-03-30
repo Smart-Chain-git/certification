@@ -4,5 +4,5 @@ import com.sword.signature.business.model.Algorithm
 
 interface AlgorithmService {
 
-    suspend fun getAlgorithmByName(algorithmName: String): Algorithm?
+    suspend fun getAlgorithmByName(algorithmName: String): Algorithm
 }
