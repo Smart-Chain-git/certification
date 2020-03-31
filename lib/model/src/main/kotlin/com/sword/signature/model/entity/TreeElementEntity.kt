@@ -5,8 +5,8 @@ import org.springframework.data.mongodb.core.index.Indexed
 import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.data.mongodb.core.mapping.Field
 
-@Document(collection = "nodes")
-data class NodeEntity(
+@Document(collection = "treeElements")
+data class TreeElementEntity (
     @Id
     @Field(value = "_id")
     val id: String? = null,
@@ -17,17 +17,17 @@ data class NodeEntity(
     val fileName: String,
     @Indexed
     val parentId: String?,
-    val position: NodePosition?,
+    val position: TreeElementPosition?,
     val jobId: String,
-    val type: NodeType
+    val type: TreeElementType
 )
 
-enum class NodeType(var shorthand: String) {
+enum class TreeElementType(var shorthand: String) {
     NODE("N"),
     LEAF("L")
 }
 
-enum class NodePosition(var shorthand: String) {
+enum class TreeElementPosition(var shorthand: String) {
     LEFT("L"),
     RIGHT("R")
 }

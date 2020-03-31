@@ -1,8 +1,9 @@
 package com.sword.signature.model.repository
 
-import com.sword.signature.model.entity.NodeEntity
+
+import com.sword.signature.model.entity.TreeElementEntity
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface NodeRepository : ReactiveMongoRepository<NodeEntity, String>
+interface TreeElementRepository : ReactiveMongoRepository<TreeElementEntity, String>
