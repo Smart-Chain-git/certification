@@ -22,12 +22,12 @@ data class TreeElementEntity(
     val type: TreeElementType
 )
 
-enum class TreeElementType(var shorthand: String) {
-    NODE("N"),
-    LEAF("L")
+enum class TreeElementType {
+    NODE,
+    LEAF
 }
 
-enum class TreeElementPosition(var shorthand: String) {
-    LEFT("L"),
-    RIGHT("R")
+enum class TreeElementPosition {
+    LEFT,
+    RIGHT
 }
