@@ -1,0 +1,11 @@
+{
+	"accounts": [
+		{
+			"_id": "5e734ba4b075db359ea73a68",
+			"login": "admin",
+			"email": "account1@signature.com",
+			"password": "password",
+			"fullName": "super Admin"
+		}
+	]
+}

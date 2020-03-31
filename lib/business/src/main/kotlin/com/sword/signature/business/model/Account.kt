@@ -1,6 +1,6 @@
 package com.sword.signature.business.model
 
-class Account(
+data class Account(
     val id: String,
     val login: String,
     val email: String,
