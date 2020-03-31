@@ -1,6 +1,6 @@
 package com.sword.signature.web.mapper
 
 import com.sword.signature.api.sign.SignResponse
-import com.sword.signature.business.model.SignJob
+import com.sword.signature.business.model.Job
 
-fun SignJob.toWeb() = SignResponse(jobId = id,files = files?: emptyList())
+fun Job.toWeb() = SignResponse(jobId = id,files = files?: emptyList())
