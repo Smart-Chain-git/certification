@@ -22,7 +22,7 @@ data class JobEntity(
     /**
      * data of the last injection in the block chain
      */
-    val injectedData: LocalDateTime? = null,
+    val injectedDate: LocalDateTime? = null,
     /**
      * date of the validation in the block chain
      */

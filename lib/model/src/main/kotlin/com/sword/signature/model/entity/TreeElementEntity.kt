@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.data.mongodb.core.mapping.Field
 
 @Document(collection = "treeElements")
-data class TreeElementEntity (
+data class TreeElementEntity(
     @Id
     @Field(value = "_id")
     val id: String? = null,
@@ -14,10 +14,10 @@ data class TreeElementEntity (
     @Indexed(unique = true)
     val hash: String,
 
-    val fileName: String,
+    val fileName: String? = null,
     @Indexed
-    val parentId: String?,
-    val position: TreeElementPosition?,
+    val parentId: String? = null,
+    val position: TreeElementPosition? = null,
     val jobId: String,
     val type: TreeElementType
 )
