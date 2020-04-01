@@ -1,5 +1,6 @@
 package com.sword.signature.business.service.impl
 
+import com.sword.signature.business.exception.UserServiceException
 import com.sword.signature.business.model.Account
 import com.sword.signature.business.model.Algorithm
 import com.sword.signature.business.model.Job
@@ -33,6 +34,9 @@ class SignServiceImpl(
 
             val intermediary = mutableListOf<Pair<String, String>>()
             fileHashs.collect { fileHash ->
+                if(!algorithm.checkHashDigest(fileHash.first)) {
+                    throw UserServiceException("bad ${algorithm.name} hash for file ${fileHash.second}")
+                }
                 intermediary.add(fileHash)
                 if (intermediary.size >= maximunLeaf) {
                     emit(anchorTree(account, algorithm, intermediary))
