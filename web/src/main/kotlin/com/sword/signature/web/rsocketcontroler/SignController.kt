@@ -27,17 +27,17 @@ class SignController(
     @MessageMapping("newJobs")
     suspend fun batchSign(
         @AuthenticationPrincipal user: UserDetails,
-        @Header(name = "algorithm") algorithm: String?,
+        @Header(name = "algorithm") algorithmParameter: String?,
       requests: Flow<SignRequest>
     ): Flow<SignResponse> {
         val account =
             accountService.getAccountByLoginOrEmail(user.username) ?: throw AccountNotFoundException(user.username)
 
-        if(algorithm == null) {
+        if(algorithmParameter == null) {
             throw IllegalArgumentException("missing algorithm parameter")
         }
 
-        algorithmService.getAlgorithmByName(algorithm)
+       val algorithm= algorithmService.getAlgorithmByName(algorithmParameter)
 
         return signService.batchSign(account, algorithm, requests.map { it.toBusiness() }).map { it.toWeb() }
     }
