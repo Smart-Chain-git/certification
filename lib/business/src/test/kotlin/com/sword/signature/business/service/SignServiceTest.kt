@@ -72,7 +72,12 @@ class SignServiceTest @Autowired constructor(
         }
         assertThatThrownBy {
             runBlocking {
-                signService.batchSign(account = accountAdmin, algorithm = sha256, fileHashs = monFlow).collect()
+                signService.batchSign(
+                    account = accountAdmin,
+                    algorithm = sha256,
+                    flowName = "monflow",
+                    fileHashs = monFlow
+                ).collect()
             }
         }.isInstanceOf(UserServiceException::class.java)
 
@@ -93,7 +98,10 @@ class SignServiceTest @Autowired constructor(
         runBlocking {
 
             val actualJobResponse =
-                signService.batchSign(account = account, algorithm = sha256, fileHashs = hashs.asFlow()).toList()
+                signService.batchSign(
+                    account = account, algorithm = sha256,
+                    flowName = "monflow", fileHashs = hashs.asFlow()
+                ).toList()
 
             assertThat(actualJobResponse).hasSize(expectedJobsResponse)
 

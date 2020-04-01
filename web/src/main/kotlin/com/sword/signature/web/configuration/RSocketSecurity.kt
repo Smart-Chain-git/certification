@@ -1,6 +1,7 @@
 package com.sword.signature.web.configuration
 
 import com.sword.signature.api.sign.ALGORITHM_MIME_TYPE
+import com.sword.signature.api.sign.FLOW_NAME_MIME_TYPE
 import org.springframework.boot.rsocket.messaging.RSocketStrategiesCustomizer
 import org.springframework.messaging.rsocket.MetadataExtractorRegistry
 import org.springframework.messaging.rsocket.RSocketStrategies
@@ -37,6 +38,7 @@ fun payloadSocketAcceptorInterceptor(security: RSocketSecurity): PayloadSocketAc
 fun rSocketStrategiesCustomizer() = RSocketStrategiesCustomizer {
     it.metadataExtractorRegistry { registry: MetadataExtractorRegistry ->
         registry.metadataToExtract<String>(MimeType.valueOf(ALGORITHM_MIME_TYPE), "algorithm")
+        registry.metadataToExtract<String>(MimeType.valueOf(FLOW_NAME_MIME_TYPE), "flowName")
     }
 }
 

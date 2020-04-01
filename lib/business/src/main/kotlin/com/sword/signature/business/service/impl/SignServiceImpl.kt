@@ -10,6 +10,7 @@ import com.sword.signature.business.visitor.SaveRepositoryTreeVisitor
 import com.sword.signature.merkletree.builder.TreeBuilder
 import com.sword.signature.merkletree.visitor.SimpleAlgorithmTreeBrowser
 import com.sword.signature.model.entity.JobEntity
+import com.sword.signature.model.entity.JobState
 import com.sword.signature.model.repository.JobRepository
 import com.sword.signature.model.repository.TreeElementRepository
 import kotlinx.coroutines.flow.Flow
@@ -19,6 +20,7 @@ import kotlinx.coroutines.reactive.awaitSingle
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDateTime
 
 @Service
 class SignServiceImpl(
@@ -28,35 +30,48 @@ class SignServiceImpl(
 ) : SignService {
 
     @Transactional
-    override fun batchSign(account: Account, algorithm: Algorithm, fileHashs: Flow<Pair<String, String>>): Flow<Job> {
+    override fun batchSign(
+        account: Account,
+        algorithm: Algorithm,
+        flowName: String,
+        fileHashs: Flow<Pair<String, String>>
+    ): Flow<Job> {
 
         return flow {
 
             val intermediary = mutableListOf<Pair<String, String>>()
             fileHashs.collect { fileHash ->
-                if(!algorithm.checkHashDigest(fileHash.first)) {
+                if (!algorithm.checkHashDigest(fileHash.first)) {
                     throw UserServiceException("bad ${algorithm.name} hash for file ${fileHash.second}")
                 }
                 intermediary.add(fileHash)
                 if (intermediary.size >= maximunLeaf) {
-                    emit(anchorTree(account, algorithm, intermediary))
+                    emit(anchorTree(account, algorithm, flowName, intermediary))
                     intermediary.clear()
                 }
             }
             // emission des derniers hash
             if (intermediary.isNotEmpty()) {
-                emit(anchorTree(account, algorithm, intermediary))
+                emit(anchorTree(account, algorithm, flowName, intermediary))
             }
         }
     }
 
-    private suspend fun anchorTree(account: Account, algorithm: Algorithm, fileHashs: List<Pair<String, String>>): Job {
+    private suspend fun anchorTree(
+        account: Account,
+        algorithm: Algorithm,
+        flowName: String,
+        fileHashs: List<Pair<String, String>>
+    ): Job {
 
         // creation du jobb en BDD
-        val jobEntity = jobRepository.save(
+        val jobEntity = jobRepository.insert(
             JobEntity(
                 userId = account.id,
-                algorithm = algorithm.name
+                algorithm = algorithm.name,
+                flowName = flowName,
+                state = JobState.INSERTED,
+                stateDate = LocalDateTime.now()
             )
         ).awaitSingle()
 
@@ -70,7 +85,6 @@ class SignServiceImpl(
             jobId = jobEntity.id!!,
             treeElementRepository = treeElementRepository
         ).visitTree(merkleTree)
-
 
         return jobEntity.toBusiness(files = fileHashs.map { it.second })
 

@@ -44,5 +44,24 @@ data class JobEntity(
      * user asking for the signature
      */
     @Indexed
-    val userId: String
+    val userId: String,
+
+    /**
+     * Name of the input Flow
+     */
+    val flowName: String,
+
+    var stateDate: LocalDateTime,
+
+    var state: JobState
+
+
 )
+
+enum class JobState {
+    INITIAL,
+    INSERTED,
+    CALCULATED,
+    INJECTED,
+    VALIDATED
+}
