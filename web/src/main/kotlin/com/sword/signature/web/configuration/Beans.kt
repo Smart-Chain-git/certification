@@ -12,7 +12,6 @@ import org.springframework.security.config.annotation.web.reactive.EnableWebFlux
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect
 
-
 fun bean() = beans {
     bean {
         //encodage des mot de passe
@@ -23,6 +22,9 @@ fun bean() = beans {
     }
     bean {
         MainHandler()
+    }
+    bean {
+        rSocketStrategiesCustomizer()
     }
     bean {
         routes(ref())
