@@ -1,31 +1,26 @@
 package com.sword.signature.business.service
 
 import com.sword.signature.business.model.Account
-import com.sword.signature.business.model.FileHash
 import com.sword.signature.merkletree.utils.hexStringHash
 import com.sword.signature.model.entity.TreeElementType
 import com.sword.signature.model.repository.JobRepository
 import com.sword.signature.model.repository.TreeElementRepository
-import kotlinx.coroutines.flow.*
-
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.runBlocking
-
+import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.SoftAssertions
 import org.junit.jupiter.api.BeforeEach
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.MethodSource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
-
-import org.assertj.core.api.Assertions.*
-import org.assertj.core.api.SoftAssertions
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.Arguments
-import org.junit.jupiter.params.provider.MethodSource
-import java.util.ArrayList
+import java.util.*
 import java.util.stream.Stream
 
 
@@ -65,13 +60,13 @@ class SignServiceTest @Autowired constructor(
         comments: String,
         account: Account,
         algorithm: String,
-        hashs: List<FileHash>,
+        hashs: List<Pair<String,String>>,
         expectedJobsResponse: Int,
         expectedTreeElements: Int
     ) {
         runBlocking {
 
-            val actualJobResponse = signService.batchSign(account = account, fileHashs = hashs.asFlow()).toList()
+            val actualJobResponse = signService.batchSign(account = account,algorithm = algorithm, fileHashs = hashs.asFlow()).toList()
 
             assertThat(actualJobResponse).hasSize(expectedJobsResponse)
 
@@ -109,7 +104,7 @@ class SignServiceTest @Autowired constructor(
                 "single",
                 accountAdmin,
                 "SHA-256",
-                listOf(FileHash(fileName = "lorem1Hash.pdf", hash = lorem1Hash, algorithm = "SHA-256")),
+                listOf(Pair(second = "lorem1Hash.pdf", first = lorem1Hash )),
                 1,
                 1
             )
@@ -121,9 +116,9 @@ class SignServiceTest @Autowired constructor(
                 accountAdmin,
                 "SHA-256",
                 listOf(
-                    FileHash(fileName = "lorem2Hash.pdf", hash = lorem2Hash, algorithm = "SHA-256"),
-                    FileHash(fileName = "lorem3Hash.pdf", hash = lorem3Hash, algorithm = "SHA-256"),
-                    FileHash(fileName = "lorem4Hash.pdf", hash = lorem4Hash, algorithm = "SHA-256")
+                    Pair(second = "lorem2Hash.pdf", first = lorem2Hash),
+                    Pair(second = "lorem3Hash.pdf", first = lorem3Hash),
+                    Pair(second = "lorem4Hash.pdf", first = lorem4Hash)
                 ),
                 1,
                 6
@@ -137,10 +132,10 @@ class SignServiceTest @Autowired constructor(
                 accountAdmin,
                 "SHA-256",
                 listOf(
-                    FileHash(fileName = "lorem1Hash.pdf", hash = lorem1Hash, algorithm = "SHA-256"),
-                    FileHash(fileName = "lorem2Hash.pdf", hash = lorem2Hash, algorithm = "SHA-256"),
-                    FileHash(fileName = "lorem3Hash.pdf", hash = lorem3Hash, algorithm = "SHA-256"),
-                    FileHash(fileName = "lorem4Hash.pdf", hash = lorem4Hash, algorithm = "SHA-256")
+                    Pair(second = "lorem1Hash.pdf", first = lorem1Hash ),
+                    Pair(second = "lorem2Hash.pdf", first = lorem2Hash ),
+                    Pair(second = "lorem3Hash.pdf", first = lorem3Hash ),
+                    Pair(second = "lorem4Hash.pdf", first = lorem4Hash )
                 ),
                 2,
                 7
@@ -149,10 +144,4 @@ class SignServiceTest @Autowired constructor(
 
         return parametre.stream()
     }
-
-
-    companion object {
-        val LOGGER: Logger = LoggerFactory.getLogger(SignServiceTest::class.java)
-    }
-
 }

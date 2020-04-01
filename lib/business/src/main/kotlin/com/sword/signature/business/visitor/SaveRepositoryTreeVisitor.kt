@@ -1,26 +1,24 @@
 package com.sword.signature.business.visitor
 
-import com.sword.signature.business.model.FileHash
+
 import com.sword.signature.merkletree.model.TreeElement
 import com.sword.signature.merkletree.model.TreeLeaf
 import com.sword.signature.merkletree.model.TreeNode
-import com.sword.signature.merkletree.visitor.TreeVisitor
 import com.sword.signature.model.entity.TreeElementEntity
 import com.sword.signature.model.entity.TreeElementPosition
 import com.sword.signature.model.entity.TreeElementType
 import com.sword.signature.model.repository.TreeElementRepository
 import kotlinx.coroutines.reactive.awaitSingle
-import kotlinx.coroutines.runBlocking
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 class SaveRepositoryTreeVisitor(
     private val jobId: String,
     private val treeElementRepository: TreeElementRepository
-) : TreeVisitor<String, Unit> {
+) {
 
-    override fun visitTree(rooTreeElement: TreeElement<String>?) {
-        runBlocking {
-            visitTreeElement(rooTreeElement, null, null)
-        }
+    suspend fun visitTree(rooTreeElement: TreeElement<String>?) {
+        visitTreeElement(rooTreeElement, null, null)
     }
 
 
@@ -38,28 +36,33 @@ class SaveRepositoryTreeVisitor(
 
     private suspend fun visitTreeNode(treeNode: TreeNode<String>, parentId: String?, position: TreeElementPosition?) {
         //creation entité
-        val nodeEntity = treeElementRepository.save(
-            TreeElementEntity(
-                hash = treeNode.value!!,
-                jobId = jobId,
-                type = TreeElementType.NODE,
-                parentId = parentId,
-                position = position
-            )
+        val tempTreeElementEntity = TreeElementEntity(
+            hash = treeNode.value!!,
+            jobId = jobId,
+            type = TreeElementType.NODE,
+            parentId = parentId,
+            position = position
+        )
+        LOGGER.trace("ecriture node {}", tempTreeElementEntity)
+
+
+        val nodeEntity = treeElementRepository.insert(
+            tempTreeElementEntity
         ).awaitSingle()
 
-        visitTreeElement(treeNode.left, nodeEntity.id, TreeElementPosition.LEFT)
+        visitTreeElement(treeNode.left, nodeEntity.id!!, TreeElementPosition.LEFT)
         if (treeNode.right != null) {
-            visitTreeElement(treeNode.right!!, nodeEntity.id, TreeElementPosition.RIGHT)
+            visitTreeElement(treeNode.right!!, nodeEntity.id!!, TreeElementPosition.RIGHT)
         }
     }
 
     private suspend fun visitTreeLeaf(treeLeaf: TreeLeaf<String>, parentId: String?, position: TreeElementPosition?) {
-        val metadata=treeLeaf.metadata as FileHash
-        treeElementRepository.save(
+        val metadata = treeLeaf.metadata as String
+        LOGGER.debug("ecriture leaf {}", treeLeaf.value)
+        treeElementRepository.insert(
             TreeElementEntity(
-                hash = metadata.hash,
-                fileName = metadata.fileName,
+                hash = treeLeaf.value,
+                fileName = metadata,
                 jobId = jobId,
                 type = TreeElementType.LEAF,
                 parentId = parentId,
@@ -68,5 +71,8 @@ class SaveRepositoryTreeVisitor(
         ).awaitSingle()
     }
 
+    companion object {
+        val LOGGER: Logger = LoggerFactory.getLogger(SaveRepositoryTreeVisitor::class.java)
+    }
 
 }
