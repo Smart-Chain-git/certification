@@ -1,8 +1,10 @@
 package com.sword.signature.business.model.mapper
 
 import com.sword.signature.business.model.Account
+import com.sword.signature.business.model.Algorithm
 import com.sword.signature.business.model.Job
 import com.sword.signature.model.entity.AccountEntity
+import com.sword.signature.model.entity.AlgorithmEntity
 import com.sword.signature.model.entity.JobEntity
 
 fun AccountEntity.toBusiness() = Account(
@@ -24,4 +26,10 @@ fun JobEntity.toBusiness(files: List<String>? = null) = Job(
     numbreOfTry = numbreOfTry,
     validatedDate = validatedDate,
     files = files
+)
+
+fun AlgorithmEntity.toBusiness() = Algorithm(
+        id = id!!,
+        name = name,
+        digestLength = digestLength
 )

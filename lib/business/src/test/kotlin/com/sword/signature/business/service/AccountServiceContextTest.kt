@@ -4,6 +4,7 @@ import com.sword.signature.business.exception.EntityNotFoundException
 import com.sword.signature.business.model.Account
 import com.sword.signature.business.model.AccountCreate
 import com.sword.signature.business.model.AccountPatch
+import com.sword.signature.model.configuration.MongoConfiguration
 import kotlinx.coroutines.flow.count
 import kotlinx.coroutines.reactive.awaitSingle
 import kotlinx.coroutines.runBlocking
@@ -21,10 +22,11 @@ import java.nio.file.Path
 
 class AccountServiceContextTest @Autowired constructor(
         private val accountService: AccountService,
-        override val mongoTemplate: ReactiveMongoTemplate
+        override val mongoTemplate: ReactiveMongoTemplate,
+        override val mongoConfiguration: MongoConfiguration
 ) : AbstractServiceContextTest() {
 
-    private val accountsInitialCount: Long = 3
+    private var accountsInitialCount: Long = 0L
 
     private val accountId1 = "5e734ba4b075db359ea73a68"
     private val accountLogin1 = "account1"
@@ -39,6 +41,9 @@ class AccountServiceContextTest @Autowired constructor(
     fun refreshDatabase() {
         resetDatabase()
         importJsonDataset(Path.of("src/test/resources/datasets/accounts.json"))
+        if (accountsInitialCount == 0L) {
+            accountsInitialCount = runBlocking { mongoTemplate.getCollection("accounts").countDocuments().awaitSingle() }
+        }
     }
 
     @Test
@@ -49,9 +54,7 @@ class AccountServiceContextTest @Autowired constructor(
         val fullName = "fullName"
         val toCreate = AccountCreate(login, email, password, fullName)
         runBlocking {
-            val createdAccount =
-                    accountService.createAccount(toCreate)
-
+            val createdAccount = accountService.createAccount(toCreate)
 
             assertAll("createdAccount",
                     { assertEquals(login, createdAccount.login) },
@@ -101,7 +104,7 @@ class AccountServiceContextTest @Autowired constructor(
     fun getAccountsTest() {
         val accounts = runBlocking { accountService.getAccounts().count() }
 
-        assertEquals(3, accounts)
+        assertEquals(accountsInitialCount, accounts.toLong())
     }
 
     @Test
