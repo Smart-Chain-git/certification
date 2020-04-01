@@ -94,10 +94,10 @@ class AccountServiceContextTest @Autowired constructor(
         assertNotNull(account)
         account as Account
         assertAll("account",
-                { assertEquals(accountLogin1, account?.login) },
-                { assertEquals(accountEmail1, account?.email) },
-                { assertEquals(accountPassword1, account?.password) },
-                { assertEquals(accountFullName1, account?.fullName) })
+                { assertEquals(accountLogin1, account.login) },
+                { assertEquals(accountEmail1, account.email) },
+                { assertEquals(accountPassword1, account.password) },
+                { assertEquals(accountFullName1, account.fullName) })
     }
 
     @Test

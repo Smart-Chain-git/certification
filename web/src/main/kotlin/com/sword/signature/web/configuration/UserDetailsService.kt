@@ -23,7 +23,7 @@ class UserDetailsService(
             mailService.sendEmail(HelloAccountMail(account))
             User.builder()
                     .username(username)
-                    .password(account?.password)
+                    .password(account.password)
                     .roles("Admin")
                     .build()
         }
