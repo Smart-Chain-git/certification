@@ -11,7 +11,6 @@ import org.springframework.security.config.annotation.web.reactive.EnableWebFlux
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect
 
-
 fun bean() = beans {
     bean {
         //encodage des mot de passe
@@ -39,7 +38,7 @@ fun bean() = beans {
 @Configuration
 @EnableWebFluxSecurity
 @ComponentScan(basePackages = ["com.sword.signature"])
-class BeansInitialiser : ApplicationContextInitializer<GenericApplicationContext> {
+class BeansInitializer : ApplicationContextInitializer<GenericApplicationContext> {
     override fun initialize(applicationContext: GenericApplicationContext) {
         bean().initialize(context = applicationContext)
     }

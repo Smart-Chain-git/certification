@@ -17,6 +17,9 @@ dependencies {
 
     // Project
     implementation(project(":lib:model"))
+    val merkleTreeVersion : String by project.extra
+    implementation("com.sword.signature:merkle-tree:$merkleTreeVersion")
+
 
     // Spring
     implementation("org.springframework.boot:spring-boot-starter-mail")

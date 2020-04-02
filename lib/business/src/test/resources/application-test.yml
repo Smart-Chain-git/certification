@@ -1,3 +1,6 @@
+sign:
+  tree:
+    maximunLeaf: 3
 spring:
   mail:
     host: localhost
@@ -14,11 +17,15 @@ spring:
           writeTimeout: 5000
         starttls:
           enable: true
+  data:
+    mongodb:
+      auto-index-creation: false
   integration:
     poller:
       fixedRate: 10000
 logging:
   level:
+    root : warn
     com.sword.signature.business: TRACE
 jwt:
   secret: Yolo@Signature
