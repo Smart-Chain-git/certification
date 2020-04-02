@@ -49,3 +49,6 @@ logging:
     org:
       springframework:
         security: info
+jwt:
+  secret: JAC1O17W1F3QB9E8B4B1MT6QKYOQB36V
+  issuer: "Tezos Signature"

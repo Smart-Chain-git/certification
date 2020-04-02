@@ -20,3 +20,6 @@ spring:
 logging:
   level:
     com.sword.signature.business: TRACE
+jwt:
+  secret: Yolo@Signature
+  issuer: "Tezos Signature"

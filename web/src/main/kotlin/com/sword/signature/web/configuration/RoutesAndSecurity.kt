@@ -2,12 +2,20 @@ package com.sword.signature.web.configuration
 
 
 import com.sword.signature.web.webhandler.MainHandler
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.security.reactive.PathRequest
+import org.springframework.context.annotation.Bean
 import org.springframework.core.io.ClassPathResource
 import org.springframework.http.MediaType.TEXT_HTML
 import org.springframework.security.config.web.server.ServerHttpSecurity
+import org.springframework.security.oauth2.jose.jws.MacAlgorithm
+import org.springframework.security.oauth2.jwt.NimbusReactiveJwtDecoder
+import org.springframework.security.oauth2.jwt.ReactiveJwtDecoder
+import org.springframework.security.oauth2.server.resource.authentication.*
 import org.springframework.security.web.server.SecurityWebFilterChain
 import org.springframework.web.reactive.function.server.coRouter
+import javax.crypto.Mac
+import javax.crypto.spec.SecretKeySpec
 
 fun routes(mainHandler: MainHandler) = coRouter {
     accept(TEXT_HTML).nest {

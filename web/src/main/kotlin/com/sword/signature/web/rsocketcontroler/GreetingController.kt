@@ -5,7 +5,6 @@ import com.sword.signature.greeting.GreetingResponse
 import org.slf4j.LoggerFactory
 import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.security.core.annotation.AuthenticationPrincipal
-import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Controller
 import java.time.Instant
 
@@ -14,9 +13,9 @@ import java.time.Instant
 internal class GreetingController {
 
     @MessageMapping("greetings")
-    suspend fun greet(@AuthenticationPrincipal user: UserDetails,request : GreetingRequest ): GreetingResponse {
-        LOGGER.debug("recu de {} : {}",user.username,request)
-        return GreetingResponse("Hello " + user.username + " @ " + Instant.now().toString())
+    suspend fun greet(@AuthenticationPrincipal user: String, request: GreetingRequest): GreetingResponse {
+        LOGGER.debug("recu de {} : {}", user, request)
+        return GreetingResponse("Hello " + user + " @ " + Instant.now().toString())
     }
 
     companion object {

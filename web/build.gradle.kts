@@ -33,6 +33,12 @@ dependencies {
 
     implementation("org.springframework.boot:spring-boot-starter-actuator")
 
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
+    implementation("org.springframework.security:spring-security-jwt:1.1.0.RELEASE")
+
+    // JWT
+    implementation("com.auth0:java-jwt:3.10.2")
+
     runtimeOnly("org.webjars:webjars-locator-core")
     runtimeOnly("org.webjars:bootstrap:4.4.1-1")
     runtimeOnly("org.webjars:jquery:3.4.1")
