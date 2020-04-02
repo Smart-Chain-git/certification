@@ -39,6 +39,7 @@ class SignServiceImpl(
 
         return flow {
 
+            // intermediary doit etre declaré dans le scope du flow!
             val intermediary = mutableListOf<Pair<String, String>>()
             fileHashs.collect { fileHash ->
                 if (!algorithm.checkHashDigest(fileHash.first)) {
