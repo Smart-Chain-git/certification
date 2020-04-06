@@ -7,6 +7,9 @@ import com.sword.signature.business.model.mapper.toBusiness
 import com.sword.signature.business.service.JwtTokenService
 import com.sword.signature.business.service.TokenService
 import com.sword.signature.model.repository.TokenRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.reactive.asFlow
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -38,6 +41,13 @@ class TokenServiceImpl(
             }
         }
         return token
+    }
+
+    override suspend fun getTokensByAccountId(accountId: String): Flow<Token> {
+        LOGGER.debug("Retrieving all tokens with accountId '{}'.", accountId)
+        val tokens = tokenRepository.findAllByAccountId(accountId).asFlow().map { it.toBusiness() }
+        LOGGER.debug("Retrieved all tokens retrieved for accountId '{}'", accountId)
+        return tokens
     }
 
     companion object {
