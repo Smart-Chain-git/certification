@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails
 
 class SignatureAuthenticationToken(
         private val principal: UserDetails,
-        private val credentials: Token,
+        private val credentials: Any,
         authorities: MutableCollection<out GrantedAuthority>
 ) : AbstractAuthenticationToken(authorities) {
 

@@ -2,6 +2,7 @@ package com.sword.signature.web.configuration
 
 import com.sword.signature.api.sign.ALGORITHM_MIME_TYPE
 import com.sword.signature.api.sign.FLOW_NAME_MIME_TYPE
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.rsocket.messaging.RSocketStrategiesCustomizer
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -39,7 +40,7 @@ class RSocketSecurity {
 
 
     @Bean
-    fun payloadSocketAcceptorInterceptor(security: RSocketSecurity, reactiveAuthenticationManager: ReactiveAuthenticationManager): PayloadSocketAcceptorInterceptor {
+    fun payloadSocketAcceptorInterceptor(security: RSocketSecurity, @Qualifier("signatureAuthManager") reactiveAuthenticationManager: ReactiveAuthenticationManager): PayloadSocketAcceptorInterceptor {
         return security
                 .authorizePayload { spec: AuthorizePayloadsSpec ->
                     spec
