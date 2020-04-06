@@ -10,35 +10,10 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
 
-@Service
-class TokenService(
-        private val tokenRepository: TokenRepository,
-        private val jwtTokenService: JwtTokenService
-) {
 
-    @Transactional(rollbackFor = [ServiceException::class])
-    suspend fun getToken(token: String): Token? {
-        LOGGER.debug("Retrieving token with jwtToken ({}).", token)
-        val token = tokenRepository.findByJwtToken(token)?.toBusiness()
-        LOGGER.debug("Token with jwtToken ({}) retrieved.", token)
-        return token
-    }
+interface TokenService {
 
-    suspend fun checkAndGetToken(token: String): Token {
-        val jwtToken = jwtTokenService.parseToken(token)
+    suspend fun getToken(token: String): Token?
 
-        val token = getToken(token)
-        if (token != null) {
-            if (token.expirationDate != null && token.expirationDate > LocalDate.now()) {
-                throw UserServiceException("Token expired.")
-            }
-
-            return token
-        }
-        throw UserServiceException("Revoked token.")
-    }
-
-    companion object {
-        private val LOGGER = LoggerFactory.getLogger(TokenService::class.java)
-    }
+    suspend fun checkAndGetToken(token: String): Token
 }

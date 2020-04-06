@@ -1,4 +1,4 @@
-package com.sword.signature.web.configuration
+package com.sword.signature.web.authentication
 
 import com.sword.signature.business.model.Account
 import com.sword.signature.business.model.mail.HelloAccountMail

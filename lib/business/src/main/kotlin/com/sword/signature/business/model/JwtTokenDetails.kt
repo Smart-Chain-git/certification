@@ -1,6 +1,6 @@
 package com.sword.signature.business.model
 
-data class TokenDetails(
+data class JwtTokenDetails(
         val id: String,
         val creationTime: String
 ) {

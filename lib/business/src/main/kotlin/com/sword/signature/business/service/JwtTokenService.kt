@@ -1,44 +1,19 @@
 package com.sword.signature.business.service
 
-import com.auth0.jwt.JWT
-import com.auth0.jwt.algorithms.Algorithm
-import com.auth0.jwt.interfaces.DecodedJWT
-import com.sword.signature.business.model.TokenDetails
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.stereotype.Service
+import com.sword.signature.business.model.JwtTokenDetails
 
-@Service
-class JwtTokenService(
-        @Value("\${jwt.secret}") private val jwtSecret: String,
-        @Value("\${jwt.issuer}") private val jwtIssuer: String
-) {
-    private val algorithm = Algorithm.HMAC256(jwtSecret)
+/**
+ * JWT token service dedicated to JWT tokens creation and verification.
+ */
+interface JwtTokenService {
 
-    fun createToken(tokenDetails: TokenDetails): String {
-        return JWT.create()
-                .withIssuer(jwtIssuer)
-                .withClaim(CLAIM_ID, tokenDetails.id)
-                .withClaim(CLAIM_CREATION_TIME, tokenDetails.creationTime)
-                .sign(algorithm)
-    }
+    /**
+     * Create a JWT token from the details and return its string representation.
+     */
+    fun createToken(jwtTokenDetails: JwtTokenDetails): String
 
-    fun parseToken(token: String): TokenDetails {
-        val decodedJWT = verifyToken(token)
-        return TokenDetails(
-                id = decodedJWT.claims[CLAIM_ID]?.asString() ?: "",
-                creationTime = decodedJWT.claims[CLAIM_CREATION_TIME]?.asString() ?: ""
-        )
-    }
-
-    fun verifyToken(token: String): DecodedJWT {
-        return JWT.require(algorithm)
-                .withIssuer(jwtIssuer)
-                .build()
-                .verify(token)
-    }
-
-    companion object {
-        private const val CLAIM_ID = "id"
-        private const val CLAIM_CREATION_TIME = "creationTime"
-    }
+    /**
+     * Parse the string representation of a JWT token, verify it, and return the details used to create it.
+     */
+    fun parseToken(token: String): JwtTokenDetails
 }

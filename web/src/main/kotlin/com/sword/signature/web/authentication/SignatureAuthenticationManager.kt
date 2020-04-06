@@ -1,7 +1,6 @@
 package com.sword.signature.web.authentication
 
 import com.sword.signature.business.service.TokenService
-import com.sword.signature.web.configuration.UserDetailsService
 import kotlinx.coroutines.runBlocking
 import org.springframework.security.authentication.ReactiveAuthenticationManager
 import org.springframework.security.core.Authentication
@@ -14,6 +13,12 @@ class SignatureAuthenticationManager(
         private val tokenService: TokenService,
         private val userDetailsService: UserDetailsService
 ) : ReactiveAuthenticationManager {
+
+    /**
+     * Authenticate the user using a token.
+     * @param authentication Bearer token containing the JWT token for authentication.
+     * @return Authentication composed of the authenticated user with its token and authorities.
+     */
     override fun authenticate(authentication: Authentication): Mono<Authentication> {
         val bearerToken = (authentication as BearerTokenAuthenticationToken).token
 

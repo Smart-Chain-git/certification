@@ -1,4 +1,6 @@
+val merkleTreeVersion : String by project.extra
 val flapdoodleVersion: String by project.extra
+val mockKVersion: String by project.extra
 
 plugins {
     id("kotlin")
@@ -17,7 +19,6 @@ dependencies {
 
     // Project
     implementation(project(":lib:model"))
-    val merkleTreeVersion : String by project.extra
     implementation("com.sword.signature:merkle-tree:$merkleTreeVersion")
 
 
@@ -31,6 +32,7 @@ dependencies {
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo:$flapdoodleVersion")
+    testImplementation("io.mockk:mockk:$mockKVersion")
 }
 
 tasks {

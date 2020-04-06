@@ -1,0 +1,77 @@
+package com.sword.signature.business.service
+
+import com.sword.signature.business.exception.AuthenticationException
+import com.sword.signature.business.model.JwtTokenDetails
+import com.sword.signature.business.model.Token
+import com.sword.signature.business.service.impl.TokenServiceImpl
+import com.sword.signature.model.entity.TokenEntity
+import com.sword.signature.model.repository.TokenRepository
+import io.mockk.*
+import kotlinx.coroutines.runBlocking
+import org.junit.jupiter.api.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import java.time.LocalDate
+import java.time.Month
+
+class TokenServiceTest {
+
+    private val tokenRepository: TokenRepository = mockk()
+    private val jwtTokenService: JwtTokenService = mockk()
+    private val tokenService = TokenServiceImpl(tokenRepository, jwtTokenService)
+
+    private val tokenId = "tokenId"
+    private val accountId = "accountId"
+    private val jwtToken = "jwtTestToken"
+    private val jwtTokenDetails = JwtTokenDetails(accountId, "creationTime")
+
+    private val expirationDate = LocalDate.of(2020, Month.APRIL, 3)
+    private val validDate = LocalDate.of(2020, Month.MARCH, 20)
+    private val expiredDate = LocalDate.of(2020, Month.MAY, 1)
+
+    private val tokenEntity = TokenEntity(tokenId, jwtToken, expirationDate, accountId)
+    private val token = Token(tokenId, jwtToken, expirationDate, accountId)
+
+
+
+    @BeforeAll
+    fun initMock() {
+        mockkStatic(LocalDate::class)
+        every { jwtTokenService.parseToken(jwtToken) } returns jwtTokenDetails
+    }
+
+    @AfterAll
+    fun freeStaticMocks() {
+        unmockkStatic(LocalDate::class)
+    }
+
+    @BeforeEach
+    fun resetMocks() {
+        clearMocks(tokenRepository)
+    }
+
+    @Test
+    fun getTokenTest() {
+        coEvery { tokenRepository.findByJwtToken(jwtToken) } returns tokenEntity
+        assertEquals(token, runBlocking { tokenService.getToken(jwtToken) })
+    }
+
+    @Test
+    fun checkAndGetTokenToken() {
+        coEvery { tokenRepository.findByJwtToken(jwtToken) } returns tokenEntity
+        every { LocalDate.now() } returns validDate
+        assertEquals(token, runBlocking { tokenService.checkAndGetToken(jwtToken) })
+    }
+
+    @Test
+    fun checkAndGetRevokedTokenTest() {
+        coEvery { tokenRepository.findByJwtToken(jwtToken) } returns null
+        assertThrows<AuthenticationException.RevokedTokenException> { runBlocking { tokenService.checkAndGetToken(jwtToken) } }
+    }
+
+    @Test
+    fun checkAndGetExpiredTokenTest() {
+        coEvery { tokenRepository.findByJwtToken(jwtToken) } returns tokenEntity
+        every { LocalDate.now() } returns expiredDate
+        assertThrows<AuthenticationException.ExpiredTokenException> { runBlocking { tokenService.checkAndGetToken(jwtToken) } }
+    }
+}
