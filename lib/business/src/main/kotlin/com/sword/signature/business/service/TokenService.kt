@@ -1,45 +1,44 @@
 package com.sword.signature.business.service
 
-import com.auth0.jwt.JWT
-import com.auth0.jwt.algorithms.Algorithm
-import com.auth0.jwt.interfaces.DecodedJWT
-import com.sword.signature.business.model.TokenDetails
-import org.springframework.beans.factory.annotation.Value
+import com.sword.signature.business.exception.ServiceException
+import com.sword.signature.business.exception.UserServiceException
+import com.sword.signature.business.model.Token
+import com.sword.signature.business.model.mapper.toBusiness
+import com.sword.signature.model.repository.TokenRepository
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDate
 
 @Service
 class TokenService(
-        @Value("\${jwt.secret}") private val jwtSecret: String,
-        @Value("\${jwt.issuer}") private val jwtIssuer: String
+        private val tokenRepository: TokenRepository,
+        private val jwtTokenService: JwtTokenService
 ) {
-    private val algorithm = Algorithm.HMAC256(jwtSecret)
 
-    fun createToken(tokenDetails: TokenDetails): String {
-        return JWT.create()
-                .withIssuer(jwtIssuer)
-                .withClaim(CLAIM_ID, tokenDetails.id)
-                .withClaim(CLAIM_LOGIN, tokenDetails.login)
-                .sign(algorithm)
+    @Transactional(rollbackFor = [ServiceException::class])
+    suspend fun getToken(token: String): Token? {
+        LOGGER.debug("Retrieving token with jwtToken ({}).", token)
+        val token = tokenRepository.findByJwtToken(token)?.toBusiness()
+        LOGGER.debug("Token with jwtToken ({}) retrieved.", token)
+        return token
     }
 
-    fun parseToken(token: String): TokenDetails {
-        val decodedJWT = verifyToken(token)
-        return TokenDetails(
-                id = decodedJWT.claims[CLAIM_ID]?.asString() ?: "",
-                login = decodedJWT.claims[CLAIM_LOGIN]?.asString() ?: ""
-        )
-    }
+    suspend fun checkAndGetToken(token: String): Token {
+        val jwtToken = jwtTokenService.parseToken(token)
 
-    fun verifyToken(token: String): DecodedJWT {
-        return JWT.require(algorithm)
-                .withIssuer(jwtIssuer)
-                .build()
-                .verify(token)
+        val token = getToken(token)
+        if (token != null) {
+            if (token.expirationDate != null && token.expirationDate > LocalDate.now()) {
+                throw UserServiceException("Token expired.")
+            }
+
+            return token
+        }
+        throw UserServiceException("Revoked token.")
     }
 
     companion object {
-        private const val CLAIM_ID = "id"
-        private const val CLAIM_LOGIN = "login"
+        private val LOGGER = LoggerFactory.getLogger(TokenService::class.java)
     }
-
 }

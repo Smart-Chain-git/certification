@@ -1,31 +1,50 @@
 package com.sword.signature.web.configuration
 
+import com.sword.signature.business.model.Account
 import com.sword.signature.business.model.mail.HelloAccountMail
 import com.sword.signature.business.service.AccountService
 import com.sword.signature.business.service.MailService
 import kotlinx.coroutines.reactor.mono
+import kotlinx.coroutines.runBlocking
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UsernameNotFoundException
+import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
 
-
+@Service
 class UserDetailsService(
         private val accountService: AccountService,
         private val mailService: MailService
 ) : ReactiveUserDetailsService {
 
+    fun findById(userId: String): UserDetails {
+        val account = runBlocking {
+            accountService.getAccount(userId) ?: throw UsernameNotFoundException("Account with id '$userId' not found.")
+        }
+        return buildUser(account)
+    }
+
     override fun findByUsername(username: String): Mono<UserDetails> {
         return mono {
             val account = accountService.getAccountByLoginOrEmail(username)
-                    ?: throw UsernameNotFoundException("account $username not found")
+                    ?: throw UsernameNotFoundException("Account with username '$username' not found.")
             mailService.sendEmail(HelloAccountMail(account))
-            User.builder()
-                    .username(username)
-                    .password(account.password)
-                    .roles("Admin")
-                    .build()
+            buildUser(account)
         }
+    }
+
+    fun buildUser(account: Account): UserDetails {
+        val roles = mutableListOf("SETUP")
+        if (account.isAdmin) {
+            roles.add("ADMIN")
+        }
+
+        return User.builder()
+                .username(account.login)
+                .password(account.password)
+                .roles(*roles.toTypedArray())
+                .build()
     }
 }

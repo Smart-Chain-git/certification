@@ -17,9 +17,6 @@ fun bean() = beans {
         BCryptPasswordEncoder()
     }
     bean {
-        UserDetailsService(ref(), ref())
-    }
-    bean {
         MainHandler()
     }
     bean {

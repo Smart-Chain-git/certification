@@ -4,7 +4,7 @@ sign:
 
 context:
   initializer:
-    classes: com.sword.signature.web.configuration.BeansInitialiser
+    classes: com.sword.signature.web.configuration.BeansInitializer
 management:
   endpoints:
     web:
@@ -54,5 +54,5 @@ logging:
       springframework:
         security: info
 jwt:
-  secret: JAC1O17W1F3QB9E8B4B1MT6QKYOQB36V
-  issuer: "Tezos Signature"
+  secret: ffe50f21d8359de7245dc13777812c2a
+  issuer: "Tezos@Signature"

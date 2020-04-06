@@ -28,5 +28,5 @@ logging:
     root : warn
     com.sword.signature.business: TRACE
 jwt:
-  secret: Yolo@Signature
-  issuer: "Tezos Signature"
+  secret: ffe50f21d8359de7245dc13777812c2a
+  issuer: "Tezos@Signature"
