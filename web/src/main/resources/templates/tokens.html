@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout (~{::body},'tokens')}">
+<body>
+<div class="container">
+    <div class="table-wrapper">
+        <div class="table-title">
+            <div class="row">
+                <div class="col-sm-8"><h2>Token <b>Details</b></h2></div>
+                <div class="col-sm-4">
+                    <button type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i> Add New</button>
+                </div>
+            </div>
+        </div>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th class="w-50">Token</th>
+                <th class="w-50">Expiration Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="token : ${tokens}" th:object="${token}">
+                <tr th:id="'token-'+*{id}">
+                    <td th:text="*{jwtToken}" class="cut-text" colspan="2">Token</td>
+                    <td th:text="*{expirationDate}" colspan="2">Expiration Date</td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

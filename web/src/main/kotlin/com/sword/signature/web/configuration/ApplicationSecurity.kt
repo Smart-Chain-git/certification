@@ -25,9 +25,6 @@ class ApplicationSecurity {
     @Bean
     fun bCryptPasswordEncoder() = BCryptPasswordEncoder()
 
-    @Bean
-    fun mainHandler() = MainHandler()
-
     /**
      * Spring security support for thymeleaf.
      */
@@ -39,7 +36,9 @@ class ApplicationSecurity {
     fun routes(mainHandler: MainHandler) = coRouter {
         accept(MediaType.TEXT_HTML).nest {
             GET("/", mainHandler::index)
+            GET("/index", mainHandler::index)
             GET("/login", mainHandler::login)
+            GET("/tokens", mainHandler::tokens)
         }
         resources("/**", ClassPathResource("/static"))
     }

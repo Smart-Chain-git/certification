@@ -1,0 +1,7 @@
+.cut-text {
+    width: 300px;
+    overflow: hidden;
+    display: inline-block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
