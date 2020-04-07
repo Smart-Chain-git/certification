@@ -40,7 +40,7 @@ class RSocketSecurity {
 
 
     @Bean
-    fun payloadSocketAcceptorInterceptor(security: RSocketSecurity, @Qualifier("signatureAuthManager") reactiveAuthenticationManager: ReactiveAuthenticationManager): PayloadSocketAcceptorInterceptor {
+    fun payloadSocketAcceptorInterceptor(security: RSocketSecurity, reactiveAuthenticationManager: ReactiveAuthenticationManager): PayloadSocketAcceptorInterceptor {
         return security
                 .authorizePayload { spec: AuthorizePayloadsSpec ->
                     spec

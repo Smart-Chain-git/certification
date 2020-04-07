@@ -1,10 +1,6 @@
 sign:
   tree:
    maximunLeaf: 3
-
-context:
-  initializer:
-    classes: com.sword.signature.web.configuration.BeansInitializer
 management:
   endpoints:
     web:
