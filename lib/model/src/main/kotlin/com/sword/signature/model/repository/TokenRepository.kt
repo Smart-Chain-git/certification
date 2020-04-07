@@ -9,6 +9,6 @@ import reactor.core.publisher.Mono
 @Repository
 interface TokenRepository : ReactiveMongoRepository<TokenEntity, String> {
 
-    suspend fun findByJwtToken(jwtToken: String): Mono<TokenEntity>
-    suspend fun findByAccountId(accountId: String): Flux<TokenEntity>
+    fun findByJwtToken(jwtToken: String): Mono<TokenEntity>
+    fun findByAccountId(accountId: String): Flux<TokenEntity>
 }
