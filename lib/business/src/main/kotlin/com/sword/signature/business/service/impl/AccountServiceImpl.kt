@@ -40,7 +40,7 @@ class AccountServiceImpl(
     @Transactional(rollbackFor = [ServiceException::class])
     override suspend fun getAccount(accountId: String): Account? {
         LOGGER.trace("Retrieving account with id ({}).", accountId)
-        val account= accountRepository.findById(accountId).awaitFirstOrNull()?.toBusiness()
+        val account = accountRepository.findById(accountId).awaitFirstOrNull()?.toBusiness()
         LOGGER.trace("Account with id ({}) retrieved.", accountId)
         return account
     }

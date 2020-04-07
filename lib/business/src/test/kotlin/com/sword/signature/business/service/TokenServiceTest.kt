@@ -17,13 +17,15 @@ import java.time.Month
 class TokenServiceTest {
 
     private val tokenRepository: TokenRepository = mockk()
-    private val jwtTokenService: JwtTokenService = mockk()
-    private val tokenService = TokenServiceImpl(tokenRepository, jwtTokenService)
+    private val tokenService = TokenServiceImpl("ffe50f21d8359de7245dc13777812c2a", "Tezos@Signature", tokenRepository)
 
     private val tokenId = "tokenId"
     private val accountId = "accountId"
-    private val jwtToken = "jwtTestToken"
-    private val jwtTokenDetails = JwtTokenDetails(accountId, "creationTime")
+    private val jwtToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjcmVhdGlvblRpbWUiOiJjcmVhdGlvblRpbWUiLCJpc3MiOiJUZXpvc0BTaWduYXR1cmUiLCJpZCI6ImFjY291bnRJZCJ9.zWQal4cCAEE4M0iJktv9VrklQRiZlL22DmVNo6YEiAY"
+    private val jwtTokenDetails = JwtTokenDetails(
+            id = accountId,
+            creationTime = "creationTime"
+    )
 
     private val expirationDate = LocalDate.of(2020, Month.APRIL, 3)
     private val validDate = LocalDate.of(2020, Month.MARCH, 20)
@@ -33,11 +35,9 @@ class TokenServiceTest {
     private val token = Token(tokenId, jwtToken, expirationDate, accountId)
 
 
-
     @BeforeAll
     fun initMock() {
         mockkStatic(LocalDate::class)
-        every { jwtTokenService.parseToken(jwtToken) } returns jwtTokenDetails
     }
 
     @AfterAll
@@ -74,5 +74,15 @@ class TokenServiceTest {
         coEvery { tokenRepository.findByJwtToken(jwtToken) } returns Mono.just(tokenEntity)
         every { LocalDate.now() } returns expiredDate
         assertThrows<AuthenticationException.ExpiredTokenException> { runBlocking { tokenService.checkAndGetToken(jwtToken) } }
+    }
+
+    @Test
+    fun createTokenTest() {
+        assertEquals(jwtToken, tokenService.createToken(jwtTokenDetails))
+    }
+
+    @Test
+    fun parseTokenTest() {
+        assertEquals(jwtTokenDetails, tokenService.parseToken(jwtToken))
     }
 }
