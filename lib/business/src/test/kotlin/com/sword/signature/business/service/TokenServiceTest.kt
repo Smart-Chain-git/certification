@@ -10,6 +10,7 @@ import io.mockk.*
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertEquals
+import reactor.core.publisher.Mono
 import java.time.LocalDate
 import java.time.Month
 
@@ -51,26 +52,26 @@ class TokenServiceTest {
 
     @Test
     fun getTokenTest() {
-        coEvery { tokenRepository.findByJwtToken(jwtToken) } returns tokenEntity
+        coEvery { tokenRepository.findByJwtToken(jwtToken) } returns Mono.just(tokenEntity)
         assertEquals(token, runBlocking { tokenService.getToken(jwtToken) })
     }
 
     @Test
     fun checkAndGetTokenToken() {
-        coEvery { tokenRepository.findByJwtToken(jwtToken) } returns tokenEntity
+        coEvery { tokenRepository.findByJwtToken(jwtToken) } returns Mono.just(tokenEntity)
         every { LocalDate.now() } returns validDate
         assertEquals(token, runBlocking { tokenService.checkAndGetToken(jwtToken) })
     }
 
     @Test
     fun checkAndGetRevokedTokenTest() {
-        coEvery { tokenRepository.findByJwtToken(jwtToken) } returns null
+        coEvery { tokenRepository.findByJwtToken(jwtToken) } returns Mono.empty()
         assertThrows<AuthenticationException.RevokedTokenException> { runBlocking { tokenService.checkAndGetToken(jwtToken) } }
     }
 
     @Test
     fun checkAndGetExpiredTokenTest() {
-        coEvery { tokenRepository.findByJwtToken(jwtToken) } returns tokenEntity
+        coEvery { tokenRepository.findByJwtToken(jwtToken) } returns Mono.just(tokenEntity)
         every { LocalDate.now() } returns expiredDate
         assertThrows<AuthenticationException.ExpiredTokenException> { runBlocking { tokenService.checkAndGetToken(jwtToken) } }
     }

@@ -10,6 +10,8 @@ import com.sword.signature.model.repository.TokenRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.reactive.asFlow
+import kotlinx.coroutines.reactive.awaitFirst
+import kotlinx.coroutines.reactive.awaitFirstOrNull
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -24,7 +26,7 @@ class TokenServiceImpl(
     @Transactional(rollbackFor = [ServiceException::class])
     override suspend fun getToken(token: String): Token? {
         LOGGER.debug("Retrieving token with jwtToken '{}'.", token)
-        val token = tokenRepository.findByJwtToken(token)?.toBusiness()
+        val token = tokenRepository.findByJwtToken(token).awaitFirstOrNull()?.toBusiness()
         LOGGER.debug("Token with jwtToken '{}' retrieved.", token)
         return token
     }
@@ -45,7 +47,7 @@ class TokenServiceImpl(
 
     override suspend fun getTokensByAccountId(accountId: String): Flow<Token> {
         LOGGER.debug("Retrieving all tokens with accountId '{}'.", accountId)
-        val tokens = tokenRepository.findAllByAccountId(accountId).asFlow().map { it.toBusiness() }
+        val tokens = tokenRepository.findByAccountId(accountId).asFlow().map { it.toBusiness() }
         LOGGER.debug("Retrieved all tokens retrieved for accountId '{}'", accountId)
         return tokens
     }
