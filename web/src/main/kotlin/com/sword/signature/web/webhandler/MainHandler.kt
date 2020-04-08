@@ -1,11 +1,13 @@
 package com.sword.signature.web.webhandler
 
+import org.springframework.stereotype.Component
+import org.springframework.stereotype.Controller
 import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse
 import org.springframework.web.reactive.function.server.html
 import org.springframework.web.reactive.function.server.renderAndAwait
 
-
+@Component
 class MainHandler {
 
 
