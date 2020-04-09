@@ -83,7 +83,7 @@ build:
     expire_in: 2 hrs
     when: always
     paths:
-      - "*/*/build"
+      - "*/build"
 
 sonar:
   stage: publish
