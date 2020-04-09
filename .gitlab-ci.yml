@@ -10,6 +10,7 @@ image: gradle:6.2-jdk11
 stages:
   - compile
   - test # runs all the tests of the application.
+  - build
   - publish
 
 # Sets the environement variables before executing scripts.
@@ -72,7 +73,17 @@ test unit:
     paths:
       - "*/*/build"
 
-
+build:
+  stage: build
+  tags:
+    - docker
+  script:
+    - gradle build
+  artifacts:
+    expire_in: 2 hrs
+    when: always
+    paths:
+      - "*/*/build"
 
 sonar:
   stage: publish
