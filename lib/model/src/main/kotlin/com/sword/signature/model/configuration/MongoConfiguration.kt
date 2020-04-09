@@ -17,9 +17,9 @@ import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRep
 @Configuration
 @EnableReactiveMongoRepositories(basePackages = ["com.sword.signature.model.repository"])
 class MongoConfiguration(
-        private val mongoTemplate: ReactiveMongoTemplate,
-        private val mongoMappingContext: MongoMappingContext,
-        private val migrationHandler: MigrationHandler
+    private val mongoTemplate: ReactiveMongoTemplate,
+    private val mongoMappingContext: MongoMappingContext,
+    private val migrationHandler: MigrationHandler
 ) {
 
     @EventListener(ApplicationReadyEvent::class)
@@ -39,7 +39,8 @@ class MongoConfiguration(
             val clazz = entity.type
             if (clazz.isAnnotationPresent(Document::class.java)) {
                 val indexOps = mongoTemplate.indexOps(clazz)
-                resolver.resolveIndexFor(clazz).forEach { indexDefinition -> indexOps.ensureIndex(indexDefinition).awaitSingle() }
+                resolver.resolveIndexFor(clazz)
+                    .forEach { indexDefinition -> indexOps.ensureIndex(indexDefinition).awaitSingle() }
             }
         }
         LOGGER.info("Initialization of Mongo indices finished in {}ms.", System.currentTimeMillis() - init)
@@ -51,6 +52,9 @@ class MongoConfiguration(
         migrationHandler.applyMigrations()
         LOGGER.info("Application of migrations data finished in {}ms.", System.currentTimeMillis() - init)
     }
+
+
+
 
     companion object {
         private val LOGGER = LoggerFactory.getLogger(MongoConfiguration::class.java)

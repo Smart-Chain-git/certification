@@ -20,7 +20,7 @@ import kotlinx.coroutines.reactive.awaitSingle
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.time.LocalDateTime
+import java.time.OffsetDateTime
 
 @Service
 class SignServiceImpl(
@@ -72,7 +72,7 @@ class SignServiceImpl(
                 algorithm = algorithm.name,
                 flowName = flowName,
                 state = JobState.INSERTED,
-                stateDate = LocalDateTime.now()
+                stateDate = OffsetDateTime.now()
             )
         ).awaitSingle()
 

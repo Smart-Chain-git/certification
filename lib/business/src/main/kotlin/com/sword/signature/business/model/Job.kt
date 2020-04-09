@@ -1,6 +1,7 @@
 package com.sword.signature.business.model
 
-import java.time.LocalDateTime
+import com.sword.signature.model.entity.JobState
+import java.time.OffsetDateTime
 
 data class Job(
     val id: String,
@@ -8,16 +9,16 @@ data class Job(
     /**
      * Date of the request
      */
-    val createdDate: LocalDateTime = LocalDateTime.now(),
+    val createdDate: OffsetDateTime = OffsetDateTime.now(),
 
     /**
      * data of the last injection in the block chain
      */
-    val injectedDate: LocalDateTime? = null,
+    val injectedDate: OffsetDateTime? = null,
     /**
      * date of the validation in the block chain
      */
-    val validatedDate: LocalDateTime? = null,
+    val validatedDate: OffsetDateTime? = null,
 
     val numbreOfTry: Int = 0,
     val blockId: String? = null,
@@ -36,5 +37,13 @@ data class Job(
      */
     val userId: String,
 
+    val flowName: String,
+
+    var stateDate: OffsetDateTime,
+
+    var state: JobState,
+
+
     val files: List<String>? = null
+
 )

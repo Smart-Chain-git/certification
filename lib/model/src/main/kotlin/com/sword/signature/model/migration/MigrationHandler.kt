@@ -23,7 +23,7 @@ class MigrationHandler(
         private val mongoTemplate: ReactiveMongoTemplate,
         private val migrationRepository: MigrationRepository
 ) {
-    private val digest = MessageDigest.getInstance("SHA-256")
+
 
     /**
      * Check already applied migrations and apply new migrations.
