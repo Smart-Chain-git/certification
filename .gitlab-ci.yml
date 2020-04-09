@@ -95,3 +95,14 @@ publishJar:
     - docker
   script:
     - gradle publish -PmavenProxyUrl=$MAVEN_PROXY_URL -PnexusUrl=$NEXUS_URL -PnexusUser=$NEXUS_USER -PnexusPassword=$NEXUS_PASSWORD -PreleasesRepo=$RELEASES_REPO -PsnapshotsRepo=$SNAPSHOTS_REPO
+dockerImage:
+  stage: publish
+  tags:
+    - dockerBuild
+  before_script:
+    - docker login $REGISTRY_URL -u $REGISTRY_USER -p $REGISTRY_PASSWORD
+  script:
+    - mkdir web/build/unpacked
+    - unzip web/build/libs/*.jar -d web/build/unpacked
+    - docker build -t $REGISTRY_URL/sword/signature-web:$CI_COMMIT_REF_NAME web
+    - docker push $REGISTRY_URL/sword/signature-web:$CI_COMMIT_REF_NAME
