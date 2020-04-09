@@ -108,6 +108,8 @@ publishJar:
     - gradle publish -PmavenProxyUrl=$MAVEN_PROXY_URL -PnexusUrl=$NEXUS_URL -PnexusUser=$NEXUS_USER -PnexusPassword=$NEXUS_PASSWORD -PreleasesRepo=$RELEASES_REPO -PsnapshotsRepo=$SNAPSHOTS_REPO
 dockerImage:
   stage: publish
+  dependencies:
+    - build
   tags:
     - dockerBuild
   before_script:
