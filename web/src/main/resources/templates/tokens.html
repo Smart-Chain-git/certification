@@ -7,15 +7,16 @@
     <div class="table-wrapper">
         <div class="table-title">
             <div class="row">
-                <div class="col-sm-8"><h2>Token <b>Details</b></h2></div>
+                <div class="col-sm-8"><h2>Token List</h2></div>
                 <div class="col-sm-4">
                     <button type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i> Add New</button>
                 </div>
             </div>
         </div>
-        <table class="table table-bordered">
+        <table class="table table-bordered token-table">
             <thead>
             <tr>
+                <th class="w-50">Name</th>
                 <th class="w-50">Token</th>
                 <th class="w-50">Expiration Date</th>
             </tr>
@@ -23,8 +24,9 @@
             <tbody>
             <th:block th:each="token : ${tokens}" th:object="${token}">
                 <tr th:id="'token-'+*{id}">
-                    <td th:text="*{jwtToken}" class="cut-text" colspan="2">Token</td>
-                    <td th:text="*{expirationDate}" colspan="2">Expiration Date</td>
+                    <td>Name</td>
+                    <td th:text="*{jwtToken}">Token</td>
+                    <td th:text="*{expirationDate}">Expiration Date</td>
                 </tr>
             </th:block>
             </tbody>

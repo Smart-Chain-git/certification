@@ -1,7 +1,9 @@
-.cut-text {
-    width: 300px;
-    overflow: hidden;
-    display: inline-block;
-    text-overflow: ellipsis;
+.token-table {
+    table-layout: fixed;
+}
+
+.token-table td {
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
