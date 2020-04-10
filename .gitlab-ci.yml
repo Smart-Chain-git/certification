@@ -25,34 +25,33 @@ before_script:
   - export GRADLE_USER_HOME=`pwd`/.gradle
 
 # There use to be a `cache` key here. We removed it because it was actually
-# slower than downloading again the ressources.
+# slower than downloading again the resources.
 # All gradle dependencies are fetched from the Nexus. It was slower to unzip the
-# cache before the stage and rezip it after the stage.
+# cache before the stage and zip it back after the stage.
 cache:
-  key: tezosserveurs
+  key: tezosservers
 
 #
-# Stage : Compile
+# Stage: compile
 #
 compilation:
   stage: compile
-
   # We tell gitlab-ci to use a machine running the docker-runner from gitlab.
   # Here, we need the script to be run in a docker image (using the gradle image defined above).
   tags:
     - docker
-
   script:
     - gradle compileTestKotlin
   # We create an artifact to be passed to the next stage.
-  # Artifact contain the backend related compiled classes and ressources.
+  # Artifact contain the backend related compiled classes and resources.
   artifacts:
-    expire_in: 10 hrs
+    expire_in: 5 hrs
     when: always
     paths:
-      - "*/*/build"
+      - "*/build"
+
 #
-# Stage : Test
+# Stage: test
 #
 
 test unit:
@@ -68,10 +67,14 @@ test unit:
   # We create an artifact to be passed to the next stage.
   # Artifact contain the backend related compiled classes and ressources.
   artifacts:
-    expire_in: 10 hrs
+    expire_in: 5 hrs
     when: always
     paths:
-      - "*/*/build"
+      - "*/build"
+
+#
+# Stage: build
+#
 
 build:
   stage: build
@@ -80,13 +83,19 @@ build:
   script:
     - gradle build
   artifacts:
-    expire_in: 2 hrs
+    expire_in: 5 hrs
     when: always
     paths:
       - "*/build"
 
+#
+# Stage: publish
+#
+
 sonar:
   stage: publish
+  dependencies:
+    - build
   tags:
     - docker
   # The (free) version of Sonar we use doesnt verify the branch on which the analysis is done.
@@ -100,12 +109,16 @@ sonar:
     # Build and upload the result of sonarqube analysis.
     # http://sonarqube.sonar.10.20.2.179.xip.io/dashboard?id=com.kami%3Aoutside
     - gradle check jacocoRootReport sonarqube
+# Publish the JAR to the nexus
 publishJar:
   stage: publish
+  dependencies:
+    - build
   tags:
     - docker
   script:
     - gradle publish -PmavenProxyUrl=$MAVEN_PROXY_URL -PnexusUrl=$NEXUS_URL -PnexusUser=$NEXUS_USER -PnexusPassword=$NEXUS_PASSWORD -PreleasesRepo=$RELEASES_REPO -PsnapshotsRepo=$SNAPSHOTS_REPO
+# Build a docker image for the web app and push it to the registry.
 dockerImage:
   stage: publish
   dependencies:
@@ -116,6 +129,9 @@ dockerImage:
     - docker login $REGISTRY_URL -u $REGISTRY_USER -p $REGISTRY_PASSWORD
   script:
     - mkdir web/build/unpacked
+    # Unpack the jar for light docker image.
     - unzip web/build/libs/*.jar -d web/build/unpacked
+    # Build the docker image tagged either with git branch name or tag.
     - docker build -t $REGISTRY_URL/sword/signature-web:$CI_COMMIT_REF_NAME web
+    # Push the image to the registry.
     - docker push $REGISTRY_URL/sword/signature-web:$CI_COMMIT_REF_NAME
