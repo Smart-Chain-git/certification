@@ -20,19 +20,19 @@ class TokenServiceTest {
     private val tokenService = TokenServiceImpl("ffe50f21d8359de7245dc13777812c2a", "Tezos@Signature", tokenRepository)
 
     private val tokenId = "tokenId"
+    private val tokenName = "tokenName"
     private val accountId = "accountId"
     private val jwtToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjcmVhdGlvblRpbWUiOiJjcmVhdGlvblRpbWUiLCJpc3MiOiJUZXpvc0BTaWduYXR1cmUiLCJpZCI6ImFjY291bnRJZCJ9.zWQal4cCAEE4M0iJktv9VrklQRiZlL22DmVNo6YEiAY"
-    private val jwtTokenDetails = JwtTokenDetails(
-            id = accountId,
-            creationTime = "creationTime"
-    )
+    private val jwtTokenDetails = JwtTokenDetails(id = accountId, creationTime = "creationTime")
 
     private val expirationDate = LocalDate.of(2020, Month.APRIL, 3)
     private val validDate = LocalDate.of(2020, Month.MARCH, 20)
     private val expiredDate = LocalDate.of(2020, Month.MAY, 1)
 
-    private val tokenEntity = TokenEntity(tokenId, jwtToken, expirationDate, accountId)
-    private val token = Token(tokenId, jwtToken, expirationDate, accountId)
+    private val tokenEntity = TokenEntity(id = tokenId, name = tokenName, jwtToken = jwtToken,
+            expirationDate = expirationDate, accountId = accountId)
+    private val token = Token(id = tokenId, name = tokenName, jwtToken = jwtToken, expirationDate = expirationDate,
+            accountId = accountId)
 
 
     @BeforeAll

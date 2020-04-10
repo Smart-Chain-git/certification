@@ -7,18 +7,22 @@ import com.sword.signature.business.exception.AuthenticationException
 import com.sword.signature.business.exception.ServiceException
 import com.sword.signature.business.model.JwtTokenDetails
 import com.sword.signature.business.model.Token
+import com.sword.signature.business.model.TokenCreate
 import com.sword.signature.business.model.mapper.toBusiness
 import com.sword.signature.business.service.TokenService
+import com.sword.signature.model.entity.TokenEntity
 import com.sword.signature.model.repository.TokenRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.reactive.awaitFirstOrNull
+import kotlinx.coroutines.reactive.awaitSingle
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
+import java.time.OffsetDateTime
 
 @Service
 class TokenServiceImpl(
@@ -28,6 +32,24 @@ class TokenServiceImpl(
 ) : TokenService {
 
     private val algorithm = Algorithm.HMAC256(jwtSecret)
+
+    @Transactional(rollbackFor = [ServiceException::class])
+    override suspend fun createToken(tokenDetails: TokenCreate): Token {
+        LOGGER.debug("Creating new token.")
+        val jwtToken = createToken(JwtTokenDetails(
+                id = tokenDetails.accountId,
+                creationTime = OffsetDateTime.now().toString()
+        ))
+        val toCreate = TokenEntity(
+                name = tokenDetails.name,
+                jwtToken = jwtToken,
+                expirationDate = tokenDetails.expirationDate,
+                accountId = tokenDetails.accountId
+        )
+        val createdToken = tokenRepository.save(toCreate).awaitSingle().toBusiness()
+        LOGGER.debug("New token created with id '{}'", createdToken.id)
+        return createdToken
+    }
 
     @Transactional(rollbackFor = [ServiceException::class])
     override suspend fun getToken(jwtToken: String): Token? {
