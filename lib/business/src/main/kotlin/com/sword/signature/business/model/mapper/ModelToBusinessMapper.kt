@@ -28,6 +28,9 @@ fun JobEntity.toBusiness(files: List<String>? = null) = Job(
         injectedDate = injectedDate,
         numbreOfTry = numbreOfTry,
         validatedDate = validatedDate,
+        flowName = flowName,
+        state = state,
+        stateDate = stateDate,
         files = files
 )
 

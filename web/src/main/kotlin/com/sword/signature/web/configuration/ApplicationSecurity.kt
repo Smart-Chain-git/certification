@@ -1,6 +1,8 @@
 package com.sword.signature.web.configuration
 
+import com.sword.signature.web.webhandler.JobHandler
 import com.sword.signature.web.webhandler.MainHandler
+import com.sword.signature.web.webhandler.TokenHandler
 import org.springframework.boot.autoconfigure.security.reactive.PathRequest
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
@@ -33,12 +35,17 @@ class ApplicationSecurity {
 
 
     @Bean
-    fun routes(mainHandler: MainHandler) = coRouter {
+    fun routes(
+            mainHandler: MainHandler,
+            jobHandler: JobHandler,
+            tokenHandler: TokenHandler
+    ) = coRouter {
         accept(MediaType.TEXT_HTML).nest {
             GET("/", mainHandler::index)
             GET("/index", mainHandler::index)
             GET("/login", mainHandler::login)
-            GET("/tokens", mainHandler::tokens)
+            GET("/jobs", jobHandler::jobs)
+            GET("/tokens", tokenHandler::tokens)
         }
         resources("/**", ClassPathResource("/static"))
     }

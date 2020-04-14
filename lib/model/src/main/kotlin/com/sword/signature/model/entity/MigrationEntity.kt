@@ -17,7 +17,7 @@ data class MigrationEntity(
         val version: String,
         val hash: String,
         @CreatedDate
-        val createdDate: LocalDateTime = LocalDateTime.now()
+        val createdDate: OffsetDateTime = OffsetDateTime.now()
 ) {
     companion object {
         fun versionComparator() = Comparator<MigrationEntity> { migration1, migration2 ->

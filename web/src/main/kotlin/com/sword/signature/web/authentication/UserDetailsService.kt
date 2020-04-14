@@ -7,7 +7,6 @@ import com.sword.signature.business.service.MailService
 import kotlinx.coroutines.reactor.mono
 import kotlinx.coroutines.runBlocking
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService
-import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
@@ -15,8 +14,8 @@ import reactor.core.publisher.Mono
 
 @Service
 class UserDetailsService(
-        private val accountService: AccountService,
-        private val mailService: MailService
+    private val accountService: AccountService,
+    private val mailService: MailService
 ) : ReactiveUserDetailsService {
 
     fun findById(userId: String): UserDetails {
@@ -29,7 +28,7 @@ class UserDetailsService(
     override fun findByUsername(username: String): Mono<UserDetails> {
         return mono {
             val account = accountService.getAccountByLoginOrEmail(username)
-                    ?: throw UsernameNotFoundException("Account with username '$username' not found.")
+                ?: throw UsernameNotFoundException("Account with username '$username' not found.")
             mailService.sendEmail(HelloAccountMail(account))
             buildUser(account)
         }
@@ -40,11 +39,10 @@ class UserDetailsService(
         if (account.isAdmin) {
             roles.add("ADMIN")
         }
-
-        return User.builder()
-                .username(account.login)
-                .password(account.password)
-                .roles(*roles.toTypedArray())
-                .build()
+        return CustomUserDetails(
+            account = account,
+            roles = roles
+        )
     }
 }
+

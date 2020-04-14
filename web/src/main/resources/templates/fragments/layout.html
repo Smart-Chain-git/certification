@@ -1,8 +1,9 @@
-<html th:fragment="layout (template, menu)" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html th:fragment="layout (template, menu)" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head th:fragment="head(title,links)">
 
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,15 +11,16 @@
 	<title th:text="#{nav.brand}"></title>
 
 	<!-- Common styles and scripts -->
-	<link rel="stylesheet" media="screen" th:href="@{/webjars/bootstrap/4.4.1-1/css/bootstrap.min.css}" />
-	<link rel="stylesheet" media="screen" th:href="@{/webjars/bootstrap/4.4.1-1/css/bootstrap-reboot.min.css}" />
-	<link rel="stylesheet" media="screen" th:href="@{/webjars/bootstrap-table/1.16.0/dist/bootstrap-table.min.css}" />
-	<link rel="stylesheet" media="screen" th:href="@{/css/main.css}"  />
+	<link rel="stylesheet" media="screen" th:href="@{/webjars/bootstrap/4.4.1-1/css/bootstrap.min.css}"/>
+	<link rel="stylesheet" media="screen" th:href="@{/webjars/bootstrap/4.4.1-1/css/bootstrap-reboot.min.css}"/>
+	<link rel="stylesheet" media="screen" th:href="@{/webjars/bootstrap-table/1.16.0/dist/bootstrap-table.min.css}"/>
+	<link rel="stylesheet" media="screen" th:href="@{/css/main.css}"/>
 
 	<!-- JS -->
 	<script type="text/javascript" th:src="@{/webjars/jquery/3.4.1/jquery.min.js}"></script>
 	<script type="text/javascript" th:src="@{/webjars/bootstrap-table/1.16.0/dist/bootstrap-table.min.js}"></script>
-	<script type="text/javascript" th:src="@{/webjars/bootstrap-table/1.16.0/dist/locale/bootstrap-table-fr-FR.js}" charset="utf-8"></script>
+	<script type="text/javascript" th:src="@{/webjars/bootstrap-table/1.16.0/dist/locale/bootstrap-table-fr-FR.js}"
+	        charset="utf-8"></script>
 	<script type="text/javascript" th:src="@{/webjars/bootstrap-notify/3.1.3-1/bootstrap-notify.min.js}"></script>
 </head>
 
@@ -26,11 +28,19 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light" role="navigation">
 	<div class="container-fluid">
 		<div class="navbar-header">
-			<a class="navbar-brand" th:href="@{/index}">sword Rules!!</a>
+			<a class="navbar-brand" th:href="@{/}">sword Rules!!</a>
 		</div>
-		<div id="navbarSupportedContent" class="collapse navbar-collapse" >
+		<div id="navbarSupportedContent" class="collapse navbar-collapse">
+
+			<ul class="nav navbar-nav">
+				<li th:fragment="menuItem (path,active,text)" th:class="${active==menu ? 'active' : ''}">
+					<a th:href="@{/__${path}__}" th:text="${text}"/>
+				</li>
+				<li th:replace="::menuItem ('','index',#{nav.index})"/>
+				<li th:replace="::menuItem ('jobs','job',#{nav.jobs})"/>
+			</ul>
 			<div class="logout" sec:authorize="isAuthenticated()">
-				<form th:action="@{/logout}" method="post" >
+				<form th:action="@{/logout}" method="post">
 					<label th:text="#{index.loggedAs(${#authentication.name})}"/>
 					<button type="submit" class="btn btn-default navbar-btn" th:text="#{login.logout}"/>
 				</form>

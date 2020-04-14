@@ -34,3 +34,9 @@ services:
     environment:
       FAKESMTP_AUTHENTICATION_USERNAME: username
       FAKESMTP_AUTHENTICATION_PASSWORD: password
+#  web:
+#    container_name: tezos-signature-web
+#    image: sword/signature-web
+#    build: web
+#    ports:
+#      - "8080:8080"

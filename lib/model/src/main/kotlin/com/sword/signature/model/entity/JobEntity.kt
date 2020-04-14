@@ -5,7 +5,7 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.index.Indexed
 import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.data.mongodb.core.mapping.Field
-import java.time.LocalDateTime
+import java.time.OffsetDateTime
 
 
 @Document(collection = "jobs")
@@ -18,15 +18,15 @@ data class JobEntity(
      * Date of the request
      */
     @CreatedDate
-    val createdDate: LocalDateTime = LocalDateTime.now(),
+    val createdDate: OffsetDateTime = OffsetDateTime.now(),
     /**
      * data of the last injection in the block chain
      */
-    val injectedDate: LocalDateTime? = null,
+    val injectedDate: OffsetDateTime? = null,
     /**
      * date of the validation in the block chain
      */
-    val validatedDate: LocalDateTime? = null,
+    val validatedDate: OffsetDateTime? = null,
 
     val numbreOfTry: Int = 0,
     val blockId: String? = null,
@@ -51,7 +51,7 @@ data class JobEntity(
      */
     val flowName: String,
 
-    var stateDate: LocalDateTime,
+    var stateDate: OffsetDateTime,
 
     var state: JobState
 
