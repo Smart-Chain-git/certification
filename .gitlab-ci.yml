@@ -116,6 +116,10 @@ publishJar:
     - build
   tags:
     - docker
+  only:
+    refs:
+      - master
+      - tags
   script:
     - gradle publish -PmavenProxyUrl=$MAVEN_PROXY_URL -PnexusUrl=$NEXUS_URL -PnexusUser=$NEXUS_USER -PnexusPassword=$NEXUS_PASSWORD -PreleasesRepo=$RELEASES_REPO -PsnapshotsRepo=$SNAPSHOTS_REPO
 # Build a docker image for the web app and push it to the registry.
