@@ -41,6 +41,7 @@ dependencies {
     runtimeOnly("org.webjars:jquery:3.4.1")
     runtimeOnly("org.webjars.npm:bootstrap-table:1.16.0")
     runtimeOnly("org.webjars:bootstrap-notify:3.1.3-1")
+    runtimeOnly("org.webjars:font-awesome:5.13.0")
 
     compileOnly("org.springframework.boot:spring-boot-devtools")
 

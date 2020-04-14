@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout (~{::body},'tokens')}">
+<body>
+<div class="container">
+    <div class="table-wrapper">
+        <div class="table-title">
+            <div class="row">
+                <div class="col-sm-8"><h2 th:text="#{tokens.title}">Token List</h2></div>
+                <div class="col-sm-4">
+                    <a th:href="@{/addToken}" class="btn btn-info add-new"><i class="fa fa-plus"></i> Add New</a>
+                </div>
+            </div>
+        </div>
+        <table class="table table-bordered token-table">
+            <thead>
+            <tr>
+                <th class="w-50" th:text="#{tokens.header.name}"/>
+                <th class="w-50" th:text="#{tokens.header.jwtToken}"/>
+                <th class="w-50" th:text="#{tokens.header.expirationDate}"/>
+                <th class="w-50" th:text="#{tokens.header.actions}"/>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="token : ${tokens}" th:object="${token}">
+                <tr th:id="'token-'+*{id}">
+                    <td th:text="*{name}"/>
+                    <td class="cut-text">
+                        <i class="fa fa-clipboard" th:data-text="*{jwtToken}"
+                           onclick="copyToClipboard(this.getAttribute('data-text'))"></i>
+                        <span th:text="*{jwtToken}" th:title="*{jwtToken}"></span>
+                    </td>
+                    <td th:text="*{expirationDate}"/>
+                    <td>Supp</td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

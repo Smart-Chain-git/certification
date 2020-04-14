@@ -2,7 +2,7 @@
     table-layout: fixed;
 }
 
-.token-table td {
+.cut-text {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
