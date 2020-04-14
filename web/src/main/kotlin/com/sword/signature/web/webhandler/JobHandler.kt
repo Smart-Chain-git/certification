@@ -16,8 +16,7 @@ class JobHandler(
 
     suspend fun jobs(request: ServerRequest): ServerResponse {
         val account = request.getAccount()
-        LOGGER.info("{} demande ses jobs", account)
-        val jobs=jobService.findAllByUser(account)
+        val jobs = jobService.findAllByUser(requester = account, account = account)
         val model = mapOf<String, Any>(
             "jobs" to jobs
         )

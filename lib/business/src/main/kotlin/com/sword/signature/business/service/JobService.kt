@@ -6,6 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface JobService {
 
-    fun findAllByUser(account: Account) : Flow<Job>
+    fun findAllByUser(requester: Account, account: Account): Flow<Job>
 
 }
