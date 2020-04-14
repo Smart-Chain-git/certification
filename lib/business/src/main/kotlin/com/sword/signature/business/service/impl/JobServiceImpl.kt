@@ -16,7 +16,7 @@ class JobServiceImpl(
 
     override fun findAllByUser(requester: Account, account: Account): Flow<Job> {
         if(!requester.isAdmin && requester.id!=account.id) {
-            throw IllegalAccessException("user ${requester.login} dont have Role to list ${account.login}'s jobs")
+            throw IllegalAccessException("user ${requester.login} does not have role/permission to list ${account.login}'s jobs")
         }
 
         return jobRepository.findAllByUserId(account.id).map { it.toBusiness() }
