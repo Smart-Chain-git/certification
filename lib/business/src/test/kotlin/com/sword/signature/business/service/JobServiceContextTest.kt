@@ -20,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate
 import java.nio.file.Path
 import java.time.OffsetDateTime
-import java.util.ArrayList
 import java.util.stream.Stream
 
 class JobServiceContextTest @Autowired constructor(
@@ -160,7 +159,8 @@ class JobServiceContextTest @Autowired constructor(
             assertThat(job).isNotNull
             job as Job
             assertThat(job).`as`("mauvais job").isEqualToIgnoringGivenFields(expected, "files")
-            assertThat(job.files).`as`("pas de file").isNotNull.`as`("mauvais files").containsExactlyInAnyOrderElementsOf(expected.files)
+            assertThat(job.files).`as`("pas de file").isNotNull.`as`("mauvais files")
+                .containsExactlyInAnyOrderElementsOf(expected.files)
         }
     }
 
@@ -178,7 +178,7 @@ class JobServiceContextTest @Autowired constructor(
                     flowName = "ARS_20180626_02236_130006",
                     stateDate = OffsetDateTime.parse("2020-04-07T08:16:04.028Z"),
                     state = JobStateType.INSERTED,
-                files = listOf("ARS_02236_00004.pdf","ARS_02236_00002.pdf","ARS_02236_00001.pdf")
+                    files = listOf("ARS_02236_00004.pdf", "ARS_02236_00002.pdf", "ARS_02236_00001.pdf")
                 )
             )
             , Arguments.of(
@@ -199,11 +199,6 @@ class JobServiceContextTest @Autowired constructor(
         ).stream()
 
 
-    }
-
-
-    companion object {
-        val LOGGER = LoggerFactory.getLogger(JobServiceContextTest::class.java)
     }
 
 }

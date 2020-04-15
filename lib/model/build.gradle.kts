@@ -15,7 +15,7 @@ dependencies {
 
 
     //querydsl
-    implementation ("com.querydsl:querydsl-mongodb")
+    api ("com.querydsl:querydsl-mongodb")
     kapt ("com.querydsl:querydsl-apt")
 
 

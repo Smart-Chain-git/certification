@@ -4,12 +4,17 @@ import com.sword.signature.business.model.Account
 import com.sword.signature.business.model.Job
 import com.sword.signature.business.model.mapper.toBusiness
 import com.sword.signature.business.service.JobService
+import com.sword.signature.common.criteria.TreeElementCriteria
+import com.sword.signature.common.enums.TreeElementType
+import com.sword.signature.model.mapper.toPredicate
 import com.sword.signature.model.repository.JobRepository
 import com.sword.signature.model.repository.TreeElementRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.reactive.awaitFirstOrNull
-import kotlinx.coroutines.reactive.awaitSingle
+import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
@@ -36,11 +41,15 @@ class JobServiceImpl(
         }
 
         //recuperation des element de l'arbre de type feuille
+        val treeElementPredicate = TreeElementCriteria(jobId = jobId, type = TreeElementType.LEAF).toPredicate()
+        val leaves = treeElementRepository.findAll(treeElementPredicate).asFlow().map { it.fileName!! }.toList()
 
-        return job.toBusiness()
+        LOGGER.debug("mes feuilles {}", leaves)
+
+        return job.toBusiness(leaves)
     }
 
     companion object {
-        val LOGGER = LoggerFactory.getLogger(JobServiceImpl::class.java)
+        val LOGGER: Logger = LoggerFactory.getLogger(JobServiceImpl::class.java)
     }
 }
