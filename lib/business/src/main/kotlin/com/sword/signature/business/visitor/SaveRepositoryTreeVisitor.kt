@@ -1,12 +1,13 @@
 package com.sword.signature.business.visitor
 
 
+import com.sword.signature.common.enums.TreeElementPosition
+import com.sword.signature.common.enums.TreeElementType
 import com.sword.signature.merkletree.model.TreeElement
 import com.sword.signature.merkletree.model.TreeLeaf
 import com.sword.signature.merkletree.model.TreeNode
 import com.sword.signature.model.entity.TreeElementEntity
-import com.sword.signature.model.entity.TreeElementPosition
-import com.sword.signature.model.entity.TreeElementType
+
 import com.sword.signature.model.repository.TreeElementRepository
 import kotlinx.coroutines.reactive.awaitSingle
 import org.slf4j.Logger

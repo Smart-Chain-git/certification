@@ -3,18 +3,25 @@ package com.sword.signature.business.service
 import com.sword.signature.business.exception.AccountNotFoundException
 import com.sword.signature.business.model.Account
 import com.sword.signature.business.model.Job
+import com.sword.signature.common.enums.JobStateType
 import com.sword.signature.model.configuration.MongoConfiguration
-import com.sword.signature.model.entity.JobState
+
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.MethodSource
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate
 import java.nio.file.Path
 import java.time.OffsetDateTime
+import java.util.ArrayList
+import java.util.stream.Stream
 
 class JobServiceContextTest @Autowired constructor(
     private val jobService: JobService,
@@ -24,7 +31,7 @@ class JobServiceContextTest @Autowired constructor(
 ) : AbstractServiceContextTest() {
 
 
-    val simpleAccount = Account(
+    private val simpleAccount = Account(
         id = "ljghdslkgjsdglhjdslghjdsklgjdgskldjglgdsjgdlskgjdslknjcvhuire",
         login = "simple",
         password = "password",
@@ -33,7 +40,7 @@ class JobServiceContextTest @Autowired constructor(
         isAdmin = false
     )
 
-    val secondAdmin = Account(
+    private val secondAdmin = Account(
         id = "ljghdslkgjsdglhgskldjglgdsjgdlskgjdslknjcvhuire",
         login = "simple",
         password = "password",
@@ -41,6 +48,8 @@ class JobServiceContextTest @Autowired constructor(
         email = "simplie@toto.net",
         isAdmin = true
     )
+    private val multipleFileJobId = "5e8c36c49df469062bc658c1"
+    private val singleFileJobId = "5e8c36c49df469062bc658c8"
 
 
     @BeforeEach
@@ -50,7 +59,7 @@ class JobServiceContextTest @Autowired constructor(
     }
 
     @Test
-    fun `simple user can't list otheer's jobs `() {
+    fun `simple user can't list other's jobs `() {
 
         Assertions.assertThatThrownBy {
             runBlocking {
@@ -63,12 +72,12 @@ class JobServiceContextTest @Autowired constructor(
     }
 
     @Test
-    fun `admin get his own jobs`() {
+    fun `admin get his own jobs list`() {
         runBlocking {
             val adminAccount =
                 accountService.getAccountByLoginOrEmail("admin") ?: throw AccountNotFoundException("admin")
 
-            val accounts = jobService.findAllByUser(adminAccount, adminAccount).toList()
+            val jobs = jobService.findAllByUser(adminAccount, adminAccount).toList()
 
             val expected = listOf(
                 Job(
@@ -79,38 +88,122 @@ class JobServiceContextTest @Autowired constructor(
                     userId = "5e74a073a386f170f3850b4b",
                     flowName = "ARS_20180626_02236_130006",
                     stateDate = OffsetDateTime.parse("2020-04-07T08:16:04.028Z"),
-                    state = JobState.INSERTED
+                    state = JobStateType.INSERTED
                 )
             )
 
-            assertThat(accounts).hasSize(2).containsAnyElementsOf(expected)
+            assertThat(jobs).hasSize(2).containsAnyElementsOf(expected)
         }
     }
 
     @Test
-    fun `second admin get first's jobs`() {
+    fun `second admin get first's jobs list`() {
         runBlocking {
             val adminAccount =
                 accountService.getAccountByLoginOrEmail("admin") ?: throw AccountNotFoundException("admin")
 
-            val accounts = jobService.findAllByUser(secondAdmin, adminAccount).toList()
+            val jobs = jobService.findAllByUser(secondAdmin, adminAccount).toList()
 
             val expected = listOf(
                 Job(
-                    id = "5e8c36c49df469062bc658c1",
+                    id = multipleFileJobId,
                     createdDate = OffsetDateTime.parse("2020-04-07T08:16:04.028Z"),
                     numbreOfTry = 0,
                     algorithm = "SHA-256",
                     userId = "5e74a073a386f170f3850b4b",
                     flowName = "ARS_20180626_02236_130006",
                     stateDate = OffsetDateTime.parse("2020-04-07T08:16:04.028Z"),
-                    state = JobState.INSERTED
+                    state = JobStateType.INSERTED
                 )
             )
 
-            assertThat(accounts).hasSize(2).containsAnyElementsOf(expected)
+            assertThat(jobs).hasSize(2).containsAnyElementsOf(expected)
         }
     }
 
+
+    @Test
+    fun `simple user can't have a job not his own`() {
+        Assertions.assertThatThrownBy {
+            runBlocking {
+                jobService.findById(simpleAccount, multipleFileJobId)
+            }
+        }.isInstanceOf(IllegalAccessException::class.java)
+    }
+
+
+    @Test
+    fun `not existing job should return null for autorised person`() {
+        runBlocking {
+            val job = jobService.findById(secondAdmin, "falseId")
+            assertThat(job).isNull()
+        }
+    }
+
+    @Test
+    fun `not existing job should return null for everybody`() {
+        runBlocking {
+            val job = jobService.findById(simpleAccount, "falseId")
+            assertThat(job).isNull()
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("getSingleJobProvider")
+    fun getSingleJob(
+        requesterAccount: Account,
+        jobId: String,
+        expected: Job
+    ) {
+        runBlocking {
+            val job = jobService.findById(requesterAccount, jobId)
+            assertThat(job).isNotNull
+            job as Job
+            assertThat(job).`as`("mauvais job").isEqualToIgnoringGivenFields(expected, "files")
+            assertThat(job.files).`as`("pas de file").isNotNull.`as`("mauvais files").containsExactlyInAnyOrderElementsOf(expected.files)
+        }
+    }
+
+    fun getSingleJobProvider(): Stream<Arguments> {
+        return listOf(
+            Arguments.of(
+                secondAdmin,
+                multipleFileJobId,
+                Job(
+                    id = multipleFileJobId,
+                    createdDate = OffsetDateTime.parse("2020-04-07T08:16:04.028Z"),
+                    numbreOfTry = 0,
+                    algorithm = "SHA-256",
+                    userId = "5e74a073a386f170f3850b4b",
+                    flowName = "ARS_20180626_02236_130006",
+                    stateDate = OffsetDateTime.parse("2020-04-07T08:16:04.028Z"),
+                    state = JobStateType.INSERTED,
+                files = listOf("ARS_02236_00004.pdf","ARS_02236_00002.pdf","ARS_02236_00001.pdf")
+                )
+            )
+            , Arguments.of(
+                secondAdmin,
+                singleFileJobId,
+                Job(
+                    id = singleFileJobId,
+                    createdDate = OffsetDateTime.parse("2020-04-07T08:16:04.114Z"),
+                    numbreOfTry = 0,
+                    algorithm = "SHA-256",
+                    userId = "5e74a073a386f170f3850b4b",
+                    flowName = "ARS_20180626_02236_130006",
+                    stateDate = OffsetDateTime.parse("2020-04-07T08:16:04.113Z"),
+                    state = JobStateType.INSERTED,
+                    files = listOf("ARS_02236_00003.pdf")
+                )
+            )
+        ).stream()
+
+
+    }
+
+
+    companion object {
+        val LOGGER = LoggerFactory.getLogger(JobServiceContextTest::class.java)
+    }
 
 }

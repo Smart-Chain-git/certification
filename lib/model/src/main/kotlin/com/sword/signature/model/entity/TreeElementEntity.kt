@@ -1,5 +1,7 @@
 package com.sword.signature.model.entity
 
+import com.sword.signature.common.enums.TreeElementPosition
+import com.sword.signature.common.enums.TreeElementType
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.index.Indexed
 import org.springframework.data.mongodb.core.mapping.Document
@@ -21,13 +23,3 @@ data class TreeElementEntity(
     val jobId: String,
     val type: TreeElementType
 )
-
-enum class TreeElementType {
-    NODE,
-    LEAF
-}
-
-enum class TreeElementPosition {
-    LEFT,
-    RIGHT
-}

@@ -1,5 +1,6 @@
 package com.sword.signature.model.entity
 
+import com.sword.signature.common.enums.JobStateType
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.index.Indexed
@@ -53,15 +54,6 @@ data class JobEntity(
 
     var stateDate: OffsetDateTime,
 
-    var state: JobState
-
-
+    var state: JobStateType
 )
 
-enum class JobState {
-    INITIAL,
-    INSERTED,
-    CALCULATED,
-    INJECTED,
-    VALIDATED
-}
