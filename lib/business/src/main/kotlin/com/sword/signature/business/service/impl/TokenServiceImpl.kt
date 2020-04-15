@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.exceptions.JWTVerificationException
 import com.sword.signature.business.exception.AuthenticationException
+import com.sword.signature.business.exception.EntityNotFoundException
 import com.sword.signature.business.exception.ServiceException
 import com.sword.signature.business.model.JwtTokenDetails
 import com.sword.signature.business.model.Token
@@ -78,6 +79,15 @@ class TokenServiceImpl(
         val tokens = tokenRepository.findByAccountId(accountId).asFlow().map { it.toBusiness() }
         LOGGER.debug("Retrieved all tokens retrieved for accountId '{}'", accountId)
         return tokens
+    }
+
+    @Transactional(rollbackFor = [ServiceException::class])
+    override suspend fun deleteToken(tokenId: String) {
+        LOGGER.debug("Deleting token with id '{}'.", tokenId)
+        val token: TokenEntity = tokenRepository.findById(tokenId).awaitFirstOrNull()
+                ?: throw EntityNotFoundException("token", tokenId)
+        tokenRepository.delete(token).awaitFirstOrNull()
+        LOGGER.debug("Token with id '{}' deleted.", tokenId)
     }
 
     /**

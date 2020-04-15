@@ -10,4 +10,5 @@ interface TokenService {
     suspend fun getToken(token: String): Token?
     suspend fun checkAndGetToken(token: String): Token
     suspend fun getTokensByAccountId(accountId: String): Flow<Token>
+    suspend fun deleteToken(tokenId: String)
 }

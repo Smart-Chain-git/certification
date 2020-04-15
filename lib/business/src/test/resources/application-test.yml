@@ -27,6 +27,7 @@ logging:
   level:
     root : warn
     com.sword.signature.business: TRACE
+    org.springframework.data.mongodb: DEBUG
 jwt:
   secret: 098f6bcd4621d373cade4e832627b4f6
   issuer: "Tezos@Signature"

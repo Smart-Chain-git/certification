@@ -10,7 +10,7 @@
                 <div class="col-sm-8"><h2 th:text="#{tokens.title}"/></div>
                 <div class="col-sm-4">
                     <a href="#addTokenModal" class="btn btn-info add-new" data-toggle="modal"><i class="fa fa-plus"></i>
-                        Add New</a>
+                    [[#{tokens.add.title}]]</a>
                 </div>
             </div>
         </div>
@@ -33,7 +33,30 @@
                         <span th:text="*{jwtToken}" th:title="*{jwtToken}"></span>
                     </td>
                     <td th:text="*{expirationDate}"/>
-                    <td>Supp</td>
+                    <td>
+                        <a th:href="'#deleteTokenModal'+*{id}" class="delete" data-toggle="modal"><i class="fa fa-minus" data-toggle="tooltip"></i></a>
+                        <!-- Delete Token Modal -->
+                        <div th:id="'deleteTokenModal'+*{id}" class="modal fade">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <form th:action="@{/deleteToken/{id}(id=*{id})}">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title" th:text="#{tokens.action.title.delete}"/>
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Are you sure you want to delete these Records?</p>
+                                            <p class="text-warning"><small>This action cannot be undone.</small></p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <input type="button" class="btn btn-default" data-dismiss="modal" th:value="#{tokens.action.cancel}">
+                                            <input type="submit" class="btn btn-danger" th:value="#{tokens.action.delete}">
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
                 </tr>
             </th:block>
             </tbody>
@@ -45,7 +68,7 @@
             <div class="modal-content">
                 <form th:action="@{/createToken}" th:object="${token}" method="post">
                     <div class="modal-header">
-                        <h4 class="modal-title" th:value="#{tokens.add.title}">Add Token</h4>
+                        <h4 class="modal-title" th:text="#{tokens.action.title.add}"/>
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     </div>
                     <div class="modal-body">
@@ -60,8 +83,8 @@
                     </div>
                     <div class="modal-footer">
                         <input type="button" class="btn btn-default" data-dismiss="modal"
-                               th:value="#{tokens.add.cancel}">
-                        <input type="submit" class="btn btn-success" th:value="#{tokens.add.validate}">
+                               th:value="#{tokens.action.cancel}">
+                        <input type="submit" class="btn btn-success" th:value="#{tokens.action.add}">
                     </div>
                 </form>
             </div>

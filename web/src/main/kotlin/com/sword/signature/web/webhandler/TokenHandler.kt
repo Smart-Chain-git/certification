@@ -35,6 +35,12 @@ class TokenHandler(
         return tokens(request)
     }
 
+    suspend fun removeToken(request: ServerRequest): ServerResponse {
+        val id = request.pathVariable("id")
+        tokenService.deleteToken(id)
+        return tokens(request)
+    }
+
     data class TokenDraft(
             @Validated val name: String,
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) val expirationDate: LocalDate?
