@@ -4,15 +4,11 @@ import com.sword.signature.business.model.TokenCreate
 import com.sword.signature.business.service.TokenService
 import kotlinx.coroutines.flow.toList
 import org.slf4j.LoggerFactory
+import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.stereotype.Controller
-import org.springframework.ui.Model
-import org.springframework.validation.BindingResult
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.reactive.function.server.ServerRequest
-import org.springframework.web.reactive.function.server.ServerResponse
-import org.springframework.web.reactive.function.server.html
-import org.springframework.web.reactive.function.server.renderAndAwait
+import org.springframework.validation.annotation.Validated
+import org.springframework.web.reactive.function.server.*
+import java.time.LocalDate
 
 @Controller
 class TokenHandler(
@@ -23,23 +19,26 @@ class TokenHandler(
         val account = request.getAccount()
         val model = mutableMapOf<String, Any>()
         model["tokens"] = tokenService.getTokensByAccountId(account.id).toList()
+        model["token"] = TokenDraft("", null)
         return ServerResponse.ok().html().renderAndAwait("tokens/tokens", model)
     }
 
     suspend fun addToken(request: ServerRequest): ServerResponse {
-        val account = request.getAccount()
-        val model = mutableMapOf<String, Any>()
-        model["token"] = TokenCreate("", null, account.id)
-        return ServerResponse.ok().html().renderAndAwait("tokens/add-token", model)
+        val formData = request.awaitFormData()
+        val tokenCreate = TokenCreate(
+                name = formData["name"]?.get(0) ?: throw IllegalStateException("Error"),
+                expirationDate = LocalDate.parse(formData["expirationDate"]?.get(0))
+                        ?: throw IllegalStateException("Error"),
+                accountId = request.getAccount().id
+        )
+        val token = tokenService.createToken(tokenCreate)
+        return tokens(request)
     }
 
-    @RequestMapping("/createToken")
-    suspend fun createToken(createToken: Any, result: BindingResult, model: Model) : ServerResponse {
-        if(result.hasErrors()) {
-            return ServerResponse.ok().html().renderAndAwait("tokens/add-token")
-        }
-        return ServerResponse.ok().html().renderAndAwait("tokens/tokens")
-    }
+    data class TokenDraft(
+            @Validated val name: String,
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) val expirationDate: LocalDate?
+    ) {}
 
     companion object {
         private val LOGGER = LoggerFactory.getLogger(TokenHandler::class.java)

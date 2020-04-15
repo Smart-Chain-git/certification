@@ -46,7 +46,7 @@ class ApplicationSecurity {
             GET("/login", mainHandler::login)
             GET("/jobs", jobHandler::jobs)
             GET("/tokens", tokenHandler::tokens)
-            GET("/addToken", tokenHandler::addToken)
+            POST("/createToken", tokenHandler::addToken)
         }
         resources("/**", ClassPathResource("/static"))
     }

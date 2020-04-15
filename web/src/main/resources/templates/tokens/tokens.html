@@ -7,9 +7,10 @@
     <div class="table-wrapper">
         <div class="table-title">
             <div class="row">
-                <div class="col-sm-8"><h2 th:text="#{tokens.title}">Token List</h2></div>
+                <div class="col-sm-8"><h2 th:text="#{tokens.title}"/></div>
                 <div class="col-sm-4">
-                    <a th:href="@{/addToken}" class="btn btn-info add-new"><i class="fa fa-plus"></i> Add New</a>
+                    <a href="#addTokenModal" class="btn btn-info add-new" data-toggle="modal"><i class="fa fa-plus"></i>
+                        Add New</a>
                 </div>
             </div>
         </div>
@@ -37,6 +38,34 @@
             </th:block>
             </tbody>
         </table>
+    </div>
+    <!-- Add Token Modal -->
+    <div id="addTokenModal" class="modal fade">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form th:action="@{/createToken}" th:object="${token}" method="post">
+                    <div class="modal-header">
+                        <h4 class="modal-title" th:value="#{tokens.add.title}">Add Token</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label th:text="#{tokens.header.name}"/>
+                            <input th:field="*{name}" type="text" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label th:text="#{tokens.header.expirationDate}"/>
+                            <input th:field="*{expirationDate}" type="date" class="form-control">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" class="btn btn-default" data-dismiss="modal"
+                               th:value="#{tokens.add.cancel}">
+                        <input type="submit" class="btn btn-success" th:value="#{tokens.add.validate}">
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 </body>
