@@ -29,14 +29,14 @@ class TokenHandler(
                 ?.let { if (it.isNotBlank()) LocalDate.parse(it) else null },
             accountId = request.getAccount().id
         )
-        val token = tokenService.createToken(tokenCreate)
-        return tokens(request)
+        tokenService.createToken(tokenCreate)
+        return ServerResponse.ok().html().renderAndAwait("redirect:/tokens")
     }
 
     suspend fun removeToken(request: ServerRequest): ServerResponse {
         val id = request.pathVariable("id")
         tokenService.deleteToken(requester = request.getAccount(), tokenId = id)
-        return tokens(request)
+        return ServerResponse.ok().html().renderAndAwait("redirect:/tokens")
     }
 
     data class TokenDraft(
