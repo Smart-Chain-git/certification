@@ -5,14 +5,12 @@ import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.index.Indexed
 import org.springframework.data.mongodb.core.mapping.Document
-import org.springframework.data.mongodb.core.mapping.Field
 import java.time.OffsetDateTime
 
 
 @Document(collection = "jobs")
 data class JobEntity(
     @Id
-    @Field(value = "_id")
     val id: String? = null,
 
     /**

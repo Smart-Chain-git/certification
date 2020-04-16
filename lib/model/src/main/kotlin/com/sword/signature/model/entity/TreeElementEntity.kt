@@ -5,12 +5,10 @@ import com.sword.signature.common.enums.TreeElementType
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.index.Indexed
 import org.springframework.data.mongodb.core.mapping.Document
-import org.springframework.data.mongodb.core.mapping.Field
 
 @Document(collection = "treeElements")
 data class TreeElementEntity(
     @Id
-    @Field(value = "_id")
     val id: String? = null,
 
     @Indexed(unique = true)

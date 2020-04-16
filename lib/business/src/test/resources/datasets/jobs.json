@@ -1,7 +1,9 @@
 {
 	"jobs": [
 		{
-			"_id": "5e8c36c49df469062bc658c1",
+			"_id": {
+				"$oid": "5e8c36c49df469062bc658c1"
+			},
 			"createdDate": "2020-04-07T08:16:04.028Z",
 			"numbreOfTry": 0,
 			"algorithm": "SHA-256",
@@ -11,7 +13,9 @@
 			"state": "INSERTED"
 		},
 		{
-			"_id": "5e8c36c49df469062bc658c8",
+			"_id": {
+				"$oid": "5e8c36c49df469062bc658c8"
+			},
 			"createdDate": "2020-04-07T08:16:04.114Z",
 			"numbreOfTry": 0,
 			"algorithm": "SHA-256",
@@ -23,13 +27,17 @@
 	],
 	"treeElements": [
 		{
-			"_id": "5e8ed52fb1606a18565cbb90",
+			"_id": {
+				"$oid": "5e8ed52fb1606a18565cbb90"
+			},
 			"hash": "112602c26bb1329b1808ed4fb3737774d1422832b988fe5bf1c5196bc1ce5cf7",
 			"jobId": "5e8c36c49df469062bc658c1",
 			"type": "NODE"
 		},
 		{
-			"_id": "5e8ed52fb1606a18565cbb91",
+			"_id": {
+				"$oid": "5e8ed52fb1606a18565cbb91"
+			},
 			"hash": "7a55f048ec7b92d8521761dae4b337dfe465170422df151a4a75eea88dd053b0",
 			"parentId": "5e8ed52fb1606a18565cbb90",
 			"position": "LEFT",
@@ -37,7 +45,9 @@
 			"type": "NODE"
 		},
 		{
-			"_id": "5e8ed52fb1606a18565cbb92",
+			"_id": {
+				"$oid": "5e8ed52fb1606a18565cbb92"
+			},
 			"hash": "830c745f08bd19ecff04565dd7ff05ae92090a5e0624391478c6dafc0422d052",
 			"fileName": "ARS_02236_00004.pdf",
 			"parentId": "5e8ed52fb1606a18565cbb91",
@@ -46,7 +56,9 @@
 			"type": "LEAF"
 		},
 		{
-			"_id": "5e8ed52fb1606a18565cbb93",
+			"_id": {
+				"$oid": "5e8ed52fb1606a18565cbb93"
+			},
 			"hash": "3d6d3491a321616e74c0db101da7b74205b09887079267b82ca76d19dd1d62ba",
 			"fileName": "ARS_02236_00002.pdf",
 			"parentId": "5e8ed52fb1606a18565cbb91",
@@ -55,7 +67,9 @@
 			"type": "LEAF"
 		},
 		{
-			"_id": "5e8ed52fb1606a18565cbb94",
+			"_id": {
+				"$oid": "5e8ed52fb1606a18565cbb94"
+			},
 			"hash": "77062f8de93be903713c90bff1751949957a7c46aad3d584848b10c85ab63a60",
 			"parentId": "5e8ed52fb1606a18565cbb90",
 			"position": "RIGHT",
@@ -63,7 +77,9 @@
 			"type": "NODE"
 		},
 		{
-			"_id": "5e8ed52fb1606a18565cbb95",
+			"_id": {
+				"$oid": "5e8ed52fb1606a18565cbb95"
+			},
 			"hash": "145e9bccd897c6428d0e8b792fa3063646e435f10154df76aed7e0543daedcfc",
 			"fileName": "ARS_02236_00001.pdf",
 			"parentId": "5e8ed52fb1606a18565cbb94",
@@ -72,7 +88,9 @@
 			"type": "LEAF"
 		},
 		{
-			"_id": "5e8ed52fb1606a18565cbb97",
+			"_id": {
+				"$oid": "5e8ed52fb1606a18565cbb97"
+			},
 			"hash": "7d70baefd8e6284346d5021dde2288a5aaf4ce03220ac7653ca3f697be4cf399",
 			"fileName": "ARS_02236_00003.pdf",
 			"jobId": "5e8c36c49df469062bc658c8",
