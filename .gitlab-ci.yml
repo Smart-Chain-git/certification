@@ -51,6 +51,7 @@ test unit:
     when: always
     paths:
       - "*/build"
+      - "*/*/build"
 
 #
 # Stage: build
@@ -67,6 +68,7 @@ build:
     when: always
     paths:
       - "*/build"
+      - "*/*/build"
 
 #
 # Stage: publish
