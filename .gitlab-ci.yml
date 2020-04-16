@@ -16,6 +16,8 @@ stages:
 variables:
   # timezone for TU that use date
   TZ: "Europe/Paris"
+  # Disable daemon for Gradle
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
 
 # Before each stage's script.
 before_script:
