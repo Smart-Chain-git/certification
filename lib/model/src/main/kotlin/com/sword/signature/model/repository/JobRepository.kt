@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository
 @Repository
 interface JobRepository : ReactiveMongoRepository<JobEntity, String> {
 
-    fun findAllByUserId(userId : String) : Flow<JobEntity>
+    fun findAllByUserId(userId: String): Flow<JobEntity>
 
 }

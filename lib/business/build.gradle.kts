@@ -18,6 +18,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
 
     // Project
+    api(project(":lib:common"))
     implementation(project(":lib:model"))
     implementation("com.sword.signature:merkle-tree:$merkleTreeVersion")
 

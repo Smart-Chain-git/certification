@@ -25,7 +25,7 @@ spring:
       fixedRate: 10000
 logging:
   level:
-    root : warn
+    root : debug
     com.sword.signature.business: TRACE
     org.springframework.data.mongodb: DEBUG
 jwt:

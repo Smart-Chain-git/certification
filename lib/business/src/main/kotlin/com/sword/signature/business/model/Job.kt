@@ -1,6 +1,6 @@
 package com.sword.signature.business.model
 
-import com.sword.signature.model.entity.JobState
+import com.sword.signature.common.enums.JobStateType
 import java.time.OffsetDateTime
 
 data class Job(
@@ -41,7 +41,7 @@ data class Job(
 
     var stateDate: OffsetDateTime,
 
-    var state: JobState,
+    var state: JobStateType,
 
 
     val files: List<String>? = null

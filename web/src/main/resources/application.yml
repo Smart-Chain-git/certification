@@ -49,6 +49,7 @@ logging:
     org:
       springframework:
         security: info
+        data: debug
 jwt:
   secret: ffe50f21d8359de7245dc13777812c2a
   issuer: "Tezos@Signature"

@@ -3,9 +3,10 @@ package com.sword.signature.business.service
 import com.sword.signature.business.exception.UserServiceException
 import com.sword.signature.business.model.Account
 import com.sword.signature.business.model.Algorithm
+import com.sword.signature.common.enums.TreeElementType
 import com.sword.signature.merkletree.utils.hexStringHash
 import com.sword.signature.model.configuration.MongoConfiguration
-import com.sword.signature.model.entity.TreeElementType
+
 import com.sword.signature.model.repository.JobRepository
 import com.sword.signature.model.repository.TreeElementRepository
 import kotlinx.coroutines.flow.asFlow

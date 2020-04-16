@@ -36,15 +36,16 @@ class ApplicationSecurity {
 
     @Bean
     fun routes(
-            mainHandler: MainHandler,
-            jobHandler: JobHandler,
-            tokenHandler: TokenHandler
+        mainHandler: MainHandler,
+        jobHandler: JobHandler,
+        tokenHandler: TokenHandler
     ) = coRouter {
         accept(MediaType.TEXT_HTML).nest {
             GET("/", mainHandler::index)
             GET("/index", mainHandler::index)
             GET("/login", mainHandler::login)
             GET("/jobs", jobHandler::jobs)
+            GET("/jobs/{jobId}", jobHandler::job)
             GET("/tokens", tokenHandler::tokens)
             POST("/createToken", tokenHandler::addToken)
             GET("/deleteToken/{id}", tokenHandler::removeToken)
