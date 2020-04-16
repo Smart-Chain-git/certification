@@ -5,10 +5,10 @@ import org.springframework.boot.runApplication
 
 
 @SpringBootApplication
-class IhmApplication
+class WebApplication
 
 
 
 fun main(args: Array<String>) {
-    runApplication<IhmApplication>(*args)
+    runApplication<WebApplication>(*args)
 }
