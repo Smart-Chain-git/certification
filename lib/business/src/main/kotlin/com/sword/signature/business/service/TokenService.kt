@@ -1,5 +1,6 @@
 package com.sword.signature.business.service
 
+import com.sword.signature.business.model.Account
 import com.sword.signature.business.model.Token
 import com.sword.signature.business.model.TokenCreate
 import kotlinx.coroutines.flow.Flow
@@ -10,5 +11,5 @@ interface TokenService {
     suspend fun getToken(token: String): Token?
     suspend fun checkAndGetToken(token: String): Token
     suspend fun getTokensByAccountId(accountId: String): Flow<Token>
-    suspend fun deleteToken(tokenId: String)
+    suspend fun deleteToken(requester: Account, tokenId: String)
 }

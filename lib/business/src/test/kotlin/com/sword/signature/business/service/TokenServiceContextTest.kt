@@ -1,6 +1,7 @@
 package com.sword.signature.business.service
 
 import com.sword.signature.business.exception.EntityNotFoundException
+import com.sword.signature.business.model.Account
 import com.sword.signature.business.model.TokenCreate
 import com.sword.signature.business.service.impl.TokenServiceImpl
 import com.sword.signature.model.configuration.MongoConfiguration
@@ -22,6 +23,24 @@ class TokenServiceContextTest @Autowired constructor(
     override val mongoTemplate: ReactiveMongoTemplate,
     override val mongoConfiguration: MongoConfiguration
 ) : AbstractServiceContextTest() {
+
+    private val simpleAccount = Account(
+        id = "simpleAccountId",
+        login = "simple",
+        password = "simple",
+        email = "simple@signature.com",
+        fullName = "Simple",
+        isAdmin = false
+    )
+
+    private val adminAccount = Account(
+        id = "adminAccount",
+        login = "admin",
+        password = "admin",
+        email = "admin@signature.com",
+        fullName = "Admin",
+        isAdmin = true
+    )
 
     @BeforeEach
     fun refreshDatabase() {
@@ -64,7 +83,7 @@ class TokenServiceContextTest @Autowired constructor(
     fun deleteTokenTest() {
         runBlocking {
             val tokenCount = mongoTemplate.getCollection("tokens").countDocuments().awaitFirst()
-            tokenService.deleteToken("5e8b4c28e2018ef99f6a98fe")
+            tokenService.deleteToken(adminAccount, "5e8b4c28e2018ef99f6a98fe")
             assertEquals(tokenCount - 1, mongoTemplate.getCollection("tokens").countDocuments().awaitFirst())
         }
     }
@@ -72,7 +91,14 @@ class TokenServiceContextTest @Autowired constructor(
     @Test
     fun deleteNonexistentTokenTest() {
         assertThrows<EntityNotFoundException> {
-            runBlocking { tokenService.deleteToken("nonexistentId") }
+            runBlocking { tokenService.deleteToken(adminAccount, "nonexistentId") }
+        }
+    }
+
+    @Test
+    fun deleteOtherTokenAsNonAdminTest() {
+        assertThrows<IllegalAccessException> {
+            runBlocking { tokenService.deleteToken(simpleAccount, "5e8b4c28e2018ef99f6a98fe") }
         }
     }
 }

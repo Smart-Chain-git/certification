@@ -6,6 +6,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException
 import com.sword.signature.business.exception.AuthenticationException
 import com.sword.signature.business.exception.EntityNotFoundException
 import com.sword.signature.business.exception.ServiceException
+import com.sword.signature.business.model.Account
 import com.sword.signature.business.model.JwtTokenDetails
 import com.sword.signature.business.model.Token
 import com.sword.signature.business.model.TokenCreate
@@ -27,9 +28,9 @@ import java.time.OffsetDateTime
 
 @Service
 class TokenServiceImpl(
-        @Value("\${jwt.secret}") private val jwtSecret: String,
-        @Value("\${jwt.issuer}") private val jwtIssuer: String,
-        private val tokenRepository: TokenRepository
+    @Value("\${jwt.secret}") private val jwtSecret: String,
+    @Value("\${jwt.issuer}") private val jwtIssuer: String,
+    private val tokenRepository: TokenRepository
 ) : TokenService {
 
     private val algorithm = Algorithm.HMAC256(jwtSecret)
@@ -37,15 +38,17 @@ class TokenServiceImpl(
     @Transactional(rollbackFor = [ServiceException::class])
     override suspend fun createToken(tokenDetails: TokenCreate): Token {
         LOGGER.debug("Creating new token.")
-        val jwtToken = createToken(JwtTokenDetails(
+        val jwtToken = createToken(
+            JwtTokenDetails(
                 id = tokenDetails.accountId,
                 creationTime = OffsetDateTime.now().toString()
-        ))
+            )
+        )
         val toCreate = TokenEntity(
-                name = tokenDetails.name,
-                jwtToken = jwtToken,
-                expirationDate = tokenDetails.expirationDate,
-                accountId = tokenDetails.accountId
+            name = tokenDetails.name,
+            jwtToken = jwtToken,
+            expirationDate = tokenDetails.expirationDate,
+            accountId = tokenDetails.accountId
         )
         val createdToken = tokenRepository.save(toCreate).awaitSingle().toBusiness()
         LOGGER.debug("New token created with id '{}'", createdToken.id)
@@ -82,10 +85,13 @@ class TokenServiceImpl(
     }
 
     @Transactional(rollbackFor = [ServiceException::class])
-    override suspend fun deleteToken(tokenId: String) {
+    override suspend fun deleteToken(requester: Account, tokenId: String) {
         LOGGER.debug("Deleting token with id '{}'.", tokenId)
         val token: TokenEntity = tokenRepository.findById(tokenId).awaitFirstOrNull()
-                ?: throw EntityNotFoundException("token", tokenId)
+            ?: throw EntityNotFoundException("token", tokenId)
+        if (!requester.isAdmin && requester.id != token.accountId) {
+            throw IllegalAccessException("Non-admin user ${requester.login} does not have permission to delete others' tokens.")
+        }
         tokenRepository.delete(token).awaitFirstOrNull()
         LOGGER.debug("Token with id '{}' deleted.", tokenId)
     }
@@ -95,10 +101,10 @@ class TokenServiceImpl(
      */
     internal fun createToken(jwtTokenDetails: JwtTokenDetails): String {
         return JWT.create()
-                .withIssuer(jwtIssuer)
-                .withClaim(CLAIM_ID, jwtTokenDetails.id)
-                .withClaim(CLAIM_CREATION_TIME, jwtTokenDetails.creationTime)
-                .sign(algorithm)
+            .withIssuer(jwtIssuer)
+            .withClaim(CLAIM_ID, jwtTokenDetails.id)
+            .withClaim(CLAIM_CREATION_TIME, jwtTokenDetails.creationTime)
+            .sign(algorithm)
     }
 
     /**
@@ -107,12 +113,12 @@ class TokenServiceImpl(
     @Throws(JWTVerificationException::class)
     internal fun parseToken(token: String): JwtTokenDetails {
         val decodedJWT = JWT.require(algorithm)
-                .withIssuer(jwtIssuer)
-                .build()
-                .verify(token)
+            .withIssuer(jwtIssuer)
+            .build()
+            .verify(token)
         return JwtTokenDetails(
-                id = decodedJWT.claims[CLAIM_ID]?.asString() ?: "",
-                creationTime = decodedJWT.claims[CLAIM_CREATION_TIME]?.asString() ?: ""
+            id = decodedJWT.claims[CLAIM_ID]?.asString() ?: "",
+            creationTime = decodedJWT.claims[CLAIM_CREATION_TIME]?.asString() ?: ""
         )
     }
 
