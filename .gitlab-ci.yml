@@ -81,7 +81,7 @@ build:
   tags:
     - docker
   script:
-    - gradle build
+    - gradle assemble
   artifacts:
     expire_in: 5 hrs
     when: always
@@ -134,7 +134,7 @@ dockerImage:
   script:
     - mkdir web/build/unpacked
     # Unpack the jar for light docker image.
-    - unzip web/build/libs/*.jar -d web/build/unpacked
+    - (cd web/build/unpacked; jar -xf ../libs/*.jar)
     # Build the docker image tagged either with git branch name or tag.
     - docker build -t $REGISTRY_URL/sword/signature-web:$CI_COMMIT_REF_NAME web
     # Push the image to the registry.
