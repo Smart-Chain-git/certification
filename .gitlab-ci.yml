@@ -8,7 +8,6 @@ image: gradle:6.2-jdk11
 
 # The pipeline consists of several stages. Each one is run in parallel.
 stages:
-  - compile
   - test # runs all the tests of the application.
   - build
   - publish
@@ -30,25 +29,6 @@ before_script:
 # cache before the stage and zip it back after the stage.
 cache:
   key: tezosservers
-
-#
-# Stage: compile
-#
-compilation:
-  stage: compile
-  # We tell gitlab-ci to use a machine running the docker-runner from gitlab.
-  # Here, we need the script to be run in a docker image (using the gradle image defined above).
-  tags:
-    - docker
-  script:
-    - gradle compileTestKotlin
-  # We create an artifact to be passed to the next stage.
-  # Artifact contain the backend related compiled classes and resources.
-  artifacts:
-    expire_in: 5 hrs
-    when: always
-    paths:
-      - "*/build"
 
 #
 # Stage: test
