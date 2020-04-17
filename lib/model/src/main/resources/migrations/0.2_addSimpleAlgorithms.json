@@ -1,41 +1,41 @@
 {
-	"algorithms": {
-		"insert": [
-			{
-				"_id": {
-					"$oid": "5e7ce2379d1d9dd15b4d70f6"
-				},
-				"name": "MD5",
-				"digestLength": "16"
-			},
-			{
-				"_id": {
-					"$oid": "5e7ce18e36eb55101ed9d9ed"
-				},
-				"name": "SHA-1",
-				"digestLength": "20"
-			},
-			{
-				"_id": {
-					"$oid": "5e7ce0c818f1f6a462448c06"
-				},
-				"name": "SHA-256",
-				"digestLength": "32"
-			},
-			{
-				"_id": {
-					"$oid": "5e7ce0e3c3ae3d5cb662944b"
-				},
-				"name": "SHA-384",
-				"digestLength": "48"
-			},
-			{
-				"_id": {
-					"$oid": "5e7ce0ec5135e4b01d8eebc2"
-				},
-				"name": "SHA-512",
-				"digestLength": "64"
-			}
-		]
-	}
+  "algorithms": {
+    "insert": [
+      {
+        "_id": {
+          "$oid": "5e7ce2379d1d9dd15b4d70f6"
+        },
+        "name": "MD5",
+        "digestLength": "16"
+      },
+      {
+        "_id": {
+          "$oid": "5e7ce18e36eb55101ed9d9ed"
+        },
+        "name": "SHA-1",
+        "digestLength": "20"
+      },
+      {
+        "_id": {
+          "$oid": "5e7ce0c818f1f6a462448c06"
+        },
+        "name": "SHA-256",
+        "digestLength": "32"
+      },
+      {
+        "_id": {
+          "$oid": "5e7ce0e3c3ae3d5cb662944b"
+        },
+        "name": "SHA-384",
+        "digestLength": "48"
+      },
+      {
+        "_id": {
+          "$oid": "5e7ce0ec5135e4b01d8eebc2"
+        },
+        "name": "SHA-512",
+        "digestLength": "64"
+      }
+    ]
+  }
 }

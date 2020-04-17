@@ -2,8 +2,10 @@ package com.sword.signature.business.model.mapper
 
 import com.sword.signature.business.model.Account
 import com.sword.signature.business.model.Algorithm
+import com.sword.signature.business.model.TokenCreate
 import com.sword.signature.model.entity.AccountEntity
 import com.sword.signature.model.entity.AlgorithmEntity
+import com.sword.signature.model.entity.TokenEntity
 
 fun Account.toModel() = AccountEntity(
         id = id,

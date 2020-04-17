@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout (~{::body},'tokens')}">
+<body>
+<div class="container">
+    <div class="table-wrapper">
+        <div class="table-title">
+            <div class="row">
+                <div class="col-sm-8"><h2 th:text="#{tokens.title}"/></div>
+                <div class="col-sm-4">
+                    <a href="#addTokenModal" class="btn btn-info add-new" data-toggle="modal"><i class="fa fa-plus"></i>
+                        [[#{tokens.action.add.label}]]</a>
+                </div>
+            </div>
+        </div>
+        <table class="table table-bordered token-table">
+            <thead>
+            <tr>
+                <th class="w-50" th:text="#{tokens.header.name}"/>
+                <th class="w-50" th:text="#{tokens.header.jwtToken}"/>
+                <th class="w-50" th:text="#{tokens.header.expirationDate}"/>
+                <th class="w-50" th:text="#{tokens.header.actions}"/>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="token : ${tokens}" th:object="${token}">
+                <tr th:id="'token-'+*{id}">
+                    <td th:text="*{name}"/>
+                    <td class="cut-text">
+                        <i class="fa fa-clipboard btn btn-light" th:data-text="*{jwtToken}"
+                           onclick="copyToClipboard(this.getAttribute('data-text'))"></i>
+                        <span th:text="*{jwtToken}" th:title="*{jwtToken}"></span>
+                    </td>
+                    <td th:text="*{expirationDate}"/>
+                    <td>
+                        <a th:href="'#revokeTokenModal'+*{id}" class="btn btn-info delete" data-toggle="modal"><i class="fa fa-minus"
+                                                                                                     data-toggle="tooltip"></i>
+                            [[#{tokens.action.revoke.label}]]</a>
+                        <!-- Revoke Token Modal -->
+                        <div th:id="'revokeTokenModal'+*{id}" class="modal fade">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <form th:action="@{/revokeToken/{id}(id=*{id})}">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title" th:text="#{tokens.action.revoke.title}"/>
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                                &times;
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>[[#{tokens.action.revoke.confirmation.question}]]</p>
+                                            <p class="text-warning"><small>[[#{tokens.action.revoke.confirmation.warning}]]</small></p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <input type="button" class="btn btn-default" data-dismiss="modal"
+                                                   th:value="#{tokens.action.cancel}">
+                                            <input type="submit" class="btn btn-danger"
+                                                   th:value="#{tokens.action.revoke.label}">
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+    </div>
+    <!-- Add Token Modal -->
+    <div id="addTokenModal" class="modal fade">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form th:action="@{/createToken}" th:object="${token}" method="post">
+                    <div class="modal-header">
+                        <h4 class="modal-title" th:text="#{tokens.action.add.title}"/>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label th:text="#{tokens.header.name}"/>
+                            <input th:field="*{name}" type="text" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label th:text="#{tokens.header.expirationDate}"/>
+                            <input th:field="*{expirationDate}" type="date" class="form-control">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" class="btn btn-default" data-dismiss="modal"
+                               th:value="#{tokens.action.cancel}">
+                        <input type="submit" class="btn btn-success" th:value="#{tokens.action.add.label}">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

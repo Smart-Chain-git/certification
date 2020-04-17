@@ -6,5 +6,5 @@ data class Account(
     val email: String,
     val password: String,
     val fullName: String?,
-    val isAdmin: Boolean = false
+    val isAdmin: Boolean
 )

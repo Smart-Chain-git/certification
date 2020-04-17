@@ -2,6 +2,7 @@ package com.sword.signature.web.configuration
 
 import com.sword.signature.web.webhandler.JobHandler
 import com.sword.signature.web.webhandler.MainHandler
+import com.sword.signature.web.webhandler.TokenHandler
 import org.springframework.boot.autoconfigure.security.reactive.PathRequest
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
@@ -18,14 +19,13 @@ import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect
 @Configuration
 @EnableWebFluxSecurity
 @ComponentScan(basePackages = ["com.sword.signature"])
-class ApplicationSecurity{
+class ApplicationSecurity {
 
     /**
      * Password encoding.
      */
     @Bean
     fun bCryptPasswordEncoder() = BCryptPasswordEncoder()
-
 
     /**
      * Spring security support for thymeleaf.
@@ -37,13 +37,18 @@ class ApplicationSecurity{
     @Bean
     fun routes(
         mainHandler: MainHandler,
-        jobHandler: JobHandler
+        jobHandler: JobHandler,
+        tokenHandler: TokenHandler
     ) = coRouter {
         accept(MediaType.TEXT_HTML).nest {
             GET("/", mainHandler::index)
+            GET("/index", mainHandler::index)
             GET("/login", mainHandler::login)
             GET("/jobs", jobHandler::jobs)
             GET("/jobs/{jobId}", jobHandler::job)
+            GET("/tokens", tokenHandler::tokens)
+            POST("/createToken", tokenHandler::addToken)
+            GET("/revokeToken/{id}", tokenHandler::revokeToken)
         }
         resources("/**", ClassPathResource("/static"))
     }

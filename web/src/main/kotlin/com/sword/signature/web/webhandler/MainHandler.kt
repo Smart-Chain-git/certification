@@ -1,15 +1,13 @@
 package com.sword.signature.web.webhandler
 
-import org.springframework.stereotype.Component
 import org.springframework.stereotype.Controller
 import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse
 import org.springframework.web.reactive.function.server.html
 import org.springframework.web.reactive.function.server.renderAndAwait
 
-@Component
+@Controller
 class MainHandler {
-
 
     suspend fun index(request: ServerRequest): ServerResponse {
         val model = mapOf<String, String>()
@@ -18,10 +16,9 @@ class MainHandler {
 
     suspend fun login(request: ServerRequest): ServerResponse {
         val model = mutableMapOf<String, String>()
-        if( request.queryParam("error").isPresent){
+        if (request.queryParam("error").isPresent) {
             model["loginError"] = "true"
         }
-        return ServerResponse.ok().html().renderAndAwait("login",model)
+        return ServerResponse.ok().html().renderAndAwait("login", model)
     }
-
 }

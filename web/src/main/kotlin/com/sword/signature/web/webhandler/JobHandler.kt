@@ -2,14 +2,13 @@ package com.sword.signature.web.webhandler
 
 import com.sword.signature.business.service.JobService
 import org.slf4j.LoggerFactory
-import org.springframework.stereotype.Component
+import org.springframework.stereotype.Controller
 import org.springframework.web.reactive.function.server.*
 
-@Component
+@Controller
 class JobHandler(
     private val jobService: JobService
 ) {
-
 
     suspend fun jobs(request: ServerRequest): ServerResponse {
         val account = request.getAccount()
@@ -24,7 +23,8 @@ class JobHandler(
         val account = request.getAccount()
         val jobId = request.pathVariable("jobId")
 
-        val job = jobService.findById(requester = account, jobId = jobId) ?: return ServerResponse.notFound().buildAndAwait()
+        val job =
+            jobService.findById(requester = account, jobId = jobId) ?: return ServerResponse.notFound().buildAndAwait()
 
         val model = mapOf<String, Any>(
             "job" to job
@@ -32,9 +32,7 @@ class JobHandler(
         return ServerResponse.ok().html().renderAndAwait("jobs/job", model)
     }
 
-
     companion object {
         private val LOGGER = LoggerFactory.getLogger(JobHandler::class.java)
     }
-
 }

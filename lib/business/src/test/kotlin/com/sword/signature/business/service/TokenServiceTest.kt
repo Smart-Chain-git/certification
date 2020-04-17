@@ -4,12 +4,14 @@ import com.sword.signature.business.exception.AuthenticationException
 import com.sword.signature.business.model.JwtTokenDetails
 import com.sword.signature.business.model.Token
 import com.sword.signature.business.service.impl.TokenServiceImpl
+import com.sword.signature.model.entity.QTokenEntity
 import com.sword.signature.model.entity.TokenEntity
 import com.sword.signature.model.repository.TokenRepository
 import io.mockk.*
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertEquals
+import reactor.core.publisher.Mono
 import java.time.LocalDate
 import java.time.Month
 
@@ -19,19 +21,24 @@ class TokenServiceTest {
     private val tokenService = TokenServiceImpl("ffe50f21d8359de7245dc13777812c2a", "Tezos@Signature", tokenRepository)
 
     private val tokenId = "tokenId"
+    private val tokenName = "tokenName"
     private val accountId = "accountId"
-    private val jwtToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjcmVhdGlvblRpbWUiOiJjcmVhdGlvblRpbWUiLCJpc3MiOiJUZXpvc0BTaWduYXR1cmUiLCJpZCI6ImFjY291bnRJZCJ9.zWQal4cCAEE4M0iJktv9VrklQRiZlL22DmVNo6YEiAY"
-    private val jwtTokenDetails = JwtTokenDetails(
-            id = accountId,
-            creationTime = "creationTime"
-    )
+    private val jwtToken =
+        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjcmVhdGlvblRpbWUiOiJjcmVhdGlvblRpbWUiLCJpc3MiOiJUZXpvc0BTaWduYXR1cmUiLCJpZCI6ImFjY291bnRJZCJ9.zWQal4cCAEE4M0iJktv9VrklQRiZlL22DmVNo6YEiAY"
+    private val jwtTokenDetails = JwtTokenDetails(id = accountId, creationTime = "creationTime")
 
     private val expirationDate = LocalDate.of(2020, Month.APRIL, 3)
     private val validDate = LocalDate.of(2020, Month.MARCH, 20)
     private val expiredDate = LocalDate.of(2020, Month.MAY, 1)
 
-    private val tokenEntity = TokenEntity(tokenId, jwtToken, expirationDate, accountId)
-    private val token = Token(tokenId, jwtToken, expirationDate, accountId)
+    private val tokenEntity = TokenEntity(
+        id = tokenId, name = tokenName, jwtToken = jwtToken,
+        expirationDate = expirationDate, accountId = accountId
+    )
+    private val token = Token(
+        id = tokenId, name = tokenName, jwtToken = jwtToken, expirationDate = expirationDate,
+        accountId = accountId, revoked = false
+    )
 
 
     @BeforeAll
@@ -51,28 +58,59 @@ class TokenServiceTest {
 
     @Test
     fun getTokenTest() {
-        coEvery { tokenRepository.findByJwtToken(jwtToken) } returns tokenEntity
+        coEvery { tokenRepository.findOne(QTokenEntity.tokenEntity.jwtToken.eq(jwtToken)) } returns Mono.just(
+            tokenEntity
+        )
         assertEquals(token, runBlocking { tokenService.getToken(jwtToken) })
     }
 
     @Test
-    fun checkAndGetTokenToken() {
-        coEvery { tokenRepository.findByJwtToken(jwtToken) } returns tokenEntity
+    fun getAndCheckTokenToken() {
+        coEvery {
+            tokenRepository.findOne(
+                QTokenEntity.tokenEntity.jwtToken.eq(jwtToken)
+                    .and(QTokenEntity.tokenEntity.revoked.isFalse)
+            )
+        } returns Mono.just(
+            tokenEntity
+        )
         every { LocalDate.now() } returns validDate
-        assertEquals(token, runBlocking { tokenService.checkAndGetToken(jwtToken) })
+        assertEquals(token, runBlocking { tokenService.getAndCheckToken(jwtToken) })
     }
 
     @Test
-    fun checkAndGetRevokedTokenTest() {
-        coEvery { tokenRepository.findByJwtToken(jwtToken) } returns null
-        assertThrows<AuthenticationException.RevokedTokenException> { runBlocking { tokenService.checkAndGetToken(jwtToken) } }
+    fun getAndCheckRevokedTokenTest() {
+        coEvery {
+            tokenRepository.findOne(
+                QTokenEntity.tokenEntity.jwtToken.eq(jwtToken).and(QTokenEntity.tokenEntity.revoked.isFalse)
+            )
+        } returns Mono.empty()
+        assertThrows<AuthenticationException.RevokedTokenException> {
+            runBlocking {
+                tokenService.getAndCheckToken(
+                    jwtToken
+                )
+            }
+        }
     }
 
     @Test
-    fun checkAndGetExpiredTokenTest() {
-        coEvery { tokenRepository.findByJwtToken(jwtToken) } returns tokenEntity
+    fun getAndCheckExpiredTokenTest() {
+        coEvery {
+            tokenRepository.findOne(
+                QTokenEntity.tokenEntity.jwtToken.eq(jwtToken).and(QTokenEntity.tokenEntity.revoked.isFalse)
+            )
+        } returns Mono.just(
+            tokenEntity
+        )
         every { LocalDate.now() } returns expiredDate
-        assertThrows<AuthenticationException.ExpiredTokenException> { runBlocking { tokenService.checkAndGetToken(jwtToken) } }
+        assertThrows<AuthenticationException.ExpiredTokenException> {
+            runBlocking {
+                tokenService.getAndCheckToken(
+                    jwtToken
+                )
+            }
+        }
     }
 
     @Test

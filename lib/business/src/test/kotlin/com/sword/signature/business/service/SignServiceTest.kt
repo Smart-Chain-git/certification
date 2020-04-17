@@ -45,7 +45,8 @@ class SignServiceTest @Autowired constructor(
         login = "admin",
         email = "admin@signature.com",
         password = "\$2a\$10\$TEQbC2lNT.dWnYVLOi8L4e5VUST7zyCV6demNJCQzNG6up3dr25Se",
-        fullName = "Administrator"
+        fullName = "Administrator",
+        isAdmin = true
     )
     private final val sha256 = Algorithm(id = "SHA-256", name = "SHA-256", digestLength = 32)
 

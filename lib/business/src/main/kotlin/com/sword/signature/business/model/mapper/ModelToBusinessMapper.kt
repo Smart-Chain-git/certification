@@ -55,8 +55,10 @@ fun AlgorithmEntity.toBusiness() = Algorithm(
 )
 
 fun TokenEntity.toBusiness() = Token(
-    id = id!!,
-    jwtToken = jwtToken,
-    expirationDate = expirationDate,
-    accountId = accountId
+        id = id!!,
+        name = name,
+        jwtToken = jwtToken,
+        expirationDate = expirationDate,
+        accountId = accountId,
+        revoked = revoked
 )

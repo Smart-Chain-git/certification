@@ -2,8 +2,8 @@
 
 ## Modules
 
-* Web server (module **frontend:ihm**): webserver providing the UI for end-users.
-* API (**lib**): business services and entities (**business**) and mongoDB collections representations and migrations (**model**).
+* Web server (module **web**): webserver providing the UI for end-users.
+* API (**lib**): business services and entities (**business**), mongoDB collections representations and migrations (**model**), and API for web server (**api**).
 * Daemon: *not released yet*.
 
 ## Requirements
@@ -14,7 +14,7 @@
 ## Development
 
 Run the web server in development mode:
-* Launch mongoDB docker container: `docker-compose up -d`
+* Launch mongoDB, mongo express (admin UI), and fakeSMTP docker containers: `docker-compose up -d`
 * Edit the configuration file: `frontend/ihm/src/application.yml`
 * Launch the web server: `./gradlew bootrun`
 
