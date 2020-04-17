@@ -4,18 +4,18 @@ import com.sword.signature.business.exception.UserServiceException
 import com.sword.signature.business.model.Account
 import com.sword.signature.business.model.Algorithm
 import com.sword.signature.business.model.Job
+import com.sword.signature.business.model.TreeElement
 import com.sword.signature.business.model.mapper.toBusiness
 import com.sword.signature.business.service.SignService
 import com.sword.signature.business.visitor.SaveRepositoryTreeVisitor
 import com.sword.signature.common.enums.JobStateType
+import com.sword.signature.common.enums.TreeElementType
 import com.sword.signature.merkletree.builder.TreeBuilder
 import com.sword.signature.merkletree.visitor.SimpleAlgorithmTreeBrowser
 import com.sword.signature.model.entity.JobEntity
 import com.sword.signature.model.repository.JobRepository
 import com.sword.signature.model.repository.TreeElementRepository
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.reactive.awaitSingle
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
@@ -82,13 +82,13 @@ class SignServiceImpl(
         SimpleAlgorithmTreeBrowser(algorithm.name).visitTree(merkleTree)
         // ecriture en BDD de l'arbre
 
-        SaveRepositoryTreeVisitor(
+        val inserted = SaveRepositoryTreeVisitor(
             jobId = jobEntity.id!!,
             treeElementRepository = treeElementRepository
         ).visitTree(merkleTree)
 
-        return jobEntity.toBusiness(files = fileHashs.map { it.second })
-
+        return jobEntity.toBusiness(files = inserted.filter { it.type == TreeElementType.LEAF }
+            .map { it.toBusiness() as TreeElement.LeafTreeElement }.toList())
 
     }
 }

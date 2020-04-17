@@ -44,6 +44,6 @@ data class Job(
     var state: JobStateType,
 
 
-    val files: List<String>? = null
+    val files: List<TreeElement.LeafTreeElement>? = null
 
 )

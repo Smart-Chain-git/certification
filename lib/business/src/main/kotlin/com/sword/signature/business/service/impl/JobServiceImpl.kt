@@ -2,6 +2,7 @@ package com.sword.signature.business.service.impl
 
 import com.sword.signature.business.model.Account
 import com.sword.signature.business.model.Job
+import com.sword.signature.business.model.TreeElement
 import com.sword.signature.business.model.mapper.toBusiness
 import com.sword.signature.business.service.JobService
 import com.sword.signature.common.criteria.TreeElementCriteria
@@ -42,7 +43,7 @@ class JobServiceImpl(
 
         //recuperation des element de l'arbre de type feuille
         val treeElementPredicate = TreeElementCriteria(jobId = jobId, type = TreeElementType.LEAF).toPredicate()
-        val leaves = treeElementRepository.findAll(treeElementPredicate).asFlow().map { it.fileName!! }.toList()
+        val leaves = treeElementRepository.findAll(treeElementPredicate).asFlow().map { it.toBusiness() as TreeElement.LeafTreeElement }.toList()
 
         LOGGER.debug("mes feuilles {}", leaves)
 

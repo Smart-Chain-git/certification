@@ -7,8 +7,10 @@ import com.sword.signature.merkletree.model.TreeElement
 import com.sword.signature.merkletree.model.TreeLeaf
 import com.sword.signature.merkletree.model.TreeNode
 import com.sword.signature.model.entity.TreeElementEntity
-
 import com.sword.signature.model.repository.TreeElementRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.reactive.awaitSingle
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -18,12 +20,18 @@ class SaveRepositoryTreeVisitor(
     private val treeElementRepository: TreeElementRepository
 ) {
 
-    suspend fun visitTree(rooTreeElement: TreeElement<String>?) {
-        visitTreeElement(rooTreeElement, null, null)
+    /**
+     * visite l'arbre et retourne un flow d'element créé dans la BDD
+     */
+
+    fun visitTree(rooTreeElement: TreeElement<String>?): Flow<TreeElementEntity> {
+        return flow {
+            visitTreeElement(rooTreeElement, null, null)
+        }
     }
 
 
-    private suspend fun visitTreeElement(
+    private suspend fun FlowCollector<TreeElementEntity>.visitTreeElement(
         treeElement: TreeElement<String>?,
         parentId: String?,
         position: TreeElementPosition?
@@ -35,7 +43,7 @@ class SaveRepositoryTreeVisitor(
         }
     }
 
-    private suspend fun visitTreeNode(treeNode: TreeNode<String>, parentId: String?, position: TreeElementPosition?) {
+    private suspend fun FlowCollector<TreeElementEntity>.visitTreeNode(treeNode: TreeNode<String>, parentId: String?, position: TreeElementPosition?) {
         //creation entité
         val tempTreeElementEntity = TreeElementEntity(
             hash = treeNode.value!!,
@@ -47,20 +55,22 @@ class SaveRepositoryTreeVisitor(
         LOGGER.trace("ecriture node {}", tempTreeElementEntity)
 
 
-        val nodeEntity = treeElementRepository.insert(
+        val inserted = treeElementRepository.insert(
             tempTreeElementEntity
         ).awaitSingle()
+        //on renvoi le noeud cree à l'appeleur
+        emit (inserted)
 
-        visitTreeElement(treeNode.left, nodeEntity.id!!, TreeElementPosition.LEFT)
+        visitTreeElement(treeNode.left, inserted.id!!, TreeElementPosition.LEFT)
         if (treeNode.right != null) {
-            visitTreeElement(treeNode.right!!, nodeEntity.id!!, TreeElementPosition.RIGHT)
+            visitTreeElement(treeNode.right!!, inserted.id!!, TreeElementPosition.RIGHT)
         }
     }
 
-    private suspend fun visitTreeLeaf(treeLeaf: TreeLeaf<String>, parentId: String?, position: TreeElementPosition?) {
+    private suspend fun FlowCollector<TreeElementEntity>.visitTreeLeaf(treeLeaf: TreeLeaf<String>, parentId: String?, position: TreeElementPosition?) {
         val metadata = treeLeaf.metadata as String
         LOGGER.debug("ecriture leaf {}", treeLeaf.value)
-        treeElementRepository.insert(
+        val inserted = treeElementRepository.insert(
             TreeElementEntity(
                 hash = treeLeaf.value,
                 fileName = metadata,
@@ -70,6 +80,9 @@ class SaveRepositoryTreeVisitor(
                 position = position
             )
         ).awaitSingle()
+        //on renvoi le noeud cree à l'appeleur
+        emit (inserted)
+
     }
 
     companion object {
