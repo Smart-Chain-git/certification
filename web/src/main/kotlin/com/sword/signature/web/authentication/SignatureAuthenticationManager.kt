@@ -29,7 +29,7 @@ class SignatureAuthenticationManager(
             is BearerTokenAuthenticationToken -> {
                 val bearerToken = authentication.token
 
-                val token = runBlocking { tokenService.checkAndGetToken(bearerToken) }
+                val token = runBlocking { tokenService.getAndCheckToken(bearerToken) }
                 val user = userDetailsService.findById(token.accountId)
 
                 Mono.just(SignatureAuthenticationToken(

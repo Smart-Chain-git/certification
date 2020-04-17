@@ -45,5 +45,6 @@ fun TokenEntity.toBusiness() = Token(
         name = name,
         jwtToken = jwtToken,
         expirationDate = expirationDate,
-        accountId = accountId
+        accountId = accountId,
+        revoked = revoked
 )

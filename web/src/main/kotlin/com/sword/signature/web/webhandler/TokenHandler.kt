@@ -1,6 +1,7 @@
 package com.sword.signature.web.webhandler
 
 import com.sword.signature.business.model.TokenCreate
+import com.sword.signature.business.model.TokenPatch
 import com.sword.signature.business.service.TokenService
 import kotlinx.coroutines.flow.toList
 import org.slf4j.LoggerFactory
@@ -33,9 +34,13 @@ class TokenHandler(
         return ServerResponse.ok().html().renderAndAwait("redirect:/tokens")
     }
 
-    suspend fun removeToken(request: ServerRequest): ServerResponse {
+    suspend fun revokeToken(request: ServerRequest): ServerResponse {
         val id = request.pathVariable("id")
-        tokenService.deleteToken(requester = request.getAccount(), tokenId = id)
+        tokenService.patchToken(
+            requester = request.getAccount(),
+            tokenId = id,
+            tokenDetails = TokenPatch(revoked = true)
+        )
         return ServerResponse.ok().html().renderAndAwait("redirect:/tokens")
     }
 

@@ -48,7 +48,7 @@ class ApplicationSecurity {
             GET("/jobs/{jobId}", jobHandler::job)
             GET("/tokens", tokenHandler::tokens)
             POST("/createToken", tokenHandler::addToken)
-            GET("/deleteToken/{id}", tokenHandler::removeToken)
+            GET("/revokeToken/{id}", tokenHandler::revokeToken)
         }
         resources("/**", ClassPathResource("/static"))
     }

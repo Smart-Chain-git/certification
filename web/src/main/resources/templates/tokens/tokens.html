@@ -34,29 +34,29 @@
                     </td>
                     <td th:text="*{expirationDate}"/>
                     <td>
-                        <a th:href="'#deleteTokenModal'+*{id}" class="btn btn-info delete" data-toggle="modal"><i class="fa fa-minus"
+                        <a th:href="'#revokeTokenModal'+*{id}" class="btn btn-info delete" data-toggle="modal"><i class="fa fa-minus"
                                                                                                      data-toggle="tooltip"></i>
-                            [[#{tokens.action.delete.label}]]</a>
-                        <!-- Delete Token Modal -->
-                        <div th:id="'deleteTokenModal'+*{id}" class="modal fade">
+                            [[#{tokens.action.revoke.label}]]</a>
+                        <!-- Revoke Token Modal -->
+                        <div th:id="'revokeTokenModal'+*{id}" class="modal fade">
                             <div class="modal-dialog">
                                 <div class="modal-content">
-                                    <form th:action="@{/deleteToken/{id}(id=*{id})}">
+                                    <form th:action="@{/revokeToken/{id}(id=*{id})}">
                                         <div class="modal-header">
-                                            <h4 class="modal-title" th:text="#{tokens.action.delete.title}"/>
+                                            <h4 class="modal-title" th:text="#{tokens.action.revoke.title}"/>
                                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                                                 &times;
                                             </button>
                                         </div>
                                         <div class="modal-body">
-                                            <p>[[#{tokens.action.delete.confirmation.question}]]</p>
-                                            <p class="text-warning"><small>[[#{tokens.action.delete.confirmation.warning}]]</small></p>
+                                            <p>[[#{tokens.action.revoke.confirmation.question}]]</p>
+                                            <p class="text-warning"><small>[[#{tokens.action.revoke.confirmation.warning}]]</small></p>
                                         </div>
                                         <div class="modal-footer">
                                             <input type="button" class="btn btn-default" data-dismiss="modal"
                                                    th:value="#{tokens.action.cancel}">
                                             <input type="submit" class="btn btn-danger"
-                                                   th:value="#{tokens.action.delete.label}">
+                                                   th:value="#{tokens.action.revoke.label}">
                                         </div>
                                     </form>
                                 </div>

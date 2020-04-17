@@ -15,6 +15,7 @@ data class TokenEntity(
     @Indexed(unique = true)
     val jwtToken: String,
     val expirationDate: LocalDate? = null,
-    val accountId: String
+    val accountId: String,
+    val revoked: Boolean = false
 ) {
 }
