@@ -31,7 +31,7 @@ class SignServiceImpl(
 
     @Transactional
     override fun batchSign(
-        account: Account,
+        requester: Account,
         algorithm: Algorithm,
         flowName: String,
         fileHashs: Flow<Pair<String, String>>
@@ -47,19 +47,19 @@ class SignServiceImpl(
                 }
                 intermediary.add(fileHash)
                 if (intermediary.size >= maximunLeaf) {
-                    emit(anchorTree(account, algorithm, flowName, intermediary))
+                    emit(anchorTree(requester, algorithm, flowName, intermediary))
                     intermediary.clear()
                 }
             }
             // emission des derniers hash
             if (intermediary.isNotEmpty()) {
-                emit(anchorTree(account, algorithm, flowName, intermediary))
+                emit(anchorTree(requester, algorithm, flowName, intermediary))
             }
         }
     }
 
     private suspend fun anchorTree(
-        account: Account,
+        requester: Account,
         algorithm: Algorithm,
         flowName: String,
         fileHashs: List<Pair<String, String>>
@@ -68,7 +68,7 @@ class SignServiceImpl(
         // creation du jobb en BDD
         val jobEntity = jobRepository.insert(
             JobEntity(
-                userId = account.id,
+                userId = requester.id,
                 algorithm = algorithm.name,
                 flowName = flowName,
                 state = JobStateType.INSERTED,

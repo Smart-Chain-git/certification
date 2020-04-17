@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 interface SignService {
 
 
-    fun batchSign(account: Account, algorithm: Algorithm, flowName : String, fileHashs: Flow<Pair<String, String>>): Flow<Job>
+    fun batchSign(requester: Account, algorithm: Algorithm, flowName : String, fileHashs: Flow<Pair<String, String>>): Flow<Job>
 
 
 }
