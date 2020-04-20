@@ -152,15 +152,16 @@ class JobServiceContextTest @Autowired constructor(
     fun getSingleJob(
         requesterAccount: Account,
         jobId: String,
-        expected: Job
+        expected: Job,
+    expectedFileNames : List<String>
     ) {
         runBlocking {
             val job = jobService.findById(requesterAccount, jobId)
             assertThat(job).isNotNull
             job as Job
             assertThat(job).`as`("mauvais job").isEqualToIgnoringGivenFields(expected, "files")
-            assertThat(job.files).`as`("pas de file").isNotNull.`as`("mauvais files")
-                .containsExactlyInAnyOrderElementsOf(expected.files)
+            assertThat(job.files?.map { it.fileName }).`as`("pas de file").isNotNull.`as`("mauvais files")
+                .containsExactlyInAnyOrderElementsOf(expectedFileNames)
         }
     }
 
@@ -177,9 +178,9 @@ class JobServiceContextTest @Autowired constructor(
                     userId = "5e74a073a386f170f3850b4b",
                     flowName = "ARS_20180626_02236_130006",
                     stateDate = OffsetDateTime.parse("2020-04-07T08:16:04.028Z"),
-                    state = JobStateType.INSERTED,
-                    files = listOf("ARS_02236_00004.pdf", "ARS_02236_00002.pdf", "ARS_02236_00001.pdf")
-                )
+                    state = JobStateType.INSERTED
+                ),
+                listOf("ARS_02236_00004.pdf", "ARS_02236_00002.pdf", "ARS_02236_00001.pdf")
             )
             , Arguments.of(
                 secondAdmin,
@@ -192,9 +193,9 @@ class JobServiceContextTest @Autowired constructor(
                     userId = "5e74a073a386f170f3850b4b",
                     flowName = "ARS_20180626_02236_130006",
                     stateDate = OffsetDateTime.parse("2020-04-07T08:16:04.113Z"),
-                    state = JobStateType.INSERTED,
-                    files = listOf("ARS_02236_00003.pdf")
-                )
+                    state = JobStateType.INSERTED
+                ),
+                listOf("ARS_02236_00003.pdf")
             )
         ).stream()
 

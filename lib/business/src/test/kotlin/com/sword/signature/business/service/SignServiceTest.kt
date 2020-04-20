@@ -75,7 +75,7 @@ class SignServiceTest @Autowired constructor(
         assertThatThrownBy {
             runBlocking {
                 signService.batchSign(
-                    account = accountAdmin,
+                    requester = accountAdmin,
                     algorithm = sha256,
                     flowName = "monflow",
                     fileHashs = monFlow
@@ -101,7 +101,7 @@ class SignServiceTest @Autowired constructor(
 
             val actualJobResponse =
                 signService.batchSign(
-                    account = account, algorithm = sha256,
+                    requester = account, algorithm = sha256,
                     flowName = "monflow", fileHashs = hashs.asFlow()
                 ).toList()
 
