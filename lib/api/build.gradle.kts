@@ -5,16 +5,17 @@ plugins {
 }
 
 description = "bean representation of communication api between client and server"
-val artefactName="communication-api"
+val artefactName = "communication-api"
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-
+    // Jackson
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 }
 
 tasks {
     jar {
-        enabled=true
+        enabled = true
     }
 }
 

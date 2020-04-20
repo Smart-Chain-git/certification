@@ -46,6 +46,7 @@ class ApplicationSecurity {
             GET("/login", mainHandler::login)
             GET("/jobs", jobHandler::jobs)
             GET("/jobs/{jobId}", jobHandler::job)
+            GET("/files/{fileId}/proof", jobHandler::fileProof)
             GET("/tokens", tokenHandler::tokens)
             POST("/createToken", tokenHandler::addToken)
             GET("/revokeToken/{id}", tokenHandler::revokeToken)
