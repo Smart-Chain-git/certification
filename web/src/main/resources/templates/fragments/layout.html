@@ -40,7 +40,7 @@
 				</li>
 				<li th:replace="::menuItem ('','index',#{nav.index})"/>
 				<li th:replace="::menuItem ('jobs','job',#{nav.jobs})"/>
-				<li th:replace="::menuItem ('tokens','token',#{nav.tokens})"/>
+				<li id="menu_tokens" th:replace="::menuItem ('tokens','token',#{nav.tokens})"/>
 			</ul>
 			<div class="logout" sec:authorize="isAuthenticated()">
 				<form th:action="@{/logout}" method="post">
