@@ -36,7 +36,7 @@
 
 			<ul class="nav navbar-nav">
 				<li th:fragment="menuItem (path,active,text)" th:class="${active==menu ? 'active' : ''}">
-					<a th:href="@{/__${path}__}" th:text="${text}"/>
+					<a th:id="'menu_' + ${text}"  th:href="@{/__${path}__}" th:text="${text}"/>
 				</li>
 				<li th:replace="::menuItem ('','index',#{nav.index})"/>
 				<li th:replace="::menuItem ('jobs','job',#{nav.jobs})"/>
@@ -45,7 +45,7 @@
 			<div class="logout" sec:authorize="isAuthenticated()">
 				<form th:action="@{/logout}" method="post">
 					<label th:text="#{index.loggedAs(${#authentication.name})}"/>
-					<button type="submit" class="btn btn-default navbar-btn" th:text="#{login.logout}"/>
+					<button type="submit" id="btn_logout" class="btn btn-default navbar-btn" th:text="#{login.logout}"/>
 				</form>
 			</div>
 		</div>
