@@ -36,11 +36,11 @@
 
 			<ul class="nav navbar-nav">
 				<li th:fragment="menuItem (path,active,text)" th:class="${active==menu ? 'active' : ''}">
-					<a th:href="@{/__${path}__}" th:text="${text}"/>
+					<a th:id="'menu_' + ${text}"  th:href="@{/__${path}__}" th:text="${text}"/>
 				</li>
 				<li th:replace="::menuItem ('','index',#{nav.index})"/>
 				<li th:replace="::menuItem ('jobs','job',#{nav.jobs})"/>
-				<li id="menu_tokens" th:replace="::menuItem ('tokens','token',#{nav.tokens})"/>
+				<li th:replace="::menuItem ('tokens','token',#{nav.tokens})"/>
 			</ul>
 			<div class="logout" sec:authorize="isAuthenticated()">
 				<form th:action="@{/logout}" method="post">
