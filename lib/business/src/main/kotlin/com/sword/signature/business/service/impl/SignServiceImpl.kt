@@ -16,6 +16,7 @@ import com.sword.signature.model.entity.JobEntity
 import com.sword.signature.model.repository.JobRepository
 import com.sword.signature.model.repository.TreeElementRepository
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.reactive.awaitFirstOrNull
 import kotlinx.coroutines.reactive.awaitSingle
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
@@ -91,4 +92,26 @@ class SignServiceImpl(
             .map { it.toBusiness() as TreeElement.LeafTreeElement }.toList())
 
     }
+
+    @Transactional
+    override suspend fun getFileProof(requester: Account, fileId: String): Pair<Job, List<TreeElement>>? {
+        val treeElement = treeElementRepository.findById(fileId).awaitFirstOrNull() ?: return null
+        val job = jobRepository.findById(treeElement.jobId).awaitSingle()
+        if (!requester.isAdmin && requester.id != job.userId) {
+            throw IllegalAccessException("user ${requester.login} does not have role/permission to get job: ${job.id}")
+        }
+
+        val elements = mutableListOf(treeElement)
+        var nextId = treeElement.parentId
+        while (nextId != null) {
+            val nextelement = treeElementRepository.findById(nextId).awaitSingle()
+            elements.add(nextelement)
+            nextId = nextelement.parentId
+        }
+
+        return Pair(job.toBusiness(), elements.map { it.toBusiness() })
+
+
+    }
+
 }
