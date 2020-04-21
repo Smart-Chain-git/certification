@@ -4,7 +4,7 @@
 
 # We use a gradle image to run all stages of the pipeline.
 # Each stage runs a bare (not wrapped) `gradle ...` command.
-image: gradle:6.3-jdk11
+image: $REGISTRY_PUBLIC_URL/gradle:6.3-jdk11
 
 # The pipeline consists of several stages. Each one is run in parallel.
 stages:
@@ -113,8 +113,6 @@ publishDocker:
     - build
   tags:
     - dockerBuild
-  before_script:
-    - docker login $REGISTRY_URL -u $REGISTRY_USER -p $REGISTRY_PASSWORD
   script:
     - mkdir web/build/unpacked
     # Unpack the jar for light docker image.
