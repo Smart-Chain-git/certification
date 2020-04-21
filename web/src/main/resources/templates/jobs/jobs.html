@@ -17,7 +17,7 @@
 		<tbody>
 		<tr th:each="job : ${jobs}">
 			<td><a th th:text="${job.id}" th:href="@{/jobs/{jobId}(jobId=${job.id})}"/></td>
-			<td th:text="${job.createdDate}"/>
+			<td th:text="${#temporals.format(job.createdDate, #messages.msg('app.dateTimeformat'))}"/>
 			<td th:text="${job.state}"/>
 		</tr>
 		</tbody>

@@ -14,7 +14,7 @@
 		</tr>
 		<tr>
 			<th th:text="#{jobs.header.createdDate}"/>
-			<td th:text="${job.createdDate}"/>
+			<td th:text="${#temporals.format(job.createdDate, #messages.msg('app.dateTimeformat'))}"/>
 		</tr>
 		<tr>
 			<th th:text="#{jobs.header.state}"/>
