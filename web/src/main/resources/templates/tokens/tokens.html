@@ -32,7 +32,7 @@
                            onclick="copyToClipboard(this.getAttribute('data-text'))"></i>
                         <span th:text="*{jwtToken}" th:title="*{jwtToken}"></span>
                     </td>
-                    <td th:text="*{expirationDate}"/>
+                    <td th:text="${#temporals.format(token.expirationDate, #messages.msg('app.dateformat'))}"/>
                     <td>
                         <a th:href="'#revokeTokenModal'+*{id}" class="btn btn-info delete" data-toggle="modal"><i class="fa fa-minus"
                                                                                                      data-toggle="tooltip"></i>
