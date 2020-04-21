@@ -23,7 +23,7 @@
                 <th class="w-50" th:text="#{tokens.header.actions}"/>
             </tr>
             </thead>
-            <tbody>
+            <tbody id="table_tokens">
             <th:block th:each="token : ${tokens}" th:object="${token}">
                 <tr th:id="'token-'+*{id}">
                     <td th:text="*{name}"/>
