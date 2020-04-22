@@ -1,41 +1,51 @@
 <!DOCTYPE html>
 
-<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'login')}">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout(activeMenuItem='login')}"
+>
+
 <body>
-	<form th:action="@{/login}" method="post" class="form-horizontal">
-		<fieldset>
-			<div class="container">
-				<table style="width: auto; margin: 0px auto;" class="table">
-					<tbody>
-						<tr>
-							<td colspan="2" style="align: center;">
-								<h2 th:text="#{login.title}"></h2>
-							</td>
-						</tr>
-						<tr style="vertical-align: middle;">
-							<td style="text-align: right;"><label th:text="#{login.user}">Username</label></td>
-							<td><input type="text" id="username" name="username" autofocus="autofocus" /></td>
-						</tr>
-						<tr style="vertical-align: middle;">
-							<td style="text-align: right;"><label th:text="#{login.password}">Password</label></td>
-							<td><input type="password" id="password" name="password" /></td>
-						</tr>
-						<th:block th:if="${loginError}">
-							<tr>
-								<td colspan="2"><th:span class="text-danger" th:text="#{login.error}">Wrong user or password</th:span></td>
-							</tr>
-						</th:block>
-						<tr style="vertical-align: middle;">
-							<td />
-							<td style="text-align: right;"><input type="submit" id="btn_login" th:value="#{login.login}" /></td>
-						</tr>
-						<tr>
-							<td colspan="2"><a href="/index" th:href="@{/index}" th:text="#{login.return}">Back to home page</a></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</fieldset>
-	</form>
+<div layout:fragment="content">
+    <form th:action="@{/login}" method="post" class="form-horizontal">
+        <fieldset>
+            <div class="container">
+                <table style="width: auto; margin: 0px auto;" class="table">
+                    <tbody>
+                    <tr>
+                        <td colspan="2" style="align: center;">
+                            <h2 th:text="#{login.title}"></h2>
+                        </td>
+                    </tr>
+                    <tr style="vertical-align: middle;">
+                        <td style="text-align: right;"><label th:text="#{login.user}">Username</label></td>
+                        <td><input type="text" id="username" name="username" autofocus="autofocus"/></td>
+                    </tr>
+                    <tr style="vertical-align: middle;">
+                        <td style="text-align: right;"><label th:text="#{login.password}">Password</label></td>
+                        <td><input type="password" id="password" name="password"/></td>
+                    </tr>
+                    <th:block th:if="${loginError}">
+                        <tr>
+                            <td colspan="2">
+                                <th:span class="text-danger" th:text="#{login.error}">Wrong user or password</th:span>
+                            </td>
+                        </tr>
+                    </th:block>
+                    <tr style="vertical-align: middle;">
+                        <td/>
+                        <td style="text-align: right;"><input type="submit" id="btn_login" th:value="#{login.login}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><a href="/index" th:href="@{/index}" th:text="#{login.return}">Back to home
+                            page</a></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </fieldset>
+    </form>
+</div>
 </body>
 </html>

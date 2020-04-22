@@ -1,29 +1,31 @@
 <!DOCTYPE html>
 
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-      th:replace="~{fragments/layout :: layout (~{::body},'jobs')}">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout(activeMenuItem='jobs')}"
+>
 <body>
-<h1 style="text-align: center;" th:text="#{jobs.title}">jobsList</h1>
-<div class="container" style="text-align: center; width: auto; margin: 0px auto;">
+<div layout:fragment="content">
+    <h1 style="text-align: center;" th:text="#{jobs.title}">jobsList</h1>
+    <div class="container" style="text-align: center; width: auto; margin: 0px auto;">
 
-	<table id="jobs" class="table table-striped table-hover">
-		<thead>
-		<tr>
-			<th th:text="#{jobs.header.id}"/>
-			<th th:text="#{jobs.header.createdDate}"/>
-			<th th:text="#{jobs.header.state}"/>
-		</tr>
-		</thead>
-		<tbody>
-		<tr th:each="job : ${jobs}">
-			<td><a th th:text="${job.id}" th:href="@{/jobs/{jobId}(jobId=${job.id})}"/></td>
-			<td th:text="${job.createdDate}"/>
-			<td th:text="${job.state}"/>
-		</tr>
-		</tbody>
-	</table>
-
-
+        <table id="jobs" class="table table-striped table-hover">
+            <thead>
+            <tr>
+                <th th:text="#{jobs.header.id}"/>
+                <th th:text="#{jobs.header.createdDate}"/>
+                <th th:text="#{jobs.header.state}"/>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="job : ${jobs}">
+                <td><a th th:text="${job.id}" th:href="@{/jobs/{jobId}(jobId=${job.id})}"/></td>
+                <td th:text="${#temporals.format(job.createdDate, #messages.msg('app.dateTimeformat'))}"/>
+                <td th:text="${job.state}"/>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 </body>
 </html>

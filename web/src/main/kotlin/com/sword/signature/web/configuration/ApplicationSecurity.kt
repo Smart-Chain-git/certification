@@ -3,6 +3,7 @@ package com.sword.signature.web.configuration
 import com.sword.signature.web.webhandler.JobHandler
 import com.sword.signature.web.webhandler.MainHandler
 import com.sword.signature.web.webhandler.TokenHandler
+import nz.net.ultraq.thymeleaf.LayoutDialect
 import org.springframework.boot.autoconfigure.security.reactive.PathRequest
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
@@ -32,6 +33,9 @@ class ApplicationSecurity {
      */
     @Bean
     fun springSecurityDialect() = SpringSecurityDialect()
+
+    @Bean
+    fun layoutDialect() = LayoutDialect()
 
 
     @Bean

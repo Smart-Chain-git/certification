@@ -17,7 +17,7 @@ class TokenHandler(
     suspend fun tokens(request: ServerRequest): ServerResponse {
         val account = request.getAccount()
         val model = mutableMapOf<String, Any>()
-        model["tokens"] = tokenService.getTokensByAccountId(account.id).toList()
+        model["tokens"] = tokenService.getTokensByAccountId(account.id)
         model["token"] = TokenDraft("", null)
         return ServerResponse.ok().html().renderAndAwait("tokens/tokens", model)
     }
