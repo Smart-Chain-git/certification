@@ -43,7 +43,7 @@ dependencies {
     runtimeOnly("org.webjars:bootstrap-notify:3.1.3-1")
     runtimeOnly("org.webjars:font-awesome:5.13.0")
 
-    compileOnly("org.springframework.boot:spring-boot-devtools")
+    implementation("org.springframework.boot:spring-boot-devtools")
 
 
     testImplementation("io.mockk:mockk:$mockKVersion")
