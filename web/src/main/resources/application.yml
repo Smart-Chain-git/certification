@@ -9,6 +9,9 @@ management:
     health:
       show-details: always
 spring:
+  jackson:
+    serialization:
+      indent-output: true
   thymeleaf:
     mode: HTML
     encoding: UTF-8
