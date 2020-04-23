@@ -2,6 +2,7 @@ package com.sword.signature.web.configuration
 
 import com.sword.signature.web.webhandler.JobHandler
 import com.sword.signature.web.webhandler.MainHandler
+import com.sword.signature.web.webhandler.SignatureHandler
 import com.sword.signature.web.webhandler.TokenHandler
 import nz.net.ultraq.thymeleaf.LayoutDialect
 import org.springframework.boot.autoconfigure.security.reactive.PathRequest
@@ -42,7 +43,8 @@ class ApplicationSecurity {
     fun routes(
         mainHandler: MainHandler,
         jobHandler: JobHandler,
-        tokenHandler: TokenHandler
+        tokenHandler: TokenHandler,
+        signatureHandler: SignatureHandler
     ) = coRouter {
         accept(MediaType.TEXT_HTML).nest {
             GET("/", mainHandler::index)
@@ -54,6 +56,10 @@ class ApplicationSecurity {
             GET("/tokens", tokenHandler::tokens)
             POST("/createToken", tokenHandler::addToken)
             GET("/revokeToken/{id}", tokenHandler::revokeToken)
+            GET("/timestamping", signatureHandler::timestamping)
+        }
+        accept(MediaType.MULTIPART_FORM_DATA).nest {
+            POST("/timestamp", signatureHandler:: timestamp)
         }
         resources("/**", ClassPathResource("/static"))
     }

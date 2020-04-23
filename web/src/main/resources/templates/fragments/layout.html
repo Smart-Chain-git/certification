@@ -44,6 +44,7 @@
                 <li th:replace="::menuItem ('','index',#{nav.index})"/>
                 <li th:replace="::menuItem ('jobs','job',#{nav.jobs})"/>
                 <li th:replace="::menuItem ('tokens','token',#{nav.tokens})"/>
+                <li th:replace="::menuItem ('timestamping','timestamping',#{nav.timestamping})"/>
             </ul>
             <div class="logout" sec:authorize="isAuthenticated()">
                 <form th:action="@{/logout}" method="post">

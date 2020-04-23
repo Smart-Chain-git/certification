@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout(activeMenuItem='tokens')}"
+>
+<head>
+    <style type="text/css">
+
+    </style>
+</head>
+<body>
+<div layout:fragment="content">
+    <h4>Timestamp your files</h4>
+    <form method="POST" th:action="@{/timestamp}" action="#" enctype="multipart/form-data" th:object="${timestampData}">
+        <div class="input-group mb-3">
+            <label for="algo-select">Select your hashing algorithm:</label>
+            <select id="algo-select" th:field="*{algorithm}">
+                <option th:each="algo : ${algorithms}" th:value="${algo}">[[${algo}]]</option>
+            </select>
+        </div>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Upload</span>
+            </div>
+            <div class="custom-file">
+                <input id="file-input" type="file" class="custom-file-input" th:value="*{files}" th:field="*{files}"
+                       multiple>
+                <label class="custom-file-label" for="file-input">Browse</label>
+            </div>
+        </div>
+        <span>
+            [[*{files.size()}]]
+        </span>
+        <span th:each="file: *{files}" th:text="${file}"/>
+        <input type="submit" class="btn btn-success"
+               value="Upload">
+    </form>
+
+</div>
+</body>
+</html>

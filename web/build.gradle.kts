@@ -1,5 +1,6 @@
 val mockKVersion: String by project.extra
 val springmockkVersion: String by project.extra
+val merkleTreeVersion : String by project.extra
 
 plugins {
     id("kotlin")
@@ -36,6 +37,7 @@ dependencies {
     // Project libs
     implementation(project(":lib:api"))
     implementation(project(":lib:business"))
+    implementation("com.sword.signature:merkle-tree:$merkleTreeVersion")
 
 
     runtimeOnly("org.webjars:webjars-locator-core")
