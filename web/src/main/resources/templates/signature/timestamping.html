@@ -5,11 +5,10 @@
       layout:decorate="~{fragments/layout(activeMenuItem='tokens')}"
 >
 <head>
-    <style type="text/css">
-
-    </style>
 </head>
 <body>
+<style type="text/css">
+</style>
 <div layout:fragment="content">
     <h4>Timestamp your files</h4>
     <form method="POST" th:action="@{/timestamp}" action="#" enctype="multipart/form-data" th:object="${timestampData}">
@@ -36,7 +35,9 @@
         <input type="submit" class="btn btn-success"
                value="Upload">
     </form>
-
+    <script type="text/javascript" th:src="@{/webjars/crypto-js/3.1.9-1/crypto-js.js}"></script>
+    <script type="module" th:src="@{/js/timestamping.js}"></script>
 </div>
+
 </body>
 </html>

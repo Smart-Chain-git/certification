@@ -47,6 +47,7 @@ dependencies {
     runtimeOnly("org.webjars.npm:bs-custom-file-input:1.3.4")
     runtimeOnly("org.webjars:bootstrap-notify:3.1.3-1")
     runtimeOnly("org.webjars:font-awesome:5.13.0")
+    runtimeOnly("org.webjars.bower:crypto-js:3.1.9-1")
 
     implementation("org.springframework.boot:spring-boot-devtools")
 
