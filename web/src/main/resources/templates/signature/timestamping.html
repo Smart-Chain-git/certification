@@ -8,10 +8,13 @@
 </head>
 <body>
 <style type="text/css">
+    table {
+        table-layout: fixed;
+    }
 </style>
 <div layout:fragment="content">
     <h4>Timestamp your files</h4>
-    <form method="POST" th:action="@{/timestamp}" action="#" enctype="multipart/form-data" th:object="${timestampData}">
+    <form method="POST" th:action="@{/timestamp}" action="#" th:object="${timestampData}">
         <div class="input-group mb-3">
             <label for="algo-select">Select your hashing algorithm:</label>
             <select id="algo-select" th:field="*{algorithm}">
@@ -23,17 +26,29 @@
                 <span class="input-group-text">Upload</span>
             </div>
             <div class="custom-file">
-                <input id="file-input" type="file" class="custom-file-input" th:value="*{files}" th:field="*{files}"
+                <input id="file-input" type="file" class="custom-file-input"
                        multiple>
                 <label class="custom-file-label" for="file-input">Browse</label>
             </div>
         </div>
-        <span>
-            [[*{files.size()}]]
-        </span>
-        <span th:each="file: *{files}" th:text="${file}"/>
+        <table id="file-info" class="table" name="info">
+            <thead>
+                <tr>
+                    <td>File name</td>
+                    <td>Size</td>
+                    <td>Checksum</td>
+                </tr>
+            </thead>
+            <tbody id="file-info-body">
+                    <tr th:each="file : *{files}">
+                        <td th:text="${file.name}">Name</td>
+                        <td th:text="${file.size}">Size</td>
+                        <td th:text="${file.hash}">Hash</td>
+                    </tr>
+            </tbody>
+        </table>
         <input type="submit" class="btn btn-success"
-               value="Upload">
+               value="Upload"/>
     </form>
     <script type="text/javascript" th:src="@{/webjars/crypto-js/3.1.9-1/crypto-js.js}"></script>
     <script type="module" th:src="@{/js/timestamping.js}"></script>

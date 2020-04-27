@@ -1,21 +1,7 @@
 import {handleFiles} from './hash.js'
 
-$("#file-input").change(async (event) => {
-    const algoSelect= document.getElementById("algo-select")
-    const algoName = algoSelect.options[algoSelect.selectedIndex].value
-    let map = new Map()
-    for (let file of event.target.files) {
-        const algo = getAlgo(algoName)
-        const hash = handleFiles(file, algo, map)
-        while (map.get(file.name) == null) {
-            await sleep(100)
-        }
-        console.log("File: ", file, "Hash: ", map.get(file.name))
-    }
-})
-
-const getAlgo = algoName => {
-    switch (algoName.toUpperCase()) {
+const getAlgorithm = algorithmName => {
+    switch (algorithmName.toUpperCase()) {
         case "MD5":
             return CryptoJS.algo.MD5.create()
         case "SHA-1":
@@ -31,6 +17,53 @@ const getAlgo = algoName => {
     }
 }
 
-const sleep = ms => {
-    return new Promise(resolve => setTimeout(resolve, ms))
+function uniqueID() {
+    function chr4() {
+        return Math.random().toString(16).slice(-4)
+    }
+
+    return chr4() + chr4() +
+        '-' + chr4() +
+        '-' + chr4() +
+        '-' + chr4() +
+        '-' + chr4() + chr4() + chr4()
+}
+
+
+$("#file-input").change(async (event) => {
+    const algorithmSelect = document.getElementById("algo-select")
+    const algorithmName = algorithmSelect.options[algorithmSelect.selectedIndex].value
+    for (let file of event.target.files) {
+        const algorithm = getAlgorithm(algorithmName)
+        const fileId = initFileDisplay(file)
+        handleFiles(file, algorithm, hash => updateFileHash(fileId, hash))
+    }
+})
+
+const resetFileDisplay = () => {
+    $("#file-info-body").empty()
+}
+
+const initFileDisplay = file => {
+    const fileId = uniqueID()
+    $("#file-info-body").append(
+        '<tr id=\"file-' + fileId + '\">' +
+        '<td><input name="file-name" value=\"' + file.name + '\" readonly></td>' +
+        '<td><input name="file-size" value=\"' + file.size + '\" readonly></td>' +
+        '<td id=\"hash-' + fileId + '\"><div class=\"spinner-border text-primary\"></div></td>' +
+        '</tr>')
+    return fileId
+}
+
+const updateFileHash = (fileId, hash) => {
+    document.getElementById("hash-" + fileId).innerHTML = '<input name ="file-hash" value=\"' + hash + '\" readonly>'
+}
+
+export const readyToUpload = () => {
+    console.log("Checking readiness")
+    $('file-info-body').children().forEach(file => {
+            console.log(file)
+        }
+    )
+    return true
 }
