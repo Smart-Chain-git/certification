@@ -29,6 +29,8 @@ function uniqueID() {
         '-' + chr4() + chr4() + chr4()
 }
 
+$("#algo-select").change(() => resetFileDisplay())
+
 
 $("#file-input").change(async (event) => {
     const algorithmSelect = document.getElementById("algo-select")
@@ -51,19 +53,11 @@ const initFileDisplay = file => {
         '<td><input name="file-name" value=\"' + file.name + '\" readonly></td>' +
         '<td><input name="file-size" value=\"' + file.size + '\" readonly></td>' +
         '<td id=\"hash-' + fileId + '\"><div class=\"spinner-border text-primary\"></div></td>' +
+        '<td> <input name="file-comment"></td>' +
         '</tr>')
     return fileId
 }
 
 const updateFileHash = (fileId, hash) => {
     document.getElementById("hash-" + fileId).innerHTML = '<input name ="file-hash" value=\"' + hash + '\" readonly>'
-}
-
-export const readyToUpload = () => {
-    console.log("Checking readiness")
-    $('file-info-body').children().forEach(file => {
-            console.log(file)
-        }
-    )
-    return true
 }

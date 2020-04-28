@@ -36,7 +36,7 @@
 			</thead>
 			<tbody>
 			<tr th:each="file : ${job.files}">
-				<td th:text="${file.fileName}"/>
+				<td th:text="${file.metadata.fileName}"/>
 				<td th:text="${file.hash}"/>
 				<td> <a th:href="@{/files/{fileId}/proof(fileId=${file.id})}"><img th:src="@{/images/icon_file.svg}" height="40px"/></a></td>
 			</tr>

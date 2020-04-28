@@ -7,7 +7,6 @@ import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.toList
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
-import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.reactive.function.server.*
 import java.io.File
 import java.time.LocalDateTime
@@ -22,13 +21,11 @@ class SignatureHandler(
         val model = mutableMapOf<String, Any>()
         model["fileToUpload"] = mutableListOf<File>()
         model["algorithms"] = listOf("MD5", "SHA-256", "SHA-1")
-        model["timestampData"] = TimestampData()
         return ServerResponse.ok().html().renderAndAwait("signature/timestamping", model)
     }
 
     suspend fun timestamp(request: ServerRequest): ServerResponse {
         val formData = request.awaitFormData()
-        val multipartData = request.awaitMultipartData()
 
         val algorithmName = formData["algorithm"]?.get(0)
         val algorithm = algorithmService.getAlgorithmByName(algorithmName!!)
@@ -36,6 +33,11 @@ class SignatureHandler(
         val fileNames = formData["file-name"]
         val fileSizes = formData["file-size"]
         val fileHashes = formData["file-hash"]
+        val fileComments = formData["file-comment"]
+        val batchComments = formData["batch-comment"]
+
+        val batchComment =
+            if (!batchComments.isNullOrEmpty() && batchComments[0].isNotBlank()) batchComments[0] else null
         val fileNumber = fileNames?.size ?: 0
 
         val files = mutableListOf<Pair<String, FileMetadata>>()
@@ -47,9 +49,9 @@ class SignatureHandler(
                     FileMetadata(
                         fileName = fileNames!![i],
                         fileSize = fileSizes!![i],
-                        fileComment = "Yolo"
+                        fileComment = if (fileComments!![i].isNotBlank()) fileComments[i] else null,
+                        batchComment = batchComment
                     )
-
                 )
             )
         }
@@ -65,12 +67,6 @@ class SignatureHandler(
 
         }
         return ServerResponse.ok().html().renderAndAwait("redirect:/timestamping")
-    }
-
-    data class TimestampData(
-        val algorithm: String = "SHA-1",
-        val files: MutableList<MultipartFile> = mutableListOf()
-    ) {
     }
 
     companion object {

@@ -5,19 +5,31 @@
       layout:decorate="~{fragments/layout(activeMenuItem='tokens')}"
 >
 <head>
+    <style type="text/css">
+        table {
+            table-layout: fixed;
+        }
+
+        table input {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+        }
+
+        input[readonly=""] {
+            border: 0px;
+        }
+
+    </style>
 </head>
 <body>
-<style type="text/css">
-    table {
-        table-layout: fixed;
-    }
-</style>
 <div layout:fragment="content">
-    <h4>Timestamp your files</h4>
+    <h4 class="">Timestamp your files</h4>
     <form method="POST" th:action="@{/timestamp}" action="#" th:object="${timestampData}">
         <div class="input-group mb-3">
             <label for="algo-select">Select your hashing algorithm:</label>
-            <select id="algo-select" th:field="*{algorithm}">
+            <select id="algo-select" name="algorithm">
                 <option th:each="algo : ${algorithms}" th:value="${algo}">[[${algo}]]</option>
             </select>
         </div>
@@ -31,22 +43,19 @@
                 <label class="custom-file-label" for="file-input">Browse</label>
             </div>
         </div>
-        <table id="file-info" class="table" name="info">
+        <table id="file-info" class="table table-bordered table-sm">
             <thead>
-                <tr>
-                    <td>File name</td>
-                    <td>Size</td>
-                    <td>Checksum</td>
-                </tr>
+            <tr>
+                <th scope="col">File name</th>
+                <th scope="col">Size</th>
+                <th scope="col">Checksum</th>
+                <th scope="col">Comment</th>
+            </tr>
             </thead>
             <tbody id="file-info-body">
-                    <tr th:each="file : *{files}">
-                        <td th:text="${file.name}">Name</td>
-                        <td th:text="${file.size}">Size</td>
-                        <td th:text="${file.hash}">Hash</td>
-                    </tr>
             </tbody>
         </table>
+        <input type="text" name="batch-comment">
         <input type="submit" class="btn btn-success"
                value="Upload"/>
     </form>
