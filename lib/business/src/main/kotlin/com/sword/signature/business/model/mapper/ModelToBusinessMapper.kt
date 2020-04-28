@@ -13,6 +13,13 @@ fun AccountEntity.toBusiness() = Account(
     isAdmin = isAdmin
 )
 
+fun TreeElementEntity.Metadata.toBusiness() = FileMetadata(
+    fileName = fileName,
+    fileSize = fileSize,
+    fileComment = fileComment,
+    batchComment = batchComment
+)
+
 fun TreeElementEntity.toBusiness(): TreeElement = when (this.type) {
     TreeElementType.NODE -> TreeElement.NodeTreeElement(
         id = id!!,
@@ -24,7 +31,7 @@ fun TreeElementEntity.toBusiness(): TreeElement = when (this.type) {
     TreeElementType.LEAF -> TreeElement.LeafTreeElement(
         id = id!!,
         jobId = jobId,
-        fileName = fileName!!,
+        metadata = metadata!!.toBusiness(),
         hash = hash,
         parentId = parentId,
         position = position
@@ -55,10 +62,10 @@ fun AlgorithmEntity.toBusiness() = Algorithm(
 )
 
 fun TokenEntity.toBusiness() = Token(
-        id = id!!,
-        name = name,
-        jwtToken = jwtToken,
-        expirationDate = expirationDate,
-        accountId = accountId,
-        revoked = revoked
+    id = id!!,
+    name = name,
+    jwtToken = jwtToken,
+    expirationDate = expirationDate,
+    accountId = accountId,
+    revoked = revoked
 )

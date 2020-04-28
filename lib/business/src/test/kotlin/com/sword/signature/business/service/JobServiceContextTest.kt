@@ -15,7 +15,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
-import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate
 import java.nio.file.Path
@@ -160,7 +159,7 @@ class JobServiceContextTest @Autowired constructor(
             assertThat(job).isNotNull
             job as Job
             assertThat(job).`as`("mauvais job").isEqualToIgnoringGivenFields(expected, "files")
-            assertThat(job.files?.map { it.fileName }).`as`("pas de file").isNotNull.`as`("mauvais files")
+            assertThat(job.files?.map { it.metadata.fileName }).`as`("pas de file").isNotNull.`as`("mauvais files")
                 .containsExactlyInAnyOrderElementsOf(expectedFileNames)
         }
     }

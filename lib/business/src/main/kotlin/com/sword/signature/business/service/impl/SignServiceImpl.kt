@@ -1,10 +1,7 @@
 package com.sword.signature.business.service.impl
 
 import com.sword.signature.business.exception.UserServiceException
-import com.sword.signature.business.model.Account
-import com.sword.signature.business.model.Algorithm
-import com.sword.signature.business.model.Job
-import com.sword.signature.business.model.TreeElement
+import com.sword.signature.business.model.*
 import com.sword.signature.business.model.mapper.toBusiness
 import com.sword.signature.business.service.SignService
 import com.sword.signature.business.visitor.SaveRepositoryTreeVisitor
@@ -35,13 +32,13 @@ class SignServiceImpl(
         requester: Account,
         algorithm: Algorithm,
         flowName: String,
-        fileHashs: Flow<Pair<String, String>>
+        fileHashs: Flow<Pair<String, FileMetadata>>
     ): Flow<Job> {
 
         return flow {
 
             // intermediary doit etre declaré dans le scope du flow!
-            val intermediary = mutableListOf<Pair<String, String>>()
+            val intermediary = mutableListOf<Pair<String, FileMetadata>>()
             fileHashs.collect { fileHash ->
                 if (!algorithm.checkHashDigest(fileHash.first)) {
                     throw UserServiceException("bad ${algorithm.name} hash for file ${fileHash.second}")
@@ -63,7 +60,7 @@ class SignServiceImpl(
         requester: Account,
         algorithm: Algorithm,
         flowName: String,
-        fileHashs: List<Pair<String, String>>
+        fileHashs: List<Pair<String, FileMetadata>>
     ): Job {
 
         // creation du jobb en BDD
@@ -90,7 +87,6 @@ class SignServiceImpl(
 
         return jobEntity.toBusiness(files = inserted.filter { it.type == TreeElementType.LEAF }
             .map { it.toBusiness() as TreeElement.LeafTreeElement }.toList())
-
     }
 
     @Transactional
@@ -104,14 +100,11 @@ class SignServiceImpl(
         val elements = mutableListOf(treeElement)
         var nextId = treeElement.parentId
         while (nextId != null) {
-            val nextelement = treeElementRepository.findById(nextId).awaitSingle()
-            elements.add(nextelement)
-            nextId = nextelement.parentId
+            val nextElement = treeElementRepository.findById(nextId).awaitSingle()
+            elements.add(nextElement)
+            nextId = nextElement.parentId
         }
 
         return Pair(job.toBusiness(), elements.map { it.toBusiness() })
-
-
     }
-
 }

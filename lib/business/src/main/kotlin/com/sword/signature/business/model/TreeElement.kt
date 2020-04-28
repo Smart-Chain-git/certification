@@ -1,7 +1,6 @@
 package com.sword.signature.business.model
 
 import com.sword.signature.common.enums.TreeElementPosition
-import com.sword.signature.common.enums.TreeElementType
 
 
 sealed class TreeElement(
@@ -18,21 +17,21 @@ sealed class TreeElement(
         parentId: String? = null,
         position: TreeElementPosition? = null,
         jobId: String,
-        val fileName: String
+        val metadata: FileMetadata
     ) : TreeElement(id = id, hash = hash, parentId = parentId, position = position, jobId = jobId) {
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
             if (other !is LeafTreeElement) return false
             if (!super.equals(other)) return false
 
-            if (fileName != other.fileName) return false
+            if (metadata != other.metadata) return false
 
             return super.equals(other)
         }
 
         override fun hashCode(): Int {
             var result = super.hashCode()
-            result = 31 * result + fileName.hashCode()
+            result = 31 * result + metadata.hashCode()
             return result
         }
     }

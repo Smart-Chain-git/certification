@@ -1,8 +1,11 @@
 package com.sword.signature.web.webhandler
 
+import com.sword.signature.business.model.FileMetadata
 import com.sword.signature.business.service.AlgorithmService
 import com.sword.signature.business.service.SignService
 import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.toList
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
 import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.reactive.function.server.*
@@ -35,23 +38,31 @@ class SignatureHandler(
         val fileHashes = formData["file-hash"]
         val fileNumber = fileNames?.size ?: 0
 
-        val files = mutableListOf<Pair<String, String>>()
+        val files = mutableListOf<Pair<String, FileMetadata>>()
 
         for (i in 0 until fileNumber) {
             files.add(
                 Pair(
                     fileHashes!![i],
-                    fileNames!![i]
+                    FileMetadata(
+                        fileName = fileNames!![i],
+                        fileSize = fileSizes!![i],
+                        fileComment = "Yolo"
+                    )
+
                 )
             )
         }
         if (files != null && files.isNotEmpty()) {
-            signService.batchSign(
+
+            val jobs = signService.batchSign(
                 requester = request.getAccount(),
                 algorithm = algorithm,
                 flowName = "web_" + LocalDateTime.now().toString(),
                 fileHashs = files.asFlow()
-            )
+            ).toList()
+            LOGGER.info("Jobs: {}", jobs)
+
         }
         return ServerResponse.ok().html().renderAndAwait("redirect:/timestamping")
     }
@@ -60,5 +71,9 @@ class SignatureHandler(
         val algorithm: String = "SHA-1",
         val files: MutableList<MultipartFile> = mutableListOf()
     ) {
+    }
+
+    companion object {
+        private val LOGGER = LoggerFactory.getLogger(SignatureHandler::class.java)
     }
 }
