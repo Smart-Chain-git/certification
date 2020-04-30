@@ -7,7 +7,7 @@ plugins {
     id("org.springframework.boot")
 }
 
-description = "Web server"
+description = "ui web server"
 val artefactName = "ui"
 
 dependencies {

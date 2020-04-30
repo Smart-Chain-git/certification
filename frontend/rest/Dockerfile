@@ -5,5 +5,5 @@ COPY ${DEPENDENCY}/BOOT-INF/lib lib
 COPY ${DEPENDENCY}/META-INF META-INF
 COPY ${DEPENDENCY}/BOOT-INF/classes .
 COPY ci/configuration.yml application.yml
-ENTRYPOINT ["java", "-cp", ".:lib/*", "com.sword.signature.web.WebApplicationKt"]
+ENTRYPOINT ["java", "-cp", ".:lib/*", "com.sword.signature.rest.RestApplicationKt"]
 EXPOSE 8080

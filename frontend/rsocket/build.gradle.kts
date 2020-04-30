@@ -7,7 +7,7 @@ plugins {
     id("org.springframework.boot")
 }
 
-description = "Web server"
+description = "rsocket api server"
 val artefactName = "web"
 
 dependencies {

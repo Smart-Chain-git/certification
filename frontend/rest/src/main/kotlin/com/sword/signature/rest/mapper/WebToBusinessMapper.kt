@@ -1,4 +1,4 @@
-package com.sword.signature.web.mapper
+package com.sword.signature.rest.mapper
 
 import com.sword.signature.api.sign.SignRequest
 

@@ -1,14 +1,14 @@
-package com.sword.signature.web
+package com.sword.signature.rest
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 
 @SpringBootApplication
-class WebApplication
+class RestApplication
 
 
 
 fun main(args: Array<String>) {
-    runApplication<WebApplication>(*args)
+    runApplication<RestApplication>(*args)
 }

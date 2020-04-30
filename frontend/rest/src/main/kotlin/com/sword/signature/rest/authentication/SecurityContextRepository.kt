@@ -1,4 +1,4 @@
-package com.sword.signature.web.authentication
+package com.sword.signature.rest.authentication
 
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpHeaders

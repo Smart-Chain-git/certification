@@ -1,4 +1,4 @@
-package com.sword.signature.web.authentication
+package com.sword.signature.rest.authentication
 
 import com.sword.signature.business.model.Account
 import org.springframework.security.core.authority.SimpleGrantedAuthority
