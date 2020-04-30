@@ -1,0 +1,45 @@
+@import url("components/tokens.css");
+
+.navbar-brand {
+	padding: 5px 15px;
+}
+
+
+table.table thead .sorted:after {
+	font-family: 'Glyphicons Halflings';
+	font-style: normal;
+	font-weight: 400;
+	opacity: 0.8;
+	margin-left: 1em;
+}
+
+table.table thead .sorted.sorted-desc:after {
+	content: "\e252";
+}
+table.table thead .sorted.sorted-asc:after{
+	content: "\e253";
+}
+
+div.logout {
+    float: right;
+    color: gray;
+}
+
+table#factures > thead > tr > th {
+	width: 180px;
+}
+
+.glow_mark {
+	-webkit-transition: text-shadow 1s linear;
+	-moz-transition: text-shadow 1s linear;
+	-ms-transition: text-shadow 1s linear;
+	-o-transition: text-shadow 1s linear;
+	transition: text-shadow 1s linear;
+}
+.glow_mark.glow {
+	text-shadow: 0 0 10px red;
+}
+
+.nav > li > a {
+	padding: 10px 0.8em;
+}

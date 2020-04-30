@@ -27,8 +27,12 @@ pluginManagement {
 }
 rootProject.name = "com.sword.signature.servers"
 
-include (":web")
+
 include(":lib:common")
 include(":lib:business")
 include (":lib:model")
 include (":lib:api")
+
+include (":frontend:rest")
+include (":frontend:rsocket")
+include (":frontend:ui")
