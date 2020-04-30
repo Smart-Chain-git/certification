@@ -1,4 +1,4 @@
-package com.sword.signature.web.webhandler
+package com.sword.signature.ui.webhandler
 
 import com.sword.signature.business.service.JobService
 import com.sword.signature.business.service.SignService

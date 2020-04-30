@@ -1,4 +1,4 @@
-package com.sword.signature.web.webhandler
+package com.sword.signature.ui.webhandler
 
 import org.springframework.stereotype.Controller
 import org.springframework.web.reactive.function.server.ServerRequest

@@ -1,9 +1,8 @@
-package com.sword.signature.web.webhandler
+package com.sword.signature.ui.webhandler
 
 import com.sword.signature.business.model.TokenCreate
 import com.sword.signature.business.model.TokenPatch
 import com.sword.signature.business.service.TokenService
-import kotlinx.coroutines.flow.toList
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
 import org.springframework.web.reactive.function.server.*

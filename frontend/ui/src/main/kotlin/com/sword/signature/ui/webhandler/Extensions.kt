@@ -1,4 +1,4 @@
-package com.sword.signature.web.webhandler
+package com.sword.signature.ui.webhandler
 
 import com.sword.signature.business.model.Account
 import com.sword.signature.ui.authentication.CustomUserDetails
