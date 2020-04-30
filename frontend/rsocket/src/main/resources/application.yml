@@ -9,15 +9,6 @@ management:
     health:
       show-details: always
 spring:
-  jackson:
-    serialization:
-      indent-output: true
-  thymeleaf:
-    mode: HTML
-    encoding: UTF-8
-  messages:
-    basename: locale/messages
-    encoding: UTF-8
   data:
     mongodb:
       auto-index-creation: false

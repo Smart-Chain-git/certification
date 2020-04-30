@@ -1,6 +1,6 @@
 sign:
   tree:
-   maximunLeaf: 3
+   maximunLeaf: 1024
 management:
   endpoints:
     web:
@@ -9,12 +9,6 @@ management:
     health:
       show-details: always
 spring:
-  thymeleaf:
-    mode: HTML
-    encoding: UTF-8
-  messages:
-    basename: locale/messages
-    encoding: UTF-8
   data:
     mongodb:
       auto-index-creation: false
