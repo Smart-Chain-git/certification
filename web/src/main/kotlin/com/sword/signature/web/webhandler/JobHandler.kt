@@ -1,10 +1,5 @@
 package com.sword.signature.web.webhandler
 
-
-import com.sword.signature.api.sign.Branch
-import com.sword.signature.api.sign.Proof
-import com.sword.signature.business.model.Job
-import com.sword.signature.business.model.TreeElement
 import com.sword.signature.business.service.JobService
 import com.sword.signature.business.service.SignService
 import com.sword.signature.web.mapper.toWeb
@@ -19,7 +14,7 @@ class JobHandler(
 ) {
 
     suspend fun jobs(request: ServerRequest): ServerResponse {
-        val account = request.getAccount()
+        val account = request.getAccount() ?: throw IllegalAccessException("not connected")
         val jobs = jobService.findAllByUser(requester = account, account = account)
         val model = mapOf<String, Any>(
             "jobs" to jobs
@@ -28,7 +23,7 @@ class JobHandler(
     }
 
     suspend fun job(request: ServerRequest): ServerResponse {
-        val account = request.getAccount()
+        val account = request.getAccount() ?: throw IllegalAccessException("not connected")
         val jobId = request.pathVariable("jobId")
 
         val job =
@@ -42,7 +37,7 @@ class JobHandler(
 
 
     suspend fun fileProof(request: ServerRequest): ServerResponse {
-        val account = request.getAccount()
+        val account = request.getAccount() ?: throw IllegalAccessException("not connected")
         val fileId = request.pathVariable("fileId")
         LOGGER.debug("preuve pour {} fichier {}", account.login, fileId)
         val proof = signService.getFileProof(requester = account, fileId = fileId).toWeb()
