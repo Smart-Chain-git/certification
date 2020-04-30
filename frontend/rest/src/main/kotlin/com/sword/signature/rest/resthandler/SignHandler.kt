@@ -7,6 +7,8 @@ import com.sword.signature.business.service.SignService
 import com.sword.signature.webcore.authentication.CustomUserDetails
 import com.sword.signature.webcore.mapper.toBusiness
 import com.sword.signature.webcore.mapper.toWeb
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -20,21 +22,26 @@ class SignHandler(
     val algorithmService: AlgorithmService
 ) {
 
-
+    @Operation(security = [SecurityRequirement(name = "bearer-key")])
     @RequestMapping(
         value = ["/sign"],
         produces = ["application/json"],
         consumes = ["application/json"],
-        method = [RequestMethod.POST])
+        method = [RequestMethod.POST]
+    )
     suspend fun sign(
         @AuthenticationPrincipal user: CustomUserDetails,
         @RequestParam(value = "algorithm") algorithmParameter: String?,
         @RequestParam(value = "flowName") flowName: String?,
-        @RequestBody requests : Flow<SignRequest>
+        @RequestBody requests: Flow<SignRequest>
     ): Flow<SignResponse> {
-        if(algorithmParameter==null) {throw IllegalArgumentException("missing algorithm parameter")}
+        if (algorithmParameter == null) {
+            throw IllegalArgumentException("missing algorithm parameter")
+        }
 
-        if(flowName==null){ throw IllegalArgumentException("missing flowName parameter")}
+        if (flowName == null) {
+            throw IllegalArgumentException("missing flowName parameter")
+        }
 
         val algorithm = algorithmService.getAlgorithmByName(algorithmParameter)
 
