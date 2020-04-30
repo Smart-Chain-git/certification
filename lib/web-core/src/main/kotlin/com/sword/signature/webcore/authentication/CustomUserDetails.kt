@@ -1,4 +1,4 @@
-package com.sword.signature.rsocket.authentication
+package com.sword.signature.webcore.authentication
 
 import com.sword.signature.business.model.Account
 import org.springframework.security.core.authority.SimpleGrantedAuthority

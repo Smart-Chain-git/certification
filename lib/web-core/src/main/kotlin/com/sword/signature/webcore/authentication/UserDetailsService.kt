@@ -1,10 +1,9 @@
-package com.sword.signature.rsocket.authentication
+package com.sword.signature.webcore.authentication
 
 import com.sword.signature.business.model.Account
 import com.sword.signature.business.model.mail.HelloAccountMail
 import com.sword.signature.business.service.AccountService
 import com.sword.signature.business.service.MailService
-import com.sword.signature.rsocket.authentication.CustomUserDetails
 import kotlinx.coroutines.reactor.mono
 import kotlinx.coroutines.runBlocking
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService
@@ -19,10 +18,10 @@ class UserDetailsService(
     private val mailService: MailService
 ) : ReactiveUserDetailsService {
 
-    fun findById(userId: String): UserDetails {
-        val account = runBlocking {
+    suspend fun findById(userId: String): UserDetails {
+        val account =
             accountService.getAccount(userId) ?: throw UsernameNotFoundException("Account with id '$userId' not found.")
-        }
+
         return buildUser(account)
     }
 

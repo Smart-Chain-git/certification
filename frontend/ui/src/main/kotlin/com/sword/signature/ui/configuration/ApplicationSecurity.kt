@@ -1,8 +1,8 @@
 package com.sword.signature.ui.configuration
 
-import com.sword.signature.web.webhandler.JobHandler
-import com.sword.signature.web.webhandler.MainHandler
-import com.sword.signature.web.webhandler.TokenHandler
+import com.sword.signature.ui.webhandler.JobHandler
+import com.sword.signature.ui.webhandler.MainHandler
+import com.sword.signature.ui.webhandler.TokenHandler
 import nz.net.ultraq.thymeleaf.LayoutDialect
 import org.springframework.boot.autoconfigure.security.reactive.PathRequest
 import org.springframework.context.annotation.Bean
@@ -22,11 +22,6 @@ import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect
 @ComponentScan(basePackages = ["com.sword.signature"])
 class ApplicationSecurity {
 
-    /**
-     * Password encoding.
-     */
-    @Bean
-    fun bCryptPasswordEncoder() = BCryptPasswordEncoder()
 
     /**
      * Spring security support for thymeleaf.

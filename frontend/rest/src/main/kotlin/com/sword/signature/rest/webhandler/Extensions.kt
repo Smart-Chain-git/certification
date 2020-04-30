@@ -1,8 +1,8 @@
 package com.sword.signature.rest.webhandler
 
 import com.sword.signature.business.model.Account
-import com.sword.signature.rest.authentication.CustomUserDetails
-import com.sword.signature.rest.authentication.SignatureAuthenticationToken
+import com.sword.signature.webcore.authentication.CustomUserDetails
+import com.sword.signature.webcore.authentication.SignatureAuthenticationToken
 import kotlinx.coroutines.reactive.awaitFirstOrNull
 import org.springframework.web.reactive.function.server.ServerRequest
 

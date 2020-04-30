@@ -32,6 +32,7 @@ include(":lib:common")
 include(":lib:business")
 include (":lib:model")
 include (":lib:api")
+include (":lib:web-core")
 
 include (":frontend:rest")
 include (":frontend:rsocket")

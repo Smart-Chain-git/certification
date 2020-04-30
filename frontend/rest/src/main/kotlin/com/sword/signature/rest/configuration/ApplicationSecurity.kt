@@ -9,7 +9,6 @@ import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity
 import org.springframework.security.config.web.server.ServerHttpSecurity
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.server.SecurityWebFilterChain
 
 
@@ -18,11 +17,7 @@ import org.springframework.security.web.server.SecurityWebFilterChain
 @ComponentScan(basePackages = ["com.sword.signature"])
 class ApplicationSecurity {
 
-    /**
-     * Password encoding.
-     */
-    @Bean
-    fun bCryptPasswordEncoder() = BCryptPasswordEncoder()
+
 
     @Bean
     fun securityWebFilterChain(http: ServerHttpSecurity,securityContextRepository: SecurityContextRepository): SecurityWebFilterChain {

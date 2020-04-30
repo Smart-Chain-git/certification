@@ -31,6 +31,7 @@ dependencies {
     // Project libs
     implementation(project(":lib:api"))
     implementation(project(":lib:business"))
+    implementation(project(":lib:web-core"))
 
     implementation("org.springframework.boot:spring-boot-devtools")
 

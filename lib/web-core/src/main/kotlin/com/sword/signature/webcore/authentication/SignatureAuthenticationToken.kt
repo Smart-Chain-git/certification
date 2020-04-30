@@ -1,4 +1,4 @@
-package com.sword.signature.ui.authentication
+package com.sword.signature.webcore.authentication
 
 import org.springframework.security.authentication.AbstractAuthenticationToken
 import org.springframework.security.core.GrantedAuthority

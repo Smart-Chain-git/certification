@@ -36,6 +36,7 @@ dependencies {
     // Project libs
     implementation(project(":lib:api"))
     implementation(project(":lib:business"))
+    implementation(project(":lib:web-core"))
 
 
     runtimeOnly("org.webjars:webjars-locator-core")

@@ -2,7 +2,7 @@ package com.sword.signature.ui.webhandler
 
 import com.sword.signature.business.service.JobService
 import com.sword.signature.business.service.SignService
-import com.sword.signature.ui.mapper.toWeb
+import com.sword.signature.webcore.mapper.toWeb
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
 import org.springframework.web.reactive.function.server.*

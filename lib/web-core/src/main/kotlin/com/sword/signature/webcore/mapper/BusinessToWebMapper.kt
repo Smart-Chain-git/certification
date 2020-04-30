@@ -1,4 +1,4 @@
-package com.sword.signature.ui.mapper
+package com.sword.signature.webcore.mapper
 
 import com.sword.signature.api.sign.Branch
 import com.sword.signature.api.sign.Proof

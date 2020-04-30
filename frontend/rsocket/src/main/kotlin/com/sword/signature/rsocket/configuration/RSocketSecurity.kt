@@ -2,7 +2,7 @@ package com.sword.signature.rsocket.configuration
 
 import com.sword.signature.api.sign.ALGORITHM_MIME_TYPE
 import com.sword.signature.api.sign.FLOW_NAME_MIME_TYPE
-import com.sword.signature.rsocket.authentication.SignatureAuthenticationManager
+import com.sword.signature.webcore.authentication.SignatureAuthenticationManager
 import org.springframework.boot.rsocket.messaging.RSocketStrategiesCustomizer
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
