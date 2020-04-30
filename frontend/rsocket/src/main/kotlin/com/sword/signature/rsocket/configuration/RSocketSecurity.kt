@@ -1,16 +1,16 @@
-package com.sword.signature.web.configuration
+package com.sword.signature.rsocket.configuration
 
 import com.sword.signature.api.sign.ALGORITHM_MIME_TYPE
 import com.sword.signature.api.sign.FLOW_NAME_MIME_TYPE
-import org.springframework.beans.factory.annotation.Qualifier
+import com.sword.signature.rsocket.authentication.SignatureAuthenticationManager
 import org.springframework.boot.rsocket.messaging.RSocketStrategiesCustomizer
 import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.springframework.messaging.rsocket.MetadataExtractorRegistry
 import org.springframework.messaging.rsocket.RSocketStrategies
 import org.springframework.messaging.rsocket.annotation.support.RSocketMessageHandler
 import org.springframework.messaging.rsocket.metadataToExtract
-import org.springframework.security.authentication.ReactiveAuthenticationManager
 import org.springframework.security.config.annotation.rsocket.EnableRSocketSecurity
 import org.springframework.security.config.annotation.rsocket.RSocketSecurity
 import org.springframework.security.config.annotation.rsocket.RSocketSecurity.AuthorizePayloadsSpec
@@ -19,6 +19,7 @@ import org.springframework.security.rsocket.core.PayloadSocketAcceptorIntercepto
 import org.springframework.util.MimeType
 
 @Configuration
+@ComponentScan(basePackages = ["com.sword.signature"])
 @EnableRSocketSecurity
 class RSocketSecurity {
 
@@ -40,7 +41,7 @@ class RSocketSecurity {
 
 
     @Bean
-    fun payloadSocketAcceptorInterceptor(security: RSocketSecurity, reactiveAuthenticationManager: ReactiveAuthenticationManager): PayloadSocketAcceptorInterceptor {
+    fun payloadSocketAcceptorInterceptor(security: RSocketSecurity, reactiveAuthenticationManager: SignatureAuthenticationManager): PayloadSocketAcceptorInterceptor {
         return security
                 .authorizePayload { spec: AuthorizePayloadsSpec ->
                     spec

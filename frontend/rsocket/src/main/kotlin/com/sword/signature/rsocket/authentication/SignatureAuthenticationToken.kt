@@ -1,4 +1,4 @@
-package com.sword.signature.web.authentication
+package com.sword.signature.rsocket.authentication
 
 import org.springframework.security.authentication.AbstractAuthenticationToken
 import org.springframework.security.core.GrantedAuthority

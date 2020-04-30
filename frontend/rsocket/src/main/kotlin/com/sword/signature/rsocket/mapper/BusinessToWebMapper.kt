@@ -1,4 +1,4 @@
-package com.sword.signature.web.mapper
+package com.sword.signature.rsocket.mapper
 
 import com.sword.signature.api.sign.Branch
 import com.sword.signature.api.sign.Proof
