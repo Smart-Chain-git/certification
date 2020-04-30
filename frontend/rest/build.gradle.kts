@@ -28,6 +28,12 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
 
+    //documentation
+    val springdocVersion : String by project.extra
+    implementation("org.springdoc:springdoc-openapi-webflux-ui:$springdocVersion")
+    implementation("org.springdoc:springdoc-openapi-kotlin:$springdocVersion")
+    implementation("org.springdoc:springdoc-openapi-security:$springdocVersion")
+
     // Project libs
     implementation(project(":lib:api"))
     implementation(project(":lib:business"))

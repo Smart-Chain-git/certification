@@ -1,8 +1,6 @@
 package com.sword.signature.webcore.authentication
 
 import com.sword.signature.business.service.TokenService
-import com.sword.signature.webcore.authentication.SignatureAuthenticationToken
-import com.sword.signature.webcore.authentication.UserDetailsService
 import kotlinx.coroutines.reactive.awaitFirst
 import kotlinx.coroutines.reactor.mono
 import org.springframework.security.authentication.BadCredentialsException
@@ -14,7 +12,7 @@ import org.springframework.security.oauth2.server.resource.BearerTokenAuthentica
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
 
-@Component("signatureAuthManager")
+@Component
 class SignatureAuthenticationManager(
     private val tokenService: TokenService,
     private val userDetailsService: UserDetailsService,

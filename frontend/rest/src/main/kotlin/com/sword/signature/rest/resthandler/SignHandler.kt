@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*
 import java.lang.IllegalArgumentException
 
 @RestController
-//@Api(value = "Bt", description = "The Bt API")
 @RequestMapping("\${api.base-path:/api}")
 class SignHandler(
     val signService: SignService,
