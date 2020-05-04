@@ -33,6 +33,7 @@ class SignHandler(
         @AuthenticationPrincipal user: CustomUserDetails,
         @RequestParam(value = "algorithm") algorithmParameter: String?,
         @RequestParam(value = "flowName") flowName: String?,
+        @RequestParam(value = "callBack") callBack: String?,
         @RequestBody requests: Flow<SignRequest>
     ): Flow<SignResponse> {
         if (algorithmParameter == null) {
