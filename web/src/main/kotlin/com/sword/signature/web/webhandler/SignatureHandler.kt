@@ -20,7 +20,7 @@ class SignatureHandler(
     suspend fun timestamping(request: ServerRequest): ServerResponse {
         val model = mutableMapOf<String, Any>()
         model["fileToUpload"] = mutableListOf<File>()
-        model["algorithms"] = listOf("MD5", "SHA-256", "SHA-1")
+        model["algorithms"] = listOf("MD5", "SHA-1", "SHA-256", "SHA-384", "SHA-512")
         return ServerResponse.ok().html().renderAndAwait("signature/timestamping", model)
     }
 

@@ -2,7 +2,7 @@
 
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{fragments/layout(activeMenuItem='tokens')}"
+      layout:decorate="~{fragments/layout(activeMenuItem='timestamping')}"
 >
 <head>
     <style type="text/css">
@@ -21,15 +21,23 @@
             border: 0px;
         }
 
+        form {
+            text-align: center;
+            width: auto;
+            margin: 0px auto;
+        }
+
     </style>
 </head>
 <body>
-<div layout:fragment="content">
-    <h4 class="">Timestamp your files</h4>
-    <form method="POST" th:action="@{/timestamp}" action="#" th:object="${timestampData}">
+<div layout:fragment="content" class="container" style="text-align: center; width: 100%;">
+    <h1 style="text-align: center">Timestamp your files</h1>
+    <form method="POST" th:action="@{/timestamp}" action="#">
         <div class="input-group mb-3">
-            <label for="algo-select">Select your hashing algorithm:</label>
-            <select id="algo-select" name="algorithm">
+            <div class="input-group-prepend">
+                <label class="input-group-text" for="algo-select">Algorithm</label>
+            </div>
+            <select class="custom-select" id="algo-select" name="algorithm">
                 <option th:each="algo : ${algorithms}" th:value="${algo}">[[${algo}]]</option>
             </select>
         </div>
@@ -55,7 +63,12 @@
             <tbody id="file-info-body">
             </tbody>
         </table>
-        <input type="text" name="batch-comment">
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Global info</span>
+            </div>
+            <textarea class="form-control" aria-label="With textarea" name="batch-comment"></textarea>
+        </div>
         <input type="submit" class="btn btn-success"
                value="Upload"/>
     </form>
