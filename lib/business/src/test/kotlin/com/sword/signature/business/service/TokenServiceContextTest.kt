@@ -11,6 +11,7 @@ import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.reactive.awaitFirst
+import kotlinx.coroutines.reactive.awaitSingle
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -68,7 +69,7 @@ class TokenServiceContextTest @Autowired constructor(
 
     @Test
     fun createTokenTest() {
-        val tokenCount = runBlocking { mongoTemplate.getCollection("tokens").countDocuments().awaitFirst() }
+        val tokenCount = runBlocking { mongoTemplate.getCollection("tokens").awaitSingle().countDocuments().awaitFirst() }
         val tokenName = "TestToken"
         val tokenExpirationDate = LocalDate.now().plusDays(180)
         val tokenAccountId = "5e8b48e940fc5793fdcfc716"
@@ -88,7 +89,7 @@ class TokenServiceContextTest @Autowired constructor(
         )
         assertEquals(
             tokenCount + 1,
-            runBlocking { mongoTemplate.getCollection("tokens").countDocuments().awaitFirst() })
+            runBlocking { mongoTemplate.getCollection("tokens").awaitSingle().countDocuments().awaitFirst() })
     }
 
     @Test
@@ -167,9 +168,9 @@ class TokenServiceContextTest @Autowired constructor(
     @Test
     fun deleteTokenTest() {
         runBlocking {
-            val tokenCount = mongoTemplate.getCollection("tokens").countDocuments().awaitFirst()
+            val tokenCount = mongoTemplate.getCollection("tokens").awaitSingle().countDocuments().awaitFirst()
             tokenService.deleteToken(adminAccount, token1Id)
-            assertEquals(tokenCount - 1, mongoTemplate.getCollection("tokens").countDocuments().awaitFirst())
+            assertEquals(tokenCount - 1, mongoTemplate.getCollection("tokens").awaitSingle().countDocuments().awaitFirst())
         }
     }
 

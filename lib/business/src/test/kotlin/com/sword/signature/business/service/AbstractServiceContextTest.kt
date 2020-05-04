@@ -4,6 +4,7 @@ import com.sword.signature.business.configuration.TestContextConfiguration
 import com.sword.signature.model.configuration.MongoConfiguration
 import kotlinx.coroutines.reactive.awaitFirstOrNull
 import kotlinx.coroutines.reactive.awaitLast
+import kotlinx.coroutines.reactive.awaitSingle
 import kotlinx.coroutines.runBlocking
 import org.bson.Document
 import org.junit.jupiter.api.extension.ExtendWith
@@ -27,7 +28,8 @@ abstract class AbstractServiceContextTest() {
         runBlocking {
             collections.keys.forEach { collection ->
                 val documents = collections[collection] as List<Document>
-                mongoTemplate.getCollection(collection).insertMany(documents).awaitLast()
+
+                mongoTemplate.getCollection(collection).awaitSingle().insertMany(documents).awaitLast()
             }
         }
     }
