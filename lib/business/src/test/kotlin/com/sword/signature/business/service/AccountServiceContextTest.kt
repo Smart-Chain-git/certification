@@ -42,7 +42,7 @@ class AccountServiceContextTest @Autowired constructor(
         resetDatabase()
         importJsonDataset(Path.of("src/test/resources/datasets/accounts.json"))
         if (accountsInitialCount == 0L) {
-            accountsInitialCount = runBlocking { mongoTemplate.getCollection("accounts").awaitSingle().countDocuments().awaitSingle() }
+            accountsInitialCount = runBlocking { mongoTemplate.getCollection("accounts").countDocuments().awaitSingle() }
         }
     }
 
@@ -62,7 +62,7 @@ class AccountServiceContextTest @Autowired constructor(
                     { assertEquals(password, createdAccount.password) },
                     { assertEquals(fullName, createdAccount.fullName) }
             )
-            assertEquals(accountsInitialCount + 1, mongoTemplate.getCollection("accounts").awaitSingle().countDocuments().awaitSingle())
+            assertEquals(accountsInitialCount + 1, mongoTemplate.getCollection("accounts").countDocuments().awaitSingle())
         }
     }
 
@@ -160,7 +160,7 @@ class AccountServiceContextTest @Autowired constructor(
 
             assertEquals(
                     accountsInitialCount - 1,
-                    mongoTemplate.getCollection("accounts").awaitSingle().countDocuments().awaitSingle()
+                    mongoTemplate.getCollection("accounts").countDocuments().awaitSingle()
             )
         }
     }

@@ -5,7 +5,6 @@ import com.sword.signature.merkletree.utils.hexStringHash
 import com.sword.signature.model.entity.MigrationEntity
 import com.sword.signature.model.repository.MigrationRepository
 import kotlinx.coroutines.reactive.awaitLast
-import kotlinx.coroutines.reactive.awaitSingle
 import org.bson.Document
 import org.slf4j.LoggerFactory
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver
@@ -90,21 +89,20 @@ class MigrationHandler(
         val collections = Document.parse(migrationContent)
         for (collectionName in collections.keys) {
             val collection: Document = collections[collectionName] as Document
-            val mongoCollection = mongoTemplate.getCollection(collectionName).awaitSingle()
             // Insert operations
             val documentsToInsert = collection["insert"] as List<Document>?
-            documentsToInsert?.let { mongoCollection.insertMany(it).awaitLast() }
+            documentsToInsert?.let { mongoTemplate.getCollection(collectionName).insertMany(it).awaitLast() }
             // Update operations
             val documentsToUpdate = collection["update"] as List<Document>?
             documentsToUpdate?.let {
                 it.forEach { document ->
-                    mongoCollection.replaceOne(Filters.eq("_id", document["_id"]), document).awaitLast()
+                    mongoTemplate.getCollection(collectionName).replaceOne(Filters.eq("_id", document["_id"]), document).awaitLast()
                 }
             }
             // Delete
             val documentToDelete = collection["delete"] as List<Document>?
             documentToDelete?.let { documents ->
-                mongoCollection.deleteMany(Filters.`in`("_id", documents.map { it["_id"] })).awaitLast()
+                mongoTemplate.getCollection(collectionName).deleteMany(Filters.`in`("_id", documents.map { it["_id"] })).awaitLast()
             }
         }
 
