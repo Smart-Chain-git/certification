@@ -16,4 +16,13 @@ data class Job(
     val flowName: String,
     var stateDate: OffsetDateTime,
     var state: String
-    )
+)
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+data class JobFile(
+    val id: String,
+    val hash: String,
+    val jobId: String,
+    val fileName: String,
+    val proof: Proof
+)
