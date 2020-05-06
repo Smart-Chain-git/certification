@@ -27,7 +27,8 @@ class JobHandler(
         val jobId = request.pathVariable("jobId")
 
         val job =
-            jobService.findById(requester = account, jobId = jobId) ?: return ServerResponse.notFound().buildAndAwait()
+            jobService.findById(requester = account, jobId = jobId, withLeaves = true)
+                ?: return ServerResponse.notFound().buildAndAwait()
 
         val model = mapOf<String, Any>(
             "job" to job

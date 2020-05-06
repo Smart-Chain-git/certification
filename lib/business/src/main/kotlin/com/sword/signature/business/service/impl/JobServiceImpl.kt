@@ -34,7 +34,7 @@ class JobServiceImpl(
         return jobRepository.findAllByUserId(account.id).map { it.toBusiness() }
     }
 
-    override suspend fun findById(requester: Account, jobId: String): Job? {
+    override suspend fun findById(requester: Account, jobId: String, withLeaves: Boolean): Job? {
         val job = jobRepository.findById(jobId).awaitFirstOrNull() ?: return null
         LOGGER.debug("id : {}, found {}", jobId, job)
         if (!requester.isAdmin && requester.id != job.userId) {
@@ -43,8 +43,13 @@ class JobServiceImpl(
 
         //recuperation des element de l'arbre de type feuille
         val treeElementPredicate = TreeElementCriteria(jobId = jobId, type = TreeElementType.LEAF).toPredicate()
-        val leaves = treeElementRepository.findAll(treeElementPredicate).asFlow().map { it.toBusiness() as TreeElement.LeafTreeElement }.toList()
-
+        val leaves =
+            if (withLeaves) {
+                treeElementRepository.findAll(treeElementPredicate).asFlow()
+                    .map { it.toBusiness() as TreeElement.LeafTreeElement }.toList()
+            } else {
+                null
+            }
         LOGGER.debug("mes feuilles {}", leaves)
 
         return job.toBusiness(leaves)
