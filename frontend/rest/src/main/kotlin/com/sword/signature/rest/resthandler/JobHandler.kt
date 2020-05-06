@@ -4,7 +4,10 @@ import com.sword.signature.api.sign.Branch
 import com.sword.signature.api.sign.Job
 import com.sword.signature.api.sign.JobFile
 import com.sword.signature.api.sign.Proof
+import com.sword.signature.business.exception.EntityNotFoundException
+import com.sword.signature.business.service.JobService
 import com.sword.signature.webcore.authentication.CustomUserDetails
+import com.sword.signature.webcore.mapper.toWeb
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
@@ -21,7 +24,9 @@ import java.util.*
 
 @RestController
 @RequestMapping("\${api.base-path:/api}")
-class JobHandler {
+class JobHandler(
+    val jobService: JobService
+) {
 
     @Operation(security = [SecurityRequirement(name = "bearer-key")])
     @RequestMapping(
@@ -33,15 +38,9 @@ class JobHandler {
         @AuthenticationPrincipal user: CustomUserDetails,
         @Parameter(description = "job Id") @PathVariable(value = "jobId") jobId: String
     ): Job {
+        val job = jobService.findById(requester = user.account,jobId = jobId) ?: throw EntityNotFoundException("job",jobId)
+        return job.toWeb()
 
-        return Job(
-            id = jobId,
-            algorithm = "SHA-256",
-            createdDate = OffsetDateTime.now(),
-            flowName = "monFlow",
-            state = "INJECTED",
-            stateDate = OffsetDateTime.now()
-        )
     }
 
     @Operation(security = [SecurityRequirement(name = "bearer-key")])

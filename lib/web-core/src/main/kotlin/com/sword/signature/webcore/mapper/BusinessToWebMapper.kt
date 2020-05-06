@@ -6,7 +6,23 @@ import com.sword.signature.api.sign.SignResponse
 import com.sword.signature.business.model.Job
 import com.sword.signature.business.model.TreeElement
 
-fun Job.toWeb() = SignResponse(jobId = id, files = files?.map { it.fileName } ?: emptyList())
+
+fun Job.toWebSignResponse() = SignResponse(jobId = id, files = files?.map { it.fileName } ?: emptyList())
+
+
+fun Job.toWeb() = com.sword.signature.api.sign.Job(
+    id = id,
+    createdDate = createdDate,
+    injectedDate = injectedDate,
+    validatedDate = validatedDate,
+    numbreOfTry = numbreOfTry,
+    blockId = blockId,
+    blockDepth = blockDepth,
+    algorithm = algorithm,
+    flowName = flowName,
+    stateDate = stateDate,
+    state = state.name
+)
 
 fun Pair<Job, List<TreeElement>>?.toWeb(): Proof? {
     if (this == null) return null
@@ -18,7 +34,7 @@ fun Pair<Job, List<TreeElement>>?.toWeb(): Proof? {
         algorithm = this.first.algorithm,
         publicKey = "ZpublicKey",
         originPublicKey = "ZoriginPublicKey",
-        branch =  this.second.foldRight(null as Branch?) { element, accumulator  ->
+        branch = this.second.foldRight(null as Branch?) { element, accumulator ->
             Branch(
                 hash = element.hash,
                 position = element.position?.name,

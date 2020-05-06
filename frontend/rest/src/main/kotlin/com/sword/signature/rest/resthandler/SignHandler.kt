@@ -6,7 +6,7 @@ import com.sword.signature.business.service.AlgorithmService
 import com.sword.signature.business.service.SignService
 import com.sword.signature.webcore.authentication.CustomUserDetails
 import com.sword.signature.webcore.mapper.toBusiness
-import com.sword.signature.webcore.mapper.toWeb
+import com.sword.signature.webcore.mapper.toWebSignResponse
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
@@ -54,7 +54,7 @@ class SignHandler(
         val algorithm = algorithmService.getAlgorithmByName(algorithmParameter)
 
         val jobs = signService.batchSign(user.account, algorithm, flowName, requests.map { it.toBusiness() })
-        return jobs.map { it.toWeb() }
+        return jobs.map { it.toWebSignResponse() }
     }
 }
 
