@@ -27,7 +27,12 @@ class ApplicationSecurity {
         http.csrf().disable()
         http.securityContextRepository(securityContextRepository)
         http.authorizeExchange { exchanges ->
-            exchanges.pathMatchers("/swagger-ui.html", "/webjars/**", "/v3/api-docs/**").permitAll()
+            exchanges.pathMatchers(
+                "/swagger-ui.html",
+                "/webjars/**",
+                "/v3/api-docs/**",
+                "/v3/api-docs.yaml"
+            ).permitAll()
             exchanges.anyExchange().authenticated()
         }
 
