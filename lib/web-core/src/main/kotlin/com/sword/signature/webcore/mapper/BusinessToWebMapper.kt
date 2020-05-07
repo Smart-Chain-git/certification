@@ -1,6 +1,7 @@
 package com.sword.signature.webcore.mapper
 
 import com.sword.signature.api.sign.Branch
+import com.sword.signature.api.sign.JobFile
 import com.sword.signature.api.sign.Proof
 import com.sword.signature.api.sign.SignResponse
 import com.sword.signature.business.model.Job
@@ -24,8 +25,16 @@ fun Job.toWeb() = com.sword.signature.api.sign.Job(
     state = state.name
 )
 
-fun Pair<Job, List<TreeElement>>?.toWeb(): Proof? {
-    if (this == null) return null
+
+fun TreeElement.LeafTreeElement.toWeb(proof :Pair<Job, List<TreeElement>>?) = JobFile(
+    id = id,
+    hash = hash,
+    jobId = jobId,
+    fileName = fileName,
+    proof = proof?.toWeb()
+)
+
+fun Pair<Job, List<TreeElement>>.toWeb(): Proof {
 
     val leaf = this.second.first() as TreeElement.LeafTreeElement
 

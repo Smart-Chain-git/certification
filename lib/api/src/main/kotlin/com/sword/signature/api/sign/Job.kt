@@ -24,5 +24,5 @@ data class JobFile(
     val hash: String,
     val jobId: String,
     val fileName: String,
-    val proof: Proof
+    val proof: Proof?
 )

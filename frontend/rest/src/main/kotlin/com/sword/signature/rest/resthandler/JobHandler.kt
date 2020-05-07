@@ -6,6 +6,7 @@ import com.sword.signature.api.sign.JobFile
 import com.sword.signature.api.sign.Proof
 import com.sword.signature.business.exception.EntityNotFoundException
 import com.sword.signature.business.service.JobService
+import com.sword.signature.business.service.SignService
 import com.sword.signature.webcore.authentication.CustomUserDetails
 import com.sword.signature.webcore.mapper.toWeb
 import io.swagger.v3.oas.annotations.Operation
@@ -24,6 +25,7 @@ import java.util.*
 @RestController
 @RequestMapping("\${api.base-path:/api}")
 class JobHandler(
+    val signService: SignService,
     val jobService: JobService
 ) {
 
@@ -37,7 +39,8 @@ class JobHandler(
         @AuthenticationPrincipal user: CustomUserDetails,
         @Parameter(description = "job Id") @PathVariable(value = "jobId") jobId: String
     ): Job {
-        val job = jobService.findById(requester = user.account,jobId = jobId) ?: throw EntityNotFoundException("job",jobId)
+        val job =
+            jobService.findById(requester = user.account, jobId = jobId) ?: throw EntityNotFoundException("job", jobId)
         return job.toWeb()
 
     }
@@ -52,26 +55,14 @@ class JobHandler(
         @AuthenticationPrincipal user: CustomUserDetails,
         @Parameter(description = "job Id") @PathVariable(value = "jobId") jobId: String
     ): Flow<JobFile> {
+        val job = jobService.findById(requester = user.account, jobId = jobId, withLeaves = true)
+            ?: throw EntityNotFoundException("job", jobId)
         return flow {
-            for (cpt in 1..10) {
-                emit(
-                    JobFile(
-                        id = UUID.randomUUID().toString(),
-                        hash = "hashOfAFile",
-                        jobId = jobId,
-                        fileName = "fichier_$cpt",
-                        proof = Proof(
-                            algorithm = "SHA-256",
-                            publicKey = "ZpublicKey",
-                            originPublicKey = "ZoriginPublicKey",
-                            branch = Branch(
-                                hash = "hashOfAFile",
-                                position = "LEFT"
-                            )
-                        )
+            job.files?.forEach { leaf ->
+                val proof = signService.getFileProof(requester = user.account, fileId = leaf.id)
+                    ?: throw EntityNotFoundException("file", leaf.id)
 
-                    )
-                )
+                emit(leaf.toWeb(proof))
             }
         }
     }

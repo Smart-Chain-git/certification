@@ -41,13 +41,13 @@ class JobHandler(
         val account = request.getAccount() ?: throw IllegalAccessException("not connected")
         val fileId = request.pathVariable("fileId")
         LOGGER.debug("preuve pour {} fichier {}", account.login, fileId)
-        val proof = signService.getFileProof(requester = account, fileId = fileId).toWeb()
+        val proof = signService.getFileProof(requester = account, fileId = fileId)
         return if (proof == null) {
             ServerResponse.notFound().buildAndAwait()
         } else {
             ServerResponse.ok()
                 .header("Content-Disposition", "attachment; filename=proof_$fileId.json")
-                .json().bodyValueAndAwait(proof)
+                .json().bodyValueAndAwait(proof.toWeb())
         }
     }
 
