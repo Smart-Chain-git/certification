@@ -4,6 +4,7 @@ import com.sword.signature.api.sign.Branch
 import com.sword.signature.api.sign.JobFile
 import com.sword.signature.api.sign.Proof
 import com.sword.signature.api.sign.SignResponse
+import com.sword.signature.business.model.Algorithm
 import com.sword.signature.business.model.Job
 import com.sword.signature.business.model.TreeElement
 
@@ -26,7 +27,7 @@ fun Job.toWeb() = com.sword.signature.api.sign.Job(
 )
 
 
-fun TreeElement.LeafTreeElement.toWeb(proof :Pair<Job, List<TreeElement>>?) = JobFile(
+fun TreeElement.LeafTreeElement.toWeb(proof: Pair<Job, List<TreeElement>>?) = JobFile(
     id = id,
     hash = hash,
     jobId = jobId,
@@ -53,3 +54,10 @@ fun Pair<Job, List<TreeElement>>.toWeb(): Proof {
     )
 
 }
+
+
+fun Algorithm.toWeb() = com.sword.signature.api.sign.Algorithm(
+    id = id,
+    digestLength = digestLength,
+    name = name
+)
