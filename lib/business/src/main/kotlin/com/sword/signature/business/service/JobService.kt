@@ -10,7 +10,7 @@ interface JobService {
     fun findAllByUser(requester: Account, account: Account): Flow<Job>
 
 
-    suspend fun findById(requester: Account, jobId: String): Job?
+    suspend fun findById(requester: Account, jobId: String, withLeaves: Boolean = false): Job?
 
     suspend fun patch(requester: Account, jobId: String, patch: JobPatch): Job
 

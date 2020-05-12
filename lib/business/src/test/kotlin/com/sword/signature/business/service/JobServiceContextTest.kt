@@ -168,15 +168,32 @@ class JobServiceContextTest @Autowired constructor(
             requesterAccount: Account,
             jobId: String,
             expected: Job,
-            expectedFileNames: List<String>
+            expectedFileNames : List<String>
+        ) {
+            runBlocking {
+                val job = jobService.findById(requesterAccount, jobId,true)
+                assertThat(job).isNotNull
+                job as Job
+                assertThat(job).`as`("mauvais job").isEqualToIgnoringGivenFields(expected, "files")
+                assertThat(job.files?.map { it.fileName }).`as`("pas de file").isNotNull.`as`("mauvais files")
+                    .containsExactlyInAnyOrderElementsOf(expectedFileNames)
+            }
+        }
+
+        @ParameterizedTest
+        @MethodSource("getSingleJobProvider")
+        fun getSingleJobNoLeaf(
+            requesterAccount: Account,
+            jobId: String,
+            expected: Job,
+            expectedFileNames : List<String>
         ) {
             runBlocking {
                 val job = jobService.findById(requesterAccount, jobId)
                 assertThat(job).isNotNull
                 job as Job
                 assertThat(job).`as`("mauvais job").isEqualToIgnoringGivenFields(expected, "files")
-                assertThat(job.files?.map { it.fileName }).`as`("pas de file").isNotNull.`as`("mauvais files")
-                    .containsExactlyInAnyOrderElementsOf(expectedFileNames)
+                assertThat(job.files).`as`("pas de file").isNull()
             }
         }
 

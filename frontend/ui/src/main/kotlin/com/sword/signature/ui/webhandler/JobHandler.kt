@@ -27,7 +27,8 @@ class JobHandler(
         val jobId = request.pathVariable("jobId")
 
         val job =
-            jobService.findById(requester = account, jobId = jobId) ?: return ServerResponse.notFound().buildAndAwait()
+            jobService.findById(requester = account, jobId = jobId, withLeaves = true)
+                ?: return ServerResponse.notFound().buildAndAwait()
 
         val model = mapOf<String, Any>(
             "job" to job
@@ -40,13 +41,13 @@ class JobHandler(
         val account = request.getAccount() ?: throw IllegalAccessException("not connected")
         val fileId = request.pathVariable("fileId")
         LOGGER.debug("preuve pour {} fichier {}", account.login, fileId)
-        val proof = signService.getFileProof(requester = account, fileId = fileId).toWeb()
+        val proof = signService.getFileProof(requester = account, fileId = fileId)
         return if (proof == null) {
             ServerResponse.notFound().buildAndAwait()
         } else {
             ServerResponse.ok()
                 .header("Content-Disposition", "attachment; filename=proof_$fileId.json")
-                .json().bodyValueAndAwait(proof)
+                .json().bodyValueAndAwait(proof.toWeb())
         }
     }
 

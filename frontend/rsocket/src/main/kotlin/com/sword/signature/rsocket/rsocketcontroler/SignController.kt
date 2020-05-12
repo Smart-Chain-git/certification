@@ -8,6 +8,7 @@ import com.sword.signature.business.service.AlgorithmService
 import com.sword.signature.business.service.SignService
 import com.sword.signature.webcore.mapper.toBusiness
 import com.sword.signature.webcore.mapper.toWeb
+import com.sword.signature.webcore.mapper.toWebSignResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.springframework.messaging.handler.annotation.Header
@@ -43,7 +44,7 @@ class SignController(
 
         val algorithm = algorithmService.getAlgorithmByName(algorithmParameter)
 
-        return signService.batchSign(account, algorithm, flowName, requests.map { it.toBusiness() }).map { it.toWeb() }
+        return signService.batchSign(account, algorithm, flowName, requests.map { it.toBusiness() }).map { it.toWebSignResponse() }
     }
 }
 
