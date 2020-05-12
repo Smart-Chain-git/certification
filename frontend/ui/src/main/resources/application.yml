@@ -22,24 +22,6 @@ spring:
     mongodb:
       auto-index-creation: false
       uri: mongodb://root:password@localhost:27017/tezos-signature?authSource=admin
-  mail:
-    host: localhost
-    port: 5025
-    username: username
-    password: password
-    sender: signer@signature.com
-    properties:
-      mail:
-        smtp:
-          auth: true
-          connectiontimeout: 5000
-          timeout: 5000
-          writeTimeout: 5000
-        starttls:
-          enable: true
-  integration:
-    poller:
-      fixedRate: 10000
 logging:
   level:
     root: info
