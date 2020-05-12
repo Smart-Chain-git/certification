@@ -1,0 +1,49 @@
+sign:
+  tree:
+   maximunLeaf: 3
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info,health
+    health:
+      show-details: always
+spring:
+  data:
+    mongodb:
+      auto-index-creation: false
+      uri: mongodb://root:password@localhost:27017/tezos-signature?authSource=admin
+  rsocket:
+    server:
+      port: 6666
+  mail:
+    host: localhost
+    port: 5025
+    username: username
+    password: password
+    sender: signer@signature.com
+    properties:
+      mail:
+        smtp:
+          auth: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writeTimeout: 5000
+        starttls:
+          enable: true
+  integration:
+    poller:
+      fixedRate: 10000
+logging:
+  level:
+    root: info
+    com:
+      sword: debug
+    web: warn
+    org:
+      springframework:
+        security: info
+        data: info
+jwt:
+  secret: ffe50f21d8359de7245dc13777812c2a
+  issuer: "Tezos@Signature"

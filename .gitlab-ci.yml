@@ -107,17 +107,47 @@ publishJar:
   script:
     - gradle publish -PmavenProxyUrl=$MAVEN_PROXY_URL -PnexusUrl=$NEXUS_URL -PnexusUser=$NEXUS_USER -PnexusPassword=$NEXUS_PASSWORD -PreleasesRepo=$RELEASES_REPO -PsnapshotsRepo=$SNAPSHOTS_REPO
 # Build a docker image for the web app and push it to the registry.
-publishDocker:
+publishDockerUi:
   stage: publish
   dependencies:
     - build
   tags:
     - dockerBuild
   script:
-    - mkdir web/build/unpacked
+    - mkdir frontend/ui/build/unpacked
     # Unpack the jar for light docker image.
-    - (cd web/build/unpacked; jar -xf ../libs/*.jar)
+    - (cd frontend/ui/build/unpacked; jar -xf ../libs/*.jar)
     # Build the docker image tagged either with git branch name or tag.
-    - docker build -t $REGISTRY_URL/sword/signature-web:$CI_COMMIT_REF_NAME web
+    - docker build -t $REGISTRY_URL/sword/signature-web:$CI_COMMIT_REF_NAME frontend/ui
     # Push the image to the registry.
     - docker push $REGISTRY_URL/sword/signature-web:$CI_COMMIT_REF_NAME
+
+publishDockerRSocket:
+  stage: publish
+  dependencies:
+    - build
+  tags:
+    - dockerBuild
+  script:
+    - mkdir frontend/rsocket/build/unpacked
+    # Unpack the jar for light docker image.
+    - (cd frontend/rsocket/build/unpacked; jar -xf ../libs/*.jar)
+    # Build the docker image tagged either with git branch name or tag.
+    - docker build -t $REGISTRY_URL/sword/signature-rsocket:$CI_COMMIT_REF_NAME frontend/rsocket
+    # Push the image to the registry.
+    - docker push $REGISTRY_URL/sword/signature-rsocket:$CI_COMMIT_REF_NAME
+
+publishDockerRest:
+  stage: publish
+  dependencies:
+    - build
+  tags:
+    - dockerBuild
+  script:
+    - mkdir frontend/rest/build/unpacked
+    # Unpack the jar for light docker image.
+    - (cd frontend/rest/build/unpacked; jar -xf ../libs/*.jar)
+    # Build the docker image tagged either with git branch name or tag.
+    - docker build -t $REGISTRY_URL/sword/signature-rest:$CI_COMMIT_REF_NAME frontend/rest
+    # Push the image to the registry.
+    - docker push $REGISTRY_URL/sword/signature-rest:$CI_COMMIT_REF_NAME

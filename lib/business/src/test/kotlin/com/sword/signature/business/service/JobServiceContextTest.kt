@@ -81,7 +81,7 @@ class JobServiceContextTest @Autowired constructor(
                 Job(
                     id = "5e8c36c49df469062bc658c1",
                     createdDate = OffsetDateTime.parse("2020-04-07T08:16:04.028Z"),
-                    numbreOfTry = 0,
+                    numberOfTry = 0,
                     algorithm = "SHA-256",
                     userId = "5e74a073a386f170f3850b4b",
                     flowName = "ARS_20180626_02236_130006",
@@ -106,7 +106,7 @@ class JobServiceContextTest @Autowired constructor(
                 Job(
                     id = multipleFileJobId,
                     createdDate = OffsetDateTime.parse("2020-04-07T08:16:04.028Z"),
-                    numbreOfTry = 0,
+                    numberOfTry = 0,
                     algorithm = "SHA-256",
                     userId = "5e74a073a386f170f3850b4b",
                     flowName = "ARS_20180626_02236_130006",
@@ -155,12 +155,29 @@ class JobServiceContextTest @Autowired constructor(
     expectedFileNames : List<String>
     ) {
         runBlocking {
-            val job = jobService.findById(requesterAccount, jobId)
+            val job = jobService.findById(requesterAccount, jobId,true)
             assertThat(job).isNotNull
             job as Job
             assertThat(job).`as`("mauvais job").isEqualToIgnoringGivenFields(expected, "files")
             assertThat(job.files?.map { it.metadata.fileName }).`as`("pas de file").isNotNull.`as`("mauvais files")
                 .containsExactlyInAnyOrderElementsOf(expectedFileNames)
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("getSingleJobProvider")
+    fun getSingleJobNoLeaf(
+        requesterAccount: Account,
+        jobId: String,
+        expected: Job,
+        expectedFileNames : List<String>
+    ) {
+        runBlocking {
+            val job = jobService.findById(requesterAccount, jobId)
+            assertThat(job).isNotNull
+            job as Job
+            assertThat(job).`as`("mauvais job").isEqualToIgnoringGivenFields(expected, "files")
+            assertThat(job.files).`as`("pas de file").isNull()
         }
     }
 
@@ -172,7 +189,7 @@ class JobServiceContextTest @Autowired constructor(
                 Job(
                     id = multipleFileJobId,
                     createdDate = OffsetDateTime.parse("2020-04-07T08:16:04.028Z"),
-                    numbreOfTry = 0,
+                    numberOfTry = 0,
                     algorithm = "SHA-256",
                     userId = "5e74a073a386f170f3850b4b",
                     flowName = "ARS_20180626_02236_130006",
@@ -187,7 +204,7 @@ class JobServiceContextTest @Autowired constructor(
                 Job(
                     id = singleFileJobId,
                     createdDate = OffsetDateTime.parse("2020-04-07T08:16:04.114Z"),
-                    numbreOfTry = 0,
+                    numberOfTry = 0,
                     algorithm = "SHA-256",
                     userId = "5e74a073a386f170f3850b4b",
                     flowName = "ARS_20180626_02236_130006",

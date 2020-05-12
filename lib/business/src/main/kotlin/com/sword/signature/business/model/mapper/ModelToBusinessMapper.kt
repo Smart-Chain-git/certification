@@ -47,7 +47,7 @@ fun JobEntity.toBusiness(files: List<TreeElement.LeafTreeElement>? = null) = Job
     blockId = blockId,
     createdDate = createdDate,
     injectedDate = injectedDate,
-    numbreOfTry = numbreOfTry,
+    numberOfTry = numbreOfTry,
     validatedDate = validatedDate,
     flowName = flowName,
     state = state,
