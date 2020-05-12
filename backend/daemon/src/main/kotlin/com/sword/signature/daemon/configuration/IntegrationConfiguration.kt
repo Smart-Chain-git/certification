@@ -1,21 +1,25 @@
 package com.sword.signature.daemon.configuration
 
 import com.sword.signature.business.model.integration.AnchorJobMessagePayload
+import com.sword.signature.business.model.integration.TransactionalMailPayload
+import com.sword.signature.business.model.integration.TransactionalMailType
 import com.sword.signature.daemon.job.AnchorJob
+import com.sword.signature.daemon.job.MailJob
+import com.sword.signature.daemon.mail.HelloAccountMail
 import kotlinx.coroutines.reactor.mono
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.integration.annotation.Poller
 import org.springframework.integration.annotation.ServiceActivator
 import org.springframework.messaging.Message
+import org.springframework.messaging.MessageHandler
 import org.springframework.messaging.ReactiveMessageHandler
 
 
 @Configuration
 class DaemonIntegrationConfiguration(
-    private val anchorJob: AnchorJob
+    private val anchorJob: AnchorJob,
+    private val mailJob: MailJob
 ) {
 
 
@@ -42,9 +46,18 @@ class DaemonIntegrationConfiguration(
         }
     }
 
+    @Bean
+    @ServiceActivator(inputChannel = "transactionalMailChannel", poller = [Poller(fixedRate = "\${spring.integration.poller.fixedRate}")])
+    fun transactionalMailHandler(): MessageHandler {
+        return MessageHandler { message: Message<*> ->
+            val payload = message.payload as TransactionalMailPayload
 
-    companion object {
-        val Logger: Logger = LoggerFactory.getLogger(DaemonIntegrationConfiguration::class.java)
+            val email = when(payload.type){
+                TransactionalMailType.HELLO_ACCOUNT -> HelloAccountMail(payload.recipient)
+            }
+
+            mailJob.sendEmail(email)
+        }
     }
 
 }

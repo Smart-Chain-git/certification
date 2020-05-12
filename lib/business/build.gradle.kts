@@ -24,8 +24,6 @@ dependencies {
 
 
     // Spring
-    implementation("org.springframework.boot:spring-boot-starter-mail")
-    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.springframework.boot:spring-boot-starter-integration")
     implementation("org.mongodb:mongodb-driver-sync")
     implementation("org.springframework.integration:spring-integration-mongodb")

@@ -1,11 +1,10 @@
 package com.sword.signature.webcore.authentication
 
 import com.sword.signature.business.model.Account
-import com.sword.signature.business.model.mail.HelloAccountMail
+import com.sword.signature.business.model.integration.TransactionalMailType
 import com.sword.signature.business.service.AccountService
 import com.sword.signature.business.service.MailService
 import kotlinx.coroutines.reactor.mono
-import kotlinx.coroutines.runBlocking
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UsernameNotFoundException
@@ -29,7 +28,7 @@ class UserDetailsService(
         return mono {
             val account = accountService.getAccountByLoginOrEmail(username)
                 ?: throw UsernameNotFoundException("Account with username '$username' not found.")
-            mailService.sendEmail(HelloAccountMail(account))
+            mailService.sendEmail(TransactionalMailType.HELLO_ACCOUNT ,account)
             buildUser(account)
         }
     }

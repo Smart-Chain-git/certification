@@ -21,13 +21,13 @@ dependencies {
     // Jackson
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
-    // Spring+
+    // Spring
     implementation("org.mongodb:mongodb-driver-sync")
     implementation("org.springframework.integration:spring-integration-mongodb")
     implementation("org.springframework.boot:spring-boot-starter")
+    implementation("org.springframework.boot:spring-boot-starter-mail")
+    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
 
-
-    implementation("org.hsqldb:hsqldb")
 
     // Project libs
     implementation(project(":lib:business"))

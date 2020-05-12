@@ -1,5 +1,7 @@
 package com.sword.signature.business.model
 
+import java.io.Serializable
+
 data class Account(
     val id: String,
     val login: String,
@@ -7,4 +9,4 @@ data class Account(
     val password: String,
     val fullName: String?,
     val isAdmin: Boolean
-)
+):Serializable

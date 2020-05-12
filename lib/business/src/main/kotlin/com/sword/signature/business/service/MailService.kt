@@ -1,8 +1,10 @@
 package com.sword.signature.business.service
 
-import com.sword.signature.business.model.mail.TransactionalMail
+import com.sword.signature.business.model.Account
+import com.sword.signature.business.model.integration.TransactionalMailType
+
 
 interface MailService {
 
-    fun sendEmail(transactionalMail: TransactionalMail)
+    fun sendEmail(type: TransactionalMailType, recipient: Account)
 }
