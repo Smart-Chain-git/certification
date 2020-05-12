@@ -27,6 +27,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-mail")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.springframework.boot:spring-boot-starter-integration")
+    implementation("org.mongodb:mongodb-driver-sync")
+    implementation("org.springframework.integration:spring-integration-mongodb")
 
     // JWT
     implementation("com.auth0:java-jwt:3.10.2")

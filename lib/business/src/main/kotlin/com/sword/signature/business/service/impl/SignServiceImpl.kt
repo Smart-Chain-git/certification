@@ -1,10 +1,8 @@
 package com.sword.signature.business.service.impl
 
 import com.sword.signature.business.exception.UserServiceException
-import com.sword.signature.business.model.Account
-import com.sword.signature.business.model.Algorithm
-import com.sword.signature.business.model.Job
-import com.sword.signature.business.model.TreeElement
+import com.sword.signature.business.model.*
+import com.sword.signature.business.model.integration.AnchorJobMessagePayload
 import com.sword.signature.business.model.mapper.toBusiness
 import com.sword.signature.business.service.SignService
 import com.sword.signature.business.visitor.SaveRepositoryTreeVisitor
@@ -19,6 +17,8 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.reactive.awaitFirstOrNull
 import kotlinx.coroutines.reactive.awaitSingle
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.messaging.MessageChannel
+import org.springframework.messaging.support.MessageBuilder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.OffsetDateTime
@@ -27,10 +27,11 @@ import java.time.OffsetDateTime
 class SignServiceImpl(
     @Value("\${sign.tree.maximunLeaf}") val maximunLeaf: Int,
     private val jobRepository: JobRepository,
-    private val treeElementRepository: TreeElementRepository
+    private val treeElementRepository: TreeElementRepository,
+    private val jobToAnchorsMessageChannel: MessageChannel
 ) : SignService {
 
-    @Transactional
+    @Transactional(rollbackFor = [Exception::class])
     override fun batchSign(
         requester: Account,
         algorithm: Algorithm,
@@ -87,6 +88,13 @@ class SignServiceImpl(
             jobId = jobEntity.id!!,
             treeElementRepository = treeElementRepository
         ).visitTree(merkleTree)
+
+        //inscription d'un message pour le daemon qu'il sache qu'il doit encrer la transaction
+        jobToAnchorsMessageChannel.send(MessageBuilder.withPayload(
+            AnchorJobMessagePayload(
+                jobEntity.id!!
+            )
+        ).build())
 
         return jobEntity.toBusiness(files = inserted.filter { it.type == TreeElementType.LEAF }
             .map { it.toBusiness() as TreeElement.LeafTreeElement }.toList())
