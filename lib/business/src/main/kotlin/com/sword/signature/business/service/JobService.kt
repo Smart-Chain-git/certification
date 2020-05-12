@@ -2,6 +2,7 @@ package com.sword.signature.business.service
 
 import com.sword.signature.business.model.Account
 import com.sword.signature.business.model.Job
+import com.sword.signature.business.model.JobPatch
 import kotlinx.coroutines.flow.Flow
 
 interface JobService {
@@ -10,5 +11,7 @@ interface JobService {
 
 
     suspend fun findById(requester: Account, jobId: String): Job?
+
+    suspend fun patch(requester: Account, jobId: String, patch: JobPatch): Job
 
 }
