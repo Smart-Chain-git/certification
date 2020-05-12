@@ -52,7 +52,7 @@ const initFileDisplay = file => {
     $("#file-info-body").append(
         '<tr id=\"file-' + fileId + '\">' +
         '<td><input name="file-name" value=\"' + file.name + '\" readonly></td>' +
-        '<td><input name="file-size" value=\"' + humanFileSize(file.size, 1000) + '\" readonly></td>' +
+        '<td><input name="file-size" value=\"' + humanFileSize(file.size, false) + '\" readonly></td>' +
         '<td id=\"hash-' + fileId + '\"><div class=\"spinner-border text-primary\"></div></td>' +
         '<td> <input name="file-comment"></td>' +
         '</tr>')
@@ -65,16 +65,18 @@ const updateFileHash = (fileId, hash) => {
 
 const humanFileSize = (bytes, si) => {
     let thresh = si ? 1000 : 1024
+    let language = navigator.language
+    const byteLabel = navigator.language.startsWith("fr") ? 'o' : 'B'
     if (Math.abs(bytes) < thresh) {
-        return bytes + ' B'
+        return bytes + ' ' + byteLabel
     }
     let units = si
-        ? ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-        : ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
+        ? ['k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y']
+        : ['Ki', 'Mi', 'Gi', 'Ti', 'Pi', 'Ei', 'Zi', 'Yi'];
     let u = -1
     do {
         bytes /= thresh
         ++u
     } while (Math.abs(bytes) >= thresh && u < units.length - 1)
-    return bytes.toFixed(1) + ' ' + units[u]
+    return bytes.toFixed(1) + ' ' + units[u] + byteLabel
 }

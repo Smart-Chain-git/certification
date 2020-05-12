@@ -21,7 +21,7 @@ class SignatureHandler(
     suspend fun timestamping(request: ServerRequest): ServerResponse {
         val model = mutableMapOf<String, Any>()
         model["fileToUpload"] = mutableListOf<File>()
-        model["algorithms"] = listOf("MD5", "SHA-1", "SHA-256", "SHA-384", "SHA-512")
+        model["algorithms"] = algorithmService.findAll().toList().map { it.name }
         return ServerResponse.ok().html().renderAndAwait("signature/timestamping", model)
     }
 
@@ -58,7 +58,7 @@ class SignatureHandler(
             )
         }
         var jobs = listOf<Job>()
-        if (files != null && files.isNotEmpty()) {
+        if (files.isNotEmpty()) {
 
             jobs = signService.batchSign(
                 requester = account,
@@ -69,7 +69,7 @@ class SignatureHandler(
             LOGGER.info("Jobs: {}", jobs)
 
         }
-        if(jobs.size > 0) {
+        if(jobs.isNotEmpty()) {
             return ServerResponse.ok().html().renderAndAwait("redirect:/jobs/"+jobs[0].id)
         }
         return ServerResponse.ok().html().renderAndAwait("redirect:/timestamping")
