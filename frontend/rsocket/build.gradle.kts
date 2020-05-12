@@ -8,7 +8,7 @@ plugins {
 }
 
 description = "rsocket api server"
-val artefactName = "web"
+val artefactName = "rsocket"
 
 dependencies {
     // Kotlin
