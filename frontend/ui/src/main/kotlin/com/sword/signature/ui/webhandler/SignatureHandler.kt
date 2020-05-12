@@ -1,6 +1,7 @@
 package com.sword.signature.ui.webhandler
 
 import com.sword.signature.business.model.FileMetadata
+import com.sword.signature.business.model.Job
 import com.sword.signature.business.service.AlgorithmService
 import com.sword.signature.business.service.SignService
 import kotlinx.coroutines.flow.asFlow
@@ -56,9 +57,10 @@ class SignatureHandler(
                 )
             )
         }
+        var jobs = listOf<Job>()
         if (files != null && files.isNotEmpty()) {
 
-            val jobs = signService.batchSign(
+            jobs = signService.batchSign(
                 requester = account,
                 algorithm = algorithm,
                 flowName = "web_" + LocalDateTime.now().toString(),
@@ -66,6 +68,9 @@ class SignatureHandler(
             ).toList()
             LOGGER.info("Jobs: {}", jobs)
 
+        }
+        if(jobs.size > 0) {
+            return ServerResponse.ok().html().renderAndAwait("redirect:/jobs/"+jobs[0].id)
         }
         return ServerResponse.ok().html().renderAndAwait("redirect:/timestamping")
     }
