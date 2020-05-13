@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.mail.SimpleMailMessage
 import org.springframework.mail.javamail.JavaMailSender
+import org.springframework.mail.javamail.MimeMailMessage
+import org.springframework.mail.javamail.MimeMessageHelper
 import org.springframework.stereotype.Component
 import org.thymeleaf.TemplateEngine
 
@@ -18,14 +20,14 @@ class MailJob(
 ) {
     fun sendEmail(transactionalMail: TransactionalMail) {
         LOGGER.trace("email send for {} subject {}",transactionalMail.recipient.email,transactionalMail.subject)
-        val mailMessage = SimpleMailMessage()
-        mailMessage.setFrom(sender)
-        mailMessage.setTo(transactionalMail.recipient.email)
-        mailMessage.setSubject(transactionalMail.subject)
+        val mimeMessage = emailSender.createMimeMessage()
+        mimeMessage.subject = transactionalMail.subject
+        val messageHelper = MimeMessageHelper(mimeMessage, true)
+        messageHelper.setFrom(sender)
+        messageHelper.setTo(transactionalMail.recipient.email)
+        messageHelper.setText(templateEngine.process(transactionalMail.templateName, transactionalMail.getContext()))
 
-        mailMessage.setText(templateEngine.process(transactionalMail.templateName, transactionalMail.getContext()))
-
-        emailSender.send(mailMessage)
+        emailSender.send(mimeMessage)
     }
 
     companion object {
