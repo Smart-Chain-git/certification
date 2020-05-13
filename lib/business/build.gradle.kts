@@ -1,6 +1,7 @@
 val merkleTreeVersion : String by project.extra
 val flapdoodleVersion: String by project.extra
 val mockKVersion: String by project.extra
+val ej4tezosVersion: String by project.extra
 
 plugins {
     id("kotlin")
@@ -30,6 +31,16 @@ dependencies {
 
     // JWT
     implementation("com.auth0:java-jwt:3.10.2")
+
+    // ej4tezos
+    implementation("org.ej4tezos:java-se.api:$ej4tezosVersion")
+    implementation("org.ej4tezos:java-se.papi:$ej4tezosVersion")
+    implementation("org.ej4tezos:java-se.model:$ej4tezosVersion")
+    implementation("org.ej4tezos:java-se.utils.assert:$ej4tezosVersion")
+    implementation("org.ej4tezos:java-se.utils.osgi:$ej4tezosVersion")
+    implementation("org.ej4tezos:java-se.utils.bytes:$ej4tezosVersion")
+    implementation("org.ej4tezos:java-se.default-impl:$ej4tezosVersion")
+    implementation("org.ej4tezos:java-se.crypto-default-impl:$ej4tezosVersion")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo:$flapdoodleVersion")
