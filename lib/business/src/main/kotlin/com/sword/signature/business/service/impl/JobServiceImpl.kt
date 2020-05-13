@@ -67,7 +67,7 @@ class JobServiceImpl(
             throw IllegalAccessException("user ${requester.login} does not have role/permission to update job: ${job.id}")
         }
         val toPatch = job.copy(
-            numbreOfTry = patch.numbreOfTry ?: job.numbreOfTry,
+            numberOfTry = patch.numberOfTry ?: job.numberOfTry,
             blockId = patch.blockId ?: job.blockId,
             blockDepth = patch.blockDepth ?: job.blockDepth,
             state = patch.state ?: job.state,

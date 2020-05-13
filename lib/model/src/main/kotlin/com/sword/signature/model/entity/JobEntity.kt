@@ -27,7 +27,7 @@ data class JobEntity(
      */
     val validatedDate: OffsetDateTime? = null,
 
-    val numbreOfTry: Int = 0,
+    val numberOfTry: Int = 0,
     val blockId: String? = null,
     /**
      * depth of the block at validation date

@@ -64,7 +64,7 @@ class JobServiceContextTest @Autowired constructor(
     private val multipleFileJob = Job(
         id = multipleFileJobId,
         createdDate = OffsetDateTime.parse("2020-04-07T08:16:04.028Z"),
-        numbreOfTry = 0,
+        numberOfTry = 0,
         algorithm = "SHA-256",
         userId = "5e74a073a386f170f3850b4b",
         flowName = "ARS_20180626_02236_130006",
@@ -75,7 +75,7 @@ class JobServiceContextTest @Autowired constructor(
     private val singleFileJob = Job(
         id = singleFileJobId,
         createdDate = OffsetDateTime.parse("2020-04-07T08:16:04.114Z"),
-        numbreOfTry = 0,
+        numberOfTry = 0,
         algorithm = "SHA-256",
         userId = "5e74a073a386f170f3850b4b",
         flowName = "ARS_20180626_02236_130006",
@@ -175,7 +175,7 @@ class JobServiceContextTest @Autowired constructor(
                 assertThat(job).isNotNull
                 job as Job
                 assertThat(job).`as`("mauvais job").isEqualToIgnoringGivenFields(expected, "files")
-                assertThat(job.files?.map { it.fileName }).`as`("pas de file").isNotNull.`as`("mauvais files")
+                assertThat(job.files?.map { it.metadata.fileName }).`as`("pas de file").isNotNull.`as`("mauvais files")
                     .containsExactlyInAnyOrderElementsOf(expectedFileNames)
             }
         }
@@ -283,8 +283,8 @@ class JobServiceContextTest @Autowired constructor(
                 "numbreOfTry change",
                 secondAdmin,
                 multipleFileJobId,
-                JobPatch(numbreOfTry = 18),
-                multipleFileJob.copy(numbreOfTry = 18)
+                JobPatch(numberOfTry = 18),
+                multipleFileJob.copy(numberOfTry = 18)
             ),
             Arguments.of(
                 "blockId change",

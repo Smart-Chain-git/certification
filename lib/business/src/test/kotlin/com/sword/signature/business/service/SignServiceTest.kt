@@ -122,7 +122,7 @@ class SignServiceTest @Autowired constructor(
                     assertThat(job.blockDepth).isNull()
                     assertThat(job.validatedDate).isNull()
                     assertThat(job.blockId).isNull()
-                    assertThat(job.numbreOfTry).isEqualTo(0)
+                    assertThat(job.numberOfTry).isEqualTo(0)
                 }.assertAll()
 
                 //verification de l'ecriture des feuille de l'arbre
