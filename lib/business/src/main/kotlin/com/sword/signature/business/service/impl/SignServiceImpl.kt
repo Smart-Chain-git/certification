@@ -36,13 +36,13 @@ class SignServiceImpl(
         requester: Account,
         algorithm: Algorithm,
         flowName: String,
-        fileHashs: Flow<Pair<String, String>>
+        fileHashs: Flow<Pair<String, FileMetadata>>
     ): Flow<Job> {
 
         return flow {
 
             // intermediary doit etre declaré dans le scope du flow!
-            val intermediary = mutableListOf<Pair<String, String>>()
+            val intermediary = mutableListOf<Pair<String, FileMetadata>>()
             fileHashs.collect { fileHash ->
                 if (!algorithm.checkHashDigest(fileHash.first)) {
                     throw UserServiceException("bad ${algorithm.name} hash for file ${fileHash.second}")
@@ -64,7 +64,7 @@ class SignServiceImpl(
         requester: Account,
         algorithm: Algorithm,
         flowName: String,
-        fileHashs: List<Pair<String, String>>
+        fileHashs: List<Pair<String, FileMetadata>>
     ): Job {
 
         // creation du jobb en BDD
@@ -98,7 +98,6 @@ class SignServiceImpl(
 
         return jobEntity.toBusiness(files = inserted.filter { it.type == TreeElementType.LEAF }
             .map { it.toBusiness() as TreeElement.LeafTreeElement }.toList())
-
     }
 
     @Transactional
@@ -112,14 +111,11 @@ class SignServiceImpl(
         val elements = mutableListOf(treeElement)
         var nextId = treeElement.parentId
         while (nextId != null) {
-            val nextelement = treeElementRepository.findById(nextId).awaitSingle()
-            elements.add(nextelement)
-            nextId = nextelement.parentId
+            val nextElement = treeElementRepository.findById(nextId).awaitSingle()
+            elements.add(nextElement)
+            nextId = nextElement.parentId
         }
 
         return Pair(job.toBusiness(), elements.map { it.toBusiness() })
-
-
     }
-
 }

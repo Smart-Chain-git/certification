@@ -2,6 +2,7 @@ package com.sword.signature.ui.configuration
 
 import com.sword.signature.ui.webhandler.JobHandler
 import com.sword.signature.ui.webhandler.MainHandler
+import com.sword.signature.ui.webhandler.SignatureHandler
 import com.sword.signature.ui.webhandler.TokenHandler
 import nz.net.ultraq.thymeleaf.LayoutDialect
 import org.springframework.boot.autoconfigure.security.reactive.PathRequest
@@ -12,7 +13,6 @@ import org.springframework.core.io.ClassPathResource
 import org.springframework.http.MediaType
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity
 import org.springframework.security.config.web.server.ServerHttpSecurity
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.server.SecurityWebFilterChain
 import org.springframework.web.reactive.function.server.coRouter
 import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect
@@ -37,7 +37,8 @@ class ApplicationSecurity {
     fun routes(
         mainHandler: MainHandler,
         jobHandler: JobHandler,
-        tokenHandler: TokenHandler
+        tokenHandler: TokenHandler,
+        signatureHandler: SignatureHandler
     ) = coRouter {
         accept(MediaType.TEXT_HTML).nest {
             GET("/", mainHandler::index)
@@ -49,6 +50,8 @@ class ApplicationSecurity {
             GET("/tokens", tokenHandler::tokens)
             POST("/createToken", tokenHandler::addToken)
             GET("/revokeToken/{id}", tokenHandler::revokeToken)
+            GET("/timestamping", signatureHandler::timestamping)
+            POST("/timestamp", signatureHandler::timestamp)
         }
         resources("/**", ClassPathResource("/static"))
     }

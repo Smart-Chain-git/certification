@@ -8,8 +8,8 @@ import java.time.OffsetDateTime
 data class Proof(
     @JsonProperty("signature_date")
     val signatureDate: OffsetDateTime? = null,
-    @JsonProperty("file_name")
-    val fileName: String? = null,
+    @JsonProperty("metadata")
+    val metadata: SignMetadata,
     val branch: Branch,
     val origin: String = "SWORD",
     val urls: List<String> = emptyList(),

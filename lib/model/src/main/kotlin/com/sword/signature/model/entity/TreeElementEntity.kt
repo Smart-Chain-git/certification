@@ -14,11 +14,17 @@ data class TreeElementEntity(
     @Indexed(unique = true)
     val hash: String,
 
-    val fileName: String? = null,
+    val metadata: Metadata? = null,
     @Indexed
     val parentId: String? = null,
     val position: TreeElementPosition? = null,
     val jobId: String,
     val type: TreeElementType
 
-)
+) {
+    data class Metadata(
+        val fileName: String,
+        val fileSize: String? = null,
+        val customFields: Map<String, String>? = null
+    )
+}

@@ -1,6 +1,8 @@
 package com.sword.signature.business.visitor
 
 
+import com.sword.signature.business.model.FileMetadata
+import com.sword.signature.business.model.mapper.toModel
 import com.sword.signature.common.enums.TreeElementPosition
 import com.sword.signature.common.enums.TreeElementType
 import com.sword.signature.merkletree.model.TreeElement
@@ -30,7 +32,6 @@ class SaveRepositoryTreeVisitor(
         }
     }
 
-
     private suspend fun FlowCollector<TreeElementEntity>.visitTreeElement(
         treeElement: TreeElement<String>?,
         parentId: String?,
@@ -43,8 +44,12 @@ class SaveRepositoryTreeVisitor(
         }
     }
 
-    private suspend fun FlowCollector<TreeElementEntity>.visitTreeNode(treeNode: TreeNode<String>, parentId: String?, position: TreeElementPosition?) {
-        //creation entité
+    private suspend fun FlowCollector<TreeElementEntity>.visitTreeNode(
+        treeNode: TreeNode<String>,
+        parentId: String?,
+        position: TreeElementPosition?
+    ) {
+        // Node creation.
         val tempTreeElementEntity = TreeElementEntity(
             hash = treeNode.value!!,
             jobId = jobId,
@@ -52,14 +57,14 @@ class SaveRepositoryTreeVisitor(
             parentId = parentId,
             position = position
         )
-        LOGGER.trace("ecriture node {}", tempTreeElementEntity)
-
+        LOGGER.debug("Insertion of node {}.", tempTreeElementEntity)
 
         val inserted = treeElementRepository.insert(
             tempTreeElementEntity
         ).awaitSingle()
-        //on renvoi le noeud cree à l'appeleur
-        emit (inserted)
+
+        // Send back the created node to the caller.
+        emit(inserted)
 
         visitTreeElement(treeNode.left, inserted.id!!, TreeElementPosition.LEFT)
         if (treeNode.right != null) {
@@ -67,21 +72,25 @@ class SaveRepositoryTreeVisitor(
         }
     }
 
-    private suspend fun FlowCollector<TreeElementEntity>.visitTreeLeaf(treeLeaf: TreeLeaf<String>, parentId: String?, position: TreeElementPosition?) {
-        val metadata = treeLeaf.metadata as String
-        LOGGER.debug("ecriture leaf {}", treeLeaf.value)
+    private suspend fun FlowCollector<TreeElementEntity>.visitTreeLeaf(
+        treeLeaf: TreeLeaf<String>,
+        parentId: String?,
+        position: TreeElementPosition?
+    ) {
+        val metadata = treeLeaf.metadata as FileMetadata
+        LOGGER.debug("Insertion of leaf with value {}.", treeLeaf.value)
         val inserted = treeElementRepository.insert(
             TreeElementEntity(
                 hash = treeLeaf.value,
-                fileName = metadata,
+                metadata = metadata.toModel(),
                 jobId = jobId,
                 type = TreeElementType.LEAF,
                 parentId = parentId,
                 position = position
             )
         ).awaitSingle()
-        //on renvoi le noeud cree à l'appeleur
-        emit (inserted)
+        // Send back the created leaf to the caller.
+        emit(inserted)
 
     }
 

@@ -1,23 +1,26 @@
 package com.sword.signature.webcore.mapper
 
-import com.sword.signature.api.sign.Branch
-import com.sword.signature.api.sign.JobFile
-import com.sword.signature.api.sign.Proof
-import com.sword.signature.api.sign.SignResponse
+import com.sword.signature.api.sign.*
 import com.sword.signature.business.model.Algorithm
+import com.sword.signature.business.model.FileMetadata
 import com.sword.signature.business.model.Job
 import com.sword.signature.business.model.TreeElement
 
 
-fun Job.toWebSignResponse() = SignResponse(jobId = id, files = files?.map { it.fileName } ?: emptyList())
+fun Job.toWebSignResponse() = SignResponse(jobId = id, files = files?.map { it.metadata.toWeb() } ?: emptyList())
 
+fun FileMetadata.toWeb() = SignMetadata(
+    fileName = fileName,
+    fileSize = fileSize,
+    customFields = customFields
+)
 
 fun Job.toWeb() = com.sword.signature.api.sign.Job(
     id = id,
     createdDate = createdDate,
     injectedDate = injectedDate,
     validatedDate = validatedDate,
-    numbreOfTry = numbreOfTry,
+    numberOfTry = numberOfTry,
     blockId = blockId,
     blockDepth = blockDepth,
     algorithm = algorithm,
@@ -31,7 +34,7 @@ fun TreeElement.LeafTreeElement.toWeb(proof: Pair<Job, List<TreeElement>>?) = Jo
     id = id,
     hash = hash,
     jobId = jobId,
-    fileName = fileName,
+    metadata = metadata.toWeb(),
     proof = proof?.toWeb()
 )
 
@@ -40,7 +43,7 @@ fun Pair<Job, List<TreeElement>>.toWeb(): Proof {
     val leaf = this.second.first() as TreeElement.LeafTreeElement
 
     return Proof(
-        fileName = leaf.fileName,
+        metadata = leaf.metadata.toWeb(),
         algorithm = this.first.algorithm,
         publicKey = "ZpublicKey",
         originPublicKey = "ZoriginPublicKey",

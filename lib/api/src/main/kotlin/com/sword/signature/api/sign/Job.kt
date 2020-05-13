@@ -9,7 +9,7 @@ data class Job(
     val createdDate: OffsetDateTime,
     val injectedDate: OffsetDateTime? = null,
     val validatedDate: OffsetDateTime? = null,
-    val numbreOfTry: Int = 0,
+    val numberOfTry: Int = 0,
     val blockId: String? = null,
     val blockDepth: Int? = null,
     val algorithm: String,
@@ -23,6 +23,6 @@ data class JobFile(
     val id: String,
     val hash: String,
     val jobId: String,
-    val fileName: String,
+    val metadata: SignMetadata,
     val proof: Proof?
 )

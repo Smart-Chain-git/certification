@@ -1,9 +1,0 @@
-.token-table {
-    table-layout: fixed;
-}
-
-.cut-text {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}

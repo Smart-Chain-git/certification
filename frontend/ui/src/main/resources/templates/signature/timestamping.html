@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout(activeMenuItem='timestamping')}"
+>
+<head>
+    <style type="text/css">
+        table {
+            table-layout: fixed;
+        }
+
+        table input {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+        }
+
+        input[readonly=""] {
+            border: 0px;
+        }
+
+        form {
+            text-align: center;
+            width: auto;
+            margin: 0px auto;
+        }
+
+        .custom-file-label::after {
+            content: var(--browse-label);
+        }
+
+        #timestamping-btn {
+            width: 200px;
+            margin: 30px;
+        }
+    </style>
+</head>
+<body>
+<div layout:fragment="content" class="container" style="text-align: center; width: 100%;">
+    <h1 style="text-align: center" th:text="#{timestamping.title}">Timestamp your files</h1>
+    <form method="POST" th:action="@{/timestamp}" action="#">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <label class="input-group-text" for="algo-select" th:text="#{timestamping.input.algorithm}">Algorithm</label>
+            </div>
+            <select class="custom-select" id="algo-select" name="algorithm">
+                <option th:each="algo : ${algorithms}" th:value="${algo}" th:selected="${algo == 'SHA-256'}">[[${algo}]]</option>
+            </select>
+        </div>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" th:text="#{timestamping.input.file.upload}">Upload</span>
+            </div>
+            <div class="custom-file">
+                <input id="file-input" type="file" class="custom-file-input"
+                       multiple>
+                <label th:style="'--browse-label: \''+#{timestamping.input.file.browse}+'\';'" class="custom-file-label" for="file-input" th:text="#{timestamping.input.file.browse}">Browse</label>
+            </div>
+        </div>
+        <p>
+            <small th:text="#{timestamping.input.file.disclaimer}">
+                Disclaimer
+            </small>
+        </p>
+        <br><br>
+        <h3 th:text="#{timestamping.input.file.list}">Files to upload</h3>
+        <table id="file-info" class="table table-bordered table-sm">
+            <thead>
+            <tr>
+                <th scope="col" th:text="#{timestamping.header.filename}">File name</th>
+                <th scope="col" th:text="#{timestamping.header.filesize}">Size</th>
+                <th scope="col" th:text="#{timestamping.header.hash}">Checksum</th>
+                <th scope="col" th:text="#{timestamping.header.comment}">Comment</th>
+            </tr>
+            </thead>
+            <tbody id="file-info-body">
+            </tbody>
+        </table>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text" th:text="#{timestamping.input.global}">Global info</span>
+            </div>
+            <textarea class="form-control" aria-label="With textarea" name="batch-comment"></textarea>
+        </div>
+        <br>
+        <input id="timestamping-btn" type="submit" class="btn btn-success"
+               value="Upload" th:value="#{timestamping.action.upload}"/>
+    </form>
+    <script type="text/javascript" th:src="@{/webjars/crypto-js/3.1.9-1/crypto-js.js}"></script>
+    <script type="module" th:src="@{/js/timestamping.js}"></script>
+</div>
+
+</body>
+</html>

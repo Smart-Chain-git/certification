@@ -1,10 +1,7 @@
 package com.sword.signature.business.service
 
 import com.sword.signature.business.exception.UserServiceException
-import com.sword.signature.business.model.Account
-import com.sword.signature.business.model.Algorithm
-import com.sword.signature.business.model.Job
-import com.sword.signature.business.model.TreeElement
+import com.sword.signature.business.model.*
 import com.sword.signature.common.enums.JobStateType
 import com.sword.signature.common.enums.TreeElementPosition
 import com.sword.signature.common.enums.TreeElementType
@@ -76,7 +73,7 @@ class SignServiceTest @Autowired constructor(
 
             val monFlow = flow {
                 emit(
-                    Pair(second = "lorem1Hash.pdf", first = lorem1badHash)
+                    Pair(second = FileMetadata(fileName = "lorem1Hash.pdf"), first = lorem1badHash)
                 )
             }
             assertThatThrownBy {
@@ -100,7 +97,7 @@ class SignServiceTest @Autowired constructor(
             comments: String,
             account: Account,
             algorithm: String,
-            hashs: List<Pair<String, String>>,
+            hashs: List<Pair<String, FileMetadata>>,
             expectedJobsResponse: Int,
             expectedTreeElements: Int
         ) {
@@ -149,7 +146,7 @@ class SignServiceTest @Autowired constructor(
                     "single",
                     accountAdmin,
                     "SHA-256",
-                    listOf(Pair(second = "lorem1Hash.pdf", first = lorem1Hash)),
+                    listOf(Pair(second = FileMetadata(fileName= "lorem1Hash.pdf"), first = lorem1Hash)),
                     1,
                     1
                 ),
@@ -158,9 +155,9 @@ class SignServiceTest @Autowired constructor(
                     accountAdmin,
                     "SHA-256",
                     listOf(
-                        Pair(second = "lorem2Hash.pdf", first = lorem2Hash),
-                        Pair(second = "lorem3Hash.pdf", first = lorem3Hash),
-                        Pair(second = "lorem4Hash.pdf", first = lorem4Hash)
+                        Pair(second = FileMetadata(fileName ="lorem2Hash.pdf"), first = lorem2Hash),
+                        Pair(second = FileMetadata(fileName="lorem3Hash.pdf"), first = lorem3Hash),
+                        Pair(second = FileMetadata(fileName="lorem4Hash.pdf"), first = lorem4Hash)
                     ),
                     1,
                     6
@@ -170,10 +167,10 @@ class SignServiceTest @Autowired constructor(
                     accountAdmin,
                     "SHA-256",
                     listOf(
-                        Pair(second = "lorem1Hash.pdf", first = lorem1Hash),
-                        Pair(second = "lorem2Hash.pdf", first = lorem2Hash),
-                        Pair(second = "lorem3Hash.pdf", first = lorem3Hash),
-                        Pair(second = "lorem4Hash.pdf", first = lorem4Hash)
+                        Pair(second = FileMetadata(fileName="lorem1Hash.pdf"), first = lorem1Hash),
+                        Pair(second = FileMetadata(fileName="lorem2Hash.pdf"), first = lorem2Hash),
+                        Pair(second = FileMetadata(fileName="lorem3Hash.pdf"), first = lorem3Hash),
+                        Pair(second = FileMetadata(fileName="lorem4Hash.pdf"), first = lorem4Hash)
                     ),
                     2,
                     7
@@ -276,7 +273,7 @@ class SignServiceTest @Autowired constructor(
                                 id = "5e8ed52fb1606a18565cbb95",
                                 hash = "145e9bccd897c6428d0e8b792fa3063646e435f10154df76aed7e0543daedcfc",
                                 jobId = multipleFileJobId,
-                                fileName = "ARS_02236_00001.pdf",
+                                metadata = FileMetadata(fileName="ARS_02236_00001.pdf"),
                                 position = TreeElementPosition.LEFT,
                                 parentId = "5e8ed52fb1606a18565cbb94"
 
@@ -313,7 +310,7 @@ class SignServiceTest @Autowired constructor(
                                 id = "5e8ed52fb1606a18565cbb93",
                                 hash = "3d6d3491a321616e74c0db101da7b74205b09887079267b82ca76d19dd1d62ba",
                                 jobId = multipleFileJobId,
-                                fileName = "ARS_02236_00002.pdf",
+                                metadata = FileMetadata(fileName="ARS_02236_00002.pdf"),
                                 position = TreeElementPosition.RIGHT,
                                 parentId = "5e8ed52fb1606a18565cbb91"
 
@@ -350,7 +347,7 @@ class SignServiceTest @Autowired constructor(
                                 id = "5e8ed52fb1606a18565cbb97",
                                 hash = "7d70baefd8e6284346d5021dde2288a5aaf4ce03220ac7653ca3f697be4cf399",
                                 jobId = singleFileJobId,
-                                fileName = "ARS_02236_00003.pdf"
+                                metadata = FileMetadata(fileName="ARS_02236_00003.pdf")
                             )
                         )
                     )
@@ -373,7 +370,7 @@ class SignServiceTest @Autowired constructor(
                                 id = "5e8ed52fb1606a18565cbb92",
                                 hash = "830c745f08bd19ecff04565dd7ff05ae92090a5e0624391478c6dafc0422d052",
                                 jobId = multipleFileJobId,
-                                fileName = "ARS_02236_00004.pdf",
+                                metadata = FileMetadata(fileName="ARS_02236_00004.pdf"),
                                 position = TreeElementPosition.LEFT,
                                 parentId = "5e8ed52fb1606a18565cbb91"
                             ),

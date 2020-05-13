@@ -1,9 +1,6 @@
 package com.sword.signature.business.service
 
-import com.sword.signature.business.model.Account
-import com.sword.signature.business.model.Algorithm
-import com.sword.signature.business.model.Job
-import com.sword.signature.business.model.TreeElement
+import com.sword.signature.business.model.*
 import kotlinx.coroutines.flow.Flow
 
 interface SignService {
@@ -13,7 +10,7 @@ interface SignService {
         requester: Account,
         algorithm: Algorithm,
         flowName: String,
-        fileHashs: Flow<Pair<String, String>>
+        fileHashs: Flow<Pair<String, FileMetadata>>
     ): Flow<Job>
 
     suspend fun getFileProof(requester: Account, fileId: String): Pair<Job, List<TreeElement>>?
