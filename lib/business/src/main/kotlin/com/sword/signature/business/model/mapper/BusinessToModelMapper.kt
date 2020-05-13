@@ -25,6 +25,5 @@ fun Algorithm.toModel() = AlgorithmEntity(
 fun FileMetadata.toModel() = TreeElementEntity.Metadata(
     fileName = fileName,
     fileSize = fileSize,
-    fileComment = fileComment,
-    batchComment = batchComment
+    customFields = customFields
 )

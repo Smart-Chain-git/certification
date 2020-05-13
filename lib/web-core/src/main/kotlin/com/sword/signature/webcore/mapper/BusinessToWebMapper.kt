@@ -12,8 +12,7 @@ fun Job.toWebSignResponse() = SignResponse(jobId = id, files = files?.map { it.m
 fun FileMetadata.toWeb() = SignMetadata(
     fileName = fileName,
     fileSize = fileSize,
-    fileComment = fileComment,
-    batchComment = batchComment
+    customFields = customFields
 )
 
 fun Job.toWeb() = com.sword.signature.api.sign.Job(

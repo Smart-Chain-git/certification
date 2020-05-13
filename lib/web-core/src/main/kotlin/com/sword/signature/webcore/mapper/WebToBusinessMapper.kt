@@ -12,6 +12,5 @@ fun SignRequest.toBusiness() = Pair(
 fun SignMetadata.toBusiness() = FileMetadata(
     fileName = fileName,
     fileSize = fileSize,
-    fileComment = fileComment,
-    batchComment = batchComment
+    customFields = customFields
 )

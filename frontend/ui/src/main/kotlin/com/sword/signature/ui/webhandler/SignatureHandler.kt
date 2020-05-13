@@ -45,14 +45,20 @@ class SignatureHandler(
         val files = mutableListOf<Pair<String, FileMetadata>>()
 
         for (i in 0 until fileNumber) {
+            // Build custom fields
+            val customFields = mutableMapOf<String, String>()
+            batchComment?.let { customFields.put("batchComment", it) }
+            if (fileComments!![i].isNotBlank()) {
+                customFields["fileComment"] = fileComments[i]
+            }
+
             files.add(
                 Pair(
                     fileHashes!![i],
                     FileMetadata(
                         fileName = fileNames!![i],
                         fileSize = fileSizes!![i],
-                        fileComment = if (fileComments!![i].isNotBlank()) fileComments[i] else null,
-                        batchComment = batchComment
+                        customFields = if (customFields.isNotEmpty()) customFields else null
                     )
                 )
             )
@@ -69,8 +75,8 @@ class SignatureHandler(
             LOGGER.info("Jobs: {}", jobs)
 
         }
-        if(jobs.isNotEmpty()) {
-            return ServerResponse.ok().html().renderAndAwait("redirect:/jobs/"+jobs[0].id)
+        if (jobs.isNotEmpty()) {
+            return ServerResponse.ok().html().renderAndAwait("redirect:/jobs/" + jobs[0].id)
         }
         return ServerResponse.ok().html().renderAndAwait("redirect:/timestamping")
     }

@@ -25,7 +25,6 @@ data class TreeElementEntity(
     data class Metadata(
         val fileName: String,
         val fileSize: String? = null,
-        val fileComment: String? = null,
-        val batchComment: String? = null
+        val customFields: Map<String, String>? = null
     )
 }

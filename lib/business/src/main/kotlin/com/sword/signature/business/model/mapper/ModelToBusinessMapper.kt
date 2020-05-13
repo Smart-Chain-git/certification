@@ -16,8 +16,7 @@ fun AccountEntity.toBusiness() = Account(
 fun TreeElementEntity.Metadata.toBusiness() = FileMetadata(
     fileName = fileName,
     fileSize = fileSize,
-    fileComment = fileComment,
-    batchComment = batchComment
+    customFields = customFields
 )
 
 fun TreeElementEntity.toBusiness(): TreeElement = when (this.type) {
