@@ -31,7 +31,8 @@ class ApplicationSecurity {
                 "/swagger-ui.html",
                 "/webjars/**",
                 "/v3/api-docs/**",
-                "/v3/api-docs.yaml"
+                "/v3/api-docs.yaml",
+                "/api/auth"
             ).permitAll()
             exchanges.anyExchange().authenticated()
         }
