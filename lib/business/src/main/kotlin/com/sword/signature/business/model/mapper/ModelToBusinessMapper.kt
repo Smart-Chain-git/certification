@@ -38,10 +38,11 @@ fun TreeElementEntity.toBusiness(): TreeElement = when (this.type) {
 }
 
 
-fun JobEntity.toBusiness(files: List<TreeElement.LeafTreeElement>? = null) = Job(
+fun JobEntity.toBusiness(rootHash: String? = null, files: List<TreeElement.LeafTreeElement>? = null) = Job(
     id = id!!,
     algorithm = algorithm,
     userId = userId,
+    transactionHash = transactionHash,
     blockDepth = blockDepth,
     blockId = blockId,
     createdDate = createdDate,
@@ -51,6 +52,7 @@ fun JobEntity.toBusiness(files: List<TreeElement.LeafTreeElement>? = null) = Job
     flowName = flowName,
     state = state,
     stateDate = stateDate,
+    rootHash = rootHash,
     files = files
 )
 

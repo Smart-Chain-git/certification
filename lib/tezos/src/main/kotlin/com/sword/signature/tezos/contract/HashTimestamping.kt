@@ -1,27 +1,28 @@
-package com.sword.signature.business.service.tezos
+package com.sword.signature.tezos.contract
 
 import org.ej4tezos.impl.TezosAbstractService
 import org.slf4j.LoggerFactory
 
-class HashTimestampingService : TezosAbstractService() {
+class HashTimestamping : TezosAbstractService() {
 
     private val hashRunOperationTemplate = loadTemplate("operations/hash_runOperation.json")
     private val hashForgeOperationTemplate = loadTemplate("operations/hash_forgeOperation.json")
     private val hashPreApplyOperationTemplate = loadTemplate("operations/hash_preApplyOperation.json")
 
-
     fun timestampHash(rootHash: String): String {
-        LOGGER.debug("timestampHash (rootHash = {])", rootHash)
-
+        LOGGER.debug("timestampHash call (rootHash = {})", rootHash)
         val parameters = mapOf("hash" to rootHash)
-        val anchorResult =
+
+        val invokeResult =
             invoke(hashRunOperationTemplate, hashForgeOperationTemplate, hashPreApplyOperationTemplate, parameters)
 
-        LOGGER.info("timestampHash = {}", anchorResult)
-        return anchorResult.toString()
+        val transactionHash = invokeResult.transactionHash.toString()
+        LOGGER.info("timestampHash result (rootHash = {}, transactionHash= {})", rootHash, transactionHash)
+
+        return transactionHash
     }
 
     companion object {
-        private val LOGGER = LoggerFactory.getLogger(HashTimestampingService::class.java)
+        private val LOGGER = LoggerFactory.getLogger(HashTimestamping::class.java)
     }
 }

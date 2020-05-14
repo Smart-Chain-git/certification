@@ -14,7 +14,9 @@
         "destination": "${tezosContractAddress}",
         "parameters": {
           "entrypoint": "default",
-          "string": "${hash}"
+          "value": {
+            "string": "${hash}"
+          }
         }
       }
     ],

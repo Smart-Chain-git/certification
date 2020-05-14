@@ -1,0 +1,7 @@
+tezos:
+  account:
+    secret_key: "edskRuR1azSfboG86YPTyxrQgosh5zChf5bVDmptqLTb5EuXAm9rsnDYfTKhq7rDQujdn5WWzwUMeV3agaZ6J2vPQT58jJAJPi"
+  contract:
+    address: "CONTRACT_ADDRESS"
+  node:
+    url: "http://localhost:18731"

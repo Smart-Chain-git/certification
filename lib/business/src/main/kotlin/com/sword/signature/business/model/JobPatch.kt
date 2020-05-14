@@ -4,6 +4,7 @@ import com.sword.signature.common.enums.JobStateType
 
 data class JobPatch(
     val numberOfTry: Int? = null,
+    val transactionHash: String? = null,
     val blockId: String? = null,
     /**
      * depth of the block at validation date

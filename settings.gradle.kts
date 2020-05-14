@@ -1,5 +1,3 @@
-
-
 pluginManagement {
     val mavenProxyUrl: String by extra
     val kotlinVersion: String by extra
@@ -18,10 +16,10 @@ pluginManagement {
     }
     repositories {
         mavenLocal()
-        maven { url = uri(mavenProxyUrl)  ; isAllowInsecureProtocol=true}
+        maven { url = uri(mavenProxyUrl); isAllowInsecureProtocol = true }
         maven { url = uri("https://repo.spring.io/snapshot") }
         maven { url = uri("https://repo.spring.io/milestone") }
-        maven{ url=uri("https://oss.sonatype.org/content/repositories/snapshots/")}
+        maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots/") }
         gradlePluginPortal()
     }
 }
@@ -33,6 +31,7 @@ include(":lib:business")
 include (":lib:model")
 include (":lib:api")
 include (":lib:web-core")
+include(":lib:tezos")
 
 include (":backend:daemon")
 
