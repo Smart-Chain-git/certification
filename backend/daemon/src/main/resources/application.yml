@@ -46,3 +46,7 @@ logging:
 jwt:
   secret: ffe50f21d8359de7245dc13777812c2a
   issuer: "Tezos@Signature"
+tezos:
+  account.secret_key: "edskRuR1azSfboG86YPTyxrQgosh5zChf5bVDmptqLTb5EuXAm9rsnDYfTKhq7rDQujdn5WWzwUMeV3agaZ6J2vPQT58jJAJPi"
+  contract.address: "CONTRACT_ADDRESS_TO_REPLACE"
+  node.url: "http://localhost:18731"

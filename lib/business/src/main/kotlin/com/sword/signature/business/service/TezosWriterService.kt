@@ -5,5 +5,5 @@ import org.ej4tezos.api.exception.TezosException
 interface TezosWriterService {
 
     @Throws(TezosException::class)
-    fun anchorHash(hash: String): String
+    fun anchorHash(rootHash: String): String
 }

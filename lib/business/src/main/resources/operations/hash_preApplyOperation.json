@@ -1,0 +1,23 @@
+[
+  {
+    "protocol": "${protocol}",
+    "branch": "${blockHash}",
+    "contents": [
+      {
+        "kind": "transaction",
+        "source": "${source}",
+        "fee": "${fee}",
+        "counter": "${counter}",
+        "gas_limit": "${gasLimit}",
+        "storage_limit": "${storageLimit}",
+        "amount": "0",
+        "destination": "${tezosContractAddress}",
+        "parameters": {
+          "entrypoint": "default",
+          "string": "${hash}"
+        }
+      }
+    ],
+    "signature": "${signature}"
+  }
+]
