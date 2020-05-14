@@ -5,6 +5,8 @@ plugins {
     id("kotlin")
     kotlin("plugin.spring")
     id("org.springframework.boot")
+    id("com.github.johnrengelman.processes") version "0.5.0"
+    id("org.springdoc.openapi-gradle-plugin") version "1.1.0"
 }
 
 description = "Rest api server"
@@ -53,6 +55,11 @@ tasks {
         archiveBaseName.set(artefactName)
     }
 }
+
+openApi {
+    apiDocsUrl.set("http://localhost:9090/v3/api-docs")
+}
+
 
 publishing {
     publications {
