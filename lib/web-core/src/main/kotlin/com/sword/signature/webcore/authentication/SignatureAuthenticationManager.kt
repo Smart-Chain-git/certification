@@ -11,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.oauth2.server.resource.BearerTokenAuthenticationToken
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
+import java.time.OffsetDateTime
 
 @Component
 class SignatureAuthenticationManager(
@@ -32,11 +33,17 @@ class SignatureAuthenticationManager(
 
                 val tokenInfo = jwtTokenService.parseToken(bearerToken)
 
-                val user= if(tokenInfo.persisted) {
+                val user = if (tokenInfo.persisted) {
                     val token = tokenService.getAndCheckToken(bearerToken)
-                     userDetailsService.findById(token.accountId)
+                    userDetailsService.findById(token.accountId)
                 } else {
-                     userDetailsService.findById(tokenInfo.id)
+                    val now = OffsetDateTime.now()
+                    if (tokenInfo.expirationTime?.isAfter(now) == true) {
+                        userDetailsService.findById(tokenInfo.id)
+                    } else {
+                        throw BadCredentialsException("Expired token")
+                    }
+
                 }
 
                 SignatureAuthenticationToken(
