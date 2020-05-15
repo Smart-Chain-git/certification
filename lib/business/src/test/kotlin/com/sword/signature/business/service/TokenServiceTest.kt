@@ -1,7 +1,6 @@
 package com.sword.signature.business.service
 
 import com.sword.signature.business.exception.AuthenticationException
-import com.sword.signature.business.model.JwtTokenDetails
 import com.sword.signature.business.model.Token
 import com.sword.signature.business.service.impl.TokenServiceImpl
 import com.sword.signature.model.entity.QTokenEntity
@@ -18,15 +17,13 @@ import java.time.Month
 class TokenServiceTest {
 
     private val tokenRepository: TokenRepository = mockk()
-    private val tokenService = TokenServiceImpl("ffe50f21d8359de7245dc13777812c2a", "Tezos@Signature", tokenRepository)
+    private val tokenService = TokenServiceImpl(tokenRepository)
 
     private val tokenId = "tokenId"
     private val tokenName = "tokenName"
     private val accountId = "accountId"
     private val jwtToken =
         "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjcmVhdGlvblRpbWUiOiJjcmVhdGlvblRpbWUiLCJpc3MiOiJUZXpvc0BTaWduYXR1cmUiLCJpZCI6ImFjY291bnRJZCJ9.zWQal4cCAEE4M0iJktv9VrklQRiZlL22DmVNo6YEiAY"
-    private val jwtTokenDetails = JwtTokenDetails(id = accountId, creationTime = "creationTime")
-
     private val expirationDate = LocalDate.of(2020, Month.APRIL, 3)
     private val validDate = LocalDate.of(2020, Month.MARCH, 20)
     private val expiredDate = LocalDate.of(2020, Month.MAY, 1)
@@ -111,15 +108,5 @@ class TokenServiceTest {
                 )
             }
         }
-    }
-
-    @Test
-    fun createTokenTest() {
-        assertEquals(jwtToken, tokenService.createToken(jwtTokenDetails))
-    }
-
-    @Test
-    fun parseTokenTest() {
-        assertEquals(jwtTokenDetails, tokenService.parseToken(jwtToken))
     }
 }

@@ -14,6 +14,7 @@ import reactor.core.publisher.Mono
 
 @Component
 class SignatureAuthenticationManager(
+    private val jwtTokenService: JwtTokenService,
     private val tokenService: TokenService,
     private val userDetailsService: UserDetailsService,
     private val bCryptPasswordEncoder: BCryptPasswordEncoder
@@ -29,12 +30,18 @@ class SignatureAuthenticationManager(
             is BearerTokenAuthenticationToken -> mono {
                 val bearerToken = authentication.token
 
-                val token = tokenService.getAndCheckToken(bearerToken)
-                val user = userDetailsService.findById(token.accountId)
+                val tokenInfo = jwtTokenService.parseToken(bearerToken)
+
+                val user= if(tokenInfo.persisted) {
+                    val token = tokenService.getAndCheckToken(bearerToken)
+                     userDetailsService.findById(token.accountId)
+                } else {
+                     userDetailsService.findById(tokenInfo.id)
+                }
 
                 SignatureAuthenticationToken(
                     principal = user,
-                    credentials = token,
+                    credentials = bearerToken,
                     authorities = user.authorities
                 )
             }

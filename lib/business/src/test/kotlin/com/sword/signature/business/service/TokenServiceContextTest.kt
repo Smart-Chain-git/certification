@@ -4,7 +4,6 @@ import com.sword.signature.business.exception.EntityNotFoundException
 import com.sword.signature.business.model.Account
 import com.sword.signature.business.model.TokenCreate
 import com.sword.signature.business.model.TokenPatch
-import com.sword.signature.business.service.impl.TokenServiceImpl
 import com.sword.signature.model.configuration.MongoConfiguration
 import io.mockk.every
 import io.mockk.mockkStatic
@@ -46,8 +45,6 @@ class TokenServiceContextTest @Autowired constructor(
     )
 
     private val token1Id = "5e8b4c28e2018ef99f6a98fe"
-    private val token2Id = "5e8b4c2c73d77d6753951edd"
-    private val token3Id = "5e8b4c300c4ad54449ba5fd3"
 
     @BeforeAll
     fun initStaticMock() {
@@ -68,27 +65,32 @@ class TokenServiceContextTest @Autowired constructor(
 
     @Test
     fun createTokenTest() {
-        val tokenCount = runBlocking { mongoTemplate.getCollection("tokens").countDocuments().awaitFirst() }
-        val tokenName = "TestToken"
-        val tokenExpirationDate = LocalDate.now().plusDays(180)
-        val tokenAccountId = "5e8b48e940fc5793fdcfc716"
-        val tokenCreate = TokenCreate(
-            name = tokenName,
-            expirationDate = tokenExpirationDate,
-            accountId = tokenAccountId
-        )
+        runBlocking {
+            val tokenCount = mongoTemplate.getCollection("tokens").countDocuments().awaitFirst()
+            val tokenName = "TestToken"
+            val tokenExpirationDate = LocalDate.now().plusDays(180)
+            val tokenAccountId = "5e8b48e940fc5793fdcfc716"
+            val jwtToken = "pureBulshitString"
+            val tokenCreate = TokenCreate(
+                name = tokenName,
+                expirationDate = tokenExpirationDate,
+                accountId = tokenAccountId,
+                jwtToken = jwtToken
+            )
 
-        val createdToken = runBlocking { tokenService.createToken(tokenCreate) }
+            val createdToken = tokenService.createToken(tokenCreate)
 
-        assertAll("createdToken",
-            { assertEquals(tokenName, createdToken.name) },
-            { assertEquals(tokenExpirationDate, createdToken.expirationDate) },
-            { assertEquals(tokenAccountId, createdToken.accountId) },
-            { assertEquals(tokenAccountId, (tokenService as TokenServiceImpl).parseToken(createdToken.jwtToken).id) }
-        )
-        assertEquals(
-            tokenCount + 1,
-            runBlocking { mongoTemplate.getCollection("tokens").countDocuments().awaitFirst() })
+            assertAll("createdToken",
+                { assertEquals(tokenName, createdToken.name) },
+                { assertEquals(tokenExpirationDate, createdToken.expirationDate) },
+                { assertEquals(tokenAccountId, createdToken.accountId) },
+                { assertEquals(jwtToken, createdToken.jwtToken) }
+            )
+            assertEquals(
+                tokenCount + 1,
+                mongoTemplate.getCollection("tokens").countDocuments().awaitFirst()
+            )
+        }
     }
 
     @Test

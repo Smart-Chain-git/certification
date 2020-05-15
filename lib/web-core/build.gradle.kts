@@ -16,12 +16,21 @@ dependencies {
     // Jackson
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
+    // JWT
+    implementation("com.auth0:java-jwt:3.10.2")
+
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
 
     // Project libs
     implementation(project(":lib:api"))
     implementation(project(":lib:business"))
+
+
+    //test
+    val mockKVersion: String by project.extra
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("io.mockk:mockk:$mockKVersion")
 
 }
 
