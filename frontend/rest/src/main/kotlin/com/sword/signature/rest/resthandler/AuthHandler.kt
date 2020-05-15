@@ -3,18 +3,24 @@ package com.sword.signature.rest.resthandler
 import com.sword.signature.api.sign.AuthRequest
 import com.sword.signature.api.sign.AuthResponse
 import com.sword.signature.business.service.AccountService
-import com.sword.signature.webcore.authentication.UserDetailsService
+import com.sword.signature.webcore.authentication.JwtTokenService
 import io.swagger.v3.oas.annotations.Parameter
-import kotlinx.coroutines.reactive.awaitFirst
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestMethod
+import org.springframework.web.bind.annotation.RestController
+import java.time.Duration
 
 @RestController
 @RequestMapping("\${api.base-path:/api}")
 class AuthHandler (
     private val accountService: AccountService,
-    private val bCryptPasswordEncoder: BCryptPasswordEncoder
+    private val bCryptPasswordEncoder: BCryptPasswordEncoder,
+    private val jwtTokenService: JwtTokenService,
+    @Value("\${jwt.duration}") private val tokenDuration: Duration
 ){
 
     @RequestMapping(
@@ -35,7 +41,9 @@ class AuthHandler (
             throw BadCredentialsException("Invalid credentials")
         }
 
-        return AuthResponse(token = "suptoken")
+        val token = jwtTokenService.generateVolatileToken(user.id,tokenDuration)
+
+        return AuthResponse(token = token)
     }
 
 

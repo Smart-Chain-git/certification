@@ -31,3 +31,4 @@ logging:
 jwt:
   secret: ffe50f21d8359de7245dc13777812c2a
   issuer: "Tezos@Signature"
+  duration : 2h
