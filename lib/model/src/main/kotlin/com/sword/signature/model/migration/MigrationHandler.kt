@@ -5,14 +5,16 @@ import com.sword.signature.merkletree.utils.hexStringHash
 import com.sword.signature.model.entity.MigrationEntity
 import com.sword.signature.model.repository.MigrationRepository
 import kotlinx.coroutines.reactive.awaitLast
+import kotlinx.coroutines.reactive.awaitSingle
 import org.bson.Document
 import org.slf4j.LoggerFactory
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate
+import org.springframework.data.mongodb.core.index.MongoPersistentEntityIndexResolver
+import org.springframework.data.mongodb.core.mapping.MongoMappingContext
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import java.io.InputStreamReader
-import java.security.MessageDigest
 
 /**
  * Handler of database migrations.
@@ -20,9 +22,26 @@ import java.security.MessageDigest
  */
 @Component
 class MigrationHandler(
-        private val mongoTemplate: ReactiveMongoTemplate,
-        private val migrationRepository: MigrationRepository
+    private val mongoTemplate: ReactiveMongoTemplate,
+    private val migrationRepository: MigrationRepository,
+    private val mongoMappingContext: MongoMappingContext
 ) {
+
+
+    suspend fun initIndices() {
+        val resolver = MongoPersistentEntityIndexResolver(mongoMappingContext)
+        for (entity in mongoMappingContext.persistentEntities) {
+            val clazz = entity.type
+            if (clazz.isAnnotationPresent(org.springframework.data.mongodb.core.mapping.Document::class.java)) {
+                val indexOps = mongoTemplate.indexOps(clazz)
+                resolver.resolveIndexFor(clazz)
+                    .forEach { indexDefinition -> indexOps.ensureIndex(indexDefinition).awaitSingle() }
+            }
+        }
+
+    }
+
+
 
 
     /**
