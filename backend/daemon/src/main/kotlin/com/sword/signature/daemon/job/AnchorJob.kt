@@ -31,7 +31,7 @@ class AnchorJob(
                 JobPatch(transactionHash = transactionHash, state = JobStateType.INJECTED)
             )
         } catch (e: Exception) {
-            LOGGER.error(e.toString())
+            LOGGER.error("Anchoring of job ({}) failed.", jobId, e)
             throw e
         }
     }

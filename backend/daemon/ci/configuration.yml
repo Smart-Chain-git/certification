@@ -44,3 +44,10 @@ logging:
 jwt:
   secret: ffe50f21d8359de7245dc13777812c2a
   issuer: "Tezos@Signature"
+tezos:
+  account:
+    secret_key: "edskRuR1azSfboG86YPTyxrQgosh5zChf5bVDmptqLTb5EuXAm9rsnDYfTKhq7rDQujdn5WWzwUMeV3agaZ6J2vPQT58jJAJPi"
+  contract:
+    address: "KT1MDJeDXHDeq1SojdCoiQKx7ZktrV12Zpk7"
+  node:
+    url: "http://edivtezosnode.ren-dev2.lan:18732"

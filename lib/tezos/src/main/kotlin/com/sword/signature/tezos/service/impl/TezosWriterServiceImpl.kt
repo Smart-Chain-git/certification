@@ -34,38 +34,43 @@ class TezosWriterServiceImpl(
     private val hashTimestamping: HashTimestamping
 
     init {
-        tezosCryptoProvider = TezosCryptoProviderImpl()
-        tezosCryptoProvider.setSecureRandom(SecureRandom())
-        tezosCryptoProvider.init()
+        tezosCryptoProvider = TezosCryptoProviderImpl().apply {
+            setSecureRandom(SecureRandom())
+            init()
+        }
 
-        tezosConnectivity = TezosConnectivityImpl()
-        tezosConnectivity.setNodeUrl(nodeUrl)
-        tezosConnectivity.init()
+        tezosConnectivity = TezosConnectivityImpl().apply {
+            setNodeUrl(nodeUrl)
+            init()
+        }
 
-        tezosKeyService = TezosKeyServiceImpl()
-        tezosKeyService.setTezosCryptoProvider(tezosCryptoProvider)
-        tezosKeyService.init()
+        tezosKeyService = TezosKeyServiceImpl().apply {
+            setTezosCryptoProvider(tezosCryptoProvider)
+            init()
+        }
 
-        tezosCoreService = TezosCoreServiceImpl()
-        tezosCoreService.setTezosConnectivity(tezosConnectivity)
-        tezosCoreService.init()
+        tezosCoreService = TezosCoreServiceImpl().apply {
+            setTezosConnectivity(tezosConnectivity)
+            init()
+        }
 
-        tezosFeeService = TezosFeeServiceImpl()
-        tezosFeeService.init()
+        tezosFeeService = TezosFeeServiceImpl().apply {
+            init()
+        }
 
-        hashTimestamping = HashTimestamping()
+        hashTimestamping = HashTimestamping().apply {
+            setAdminPrivateKey(TezosPrivateKey.toTezosPrivateKey(privateKey))
+            setTezosContractAddress(TezosContractAddress.toTezosContractAddress(contractAddress))
 
-        hashTimestamping.setAdminPrivateKey(TezosPrivateKey.toTezosPrivateKey(privateKey))
-        hashTimestamping.setTezosContractAddress(TezosContractAddress.toTezosContractAddress(contractAddress))
+            setBundleContext(null)
+            setTezosKeyService(tezosKeyService)
+            setTezosFeeService(tezosFeeService)
+            setTezosCoreService(tezosCoreService)
+            setTezosConnectivity(tezosConnectivity)
+            setTezosCryptoProvider(tezosCryptoProvider)
 
-        hashTimestamping.setBundleContext(null)
-        hashTimestamping.setTezosKeyService(tezosKeyService)
-        hashTimestamping.setTezosFeeService(tezosFeeService)
-        hashTimestamping.setTezosCoreService(tezosCoreService)
-        hashTimestamping.setTezosConnectivity(tezosConnectivity)
-        hashTimestamping.setTezosCryptoProvider(tezosCryptoProvider)
-
-        hashTimestamping.init()
+            init()
+        }
     }
 
     override fun anchorHash(rootHash: String): String {
