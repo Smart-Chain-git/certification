@@ -1,3 +1,5 @@
+[Index](../README.md) [Smart contract](./README.md)
+
 # Smart contract
 
 ## Requirements
