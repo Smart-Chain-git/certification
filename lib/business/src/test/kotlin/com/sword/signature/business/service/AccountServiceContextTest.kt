@@ -5,6 +5,7 @@ import com.sword.signature.business.model.Account
 import com.sword.signature.business.model.AccountCreate
 import com.sword.signature.business.model.AccountPatch
 import com.sword.signature.model.configuration.MongoConfiguration
+import com.sword.signature.model.migration.MigrationHandler
 import kotlinx.coroutines.flow.count
 import kotlinx.coroutines.reactive.awaitSingle
 import kotlinx.coroutines.runBlocking
@@ -23,7 +24,7 @@ import java.nio.file.Path
 class AccountServiceContextTest @Autowired constructor(
         private val accountService: AccountService,
         override val mongoTemplate: ReactiveMongoTemplate,
-        override val mongoConfiguration: MongoConfiguration
+        override val migrationHandler : MigrationHandler
 ) : AbstractServiceContextTest() {
 
     private var accountsInitialCount: Long = 0L
@@ -42,7 +43,7 @@ class AccountServiceContextTest @Autowired constructor(
         resetDatabase()
         importJsonDataset(Path.of("src/test/resources/datasets/accounts.json"))
         if (accountsInitialCount == 0L) {
-            accountsInitialCount = runBlocking { mongoTemplate.getCollection("accounts").countDocuments().awaitSingle() }
+            accountsInitialCount = runBlocking { mongoTemplate.getCollection("accounts").awaitSingle().countDocuments().awaitSingle() }
         }
     }
 
@@ -62,7 +63,7 @@ class AccountServiceContextTest @Autowired constructor(
                     { assertEquals(password, createdAccount.password) },
                     { assertEquals(fullName, createdAccount.fullName) }
             )
-            assertEquals(accountsInitialCount + 1, mongoTemplate.getCollection("accounts").countDocuments().awaitSingle())
+            assertEquals(accountsInitialCount + 1, mongoTemplate.getCollection("accounts").awaitSingle().countDocuments().awaitSingle())
         }
     }
 
@@ -160,7 +161,7 @@ class AccountServiceContextTest @Autowired constructor(
 
             assertEquals(
                     accountsInitialCount - 1,
-                    mongoTemplate.getCollection("accounts").countDocuments().awaitSingle()
+                    mongoTemplate.getCollection("accounts").awaitSingle().countDocuments().awaitSingle()
             )
         }
     }

@@ -7,6 +7,7 @@ import com.sword.signature.common.enums.TreeElementPosition
 import com.sword.signature.common.enums.TreeElementType
 import com.sword.signature.merkletree.utils.hexStringHash
 import com.sword.signature.model.configuration.MongoConfiguration
+import com.sword.signature.model.migration.MigrationHandler
 import com.sword.signature.model.repository.JobRepository
 import com.sword.signature.model.repository.TreeElementRepository
 import kotlinx.coroutines.flow.asFlow
@@ -35,7 +36,7 @@ import java.util.stream.Stream
 
 class SignServiceTest @Autowired constructor(
     override val mongoTemplate: ReactiveMongoTemplate,
-    override val mongoConfiguration: MongoConfiguration,
+    override val migrationHandler : MigrationHandler,
     private val signService: SignService,
     private val jobRepository: JobRepository,
     private val nodeRepository: TreeElementRepository

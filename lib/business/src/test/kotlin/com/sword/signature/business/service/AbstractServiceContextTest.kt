@@ -2,8 +2,10 @@ package com.sword.signature.business.service
 
 import com.sword.signature.business.configuration.TestContextConfiguration
 import com.sword.signature.model.configuration.MongoConfiguration
+import com.sword.signature.model.migration.MigrationHandler
 import kotlinx.coroutines.reactive.awaitFirstOrNull
 import kotlinx.coroutines.reactive.awaitLast
+import kotlinx.coroutines.reactive.awaitSingle
 import kotlinx.coroutines.runBlocking
 import org.bson.Document
 import org.junit.jupiter.api.extension.ExtendWith
@@ -20,14 +22,14 @@ import java.nio.file.Path
 @SpringBootTest(classes = [TestContextConfiguration::class])
 abstract class AbstractServiceContextTest() {
     abstract val mongoTemplate: ReactiveMongoTemplate
-    abstract val mongoConfiguration: MongoConfiguration
+    abstract val migrationHandler : MigrationHandler
 
     fun importJsonDataset(path: Path) {
         val collections = Document.parse(Files.readString(path))
         runBlocking {
             collections.keys.forEach { collection ->
                 val documents = collections[collection] as List<Document>
-                mongoTemplate.getCollection(collection).insertMany(documents).awaitLast()
+                mongoTemplate.getCollection(collection).awaitSingle().insertMany(documents).awaitLast()
             }
         }
     }
@@ -38,9 +40,12 @@ abstract class AbstractServiceContextTest() {
             for (collectionName in mongoTemplate.collectionNames.toIterable()) {
                 mongoTemplate.dropCollection(collectionName).awaitFirstOrNull()
             }
+
+            // Init the migration (indices + migrations).
+            migrationHandler.initIndices()
+            migrationHandler.applyMigrations()
         }
-        // Init the migration (indices + migrations).
-        mongoConfiguration.initDatabase()
+
     }
 }
 
