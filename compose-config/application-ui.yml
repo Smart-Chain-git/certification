@@ -1,0 +1,36 @@
+sign:
+  tree:
+   maximunLeaf: 1024
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info,health
+    health:
+      show-details: always
+spring:
+  jackson:
+    serialization:
+      indent-output: true
+  thymeleaf:
+    mode: HTML
+    encoding: UTF-8
+  messages:
+    basename: locale/messages
+    encoding: UTF-8
+  data:
+    mongodb:
+      auto-index-creation: false
+      uri: mongodb://root:password@mongo:27017/tezos-signature?authSource=admin
+logging:
+  level:
+    root: info
+    com:
+      sword: debug
+    web: warn
+    org:
+      springframework:
+        security: info
+jwt:
+  secret: ffe50f21d8359de7245dc13777812c2a
+  issuer: "Tezos@Signature"

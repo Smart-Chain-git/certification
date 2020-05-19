@@ -1,0 +1,53 @@
+sign:
+  tree:
+   maximunLeaf: 1024
+spring:
+  data:
+    mongodb:
+      auto-index-creation: false
+      uri: mongodb://root:password@mongo:27017/tezos-signature?authSource=admin
+  batch:
+    initialize-schema: always
+    datasource:
+      initialize: true
+      driver-class-name: org.hsqldb.jdbcDriver
+      jdbcUrl: jdbc:hsqldb:mem:jobDataSource;sql.enforce_strict_size=true;hsqldb.tx=mvcc
+      username: sa
+      password:
+  mail:
+    host: fakesmtp
+    port: 5025
+    username: username
+    password: password
+    sender: signer@signature.com
+    properties:
+      mail:
+        smtp:
+          auth: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writeTimeout: 5000
+        starttls:
+          enable: true
+  integration:
+    poller:
+      fixedRate: 10000
+logging:
+  level:
+    root: info
+    com:
+      sword: debug
+    web: warn
+    org:
+      springframework:
+        security: info
+jwt:
+  secret: ffe50f21d8359de7245dc13777812c2a
+  issuer: "Tezos@Signature"
+tezos:
+  account:
+    secret_key: "edskRuR1azSfboG86YPTyxrQgosh5zChf5bVDmptqLTb5EuXAm9rsnDYfTKhq7rDQujdn5WWzwUMeV3agaZ6J2vPQT58jJAJPi"
+  contract:
+    address: "KT1RxNPYeX7YvRRgTmwVqWwemGEvmszWBgEC"
+  node:
+    url: "http://172.23.0.2:8732" # IP obtained by command `docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' teztool_sandbox_carthagenet`
