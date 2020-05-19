@@ -174,7 +174,7 @@ class JobServiceContextTest @Autowired constructor(
                 val job = jobService.findById(requesterAccount, jobId,true)
                 assertThat(job).isNotNull
                 job as Job
-                assertThat(job).`as`("mauvais job").isEqualToIgnoringGivenFields(expected, "files")
+                assertThat(job).`as`("mauvais job").isEqualToIgnoringGivenFields(expected, "rootHash", "files")
                 assertThat(job.files?.map { it.metadata.fileName }).`as`("pas de file").isNotNull.`as`("mauvais files")
                     .containsExactlyInAnyOrderElementsOf(expectedFileNames)
             }
@@ -192,7 +192,7 @@ class JobServiceContextTest @Autowired constructor(
                 val job = jobService.findById(requesterAccount, jobId)
                 assertThat(job).isNotNull
                 job as Job
-                assertThat(job).`as`("mauvais job").isEqualToIgnoringGivenFields(expected, "files")
+                assertThat(job).`as`("mauvais job").isEqualToIgnoringGivenFields(expected, "rootHash", "files")
                 assertThat(job.files).`as`("pas de file").isNull()
             }
         }

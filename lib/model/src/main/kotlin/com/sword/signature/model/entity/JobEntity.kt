@@ -28,6 +28,10 @@ data class JobEntity(
     val validatedDate: OffsetDateTime? = null,
 
     val numberOfTry: Int = 0,
+    /**
+     * Hash of inject transaction
+     */
+    val transactionHash: String ? = null,
     val blockId: String? = null,
     /**
      * depth of the block at validation date

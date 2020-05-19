@@ -10,6 +10,8 @@ import com.sword.signature.business.service.JobService
 import com.sword.signature.common.criteria.TreeElementCriteria
 import com.sword.signature.common.enums.JobStateType
 import com.sword.signature.common.enums.TreeElementType
+import com.sword.signature.model.entity.QJobEntity
+import com.sword.signature.model.entity.QTreeElementEntity
 import com.sword.signature.model.mapper.toPredicate
 import com.sword.signature.model.repository.JobRepository
 import com.sword.signature.model.repository.TreeElementRepository
@@ -22,6 +24,7 @@ import kotlinx.coroutines.reactive.awaitSingle
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
+import java.lang.IllegalStateException
 import java.time.OffsetDateTime
 
 @Service
@@ -47,6 +50,8 @@ class JobServiceImpl(
         }
 
         //recuperation des element de l'arbre de type feuille
+        val rootElementPredicate = QTreeElementEntity.treeElementEntity.parentId.isNull.and(QTreeElementEntity.treeElementEntity.jobId.eq(jobId))
+        val rootHash = treeElementRepository.findOne(rootElementPredicate).awaitFirstOrNull()?.hash
         val treeElementPredicate = TreeElementCriteria(jobId = jobId, type = TreeElementType.LEAF).toPredicate()
         val leaves =
             if (withLeaves) {
@@ -57,7 +62,7 @@ class JobServiceImpl(
             }
         LOGGER.debug("mes feuilles {}", leaves)
 
-        return job.toBusiness(leaves)
+        return job.toBusiness(rootHash, leaves)
     }
 
     override suspend fun patch(requester: Account, jobId: String, patch: JobPatch): Job {
@@ -68,6 +73,7 @@ class JobServiceImpl(
         }
         val toPatch = job.copy(
             numberOfTry = patch.numberOfTry ?: job.numberOfTry,
+            transactionHash = patch.transactionHash ?: job.transactionHash,
             blockId = patch.blockId ?: job.blockId,
             blockDepth = patch.blockDepth ?: job.blockDepth,
             state = patch.state ?: job.state,

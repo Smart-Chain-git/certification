@@ -21,6 +21,9 @@ data class Job(
     val validatedDate: OffsetDateTime? = null,
 
     val numberOfTry: Int = 0,
+
+    val transactionHash: String? = null,
+
     val blockId: String? = null,
     /**
      * depth of the block at validation date
@@ -43,6 +46,10 @@ data class Job(
 
     var state: JobStateType,
 
+    /**
+     * Hash of root element
+     */
+    val rootHash: String? = null,
 
     val files: List<TreeElement.LeafTreeElement>? = null
 

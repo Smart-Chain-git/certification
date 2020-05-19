@@ -32,6 +32,7 @@ dependencies {
     // Project libs
     implementation(project(":lib:business"))
     implementation(project(":lib:model"))
+    implementation(project(":lib:tezos"))
 
 }
 
