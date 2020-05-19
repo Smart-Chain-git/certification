@@ -110,18 +110,18 @@ class MigrationHandler(
         for (collectionName in collections.keys) {
             val collection: Document = collections[collectionName] as Document
             // Insert operations
-            val documentsToInsert = collection["insert"] as List<Document>?
+            @Suppress("UNCHECKED_CAST") val documentsToInsert = collection["insert"] as List<Document>?
             documentsToInsert?.let {
                 mongoTemplate.getCollection(collectionName).awaitFirstOrNull()?.insertMany(it)?.awaitLast() }
             // Update operations
-            val documentsToUpdate = collection["update"] as List<Document>?
+            @Suppress("UNCHECKED_CAST") val documentsToUpdate = collection["update"] as List<Document>?
             documentsToUpdate?.let {
                 it.forEach { document ->
                     mongoTemplate.getCollection(collectionName).awaitFirstOrNull()?.replaceOne(Filters.eq("_id", document["_id"]), document)?.awaitLast()
                 }
             }
             // Delete
-            val documentToDelete = collection["delete"] as List<Document>?
+            @Suppress("UNCHECKED_CAST") val documentToDelete = collection["delete"] as List<Document>?
             documentToDelete?.let { documents ->
                 mongoTemplate.getCollection(collectionName).awaitFirstOrNull()?.deleteMany(Filters.`in`("_id", documents.map { it["_id"] }))?.awaitLast()
             }
