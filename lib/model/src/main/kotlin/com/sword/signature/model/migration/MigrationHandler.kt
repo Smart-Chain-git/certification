@@ -4,6 +4,7 @@ import com.mongodb.client.model.Filters
 import com.sword.signature.merkletree.utils.hexStringHash
 import com.sword.signature.model.entity.MigrationEntity
 import com.sword.signature.model.repository.MigrationRepository
+import kotlinx.coroutines.reactive.awaitFirstOrNull
 import kotlinx.coroutines.reactive.awaitLast
 import kotlinx.coroutines.reactive.awaitSingle
 import org.bson.Document
@@ -76,7 +77,7 @@ class MigrationHandler(
                     name = migration.name,
                     version = migration.version,
                     hash = hashMigration(migration.content)
-            )).block()
+            )).awaitFirstOrNull()
             LOGGER.info("New migration '{}' applied.", migration.name)
         }
         LOGGER.info("{} new migration(s) successfully applied.", migrations.size - appliedMigrations.size)
@@ -110,18 +111,19 @@ class MigrationHandler(
             val collection: Document = collections[collectionName] as Document
             // Insert operations
             val documentsToInsert = collection["insert"] as List<Document>?
-            documentsToInsert?.let { mongoTemplate.getCollection(collectionName).insertMany(it).awaitLast() }
+            documentsToInsert?.let {
+                mongoTemplate.getCollection(collectionName).awaitFirstOrNull()?.insertMany(it)?.awaitLast() }
             // Update operations
             val documentsToUpdate = collection["update"] as List<Document>?
             documentsToUpdate?.let {
                 it.forEach { document ->
-                    mongoTemplate.getCollection(collectionName).replaceOne(Filters.eq("_id", document["_id"]), document).awaitLast()
+                    mongoTemplate.getCollection(collectionName).awaitFirstOrNull()?.replaceOne(Filters.eq("_id", document["_id"]), document)?.awaitLast()
                 }
             }
             // Delete
             val documentToDelete = collection["delete"] as List<Document>?
             documentToDelete?.let { documents ->
-                mongoTemplate.getCollection(collectionName).deleteMany(Filters.`in`("_id", documents.map { it["_id"] })).awaitLast()
+                mongoTemplate.getCollection(collectionName).awaitFirstOrNull()?.deleteMany(Filters.`in`("_id", documents.map { it["_id"] }))?.awaitLast()
             }
         }
 
