@@ -70,11 +70,12 @@ services:
     depends_on:
       - mongodb
       - mail
-    external_links:
-      - teztool_sandbox_carthagenet
-    networks:
-      - default
-      - teztool_sandbox_carthagenet
-networks:
-  teztool_sandbox_carthagenet:
-    external: true
+      - node
+  node:
+    image: registry.gitlab.com/tezos/flextesa:image-tutobox-run
+    container_name: tezos-sandbox-node
+    ports:
+      - "18731:20000"
+    environment:
+      block_time: 10
+    command: carthagebox start

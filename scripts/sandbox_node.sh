@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 teztool() {
   docker run -it --name teztool -v $PWD:/mnt/pwd \

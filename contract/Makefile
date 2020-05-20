@@ -1,7 +1,7 @@
 LIGO := ligo
 CLIENT := tezos-client
 CLIENT_CONFIG := -A 127.0.0.1 -P 18731
-SIGNER = bootstrap1
+SIGNER = alice
 
 compile:
 	($(LIGO) compile-contract hash_timestamping.mligo addHash) > hash_timestamping.tz
