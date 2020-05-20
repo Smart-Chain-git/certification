@@ -48,6 +48,6 @@ tezos:
   account:
     secret_key: "edskRuR1azSfboG86YPTyxrQgosh5zChf5bVDmptqLTb5EuXAm9rsnDYfTKhq7rDQujdn5WWzwUMeV3agaZ6J2vPQT58jJAJPi"
   contract:
-    address: "KT1RxNPYeX7YvRRgTmwVqWwemGEvmszWBgEC"
+    address: "KT1RxNPYeX7YvRRgTmwVqWwemGEvmszWBgEC" # To replace by the actual contract address.
   node:
-    url: "http://172.23.0.2:8732" # IP obtained by command `docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' teztool_sandbox_carthagenet`
+    url: "http://teztool_sandbox_carthagenet:8732"

@@ -23,6 +23,8 @@ services:
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: root
       ME_CONFIG_MONGODB_ADMINPASSWORD: password
+    external_links:
+      - teztool_sandbox_carthagenet
   mail:
     container_name: tezos-signature-mail
     image: gessnerfl/fake-smtp-server:1.3.0
@@ -59,3 +61,11 @@ services:
     build: backend/daemon
     volumes:
       - "./compose-config/application-daemon.yml:/app/application.yml:ro"
+    external_links:
+      - teztool_sandbox_carthagenet
+    networks:
+      - default
+      - teztool_sandbox_carthagenet
+networks:
+  teztool_sandbox_carthagenet:
+    external: true
