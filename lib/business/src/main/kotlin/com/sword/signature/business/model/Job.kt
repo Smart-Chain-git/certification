@@ -42,9 +42,14 @@ data class Job(
 
     val flowName: String,
 
-    var stateDate: OffsetDateTime,
+    val stateDate: OffsetDateTime,
 
-    var state: JobStateType,
+    val state: JobStateType,
+
+    /**
+     * url to call when job is anchored
+     */
+    val callBackUrl : String?,
 
     /**
      * Hash of root element

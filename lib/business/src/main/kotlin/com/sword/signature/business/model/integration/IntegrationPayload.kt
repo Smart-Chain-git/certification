@@ -6,14 +6,19 @@ import java.io.Serializable
 
 data class AnchorJobMessagePayload(
     val id: String
-): Serializable
+) : Serializable
 
 
 data class TransactionalMailPayload(
     val type: TransactionalMailType,
     val recipient: Account
-): Serializable
+) : Serializable
 
 enum class TransactionalMailType {
     HELLO_ACCOUNT
 }
+
+data class CallBackJobMessagePayload(
+    val url: String,
+    val numberOfTry: Int = 0
+) : Serializable

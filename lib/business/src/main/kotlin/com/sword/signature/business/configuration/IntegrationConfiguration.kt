@@ -28,9 +28,16 @@ class IntegrationConfiguration{
         MessageGroupQueue(mongoDbChannelMessageStore, "jobToAnchor")
     )
 
+    @Bean
+    fun callBackMessageChannel(mongoDbChannelMessageStore: MongoDbChannelMessageStore) = QueueChannel(MessageGroupQueue(mongoDbChannelMessageStore, "callBack"))
+
+    @Bean
+    fun callBackErrorMessageChannel(mongoDbChannelMessageStore: MongoDbChannelMessageStore) = QueueChannel(MessageGroupQueue(mongoDbChannelMessageStore, "callBackError"))
 
     @Bean
     fun transactionalMailChannel(mongoDbChannelMessageStore: MongoDbChannelMessageStore) = QueueChannel(MessageGroupQueue(mongoDbChannelMessageStore, "transactionalMail"))
+
+
 
 
 }

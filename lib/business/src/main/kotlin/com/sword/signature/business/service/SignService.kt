@@ -10,6 +10,7 @@ interface SignService {
         requester: Account,
         algorithm: Algorithm,
         flowName: String,
+        callBackUrl: String?,
         fileHashs: Flow<Pair<String, FileMetadata>>
     ): Flow<Job>
 

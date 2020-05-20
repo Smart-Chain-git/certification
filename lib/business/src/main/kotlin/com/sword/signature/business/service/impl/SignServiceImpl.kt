@@ -36,6 +36,7 @@ class SignServiceImpl(
         requester: Account,
         algorithm: Algorithm,
         flowName: String,
+        callBackUrl: String?,
         fileHashs: Flow<Pair<String, FileMetadata>>
     ): Flow<Job> {
 
@@ -49,13 +50,13 @@ class SignServiceImpl(
                 }
                 intermediary.add(fileHash)
                 if (intermediary.size >= maximunLeaf) {
-                    emit(anchorTree(requester, algorithm, flowName, intermediary))
+                    emit(anchorTree(requester, algorithm, flowName, callBackUrl, intermediary))
                     intermediary.clear()
                 }
             }
             // emission des derniers hash
             if (intermediary.isNotEmpty()) {
-                emit(anchorTree(requester, algorithm, flowName, intermediary))
+                emit(anchorTree(requester, algorithm, flowName, callBackUrl, intermediary))
             }
         }
     }
@@ -64,6 +65,7 @@ class SignServiceImpl(
         requester: Account,
         algorithm: Algorithm,
         flowName: String,
+        callBackUrl: String?,
         fileHashs: List<Pair<String, FileMetadata>>
     ): Job {
 
@@ -73,6 +75,7 @@ class SignServiceImpl(
                 userId = requester.id,
                 algorithm = algorithm.name,
                 flowName = flowName,
+                callBackUrl = callBackUrl,
                 state = JobStateType.INSERTED,
                 stateDate = OffsetDateTime.now()
             )
@@ -90,11 +93,13 @@ class SignServiceImpl(
         ).visitTree(merkleTree)
 
         //inscription d'un message pour le daemon qu'il sache qu'il doit encrer la transaction
-        jobToAnchorsMessageChannel.send(MessageBuilder.withPayload(
-            AnchorJobMessagePayload(
-                jobEntity.id!!
-            )
-        ).build())
+        jobToAnchorsMessageChannel.send(
+            MessageBuilder.withPayload(
+                AnchorJobMessagePayload(
+                    jobEntity.id!!
+                )
+            ).build()
+        )
 
         return jobEntity.toBusiness(files = inserted.filter { it.type == TreeElementType.LEAF }
             .map { it.toBusiness() as TreeElement.LeafTreeElement }.toList())

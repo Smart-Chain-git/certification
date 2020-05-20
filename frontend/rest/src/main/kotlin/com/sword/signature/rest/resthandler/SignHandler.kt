@@ -40,7 +40,7 @@ class SignHandler(
             description = "name of the flow",
             required = true
         ) @RequestParam(value = "flowName") flowName: String?,
-        @Parameter(description = "callback URL") @RequestParam(value = "callBack") callBack: String?,
+        @Parameter(description = "callback URL") @RequestParam(value = "callBack") callBackUrl: String?,
         @RequestBody requests: Flow<SignRequest>
     ): Flow<SignResponse> {
         if (algorithmParameter == null) {
@@ -53,7 +53,8 @@ class SignHandler(
 
         val algorithm = algorithmService.getAlgorithmByName(algorithmParameter)
 
-        val jobs = signService.batchSign(user.account, algorithm, flowName, requests.map { it.toBusiness() })
+        val jobs =
+            signService.batchSign(user.account, algorithm, flowName, callBackUrl, requests.map { it.toBusiness() })
         return jobs.map { it.toWebSignResponse() }
     }
 }

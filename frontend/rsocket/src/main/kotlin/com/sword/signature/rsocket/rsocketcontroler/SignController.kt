@@ -7,7 +7,6 @@ import com.sword.signature.business.service.AccountService
 import com.sword.signature.business.service.AlgorithmService
 import com.sword.signature.business.service.SignService
 import com.sword.signature.webcore.mapper.toBusiness
-import com.sword.signature.webcore.mapper.toWeb
 import com.sword.signature.webcore.mapper.toWebSignResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -30,6 +29,7 @@ class SignController(
         @AuthenticationPrincipal user: UserDetails,
         @Header(name = "algorithm") algorithmParameter: String?,
         @Header(name = "flowName") flowName: String?,
+        @Header(name = "callBackUrl") callBackUrl: String?,
         requests: Flow<SignRequest>
     ): Flow<SignResponse> {
         val account =
@@ -44,7 +44,7 @@ class SignController(
 
         val algorithm = algorithmService.getAlgorithmByName(algorithmParameter)
 
-        return signService.batchSign(account, algorithm, flowName, requests.map { it.toBusiness() }).map { it.toWebSignResponse() }
+        return signService.batchSign(account, algorithm, flowName, callBackUrl, requests.map { it.toBusiness() }).map { it.toWebSignResponse() }
     }
 }
 

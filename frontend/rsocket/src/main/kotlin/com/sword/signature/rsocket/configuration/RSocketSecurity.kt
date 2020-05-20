@@ -1,6 +1,7 @@
 package com.sword.signature.rsocket.configuration
 
 import com.sword.signature.api.sign.ALGORITHM_MIME_TYPE
+import com.sword.signature.api.sign.CALLBACK_URL_MIME_TYPE
 import com.sword.signature.api.sign.FLOW_NAME_MIME_TYPE
 import com.sword.signature.webcore.authentication.SignatureAuthenticationManager
 import org.springframework.boot.rsocket.messaging.RSocketStrategiesCustomizer
@@ -36,6 +37,7 @@ class RSocketSecurity {
         it.metadataExtractorRegistry { registry: MetadataExtractorRegistry ->
             registry.metadataToExtract<String>(MimeType.valueOf(ALGORITHM_MIME_TYPE), "algorithm")
             registry.metadataToExtract<String>(MimeType.valueOf(FLOW_NAME_MIME_TYPE), "flowName")
+            registry.metadataToExtract<String>(MimeType.valueOf(CALLBACK_URL_MIME_TYPE), "callBackUrl")
         }
     }
 

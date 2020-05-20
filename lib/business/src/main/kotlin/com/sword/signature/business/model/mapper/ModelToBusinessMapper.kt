@@ -53,7 +53,8 @@ fun JobEntity.toBusiness(rootHash: String? = null, files: List<TreeElement.LeafT
     state = state,
     stateDate = stateDate,
     rootHash = rootHash,
-    files = files
+    files = files,
+    callBackUrl = callBackUrl
 )
 
 fun AlgorithmEntity.toBusiness() = Algorithm(
