@@ -3,17 +3,20 @@ package com.sword.signature.daemon.job
 import com.sword.signature.business.model.Account
 import com.sword.signature.business.model.JobPatch
 import com.sword.signature.business.model.integration.AnchorJobMessagePayload
+import com.sword.signature.business.model.integration.CallBackJobMessagePayload
 import com.sword.signature.business.service.JobService
 import com.sword.signature.common.enums.JobStateType
+import com.sword.signature.daemon.logger
 import com.sword.signature.tezos.service.TezosWriterService
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import org.springframework.messaging.MessageChannel
+import org.springframework.messaging.support.MessageBuilder
 import org.springframework.stereotype.Component
 
 @Component
 class AnchorJob(
-    val jobService: JobService,
-    val tezosWriterService: TezosWriterService
+    private val jobService: JobService,
+    private val tezosWriterService: TezosWriterService,
+    private val callBackMessageChannel: MessageChannel
 ) {
 
     private val adminAccount = Account(email = "", login = "", password = "", isAdmin = true, fullName = "", id = "")
@@ -34,6 +37,19 @@ class AnchorJob(
             LOGGER.error("Anchoring of job ({}) failed.", jobId, e)
             throw e
         }
+
+        //adding callback after job
+        if (job.callBackUrl != null) {
+            callBackMessageChannel.send(
+                MessageBuilder.withPayload(
+                    CallBackJobMessagePayload(
+                        jobId = job.id,
+                        url = job.callBackUrl!!
+                    )
+                ).build()
+            )
+        }
+
     }
 
     companion object {
@@ -41,5 +57,3 @@ class AnchorJob(
     }
 }
 
-inline fun <reified R : Any> R.logger(): Logger =
-    LoggerFactory.getLogger(this::class.java.name.substringBefore("\$Companion"))

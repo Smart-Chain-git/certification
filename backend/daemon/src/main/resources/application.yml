@@ -3,6 +3,8 @@ sign:
    maximunLeaf: 3
 
 spring:
+  main:
+    web-application-type: none
   data:
     mongodb:
       auto-index-creation: false
@@ -51,6 +53,6 @@ tezos:
   account:
     secret_key: "edskRuR1azSfboG86YPTyxrQgosh5zChf5bVDmptqLTb5EuXAm9rsnDYfTKhq7rDQujdn5WWzwUMeV3agaZ6J2vPQT58jJAJPi"
   contract:
-    address: "CONTRACT_ADDRESS"
+    address: KT1SUTNvXWynGDFs2LNDTdr51LVtzVJACm97
   node:
     url: "http://127.0.0.1:18731/"

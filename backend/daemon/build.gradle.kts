@@ -27,7 +27,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-mail")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
-
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
 
     // Project libs
     implementation(project(":lib:business"))

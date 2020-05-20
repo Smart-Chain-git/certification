@@ -19,6 +19,7 @@ enum class TransactionalMailType {
 }
 
 data class CallBackJobMessagePayload(
+    val jobId: String,
     val url: String,
-    val numberOfTry: Int = 0
+    val numberOfTry: Int = 1
 ) : Serializable
