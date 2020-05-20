@@ -20,6 +20,9 @@ export PATH=$PATH:$PWD/scripts/bin
 (cd contract; make originate)
 ```
 
+* Update the daemon config (**compose-config/application-daemon.yml**) with the contract address (**tezos.contract.address**)
+
+
 Notice: after reboot, the node is not automatically restarted so it should be resumed using the **start** command.
 
 ## Signature microservices
