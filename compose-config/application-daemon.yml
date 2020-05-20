@@ -15,7 +15,7 @@ spring:
       username: sa
       password:
   mail:
-    host: fakesmtp
+    host: mail
     port: 5025
     username: username
     password: password
