@@ -32,9 +32,6 @@ spring:
           writeTimeout: 5000
         starttls:
           enable: true
-  integration:
-    poller:
-      fixedRate: 10000
 logging:
   level:
     root: info
@@ -46,6 +43,12 @@ logging:
         security: info
         data: info
       ej4tezos: debug
+daemon:
+  callback:
+    maxTry : 5
+    delay : 120_000
+  poller:
+    fixedRate: 10000
 jwt:
   secret: ffe50f21d8359de7245dc13777812c2a
   issuer: "Tezos@Signature"

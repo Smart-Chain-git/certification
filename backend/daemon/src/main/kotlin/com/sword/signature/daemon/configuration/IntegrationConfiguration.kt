@@ -9,10 +9,13 @@ import com.sword.signature.daemon.job.CallBackJob
 import com.sword.signature.daemon.job.MailJob
 import com.sword.signature.daemon.mail.HelloAccountMail
 import kotlinx.coroutines.reactor.mono
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.integration.annotation.Poller
 import org.springframework.integration.annotation.ServiceActivator
+import org.springframework.integration.handler.DelayHandler
+import org.springframework.integration.mongodb.store.ConfigurableMongoDbMessageStore
 import org.springframework.messaging.Message
 import org.springframework.messaging.MessageHandler
 import org.springframework.messaging.ReactiveMessageHandler
@@ -41,7 +44,7 @@ class DaemonIntegrationConfiguration(
     @Bean
     @ServiceActivator(
         inputChannel = "jobToAnchorsMessageChannel",
-        poller = [Poller(fixedRate = "\${spring.integration.poller.fixedRate}")]
+        poller = [Poller(fixedRate = "\${daemon.poller.fixedRate}")]
     )
     fun jobToAnchorsHandler(): ReactiveMessageHandler {
         return ReactiveMessageHandler { message: Message<*> ->
@@ -55,7 +58,7 @@ class DaemonIntegrationConfiguration(
     @Bean
     @ServiceActivator(
         inputChannel = "transactionalMailChannel",
-        poller = [Poller(fixedRate = "\${spring.integration.poller.fixedRate}")]
+        poller = [Poller(fixedRate = "\${daemon.poller.fixedRate}")]
     )
     fun transactionalMailHandler(): MessageHandler {
         return MessageHandler { message: Message<*> ->
@@ -72,7 +75,7 @@ class DaemonIntegrationConfiguration(
     @Bean
     @ServiceActivator(
         inputChannel = "callBackMessageChannel",
-        poller = [Poller(fixedRate = "\${spring.integration.poller.fixedRate}")]
+        poller = [Poller(fixedRate = "\${daemon.poller.fixedRate}")]
     )
     fun callBackMessageHandler() = ReactiveMessageHandler { message: Message<*> ->
         mono {
@@ -81,5 +84,28 @@ class DaemonIntegrationConfiguration(
         }
     }
 
+    @Bean
+    @ServiceActivator(
+        inputChannel = "callBackErrorMessageChannel",
+        poller = [Poller(fixedRate = "\${daemon.poller.fixedRate}")]
+    )
+    fun callBackErrorMessageHandler() = ReactiveMessageHandler { message: Message<*> ->
+        mono {
+            callBackJob.callBack(message.payload as CallBackJobMessagePayload)
+            null
+        }
+    }
+
+    @Bean
+    @ServiceActivator(
+        inputChannel = "callBackErrorMessageChannel",
+        poller = [org.springframework.integration.annotation.Poller(fixedRate = "\${daemon.poller.fixedRate}")]
+    )
+    fun callBackErrorMessageChannelDelayer(@Value("\${daemon.callback.delay}") delay: Long,configurableMongoDbMessageStore: ConfigurableMongoDbMessageStore) =
+        DelayHandler("callBackErrorMessageChannelDelayer").apply {
+            setMessageStore(configurableMongoDbMessageStore)
+            setDefaultDelay(delay)
+            setOutputChannelName("callBackMessageChannel")
+        }
 
 }

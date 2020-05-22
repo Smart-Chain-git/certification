@@ -7,9 +7,9 @@ import com.sword.signature.business.model.integration.CallBackJobMessagePayload
 import com.sword.signature.business.service.JobService
 import com.sword.signature.common.enums.JobStateType
 import com.sword.signature.daemon.logger
+import com.sword.signature.daemon.sendPayload
 import com.sword.signature.tezos.service.TezosWriterService
 import org.springframework.messaging.MessageChannel
-import org.springframework.messaging.support.MessageBuilder
 import org.springframework.stereotype.Component
 
 @Component
@@ -40,14 +40,7 @@ class AnchorJob(
 
         //adding callback after job
         if (job.callBackUrl != null) {
-            callBackMessageChannel.send(
-                MessageBuilder.withPayload(
-                    CallBackJobMessagePayload(
-                        jobId = job.id,
-                        url = job.callBackUrl!!
-                    )
-                ).build()
-            )
+            callBackMessageChannel.sendPayload(CallBackJobMessagePayload(jobId = job.id, url = job.callBackUrl!!))
         }
 
     }
