@@ -49,7 +49,7 @@ data class Job(
     /**
      * url to call when job is anchored
      */
-    val callBackUrl : String?,
+    val callBackUrl: String? = null,
 
     /**
      * Hash of root element
