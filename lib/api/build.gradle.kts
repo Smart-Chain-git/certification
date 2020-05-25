@@ -28,7 +28,7 @@ publishing {
     publications {
         create<MavenPublication>("maven") {
             artifactId = artefactName
-            artifact(tasks["jar"])
+            from(components["kotlin"])
             artifact(tasks["sourcesJar"])
         }
     }
