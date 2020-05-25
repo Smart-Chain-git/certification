@@ -11,6 +11,18 @@ fun TreeElementCriteria.toPredicate(): Predicate {
 
     val qTreeElementEntity = QTreeElementEntity("blop")
 
+    if (this.notId?.isNotBlank() == true) {
+        predicates.add(
+            qTreeElementEntity.id.ne(this.notId)
+        )
+    }
+
+    if (this.parentId?.isNotBlank() == true) {
+        predicates.add(
+            qTreeElementEntity.parentId.eq(this.parentId)
+        )
+    }
+
     if (this.jobId?.isNotBlank() == true) {
         predicates.add(
             qTreeElementEntity.jobId.eq(this.jobId)
