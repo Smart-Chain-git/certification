@@ -80,3 +80,14 @@ services:
     environment:
       block_time: 10
     command: carthagebox start
+  tzindex:
+    image: blockwatch/tzindex:v6.0.3
+    container_name: tezos-signature-tzindex
+    ports:
+      - "8000:8000"
+    environment:
+      TZ_RPC_HOST: "node"
+      TZ_RPC_PORT: "20000"
+    command: ["sh", "-c", "sleep 10 && tzindex run"]
+    depends_on:
+      - node
