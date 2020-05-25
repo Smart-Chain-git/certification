@@ -20,3 +20,6 @@ frontend/public/skins
 java_pid*
 /frontend/cypress/videos/
 /frontend/cypress/screenshots/
+
+# Tezos
+tezos-client

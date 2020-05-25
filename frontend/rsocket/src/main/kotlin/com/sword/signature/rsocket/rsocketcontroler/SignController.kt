@@ -7,16 +7,15 @@ import com.sword.signature.business.service.AccountService
 import com.sword.signature.business.service.AlgorithmService
 import com.sword.signature.business.service.SignService
 import com.sword.signature.webcore.mapper.toBusiness
-import com.sword.signature.webcore.mapper.toWeb
 import com.sword.signature.webcore.mapper.toWebSignResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.runBlocking
 import org.springframework.messaging.handler.annotation.Header
 import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Controller
-import java.lang.IllegalArgumentException
 
 @Controller
 class SignController(
@@ -26,26 +25,34 @@ class SignController(
 ) {
 
     @MessageMapping("newJobs")
-    suspend fun batchSign(
+    fun batchSign(
         @AuthenticationPrincipal user: UserDetails,
         @Header(name = "algorithm") algorithmParameter: String?,
         @Header(name = "flowName") flowName: String?,
+        @Header(name = "callBackUrl") callBackUrl: String?,
         requests: Flow<SignRequest>
     ): Flow<SignResponse> {
-        val account =
-            accountService.getAccountByLoginOrEmail(user.username) ?: throw AccountNotFoundException(user.username)
 
         if (algorithmParameter == null) {
             throw IllegalArgumentException("missing algorithm parameter")
         }
+
         if (flowName == null) {
             throw IllegalArgumentException("missing flowName parameter")
         }
 
-        val algorithm = algorithmService.getAlgorithmByName(algorithmParameter)
+        // BOF BIDOUILLE
+        // je fait un runBlocking pour appeler un truc non bloquant
+        // car sinon  le return de mon flow me lance une erreur de netty
+        // c'ets tolerable car on bloque que sur un petit appel de la table des utilisateur et des algo
+        val account = runBlocking {
+            accountService.getAccountByLoginOrEmail(user.username) ?: throw AccountNotFoundException(user.username)
+        }
 
-        return signService.batchSign(account, algorithm, flowName, requests.map { it.toBusiness() }).map { it.toWebSignResponse() }
+
+        val algorithm = runBlocking { algorithmService.getAlgorithmByName(algorithmParameter) }
+
+        return signService.batchSign(account, algorithm, flowName, callBackUrl, requests.map { it.toBusiness() })
+            .map { it.toWebSignResponse() }
     }
 }
-
-

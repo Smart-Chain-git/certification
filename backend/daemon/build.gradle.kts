@@ -27,10 +27,12 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-mail")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
-
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
 
     // Project libs
     implementation(project(":lib:business"))
+    implementation(project(":lib:model"))
+    implementation(project(":lib:tezos"))
 
 }
 
@@ -42,6 +44,12 @@ springBoot {
 tasks {
     bootJar {
         archiveBaseName.set(artefactName)
+    }
+
+    val unpack by registering(Copy::class) {
+        dependsOn("bootJar")
+        from(zipTree("build/libs/$artefactName-$version.jar"))
+        into("build/unpacked")
     }
 }
 

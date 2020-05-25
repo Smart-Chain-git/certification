@@ -1,0 +1,53 @@
+sign:
+  tree:
+   maximunLeaf: 1024
+spring:
+  data:
+    mongodb:
+      auto-index-creation: false
+      uri: mongodb://root:password@mongodb:27017/tezos-signature?authSource=admin
+  batch:
+    initialize-schema: always
+    datasource:
+      initialize: true
+      driver-class-name: org.hsqldb.jdbcDriver
+      jdbcUrl: jdbc:hsqldb:mem:jobDataSource;sql.enforce_strict_size=true;hsqldb.tx=mvcc
+      username: sa
+      password:
+  mail:
+    host: mail
+    port: 5025
+    username: username
+    password: password
+    sender: signer@signature.com
+    properties:
+      mail:
+        smtp:
+          auth: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writeTimeout: 5000
+        starttls:
+          enable: true
+  integration:
+    poller:
+      fixedRate: 10000
+logging:
+  level:
+    root: info
+    com:
+      sword: debug
+    web: warn
+    org:
+      springframework:
+        security: info
+jwt:
+  secret: ffe50f21d8359de7245dc13777812c2a
+  issuer: "Tezos@Signature"
+tezos:
+  account:
+    secret_key: "edskRpm2mUhvoUjHjXgMoDRxMKhtKfww1ixmWiHCWhHuMEEbGzdnz8Ks4vgarKDtxok7HmrEo1JzkXkdkvyw7Rtw6BNtSd7MJ7"
+  contract:
+    address: "KT1RxNPYeX7YvRRgTmwVqWwemGEvmszWBgEC" # To replace by the actual contract address.
+  node:
+    url: "http://node:20000"

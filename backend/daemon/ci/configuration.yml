@@ -2,6 +2,8 @@ sign:
   tree:
    maximunLeaf: 1024
 spring:
+  main:
+    web-application-type: none
   data:
     mongodb:
       auto-index-creation: false
@@ -29,9 +31,6 @@ spring:
           writeTimeout: 5000
         starttls:
           enable: true
-  integration:
-    poller:
-      fixedRate: 10000
 logging:
   level:
     root: info
@@ -41,3 +40,19 @@ logging:
     org:
       springframework:
         security: info
+daemon:
+  callback:
+    maxTry : 5
+    delay : 120_000
+  poller:
+    fixedRate: 10000
+jwt:
+  secret: ffe50f21d8359de7245dc13777812c2a
+  issuer: "Tezos@Signature"
+tezos:
+  account:
+    secret_key: "edskRuR1azSfboG86YPTyxrQgosh5zChf5bVDmptqLTb5EuXAm9rsnDYfTKhq7rDQujdn5WWzwUMeV3agaZ6J2vPQT58jJAJPi"
+  contract:
+    address: "KT1MDJeDXHDeq1SojdCoiQKx7ZktrV12Zpk7"
+  node:
+    url: "http://edivtezosnode.ren-dev2.lan:18732"

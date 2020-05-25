@@ -10,9 +10,10 @@ interface SignService {
         requester: Account,
         algorithm: Algorithm,
         flowName: String,
+        callBackUrl: String? = null,
         fileHashs: Flow<Pair<String, FileMetadata>>
     ): Flow<Job>
 
-    suspend fun getFileProof(requester: Account, fileId: String): Pair<Job, List<TreeElement>>?
+    suspend fun getFileProof(requester: Account, fileId: String): Proof?
 
 }

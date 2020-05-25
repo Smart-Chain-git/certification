@@ -18,12 +18,18 @@ tasks {
         enabled = true
     }
 }
+tasks.register<Jar>("sourcesJar") {
+    archiveClassifier.set("sources")
+    from(sourceSets.main.get().allSource)
+}
+
 
 publishing {
     publications {
         create<MavenPublication>("maven") {
             artifactId = artefactName
-            artifact(tasks["jar"])
+            from(components["kotlin"])
+            artifact(tasks["sourcesJar"])
         }
     }
 }

@@ -21,6 +21,9 @@ data class Job(
     val validatedDate: OffsetDateTime? = null,
 
     val numberOfTry: Int = 0,
+
+    val transactionHash: String? = null,
+
     val blockId: String? = null,
     /**
      * depth of the block at validation date
@@ -39,10 +42,19 @@ data class Job(
 
     val flowName: String,
 
-    var stateDate: OffsetDateTime,
+    val stateDate: OffsetDateTime,
 
-    var state: JobStateType,
+    val state: JobStateType,
 
+    /**
+     * url to call when job is anchored
+     */
+    val callBackUrl: String? = null,
+
+    /**
+     * Hash of root element
+     */
+    val rootHash: String? = null,
 
     val files: List<TreeElement.LeafTreeElement>? = null
 

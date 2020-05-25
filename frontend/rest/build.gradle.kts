@@ -54,6 +54,12 @@ tasks {
     bootJar {
         archiveBaseName.set(artefactName)
     }
+
+    val unpack by registering(Copy::class) {
+        dependsOn("bootJar")
+        from(zipTree("build/libs/$artefactName-$version.jar"))
+        into("build/unpacked")
+    }
 }
 
 openApi {

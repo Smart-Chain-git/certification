@@ -28,6 +28,10 @@ data class JobEntity(
     val validatedDate: OffsetDateTime? = null,
 
     val numberOfTry: Int = 0,
+    /**
+     * Hash of inject transaction
+     */
+    val transactionHash: String ? = null,
     val blockId: String? = null,
     /**
      * depth of the block at validation date
@@ -52,6 +56,11 @@ data class JobEntity(
 
     var stateDate: OffsetDateTime,
 
-    var state: JobStateType
+    var state: JobStateType,
+
+    /**
+     * url to call when job is anchored
+     */
+    val callBackUrl: String?
 )
 

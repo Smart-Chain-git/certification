@@ -1,6 +1,7 @@
 val merkleTreeVersion : String by project.extra
 val flapdoodleVersion: String by project.extra
 val mockKVersion: String by project.extra
+val ej4tezosVersion: String by project.extra
 
 plugins {
     id("kotlin")

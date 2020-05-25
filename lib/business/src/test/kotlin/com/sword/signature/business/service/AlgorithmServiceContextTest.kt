@@ -3,6 +3,7 @@ package com.sword.signature.business.service;
 import com.sword.signature.business.exception.AlgorithmNotFoundException
 import com.sword.signature.business.model.Algorithm
 import com.sword.signature.model.configuration.MongoConfiguration
+import com.sword.signature.model.migration.MigrationHandler
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions
@@ -21,7 +22,7 @@ import java.security.MessageDigest
 class AlgorithmServiceContextTest @Autowired constructor(
     private val algorithmService: AlgorithmService,
     override val mongoTemplate: ReactiveMongoTemplate,
-    override val mongoConfiguration: MongoConfiguration
+    override val migrationHandler : MigrationHandler
 ) : AbstractServiceContextTest() {
 
     @BeforeAll

@@ -7,6 +7,7 @@ import com.sword.signature.business.model.Job
 import com.sword.signature.business.model.JobPatch
 import com.sword.signature.common.enums.JobStateType
 import com.sword.signature.model.configuration.MongoConfiguration
+import com.sword.signature.model.migration.MigrationHandler
 
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
@@ -27,7 +28,7 @@ import java.util.stream.Stream
 class JobServiceContextTest @Autowired constructor(
     private val jobService: JobService,
     override val mongoTemplate: ReactiveMongoTemplate,
-    override val mongoConfiguration: MongoConfiguration
+    override val migrationHandler : MigrationHandler
 ) : AbstractServiceContextTest() {
 
 
@@ -174,7 +175,7 @@ class JobServiceContextTest @Autowired constructor(
                 val job = jobService.findById(requesterAccount, jobId,true)
                 assertThat(job).isNotNull
                 job as Job
-                assertThat(job).`as`("mauvais job").isEqualToIgnoringGivenFields(expected, "files")
+                assertThat(job).`as`("mauvais job").isEqualToIgnoringGivenFields(expected, "rootHash", "files")
                 assertThat(job.files?.map { it.metadata.fileName }).`as`("pas de file").isNotNull.`as`("mauvais files")
                     .containsExactlyInAnyOrderElementsOf(expectedFileNames)
             }
@@ -192,7 +193,7 @@ class JobServiceContextTest @Autowired constructor(
                 val job = jobService.findById(requesterAccount, jobId)
                 assertThat(job).isNotNull
                 job as Job
-                assertThat(job).`as`("mauvais job").isEqualToIgnoringGivenFields(expected, "files")
+                assertThat(job).`as`("mauvais job").isEqualToIgnoringGivenFields(expected, "rootHash", "files")
                 assertThat(job.files).`as`("pas de file").isNull()
             }
         }
