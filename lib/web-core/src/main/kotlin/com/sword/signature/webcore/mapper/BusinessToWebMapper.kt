@@ -15,7 +15,7 @@ fun FileMetadata.toWeb() = SignMetadata(
     customFields = customFields
 )
 
-fun Job.toWeb() = com.sword.signature.api.sign.Job(
+fun Job.toWeb() = Job(
     id = id,
     createdDate = createdDate,
     injectedDate = injectedDate,
@@ -30,7 +30,7 @@ fun Job.toWeb() = com.sword.signature.api.sign.Job(
 )
 
 
-fun TreeElement.LeafTreeElement.toWeb(proof: Pair<Job, List<TreeElement>>?) = JobFile(
+fun TreeElement.LeafTreeElement.toWeb(proof: com.sword.signature.business.model.Proof?) = JobFile(
     id = id,
     hash = hash,
     jobId = jobId,
@@ -38,22 +38,15 @@ fun TreeElement.LeafTreeElement.toWeb(proof: Pair<Job, List<TreeElement>>?) = Jo
     proof = proof?.toWeb()
 )
 
-fun Pair<Job, List<TreeElement>>.toWeb(): Proof {
-
-    val leaf = this.second.first() as TreeElement.LeafTreeElement
+fun com.sword.signature.business.model.Proof.toWeb(): Proof {
 
     return Proof(
-        metadata = leaf.metadata.toWeb(),
-        algorithm = this.first.algorithm,
+        algorithm = algorithm,
         publicKey = "ZpublicKey",
         originPublicKey = "ZoriginPublicKey",
-        branch = this.second.foldRight(null as Branch?) { element, accumulator ->
-            Branch(
-                hash = element.hash,
-                position = element.position?.name,
-                par = accumulator
-            )
-        }!!
+        documentHash = documentHash,
+        rootHash = rootHash,
+        hashes = hashes.map { HashNode(it.first, it.second.name) }
     )
 
 }

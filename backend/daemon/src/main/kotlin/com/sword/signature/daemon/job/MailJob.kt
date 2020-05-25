@@ -1,5 +1,6 @@
 package com.sword.signature.daemon.job
 
+import com.sword.signature.daemon.logger
 import com.sword.signature.daemon.mail.TransactionalMail
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -31,6 +32,6 @@ class MailJob(
     }
 
     companion object {
-        val LOGGER: Logger = LoggerFactory.getLogger(MailJob::class.java)
+        val LOGGER: Logger = logger()
     }
 }

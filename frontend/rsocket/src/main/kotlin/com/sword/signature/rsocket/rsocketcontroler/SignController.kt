@@ -29,6 +29,7 @@ class SignController(
         @AuthenticationPrincipal user: UserDetails,
         @Header(name = "algorithm") algorithmParameter: String?,
         @Header(name = "flowName") flowName: String?,
+        @Header(name = "callBackUrl") callBackUrl: String?,
         requests: Flow<SignRequest>
     ): Flow<SignResponse> {
 
@@ -51,10 +52,7 @@ class SignController(
 
         val algorithm = runBlocking { algorithmService.getAlgorithmByName(algorithmParameter) }
 
-        return signService.batchSign(account, algorithm, flowName, requests.map { it.toBusiness() })
+        return signService.batchSign(account, algorithm, flowName, callBackUrl, requests.map { it.toBusiness() })
             .map { it.toWebSignResponse() }
-
     }
 }
-
-

@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.MongoDatabaseFactory
 import org.springframework.integration.annotation.IntegrationComponentScan
 import org.springframework.integration.channel.QueueChannel
 import org.springframework.integration.config.EnableIntegration
+import org.springframework.integration.mongodb.store.ConfigurableMongoDbMessageStore
 import org.springframework.integration.mongodb.store.MongoDbChannelMessageStore
 import org.springframework.integration.store.MessageGroupQueue
 
@@ -15,22 +16,25 @@ import org.springframework.integration.store.MessageGroupQueue
 @ComponentScan("com.sword.signature")
 @EnableIntegration
 @IntegrationComponentScan("com.sword.signature.business.service")
-class IntegrationConfiguration{
+class IntegrationConfiguration {
 
 
     @Bean
     fun mongoDbChannelMessageStore(mongoDatabaseFactory: MongoDatabaseFactory) =
         MongoDbChannelMessageStore(mongoDatabaseFactory)
 
+    @Bean
+    fun configurableMongoDbMessageStore(mongoDatabaseFactory: MongoDatabaseFactory) =
+        ConfigurableMongoDbMessageStore(mongoDatabaseFactory)
 
     @Bean
     fun jobToAnchorsMessageChannel(mongoDbChannelMessageStore: MongoDbChannelMessageStore) = QueueChannel(
         MessageGroupQueue(mongoDbChannelMessageStore, "jobToAnchor")
     )
 
-
     @Bean
-    fun transactionalMailChannel(mongoDbChannelMessageStore: MongoDbChannelMessageStore) = QueueChannel(MessageGroupQueue(mongoDbChannelMessageStore, "transactionalMail"))
+    fun transactionalMailChannel(mongoDbChannelMessageStore: MongoDbChannelMessageStore) =
+        QueueChannel(MessageGroupQueue(mongoDbChannelMessageStore, "transactionalMail"))
 
 
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 
 const val ALGORITHM_MIME_TYPE = "message/x.sign.algorithm"
 const val FLOW_NAME_MIME_TYPE = "message/x.sign.flowName"
+const val CALLBACK_URL_MIME_TYPE = "message/x.sign.callBack"
 
 data class SignRequest(
     val metadata: SignMetadata,

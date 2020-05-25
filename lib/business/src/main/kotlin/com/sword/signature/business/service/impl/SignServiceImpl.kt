@@ -6,16 +6,22 @@ import com.sword.signature.business.model.integration.AnchorJobMessagePayload
 import com.sword.signature.business.model.mapper.toBusiness
 import com.sword.signature.business.service.SignService
 import com.sword.signature.business.visitor.SaveRepositoryTreeVisitor
+import com.sword.signature.common.criteria.TreeElementCriteria
 import com.sword.signature.common.enums.JobStateType
+import com.sword.signature.common.enums.TreeElementPosition
 import com.sword.signature.common.enums.TreeElementType
 import com.sword.signature.merkletree.builder.TreeBuilder
 import com.sword.signature.merkletree.visitor.SimpleAlgorithmTreeBrowser
 import com.sword.signature.model.entity.JobEntity
+import com.sword.signature.model.entity.TreeElementEntity
+import com.sword.signature.model.mapper.toPredicate
 import com.sword.signature.model.repository.JobRepository
 import com.sword.signature.model.repository.TreeElementRepository
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.reactive.awaitFirst
 import kotlinx.coroutines.reactive.awaitFirstOrNull
 import kotlinx.coroutines.reactive.awaitSingle
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.messaging.MessageChannel
 import org.springframework.messaging.support.MessageBuilder
@@ -36,6 +42,7 @@ class SignServiceImpl(
         requester: Account,
         algorithm: Algorithm,
         flowName: String,
+        callBackUrl: String?,
         fileHashs: Flow<Pair<String, FileMetadata>>
     ): Flow<Job> {
 
@@ -49,13 +56,13 @@ class SignServiceImpl(
                 }
                 intermediary.add(fileHash)
                 if (intermediary.size >= maximunLeaf) {
-                    emit(anchorTree(requester, algorithm, flowName, intermediary))
+                    emit(anchorTree(requester, algorithm, flowName, callBackUrl, intermediary))
                     intermediary.clear()
                 }
             }
             // emission des derniers hash
             if (intermediary.isNotEmpty()) {
-                emit(anchorTree(requester, algorithm, flowName, intermediary))
+                emit(anchorTree(requester, algorithm, flowName, callBackUrl, intermediary))
             }
         }
     }
@@ -64,6 +71,7 @@ class SignServiceImpl(
         requester: Account,
         algorithm: Algorithm,
         flowName: String,
+        callBackUrl: String?,
         fileHashs: List<Pair<String, FileMetadata>>
     ): Job {
 
@@ -73,6 +81,7 @@ class SignServiceImpl(
                 userId = requester.id,
                 algorithm = algorithm.name,
                 flowName = flowName,
+                callBackUrl = callBackUrl,
                 state = JobStateType.INSERTED,
                 stateDate = OffsetDateTime.now()
             )
@@ -90,32 +99,73 @@ class SignServiceImpl(
         ).visitTree(merkleTree)
 
         //inscription d'un message pour le daemon qu'il sache qu'il doit encrer la transaction
-        jobToAnchorsMessageChannel.send(MessageBuilder.withPayload(
-            AnchorJobMessagePayload(
-                jobEntity.id!!
-            )
-        ).build())
+        jobToAnchorsMessageChannel.send(
+            MessageBuilder.withPayload(
+                AnchorJobMessagePayload(
+                    jobEntity.id!!
+                )
+            ).build()
+        )
 
         return jobEntity.toBusiness(files = inserted.filter { it.type == TreeElementType.LEAF }
             .map { it.toBusiness() as TreeElement.LeafTreeElement }.toList())
     }
 
     @Transactional
-    override suspend fun getFileProof(requester: Account, fileId: String): Pair<Job, List<TreeElement>>? {
-        val treeElement = treeElementRepository.findById(fileId).awaitFirstOrNull() ?: return null
-        val job = jobRepository.findById(treeElement.jobId).awaitSingle()
+    override suspend fun getFileProof(requester: Account, fileId: String): Proof? {
+        val leafElement = treeElementRepository.findById(fileId).awaitFirstOrNull() ?: return null
+        val job = jobRepository.findById(leafElement.jobId).awaitSingle()
         if (!requester.isAdmin && requester.id != job.userId) {
             throw IllegalAccessException("user ${requester.login} does not have role/permission to get job: ${job.id}")
         }
 
-        val elements = mutableListOf(treeElement)
-        var nextId = treeElement.parentId
-        while (nextId != null) {
-            val nextElement = treeElementRepository.findById(nextId).awaitSingle()
-            elements.add(nextElement)
-            nextId = nextElement.parentId
+        LOGGER.debug("proof for {}", leafElement.metadata?.fileName)
+
+        val elements = mutableListOf<Pair<String?, TreeElementPosition>>()
+        var nextParent = leafElement.parentId?.let { treeElementRepository.findById(it).awaitFirst() }
+        var element = leafElement
+        while (nextParent != null) {
+            val nextSiblingElement = findSibling(element.id!!, element.parentId)
+            LOGGER.debug("add in siblings {}", nextSiblingElement?.id)
+            elements.add(
+                if (nextSiblingElement == null) {
+                    Pair(
+                        null, if (element.position == TreeElementPosition.RIGHT) {
+                            TreeElementPosition.LEFT
+                        } else {
+                            TreeElementPosition.RIGHT
+                        }
+                    )
+                } else {
+                    Pair(nextSiblingElement.hash, nextSiblingElement.position!!) // dans un arbre la position n'ets jamais null
+                }
+            )
+            element = nextParent
+            nextParent = element.parentId?.let { treeElementRepository.findById(it).awaitFirst() }
         }
 
-        return Pair(job.toBusiness(), elements.map { it.toBusiness() })
+        return Proof(
+            filename = leafElement.metadata?.fileName,
+            algorithm = job.algorithm,
+            documentHash = leafElement.hash,
+            rootHash = element.hash ,
+            hashes = elements
+        )
     }
+
+    private suspend fun findSibling(id: String, parentId: String?): TreeElementEntity? {
+        if (parentId == null) {
+            return null
+        }
+        val treeElementPredicate = TreeElementCriteria(notId = id, parentId = parentId).toPredicate()
+        return treeElementRepository.findOne(
+            treeElementPredicate
+        ).awaitFirstOrNull()
+
+    }
+
+    companion object {
+        private val LOGGER = LoggerFactory.getLogger(SignServiceImpl::class.java)
+    }
+
 }

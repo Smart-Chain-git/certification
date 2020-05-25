@@ -56,6 +56,11 @@ data class JobEntity(
 
     var stateDate: OffsetDateTime,
 
-    var state: JobStateType
+    var state: JobStateType,
+
+    /**
+     * url to call when job is anchored
+     */
+    val callBackUrl: String?
 )
 
