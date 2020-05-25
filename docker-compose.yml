@@ -38,19 +38,20 @@ services:
       FAKESMTP_AUTHENTICATION_PASSWORD: password
   node:
     image: registry.gitlab.com/tezos/flextesa:image-tutobox-run
-    container_name: node
+    container_name: tezos-signature-node
     ports:
       - "18731:20000"
     environment:
       block_time: 10
     command: carthagebox start
   tzindex:
-    image: blockwatch/tzindex
-    container_name: tzindex
+    image: blockwatch/tzindex:v6.0.3
+    container_name: tezos-signature-tzindex
     ports:
       - "8000:8000"
     environment:
       TZ_RPC_HOST: "node"
       TZ_RPC_PORT: "20000"
+    command: ["sh", "-c", "sleep 10 && tzindex run"]
     depends_on:
       - node

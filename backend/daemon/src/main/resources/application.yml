@@ -54,8 +54,8 @@ jwt:
   issuer: "Tezos@Signature"
 tezos:
   account:
-    secret_key: "edskRuR1azSfboG86YPTyxrQgosh5zChf5bVDmptqLTb5EuXAm9rsnDYfTKhq7rDQujdn5WWzwUMeV3agaZ6J2vPQT58jJAJPi"
+    secret_key: "edskRpm2mUhvoUjHjXgMoDRxMKhtKfww1ixmWiHCWhHuMEEbGzdnz8Ks4vgarKDtxok7HmrEo1JzkXkdkvyw7Rtw6BNtSd7MJ7"
   contract:
-    address: KT1SUTNvXWynGDFs2LNDTdr51LVtzVJACm97
+    address: KT1F7mS6jwuuq6B2B91BGWxxLH2wrXC2hBje
   node:
     url: "http://127.0.0.1:18731/"
