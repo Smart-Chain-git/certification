@@ -23,6 +23,8 @@ services:
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: root
       ME_CONFIG_MONGODB_ADMINPASSWORD: password
+    depends_on:
+      - mongo
   mail:
     container_name: tezos-signature-mail
     image: gessnerfl/fake-smtp-server:1.3.0
@@ -34,3 +36,21 @@ services:
     environment:
       FAKESMTP_AUTHENTICATION_USERNAME: username
       FAKESMTP_AUTHENTICATION_PASSWORD: password
+  node:
+    image: registry.gitlab.com/tezos/flextesa:image-tutobox-run
+    container_name: node
+    ports:
+      - "18731:20000"
+    environment:
+      block_time: 10
+    command: carthagebox start
+  tzindex:
+    image: blockwatch/tzindex
+    container_name: tzindex
+    ports:
+      - "8000:8000"
+    environment:
+      TZ_RPC_HOST: "node"
+      TZ_RPC_PORT: "20000"
+    depends_on:
+      - node
