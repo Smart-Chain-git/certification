@@ -2,15 +2,20 @@
 
 teztool() {
   docker run -it --name teztool -v $PWD:/mnt/pwd \
-    -e MODE=dind -e DIND_PWD=$PWD \
-    -v /var/run/docker.sock:/var/run/docker.sock \
+    -e DIND_PWD=$PWD -v /var/run/docker.sock:/var/run/docker.sock \
     registry.gitlab.com/nomadic-labs/teztool:latest "$@"
 }
 
+teztoolUpdate() {
+  docker pull registry.gitlab.com/nomadic-labs/teztool:latest
+}
+
 start() {
+  # Update teztool image
+  # teztoolUpdate
   # Create node, baker, and endorser containers
-  teztool carthagenet sandbox --baker bootstrap2 \
-    --time-between-blocks 10 start 18731
+  teztool create sandbox --network sandbox --rpc-port 18731  \
+    --sandbox-time-between-blocks 10 --baker-identity bootstrap2 --historyMode archive
   # Destroy teztool container once all containers are initialized
   docker rm teztool
 }
@@ -18,17 +23,17 @@ start() {
 stop() {
   # Delete all sandbox containers
   docker rm -f \
-    teztool_sandbox_carthagenet_endorser_006-PsCARTHA \
-    teztool_sandbox_carthagenet_baker_006-PsCARTHA \
-    teztool_sandbox_carthagenet
+    teztool_sandbox_endorser_006-PsCARTHA \
+    teztool_sandbox_baker_006-PsCARTHA \
+    teztool_sandbox
 }
 
 reset() {
   stop
   # Delete all volumes
   docker volume rm \
-    teztool_sandbox_carthagenet_client \
-    teztool_sandbox_carthagenet_data
+    teztool_sandbox_client \
+    teztool_sandbox_data
 }
 
 case "$1" in
