@@ -1,9 +1,8 @@
 package com.sword.signature.rest.resthandler
 
-import com.sword.signature.api.sign.Branch
+
 import com.sword.signature.api.sign.Job
 import com.sword.signature.api.sign.JobFile
-import com.sword.signature.api.sign.Proof
 import com.sword.signature.business.exception.EntityNotFoundException
 import com.sword.signature.business.service.JobService
 import com.sword.signature.business.service.SignService
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RestController
-import java.util.*
 
 
 @RestController
