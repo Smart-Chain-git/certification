@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component
 class AnchorJob(
     private val jobService: JobService,
     private val tezosWriterService: TezosWriterService,
+    private val anchoringRetryMessageChannel: MessageChannel,
     private val validationMessageChannel: MessageChannel
 ) {
 
@@ -28,19 +29,26 @@ class AnchorJob(
         LOGGER.debug("Ready to anchor job ({}) rootHash ({}) into the blockchain.", jobId, rootHash)
         try {
             val transactionHash = tezosWriterService.anchorHash(rootHash)
-            jobService.patch(
-                adminAccount,
-                jobId,
-                JobPatch(transactionHash = transactionHash, state = JobStateType.INJECTED)
+            val injectedJob = jobService.patch(
+                requester = adminAccount,
+                jobId = jobId,
+                patch = JobPatch(
+                    transactionHash = transactionHash,
+                    state = JobStateType.INJECTED,
+                    numberOfTry = job.numberOfTry + 1
+                )
             )
             validationMessageChannel.sendPayload(
                 ValidationJobMessagePayload(
                     jobId = jobId,
-                    transactionHash = transactionHash
+                    transactionHash = transactionHash,
+                    injectionTime = injectedJob.injectedDate!!
                 )
             )
         } catch (e: Exception) {
             LOGGER.error("Anchoring of job ({}) failed.", jobId, e)
+            // Set the anchoring for retry later.
+            anchoringRetryMessageChannel.sendPayload(payload)
             throw e
         }
 

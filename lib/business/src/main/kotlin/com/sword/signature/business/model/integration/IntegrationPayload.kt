@@ -2,6 +2,7 @@ package com.sword.signature.business.model.integration
 
 import com.sword.signature.business.model.Account
 import java.io.Serializable
+import java.time.OffsetDateTime
 
 
 data class AnchorJobMessagePayload(
@@ -26,5 +27,6 @@ data class CallBackJobMessagePayload(
 
 data class ValidationJobMessagePayload(
     val jobId: String,
-    val transactionHash: String
+    val transactionHash: String,
+    val injectionTime: OffsetDateTime
 ) : Serializable

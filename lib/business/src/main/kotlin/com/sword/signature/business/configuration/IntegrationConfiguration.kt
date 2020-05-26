@@ -18,7 +18,6 @@ import org.springframework.integration.store.MessageGroupQueue
 @IntegrationComponentScan("com.sword.signature.business.service")
 class IntegrationConfiguration {
 
-
     @Bean
     fun mongoDbChannelMessageStore(mongoDatabaseFactory: MongoDatabaseFactory) =
         MongoDbChannelMessageStore(mongoDatabaseFactory)
@@ -28,13 +27,14 @@ class IntegrationConfiguration {
         ConfigurableMongoDbMessageStore(mongoDatabaseFactory)
 
     @Bean
-    fun jobToAnchorsMessageChannel(mongoDbChannelMessageStore: MongoDbChannelMessageStore) = QueueChannel(
-        MessageGroupQueue(mongoDbChannelMessageStore, "jobToAnchor")
-    )
+    fun anchoringMessageChannel(mongoDbChannelMessageStore: MongoDbChannelMessageStore) =
+        QueueChannel(MessageGroupQueue(mongoDbChannelMessageStore, "anchoring"))
+
+    @Bean
+    fun anchoringRetryMessageChannel(mongoDbChannelMessageStore: MongoDbChannelMessageStore) =
+        QueueChannel(MessageGroupQueue(mongoDbChannelMessageStore, "anchoringRetry"))
 
     @Bean
     fun transactionalMailChannel(mongoDbChannelMessageStore: MongoDbChannelMessageStore) =
         QueueChannel(MessageGroupQueue(mongoDbChannelMessageStore, "transactionalMail"))
-
-
 }

@@ -43,10 +43,10 @@ class DaemonIntegrationConfiguration(
 
     @Bean
     @ServiceActivator(
-        inputChannel = "jobToAnchorsMessageChannel",
+        inputChannel = "anchoringMessageChannel",
         poller = [Poller(fixedRate = "\${daemon.poller.fixedRate}")]
     )
-    fun jobToAnchorsHandler(): ReactiveMessageHandler {
+    fun jobToAnchorHandler(): ReactiveMessageHandler {
         return ReactiveMessageHandler { message: Message<*> ->
             mono {
                 anchorJob.anchor(message.payload as AnchorJobMessagePayload)
@@ -54,6 +54,21 @@ class DaemonIntegrationConfiguration(
             }
         }
     }
+
+    @Bean
+    @ServiceActivator(
+        inputChannel = "anchoringRetryMessageChannel",
+        poller = [Poller(fixedRate = "\${daemon.poller.fixedRate}")]
+    )
+    fun anchoringRetryMessageChannelDelayer(
+        @Value("\${daemon.anchoring.delay}") delay: Duration,
+        configurableMongoDbMessageStore: ConfigurableMongoDbMessageStore
+    ) =
+        DelayHandler("anchoringRetryMessageChannelDelayer").apply {
+            setMessageStore(configurableMongoDbMessageStore)
+            setDefaultDelay(delay.toMillis())
+            setOutputChannelName("anchoringMessageChannel")
+        }
 
     @Bean
     @ServiceActivator(
@@ -74,10 +89,10 @@ class DaemonIntegrationConfiguration(
 
     @Bean
     @ServiceActivator(
-        inputChannel = "callBackMessageChannel",
+        inputChannel = "callbackMessageChannel",
         poller = [Poller(fixedRate = "\${daemon.poller.fixedRate}")]
     )
-    fun callBackMessageHandler() = ReactiveMessageHandler { message: Message<*> ->
+    fun callbackMessageHandler() = ReactiveMessageHandler { message: Message<*> ->
         mono {
             callBackJob.callBack(message.payload as CallBackJobMessagePayload)
             null
@@ -86,17 +101,17 @@ class DaemonIntegrationConfiguration(
 
     @Bean
     @ServiceActivator(
-        inputChannel = "callBackErrorMessageChannel",
+        inputChannel = "callbackRetryMessageChannel",
         poller = [Poller(fixedRate = "\${daemon.poller.fixedRate}")]
     )
-    fun callBackErrorMessageChannelDelayer(
+    fun callbackRetryMessageChannelDelayer(
         @Value("\${daemon.callback.delay}") delay: Duration,
         configurableMongoDbMessageStore: ConfigurableMongoDbMessageStore
     ) =
-        DelayHandler("callBackErrorMessageChannelDelayer").apply {
+        DelayHandler("callbackRetryMessageChannelDelayer").apply {
             setMessageStore(configurableMongoDbMessageStore)
             setDefaultDelay(delay.toMillis())
-            setOutputChannelName("callBackMessageChannel")
+            setOutputChannelName("callbackMessageChannel")
         }
 
     @Bean

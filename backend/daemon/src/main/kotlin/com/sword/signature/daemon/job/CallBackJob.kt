@@ -14,7 +14,7 @@ import java.lang.Exception
 class CallBackJob(
     private val webClientBuilder: WebClient.Builder,
     @Value("\${daemon.callback.maxTry}") private val maxTry: Int,
-    private val callBackErrorMessageChannel: MessageChannel
+    private val callbackRetryMessageChannel: MessageChannel
 ) {
 
 
@@ -42,7 +42,7 @@ class CallBackJob(
             LOGGER.warn("fail to call '{}' for the {} time", callBackJobMessage.url, callBackJobMessage.numberOfTry)
             if (callBackJobMessage.numberOfTry < maxTry) {
                 LOGGER.warn("will try again later")
-                callBackErrorMessageChannel.sendPayload(callBackJobMessage.copy(numberOfTry = callBackJobMessage.numberOfTry + 1))
+                callbackRetryMessageChannel.sendPayload(callBackJobMessage.copy(numberOfTry = callBackJobMessage.numberOfTry + 1))
             } else {
                 LOGGER.warn("it was the last try")
             }

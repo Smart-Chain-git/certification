@@ -74,7 +74,7 @@ class TezosWriterServiceImpl(
     }
 
     override fun anchorHash(rootHash: String): String {
-        LOGGER.debug("anchorHash (rootHash = {])", rootHash)
+        LOGGER.debug("anchorHash (rootHash = {})", rootHash)
 
         return hashTimestamping.timestampHash(rootHash)
     }

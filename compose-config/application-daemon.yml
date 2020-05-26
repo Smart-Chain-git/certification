@@ -42,12 +42,15 @@ logging:
       springframework:
         security: info
 daemon:
+  anchoring:
+    delay: 5m
   callback:
     maxTry : 5
     delay : 2m
   validation:
     minDepth: 30
     delay: 1m
+    timeout: 10m
   poller:
     fixedRate: 10000
 jwt:

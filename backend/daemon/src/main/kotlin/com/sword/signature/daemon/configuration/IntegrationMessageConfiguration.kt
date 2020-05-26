@@ -9,26 +9,19 @@ import org.springframework.integration.store.MessageGroupQueue
 @Configuration
 class IntegrationMessageConfiguration {
 
+    @Bean
+    fun callbackMessageChannel(mongoDbChannelMessageStore: MongoDbChannelMessageStore) =
+        QueueChannel(MessageGroupQueue(mongoDbChannelMessageStore, "callback"))
 
     @Bean
-    fun callBackMessageChannel(mongoDbChannelMessageStore: MongoDbChannelMessageStore) =
-        QueueChannel(MessageGroupQueue(mongoDbChannelMessageStore, "callBack"))
+    fun callbackRetryMessageChannel(mongoDbChannelMessageStore: MongoDbChannelMessageStore) =
+        QueueChannel(MessageGroupQueue(mongoDbChannelMessageStore, "callbackRetry"))
 
     @Bean
-    fun callBackErrorMessageChannel(
-        mongoDbChannelMessageStore: MongoDbChannelMessageStore
-    ) = QueueChannel(
-        MessageGroupQueue(mongoDbChannelMessageStore, "callBackError")
-    )
+    fun validationMessageChannel(mongoDbChannelMessageStore: MongoDbChannelMessageStore) =
+        QueueChannel(MessageGroupQueue(mongoDbChannelMessageStore, "validation"))
 
     @Bean
-    fun validationMessageChannel(
-        mongoDbChannelMessageStore: MongoDbChannelMessageStore
-    ) = QueueChannel(MessageGroupQueue(mongoDbChannelMessageStore, "validation"))
-
-    @Bean
-    fun validationRetryMessageChannel(
-        mongoDbChannelMessageStore: MongoDbChannelMessageStore
-    ) = QueueChannel(MessageGroupQueue(mongoDbChannelMessageStore, "validationRetry"))
-
+    fun validationRetryMessageChannel(mongoDbChannelMessageStore: MongoDbChannelMessageStore) =
+        QueueChannel(MessageGroupQueue(mongoDbChannelMessageStore, "validationRetry"))
 }

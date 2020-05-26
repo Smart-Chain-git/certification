@@ -34,7 +34,7 @@ class SignServiceImpl(
     @Value("\${sign.tree.maximunLeaf}") val maximunLeaf: Int,
     private val jobRepository: JobRepository,
     private val treeElementRepository: TreeElementRepository,
-    private val jobToAnchorsMessageChannel: MessageChannel
+    private val anchoringMessageChannel: MessageChannel
 ) : SignService {
 
     @Transactional(rollbackFor = [Exception::class])
@@ -99,7 +99,7 @@ class SignServiceImpl(
         ).visitTree(merkleTree)
 
         // Send a message to the anchoring channel to trigger the daemon anchoring job
-        jobToAnchorsMessageChannel.send(
+        anchoringMessageChannel.send(
             MessageBuilder.withPayload(
                 AnchorJobMessagePayload(
                     jobId = jobEntity.id!!
