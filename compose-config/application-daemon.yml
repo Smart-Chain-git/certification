@@ -44,7 +44,10 @@ logging:
 daemon:
   callback:
     maxTry : 5
-    delay : 120_000
+    delay : 2m
+  validation:
+    minDepth: 30
+    delay: 1m
   poller:
     fixedRate: 10000
 jwt:
@@ -57,3 +60,5 @@ tezos:
     address: "KT1RxNPYeX7YvRRgTmwVqWwemGEvmszWBgEC" # To replace by the actual contract address.
   node:
     url: "http://node:20000"
+  indexer:
+    url: "http://tzindex:8000"

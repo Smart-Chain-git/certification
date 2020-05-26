@@ -49,9 +49,11 @@ class JobServiceImpl(
             throw IllegalAccessException("user ${requester.login} does not have role/permission to get job: ${job.id}")
         }
 
-        //recuperation des element de l'arbre de type feuille
+        // Retrieve the merkle tree root hash.
         val rootElementPredicate = QTreeElementEntity.treeElementEntity.parentId.isNull.and(QTreeElementEntity.treeElementEntity.jobId.eq(jobId))
         val rootHash = treeElementRepository.findOne(rootElementPredicate).awaitFirstOrNull()?.hash
+
+        // Retrieve the leaves if needed.
         val treeElementPredicate = TreeElementCriteria(jobId = jobId, type = TreeElementType.LEAF).toPredicate()
         val leaves =
             if (withLeaves) {
@@ -60,7 +62,7 @@ class JobServiceImpl(
             } else {
                 null
             }
-        LOGGER.debug("mes feuilles {}", leaves)
+        LOGGER.debug("Job {}: leaves retrieved {}.", jobId, leaves)
 
         return job.toBusiness(rootHash, leaves)
     }

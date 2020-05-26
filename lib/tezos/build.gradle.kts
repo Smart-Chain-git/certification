@@ -8,16 +8,19 @@ plugins {
     kotlin("plugin.spring")
 }
 
-description = "Business representation of application data"
+description = "Tezos connectors implementation"
 
 dependencies {
     // Kotlin
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
+    implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
 
     // Spring
     implementation("org.springframework.boot:spring-boot-starter")
-    implementation("org.mongodb:mongodb-driver-sync")
-    implementation("org.springframework.integration:spring-integration-mongodb")
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
 
     // ej4tezos
     implementation("org.ej4tezos:java-se.api:$ej4tezosVersion")

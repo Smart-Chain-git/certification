@@ -21,4 +21,14 @@ class IntegrationMessageConfiguration {
         MessageGroupQueue(mongoDbChannelMessageStore, "callBackError")
     )
 
+    @Bean
+    fun validationMessageChannel(
+        mongoDbChannelMessageStore: MongoDbChannelMessageStore
+    ) = QueueChannel(MessageGroupQueue(mongoDbChannelMessageStore, "validation"))
+
+    @Bean
+    fun validationRetryMessageChannel(
+        mongoDbChannelMessageStore: MongoDbChannelMessageStore
+    ) = QueueChannel(MessageGroupQueue(mongoDbChannelMessageStore, "validationRetry"))
+
 }

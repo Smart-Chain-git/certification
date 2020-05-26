@@ -75,6 +75,7 @@ services:
   node:
     image: registry.gitlab.com/tezos/flextesa:image-tutobox-run
     container_name: tezos-sandbox-node
+    restart: unless-stopped
     ports:
       - "18731:20000"
     environment:
@@ -83,11 +84,12 @@ services:
   tzindex:
     image: blockwatch/tzindex:v6.0.3
     container_name: tezos-signature-tzindex
+    restart: unless-stopped
     ports:
       - "8000:8000"
     environment:
       TZ_RPC_HOST: "node"
       TZ_RPC_PORT: "20000"
-    command: ["sh", "-c", "sleep 10 && tzindex run"]
+    command: ["sh", "-c", "sleep 30 && tzindex run"]
     depends_on:
       - node

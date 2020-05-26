@@ -75,7 +75,7 @@ class SignServiceImpl(
         fileHashs: List<Pair<String, FileMetadata>>
     ): Job {
 
-        // creation du jobb en BDD
+        // Job creation.
         val jobEntity = jobRepository.insert(
             JobEntity(
                 userId = requester.id,
@@ -87,22 +87,22 @@ class SignServiceImpl(
             )
         ).awaitSingle()
 
-        //creation de l'arbre
+        // Merkle tree creation.
         val merkleTree = TreeBuilder<String>(algorithm.name).elements(fileHashs).build()
-        //calcul du hash des noeud
+        // Compute all merkle tree nodes value.
         SimpleAlgorithmTreeBrowser(algorithm.name).visitTree(merkleTree)
-        // ecriture en BDD de l'arbre
 
+        // Save the merkle tree.
         val inserted = SaveRepositoryTreeVisitor(
             jobId = jobEntity.id!!,
             treeElementRepository = treeElementRepository
         ).visitTree(merkleTree)
 
-        //inscription d'un message pour le daemon qu'il sache qu'il doit encrer la transaction
+        // Send a message to the anchoring channel to trigger the daemon anchoring job
         jobToAnchorsMessageChannel.send(
             MessageBuilder.withPayload(
                 AnchorJobMessagePayload(
-                    jobEntity.id!!
+                    jobId = jobEntity.id!!
                 )
             ).build()
         )
@@ -119,14 +119,14 @@ class SignServiceImpl(
             throw IllegalAccessException("user ${requester.login} does not have role/permission to get job: ${job.id}")
         }
 
-        LOGGER.debug("proof for {}", leafElement.metadata?.fileName)
+        LOGGER.debug("Retrieving proof for document {}.", leafElement.metadata?.fileName)
 
         val elements = mutableListOf<Pair<String?, TreeElementPosition>>()
         var nextParent = leafElement.parentId?.let { treeElementRepository.findById(it).awaitFirst() }
         var element = leafElement
         while (nextParent != null) {
             val nextSiblingElement = findSibling(element.id!!, element.parentId)
-            LOGGER.debug("add in siblings {}", nextSiblingElement?.id)
+            LOGGER.debug("Element ({}) added in siblings list.", nextSiblingElement?.id)
             elements.add(
                 if (nextSiblingElement == null) {
                     Pair(
@@ -137,7 +137,10 @@ class SignServiceImpl(
                         }
                     )
                 } else {
-                    Pair(nextSiblingElement.hash, nextSiblingElement.position!!) // dans un arbre la position n'ets jamais null
+                    Pair(
+                        nextSiblingElement.hash,
+                        nextSiblingElement.position!! // Position is not nullable in a tree element.
+                    )
                 }
             )
             element = nextParent
@@ -148,7 +151,7 @@ class SignServiceImpl(
             filename = leafElement.metadata?.fileName,
             algorithm = job.algorithm,
             documentHash = leafElement.hash,
-            rootHash = element.hash ,
+            rootHash = element.hash,
             hashes = elements
         )
     }

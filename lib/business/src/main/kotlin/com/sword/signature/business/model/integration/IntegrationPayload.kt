@@ -5,7 +5,7 @@ import java.io.Serializable
 
 
 data class AnchorJobMessagePayload(
-    val id: String
+    val jobId: String
 ) : Serializable
 
 
@@ -22,4 +22,9 @@ data class CallBackJobMessagePayload(
     val jobId: String,
     val url: String,
     val numberOfTry: Int = 1
+) : Serializable
+
+data class ValidationJobMessagePayload(
+    val jobId: String,
+    val transactionHash: String
 ) : Serializable

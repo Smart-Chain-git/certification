@@ -1,12 +1,10 @@
 package com.sword.signature.daemon.configuration
 
-import com.sword.signature.business.model.integration.AnchorJobMessagePayload
-import com.sword.signature.business.model.integration.CallBackJobMessagePayload
-import com.sword.signature.business.model.integration.TransactionalMailPayload
-import com.sword.signature.business.model.integration.TransactionalMailType
+import com.sword.signature.business.model.integration.*
 import com.sword.signature.daemon.job.AnchorJob
 import com.sword.signature.daemon.job.CallBackJob
 import com.sword.signature.daemon.job.MailJob
+import com.sword.signature.daemon.job.ValidationJob
 import com.sword.signature.daemon.mail.HelloAccountMail
 import kotlinx.coroutines.reactor.mono
 import org.springframework.beans.factory.annotation.Value
@@ -19,13 +17,15 @@ import org.springframework.integration.mongodb.store.ConfigurableMongoDbMessageS
 import org.springframework.messaging.Message
 import org.springframework.messaging.MessageHandler
 import org.springframework.messaging.ReactiveMessageHandler
+import java.time.Duration
 
 
 @Configuration
 class DaemonIntegrationConfiguration(
     private val anchorJob: AnchorJob,
     private val mailJob: MailJob,
-    private val callBackJob: CallBackJob
+    private val callBackJob: CallBackJob,
+    private val validationJob: ValidationJob
 ) {
 
 
@@ -89,23 +89,39 @@ class DaemonIntegrationConfiguration(
         inputChannel = "callBackErrorMessageChannel",
         poller = [Poller(fixedRate = "\${daemon.poller.fixedRate}")]
     )
-    fun callBackErrorMessageHandler() = ReactiveMessageHandler { message: Message<*> ->
+    fun callBackErrorMessageChannelDelayer(
+        @Value("\${daemon.callback.delay}") delay: Duration,
+        configurableMongoDbMessageStore: ConfigurableMongoDbMessageStore
+    ) =
+        DelayHandler("callBackErrorMessageChannelDelayer").apply {
+            setMessageStore(configurableMongoDbMessageStore)
+            setDefaultDelay(delay.toMillis())
+            setOutputChannelName("callBackMessageChannel")
+        }
+
+    @Bean
+    @ServiceActivator(
+        inputChannel = "validationMessageChannel",
+        poller = [Poller(fixedRate = "\${daemon.poller.fixedRate}")]
+    )
+    fun validationMessageChannelHandler() = ReactiveMessageHandler { message: Message<*> ->
         mono {
-            callBackJob.callBack(message.payload as CallBackJobMessagePayload)
+            validationJob.validate(message.payload as ValidationJobMessagePayload)
             null
         }
     }
 
     @Bean
     @ServiceActivator(
-        inputChannel = "callBackErrorMessageChannel",
-        poller = [org.springframework.integration.annotation.Poller(fixedRate = "\${daemon.poller.fixedRate}")]
+        inputChannel = "validationRetryMessageChannel",
+        poller = [Poller(fixedRate = "\${daemon.poller.fixedRate}")]
     )
-    fun callBackErrorMessageChannelDelayer(@Value("\${daemon.callback.delay}") delay: Long,configurableMongoDbMessageStore: ConfigurableMongoDbMessageStore) =
-        DelayHandler("callBackErrorMessageChannelDelayer").apply {
-            setMessageStore(configurableMongoDbMessageStore)
-            setDefaultDelay(delay)
-            setOutputChannelName("callBackMessageChannel")
-        }
-
+    fun validationRetryMessageChannelDelayer(
+        @Value("\${daemon.validation.delay}") delay: Duration,
+        configurableMongoDbMessageStore: ConfigurableMongoDbMessageStore
+    ) = DelayHandler("validationRetryMessageChannelDelayer").apply {
+        setMessageStore(configurableMongoDbMessageStore)
+        setDefaultDelay(delay.toMillis())
+        setOutputChannelName("validationMessageChannel")
+    }
 }

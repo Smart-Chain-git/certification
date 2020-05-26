@@ -46,7 +46,10 @@ logging:
 daemon:
   callback:
     maxTry : 5
-    delay : 120_000
+    delay : 2m
+  validation:
+    minDepth: 30
+    delay: 1m
   poller:
     fixedRate: 10000
 jwt:
@@ -56,6 +59,8 @@ tezos:
   account:
     secret_key: "edskRpm2mUhvoUjHjXgMoDRxMKhtKfww1ixmWiHCWhHuMEEbGzdnz8Ks4vgarKDtxok7HmrEo1JzkXkdkvyw7Rtw6BNtSd7MJ7"
   contract:
-    address: KT1F7mS6jwuuq6B2B91BGWxxLH2wrXC2hBje
+    address: KT19e9TiYeELJJf9PpFoCezEWxdmts5uQ32F
   node:
     url: "http://127.0.0.1:18731/"
+  indexer:
+    url: "http://127.0.0.1:8000"
