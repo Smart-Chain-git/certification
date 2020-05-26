@@ -29,8 +29,8 @@ spring:
           connectiontimeout: 5000
           timeout: 5000
           writeTimeout: 5000
-        starttls:
-          enable: true
+          starttls:
+            enable: true
 logging:
   level:
     root: info
