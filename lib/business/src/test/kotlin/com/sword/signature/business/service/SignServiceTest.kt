@@ -2,11 +2,9 @@ package com.sword.signature.business.service
 
 import com.sword.signature.business.exception.UserServiceException
 import com.sword.signature.business.model.*
-import com.sword.signature.common.enums.JobStateType
 import com.sword.signature.common.enums.TreeElementPosition
 import com.sword.signature.common.enums.TreeElementType
 import com.sword.signature.merkletree.utils.hexStringHash
-import com.sword.signature.model.configuration.MongoConfiguration
 import com.sword.signature.model.migration.MigrationHandler
 import com.sword.signature.model.repository.JobRepository
 import com.sword.signature.model.repository.TreeElementRepository
@@ -30,7 +28,6 @@ import org.springframework.data.mongodb.core.ReactiveMongoTemplate
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
-import java.time.OffsetDateTime
 import java.util.stream.Stream
 
 
@@ -126,7 +123,7 @@ class SignServiceTest @Autowired constructor(
                     assertThat(job.algorithm).isEqualTo(algorithm)
                     assertThat(job.blockDepth).isNull()
                     assertThat(job.validatedDate).isNull()
-                    assertThat(job.blockId).isNull()
+                    assertThat(job.blockHash).isNull()
                     assertThat(job.numberOfTry).isEqualTo(0)
                 }.assertAll()
 

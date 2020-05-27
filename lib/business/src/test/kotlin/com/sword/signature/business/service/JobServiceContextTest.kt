@@ -6,7 +6,6 @@ import com.sword.signature.business.model.Account
 import com.sword.signature.business.model.Job
 import com.sword.signature.business.model.JobPatch
 import com.sword.signature.common.enums.JobStateType
-import com.sword.signature.model.configuration.MongoConfiguration
 import com.sword.signature.model.migration.MigrationHandler
 
 import kotlinx.coroutines.flow.toList
@@ -261,7 +260,7 @@ class JobServiceContextTest @Autowired constructor(
                 val before = OffsetDateTime.now()
                 val job=jobService.patch(requester, jobId, patch)
 
-                assertThat(job).`as`(comment).isEqualToIgnoringGivenFields(expected, "injectedDate", "validatedDate")
+                assertThat(job).`as`(comment).isEqualToIgnoringGivenFields(expected, "injectedDate", "validatedDate", "stateDate")
                 if (patch.state == JobStateType.INJECTED) {
                     assertThat(job.injectedDate).`as`("verification date injection").isAfter(before)
                 }
@@ -291,8 +290,8 @@ class JobServiceContextTest @Autowired constructor(
                 "blockId change",
                 adminAccount,
                 multipleFileJobId,
-                JobPatch(blockId = "supberbeId"),
-                multipleFileJob.copy(blockId = "supberbeId")
+                JobPatch(blockHash = "superbeId"),
+                multipleFileJob.copy(blockHash = "superbeId")
             ),
             Arguments.of(
                 "blockDepth change",

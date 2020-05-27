@@ -3,11 +3,11 @@ package com.sword.signature.webcore.mapper
 import com.sword.signature.api.sign.*
 import com.sword.signature.business.model.Algorithm
 import com.sword.signature.business.model.FileMetadata
-import com.sword.signature.business.model.Job
 import com.sword.signature.business.model.TreeElement
 
 
-fun Job.toWebSignResponse() = SignResponse(jobId = id, files = files?.map { it.metadata.toWeb() } ?: emptyList())
+fun com.sword.signature.business.model.Job.toWebSignResponse() =
+    SignResponse(jobId = id, files = files?.map { it.metadata.toWeb() } ?: emptyList())
 
 fun FileMetadata.toWeb() = SignMetadata(
     fileName = fileName,
@@ -15,18 +15,20 @@ fun FileMetadata.toWeb() = SignMetadata(
     customFields = customFields
 )
 
-fun Job.toWeb() = Job(
+fun com.sword.signature.business.model.Job.toWeb() = Job(
     id = id,
     createdDate = createdDate,
     injectedDate = injectedDate,
     validatedDate = validatedDate,
     numberOfTry = numberOfTry,
-    blockId = blockId,
+    blockHash = blockHash,
     blockDepth = blockDepth,
     algorithm = algorithm,
     flowName = flowName,
     stateDate = stateDate,
-    state = state.name
+    state = state.name,
+    contractAddress = contractAddress,
+    transactionHash = transactionHash
 )
 
 
@@ -41,12 +43,18 @@ fun TreeElement.LeafTreeElement.toWeb(proof: com.sword.signature.business.model.
 fun com.sword.signature.business.model.Proof.toWeb(): Proof {
 
     return Proof(
+        signatureDate = signatureDate,
+        filename = filename,
         algorithm = algorithm,
         publicKey = "ZpublicKey",
         originPublicKey = "ZoriginPublicKey",
         documentHash = documentHash,
         rootHash = rootHash,
-        hashes = hashes.map { HashNode(it.first, it.second.name) }
+        hashes = hashes.map { HashNode(it.first, it.second.name) },
+        customFields = customFields,
+        contractAddress = contractAddress,
+        transactionHash = transactionHash,
+        blockHash = blockHash
     )
 
 }

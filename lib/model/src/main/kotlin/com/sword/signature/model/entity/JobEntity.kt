@@ -31,12 +31,12 @@ data class JobEntity(
     /**
      * Hash of inject transaction
      */
-    val transactionHash: String ? = null,
-    val blockId: String? = null,
+    val transactionHash: String? = null,
+    val blockHash: String? = null,
     /**
      * depth of the block at validation date
      */
-    val blockDepth: Int? = null,
+    val blockDepth: Long? = null,
 
     /**
      * Algotithm used to build the Merkel tree
@@ -61,6 +61,11 @@ data class JobEntity(
     /**
      * url to call when job is anchored
      */
-    val callBackUrl: String?
+    val callBackUrl: String?,
+
+    /**
+     * Address of the smart contract in the blockchain.
+     */
+    val contractAddress: String? = null
 )
 

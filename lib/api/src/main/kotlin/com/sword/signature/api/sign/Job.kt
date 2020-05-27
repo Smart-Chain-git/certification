@@ -7,15 +7,17 @@ import java.time.OffsetDateTime
 data class Job(
     val id: String,
     val createdDate: OffsetDateTime,
-    val injectedDate: OffsetDateTime? = null,
-    val validatedDate: OffsetDateTime? = null,
+    val injectedDate: OffsetDateTime?,
+    val validatedDate: OffsetDateTime?,
     val numberOfTry: Int = 0,
-    val blockId: String? = null,
-    val blockDepth: Int? = null,
+    val blockHash: String?,
+    val blockDepth: Long?,
     val algorithm: String,
     val flowName: String,
     var stateDate: OffsetDateTime,
-    var state: String
+    var state: String,
+    val contractAddress: String?,
+    val transactionHash: String?
 )
 
 @JsonInclude(JsonInclude.Include.NON_NULL)

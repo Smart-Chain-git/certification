@@ -9,6 +9,7 @@ import com.sword.signature.business.service.JobService
 import com.sword.signature.common.enums.JobStateType
 import com.sword.signature.daemon.sendPayload
 import com.sword.signature.tezos.service.TezosReaderService
+import com.sword.signature.tezos.tzindex.model.TzOp
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.messaging.MessageChannel
@@ -46,23 +47,35 @@ class ValidationJob(
 
         if (transactionDepth != null) {
             if (transactionDepth >= minDepth) {
-                LOGGER.info("Transaction {} for job {} validated.", transactionHash, jobId)
-                val job = jobService.patch(
-                    requester = adminAccount,
-                    jobId = jobId,
-                    patch = JobPatch(
-                        state = JobStateType.VALIDATED
-                    )
-                )
-                // Call the callback url
-                if (job.callBackUrl != null) {
-                    callbackMessageChannel.sendPayload(
-                        CallBackJobMessagePayload(
-                            jobId = job.id,
-                            url = job.callBackUrl!!
+                try {
+                    LOGGER.info("Transaction {} for job {} validated.", transactionHash, jobId)
+                    // Retrieving the transaction
+                    val transaction: TzOp = tezosReaderService.getTransaction(transactionHash)
+                        ?: throw IllegalStateException("The transaction ($transactionHash) should not be null there since its depth has been found before.")
+                    val job = jobService.patch(
+                        requester = adminAccount,
+                        jobId = jobId,
+                        patch = JobPatch(
+                            state = JobStateType.VALIDATED,
+                            blockHash = transaction.block,
+                            blockDepth = transactionDepth
                         )
                     )
+                    // Call the callback url
+                    if (job.callBackUrl != null) {
+                        callbackMessageChannel.sendPayload(
+                            CallBackJobMessagePayload(
+                                jobId = job.id,
+                                url = job.callBackUrl!!
+                            )
+                        )
+                    }
+                } catch (e: Exception) {
+                    // Set the validation for retry later.
+                    validationRetryMessageChannel.sendPayload(payload)
+                    throw e
                 }
+
             } else {
                 LOGGER.info(
                     "{}/{} confirmations found for transaction {} (job={}).", transactionDepth, minDepth,

@@ -24,11 +24,11 @@ data class Job(
 
     val transactionHash: String? = null,
 
-    val blockId: String? = null,
+    val blockHash: String? = null,
     /**
      * depth of the block at validation date
      */
-    val blockDepth: Int? = null,
+    val blockDepth: Long? = null,
 
     /**
      * Algotithm used to build the Merkel tree
@@ -56,6 +56,10 @@ data class Job(
      */
     val rootHash: String? = null,
 
-    val files: List<TreeElement.LeafTreeElement>? = null
+    val files: List<TreeElement.LeafTreeElement>? = null,
 
+    /**
+     * Address of the smart contract in the blockchain.
+     */
+    val contractAddress: String? = null
 )

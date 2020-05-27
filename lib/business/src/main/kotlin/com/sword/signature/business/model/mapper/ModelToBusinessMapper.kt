@@ -44,7 +44,7 @@ fun JobEntity.toBusiness(rootHash: String? = null, files: List<TreeElement.LeafT
     userId = userId,
     transactionHash = transactionHash,
     blockDepth = blockDepth,
-    blockId = blockId,
+    blockHash = blockHash,
     createdDate = createdDate,
     injectedDate = injectedDate,
     numberOfTry = numberOfTry,
@@ -54,7 +54,8 @@ fun JobEntity.toBusiness(rootHash: String? = null, files: List<TreeElement.LeafT
     stateDate = stateDate,
     rootHash = rootHash,
     files = files,
-    callBackUrl = callBackUrl
+    callBackUrl = callBackUrl,
+    contractAddress = contractAddress
 )
 
 fun AlgorithmEntity.toBusiness() = Algorithm(

@@ -8,8 +8,8 @@ import java.time.OffsetDateTime
 data class Proof(
 
     val version: String = "1.0.0",
-    @JsonProperty("signature_date") val signatureDate: OffsetDateTime? = null,
-    @JsonProperty("file_name") val filename: String? = null,
+    @JsonProperty("signature_date") val signatureDate: OffsetDateTime?,
+    @JsonProperty("file_name") val filename: String?,
     @JsonProperty("hash_root") val rootHash: String,
     @JsonProperty("hash_document") val documentHash: String,
     @JsonProperty("hash_list") val hashes: List<HashNode>,
@@ -20,8 +20,16 @@ data class Proof(
     val publicKey: String,
     @JsonProperty("origin_public_key")
     val originPublicKey: String,
-    val comment: String?=null
-
+    @JsonProperty("custom_fields")
+    val customFields: Map <String, Any>?,
+    @JsonProperty("contract_address")
+    val contractAddress: String? = null,
+    @JsonProperty("transaction_hash")
+    val transactionHash: String? = null,
+    @JsonProperty("block_hash")
+    val blockHash: String? = null,
+    @JsonProperty("block_depth")
+    val blockDepth: Long? = null
 )
 
 @JsonInclude(JsonInclude.Include.NON_NULL)

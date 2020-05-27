@@ -10,7 +10,6 @@ import com.sword.signature.business.service.JobService
 import com.sword.signature.common.criteria.TreeElementCriteria
 import com.sword.signature.common.enums.JobStateType
 import com.sword.signature.common.enums.TreeElementType
-import com.sword.signature.model.entity.QJobEntity
 import com.sword.signature.model.entity.QTreeElementEntity
 import com.sword.signature.model.mapper.toPredicate
 import com.sword.signature.model.repository.JobRepository
@@ -24,7 +23,6 @@ import kotlinx.coroutines.reactive.awaitSingle
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
-import java.lang.IllegalStateException
 import java.time.OffsetDateTime
 
 @Service
@@ -50,7 +48,8 @@ class JobServiceImpl(
         }
 
         // Retrieve the merkle tree root hash.
-        val rootElementPredicate = QTreeElementEntity.treeElementEntity.parentId.isNull.and(QTreeElementEntity.treeElementEntity.jobId.eq(jobId))
+        val rootElementPredicate =
+            QTreeElementEntity.treeElementEntity.parentId.isNull.and(QTreeElementEntity.treeElementEntity.jobId.eq(jobId))
         val rootHash = treeElementRepository.findOne(rootElementPredicate).awaitFirstOrNull()?.hash
 
         // Retrieve the leaves if needed.
@@ -76,7 +75,7 @@ class JobServiceImpl(
         val toPatch = job.copy(
             numberOfTry = patch.numberOfTry ?: job.numberOfTry,
             transactionHash = patch.transactionHash ?: job.transactionHash,
-            blockId = patch.blockId ?: job.blockId,
+            blockHash = patch.blockHash ?: job.blockHash,
             blockDepth = patch.blockDepth ?: job.blockDepth,
             state = patch.state ?: job.state,
             injectedDate = if (patch.state == JobStateType.INJECTED) {
@@ -88,9 +87,13 @@ class JobServiceImpl(
                 OffsetDateTime.now()
             } else {
                 job.validatedDate
-            }
-
-
+            },
+            stateDate = if (patch.state != null) {
+                OffsetDateTime.now()
+            } else {
+                job.stateDate
+            },
+            contractAddress = patch.contractAddress ?: job.contractAddress
         )
 
         val updatedJob = jobRepository.save(toPatch).awaitSingle().toBusiness()

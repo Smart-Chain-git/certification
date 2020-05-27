@@ -9,6 +9,7 @@ import com.sword.signature.common.enums.JobStateType
 import com.sword.signature.daemon.logger
 import com.sword.signature.daemon.sendPayload
 import com.sword.signature.tezos.service.TezosWriterService
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.messaging.MessageChannel
 import org.springframework.stereotype.Component
 
@@ -17,7 +18,8 @@ class AnchorJob(
     private val jobService: JobService,
     private val tezosWriterService: TezosWriterService,
     private val anchoringRetryMessageChannel: MessageChannel,
-    private val validationMessageChannel: MessageChannel
+    private val validationMessageChannel: MessageChannel,
+    @Value("\${tezos.contract.address}") private val contractAddress: String
 ) {
 
     private val adminAccount = Account(email = "", login = "", password = "", isAdmin = true, fullName = "", id = "")
@@ -35,7 +37,8 @@ class AnchorJob(
                 patch = JobPatch(
                     transactionHash = transactionHash,
                     state = JobStateType.INJECTED,
-                    numberOfTry = job.numberOfTry + 1
+                    numberOfTry = job.numberOfTry + 1,
+                    contractAddress = contractAddress
                 )
             )
             validationMessageChannel.sendPayload(

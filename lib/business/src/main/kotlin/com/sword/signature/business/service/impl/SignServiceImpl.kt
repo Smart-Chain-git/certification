@@ -148,11 +148,16 @@ class SignServiceImpl(
         }
 
         return Proof(
+            signatureDate = job.injectedDate,
             filename = leafElement.metadata?.fileName,
             algorithm = job.algorithm,
             documentHash = leafElement.hash,
             rootHash = element.hash,
-            hashes = elements
+            hashes = elements,
+            customFields = leafElement.metadata?.customFields,
+            contractAddress = job.contractAddress,
+            transactionHash = job.transactionHash,
+            blockHash = job.blockHash
         )
     }
 
