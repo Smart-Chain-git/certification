@@ -1,5 +1,5 @@
 LIGO := ligo
-CLIENT := tezos-client
+CLIENT := ../scripts/bin/tezos-client
 CLIENT_CONFIG := -A 127.0.0.1 -P 18731
 SIGNER = alice
 
