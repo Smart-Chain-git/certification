@@ -3,16 +3,18 @@ import {AxiosRequestConfig, AxiosResponse} from "axios"
 import {Api} from "@/api/api"
 import {apiConfig} from "@/api/api.config"
 
-export const API_AUTH = "/auth"
-export const API_ME = "/me"
-export const API_GET = "/accounts"
+import {API_BASE} from "@/api/api.config"
+
+export const API_AUTH = API_BASE+"/auth"
+export const API_ME = API_BASE+"/me"
+export const API_GET = API_BASE+"/accounts"
 
 
 export interface Account {
     id: string
     login: string
     email: string
-    fullName: string
+    fullName: string | undefined
     isAdmin: boolean
 }
 
@@ -50,7 +52,7 @@ export class AccountApi extends Api {
     }
 
     public getById(id: string): Promise<Account> {
-        return this.get<Account>(API_GET + "/${id}")
+        return this.get<Account>(API_GET + "/" + id)
             .then((response: AxiosResponse<Account>) => {
                 return response.data
             })

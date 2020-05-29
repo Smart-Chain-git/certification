@@ -1,12 +1,16 @@
 package com.sword.signature.rest.resthandler
 
+import com.sword.signature.api.sign.Account
 import com.sword.signature.api.sign.AuthRequest
 import com.sword.signature.api.sign.AuthResponse
 import com.sword.signature.business.service.AccountService
+import com.sword.signature.webcore.authentication.CustomUserDetails
 import com.sword.signature.webcore.authentication.JwtTokenService
+import com.sword.signature.webcore.mapper.toWeb
 import io.swagger.v3.oas.annotations.Parameter
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.authentication.BadCredentialsException
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -45,6 +49,19 @@ class AuthHandler (
 
         return AuthResponse(token = token)
     }
+
+    @RequestMapping(
+        value = ["/me"],
+        produces = ["application/json"],
+        method = [RequestMethod.GET]
+    )
+    suspend fun me(
+        @AuthenticationPrincipal user: CustomUserDetails
+    ): Account {
+        return user.account.toWeb()
+    }
+
+
 
 
 }
