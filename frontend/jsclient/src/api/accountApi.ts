@@ -17,7 +17,7 @@ export interface Account {
 }
 
 export interface AuthRequest {
-    username: string
+    user: string
     password: string
 }
 

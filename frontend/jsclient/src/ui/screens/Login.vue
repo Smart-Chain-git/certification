@@ -86,7 +86,7 @@
         }
 
         private async handleLogin() {
-            const authRequest: AuthRequest = {username: this.username, password: this.password}
+            const authRequest: AuthRequest = {user: this.username, password: this.password}
             await this.$modules.accounts.loadToken(authRequest).then(async () => {
                 this.tErrorMessage = ""
                 await fetchData(this.$modules).then(() => this.$router.push("/"))
