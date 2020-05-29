@@ -1,7 +1,6 @@
 package com.sword.signature.rest.configuration
 
 
-
 import com.sword.signature.rest.authentication.SecurityContextRepository
 import io.swagger.v3.oas.models.Components
 import io.swagger.v3.oas.models.OpenAPI
@@ -12,6 +11,9 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity
 import org.springframework.security.config.web.server.ServerHttpSecurity
 import org.springframework.security.web.server.SecurityWebFilterChain
+import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.reactive.CorsWebFilter
+import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource
 
 
 @Configuration
@@ -20,10 +22,11 @@ import org.springframework.security.web.server.SecurityWebFilterChain
 class ApplicationSecurity {
 
 
-
     @Bean
-    fun securityWebFilterChain(http: ServerHttpSecurity,securityContextRepository: SecurityContextRepository): SecurityWebFilterChain {
-        http.cors().disable()
+    fun securityWebFilterChain(
+        http: ServerHttpSecurity,
+        securityContextRepository: SecurityContextRepository
+    ): SecurityWebFilterChain {
         http.csrf().disable()
         http.securityContextRepository(securityContextRepository)
         http.authorizeExchange { exchanges ->
@@ -39,6 +42,23 @@ class ApplicationSecurity {
 
         return http.build()
     }
+
+    @Bean
+    fun corsFilter(): CorsWebFilter {
+
+        val config = CorsConfiguration().apply {
+            allowCredentials = true
+            addAllowedOrigin("http://localhost:8082")
+            addAllowedHeader("*")
+            addAllowedMethod("*")
+        }
+
+        val source = UrlBasedCorsConfigurationSource().apply {
+            registerCorsConfiguration("/**", config)
+        }
+        return CorsWebFilter(source)
+    }
+
 
     @Bean
     fun customOpenAPI(): OpenAPI {
