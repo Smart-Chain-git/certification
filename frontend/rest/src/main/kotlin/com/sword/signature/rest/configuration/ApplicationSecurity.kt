@@ -8,6 +8,7 @@ import io.swagger.v3.oas.models.security.SecurityScheme
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity
 import org.springframework.security.config.web.server.ServerHttpSecurity
 import org.springframework.security.web.server.SecurityWebFilterChain
@@ -30,6 +31,7 @@ class ApplicationSecurity {
         http.csrf().disable()
         http.securityContextRepository(securityContextRepository)
         http.authorizeExchange { exchanges ->
+            exchanges.pathMatchers(HttpMethod.OPTIONS,"/**").permitAll()
             exchanges.pathMatchers(
                 "/swagger-ui.html",
                 "/webjars/**",
