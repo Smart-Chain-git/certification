@@ -8,7 +8,7 @@ import com.sword.signature.business.service.JobService
 import com.sword.signature.common.enums.JobStateType
 import com.sword.signature.daemon.logger
 import com.sword.signature.daemon.sendPayload
-import com.sword.signature.tezos.service.TezosWriterService
+import com.sword.signature.tezos.writer.service.TezosWriterService
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.messaging.MessageChannel
 import org.springframework.stereotype.Component

@@ -1,8 +1,8 @@
-package com.sword.signature.tezos.service.impl
+package com.sword.signature.tezos.reader.service.impl
 
-import com.sword.signature.tezos.service.TezosReaderService
-import com.sword.signature.tezos.tzindex.TzIndexConnector
-import com.sword.signature.tezos.tzindex.model.TzOp
+import com.sword.signature.tezos.reader.service.TezosReaderService
+import com.sword.signature.tezos.reader.tzindex.TzIndexConnector
+import com.sword.signature.tezos.reader.tzindex.model.TzOp
 import org.springframework.stereotype.Service
 
 @Service

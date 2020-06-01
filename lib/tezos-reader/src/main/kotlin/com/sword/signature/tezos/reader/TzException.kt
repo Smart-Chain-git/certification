@@ -1,4 +1,4 @@
-package com.sword.signature.tezos
+package com.sword.signature.tezos.reader
 
 import java.lang.RuntimeException
 

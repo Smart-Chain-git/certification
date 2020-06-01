@@ -1,4 +1,4 @@
-package com.sword.signature.tezos.tzindex.model
+package com.sword.signature.tezos.reader.tzindex.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.OffsetDateTime

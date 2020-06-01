@@ -1,6 +1,6 @@
-package com.sword.signature.tezos.service
+package com.sword.signature.tezos.reader.service
 
-import com.sword.signature.tezos.tzindex.model.TzOp
+import com.sword.signature.tezos.reader.tzindex.model.TzOp
 
 interface TezosReaderService {
 

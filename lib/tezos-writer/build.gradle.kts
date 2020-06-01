@@ -20,7 +20,6 @@ dependencies {
 
     // Spring
     implementation("org.springframework.boot:spring-boot-starter")
-    implementation("org.springframework.boot:spring-boot-starter-webflux")
 
     // ej4tezos
     implementation("org.ej4tezos:java-se.api:$ej4tezosVersion")
@@ -36,10 +35,6 @@ dependencies {
     implementation("org.json:json:20180813")
     implementation("org.apache.httpcomponents:httpclient:4.5.7")
     implementation("commons-io:commons-io:2.6")
-
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo:$flapdoodleVersion")
-    testImplementation("io.mockk:mockk:$mockKVersion")
 }
 
 tasks {

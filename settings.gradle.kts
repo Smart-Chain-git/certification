@@ -31,7 +31,8 @@ include(":lib:business")
 include (":lib:model")
 include (":lib:api")
 include (":lib:web-core")
-include(":lib:tezos")
+include(":lib:tezos-reader")
+include(":lib:tezos-writer")
 
 include (":backend:daemon")
 

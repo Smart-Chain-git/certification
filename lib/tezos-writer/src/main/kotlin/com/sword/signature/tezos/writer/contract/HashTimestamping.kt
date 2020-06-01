@@ -1,4 +1,4 @@
-package com.sword.signature.tezos.contract
+package com.sword.signature.tezos.writer.contract
 
 import org.ej4tezos.impl.TezosAbstractService
 import org.slf4j.LoggerFactory

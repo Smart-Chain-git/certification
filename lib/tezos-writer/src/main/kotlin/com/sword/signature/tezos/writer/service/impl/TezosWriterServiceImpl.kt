@@ -1,7 +1,7 @@
-package com.sword.signature.tezos.service.impl
+package com.sword.signature.tezos.writer.service.impl
 
-import com.sword.signature.tezos.contract.HashTimestamping
-import com.sword.signature.tezos.service.TezosWriterService
+import com.sword.signature.tezos.writer.contract.HashTimestamping
+import com.sword.signature.tezos.writer.service.TezosWriterService
 import org.ej4tezos.api.TezosCoreService
 import org.ej4tezos.api.TezosFeeService
 import org.ej4tezos.api.TezosKeyService

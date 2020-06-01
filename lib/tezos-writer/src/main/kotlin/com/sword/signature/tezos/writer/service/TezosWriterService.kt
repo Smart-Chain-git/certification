@@ -1,4 +1,4 @@
-package com.sword.signature.tezos.service
+package com.sword.signature.tezos.writer.service
 
 import org.ej4tezos.api.exception.TezosException
 

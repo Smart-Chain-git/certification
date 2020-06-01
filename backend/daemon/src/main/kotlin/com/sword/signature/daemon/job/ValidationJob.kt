@@ -8,8 +8,8 @@ import com.sword.signature.business.model.integration.ValidationJobMessagePayloa
 import com.sword.signature.business.service.JobService
 import com.sword.signature.common.enums.JobStateType
 import com.sword.signature.daemon.sendPayload
-import com.sword.signature.tezos.service.TezosReaderService
-import com.sword.signature.tezos.tzindex.model.TzOp
+import com.sword.signature.tezos.reader.service.TezosReaderService
+import com.sword.signature.tezos.reader.tzindex.model.TzOp
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.messaging.MessageChannel
@@ -58,7 +58,8 @@ class ValidationJob(
                         patch = JobPatch(
                             state = JobStateType.VALIDATED,
                             blockHash = transaction.block,
-                            blockDepth = transactionDepth
+                            blockDepth = transactionDepth,
+                            minDepth = minDepth
                         )
                     )
                     // Call the callback url
@@ -80,6 +81,15 @@ class ValidationJob(
                 LOGGER.info(
                     "{}/{} confirmations found for transaction {} (job={}).", transactionDepth, minDepth,
                     transactionHash, jobId
+                )
+                // Update transaction depth.
+                jobService.patch(
+                    requester = adminAccount,
+                    jobId = jobId,
+                    patch = JobPatch(
+                        blockDepth = transactionDepth,
+                        minDepth = minDepth
+                    )
                 )
                 // Set the validation for retry later.
                 validationRetryMessageChannel.sendPayload(payload)

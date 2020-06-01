@@ -26,9 +26,13 @@ data class Job(
 
     val blockHash: String? = null,
     /**
-     * depth of the block at validation date
+     * Block depth at validation date.
      */
     val blockDepth: Long? = null,
+    /**
+     * Expected depth for validation.
+     */
+    val minDepth: Long? = null,
 
     /**
      * Algotithm used to build the Merkel tree

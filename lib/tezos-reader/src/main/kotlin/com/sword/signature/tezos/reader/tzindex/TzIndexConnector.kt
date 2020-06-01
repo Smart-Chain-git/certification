@@ -1,12 +1,12 @@
-package com.sword.signature.tezos.tzindex
+package com.sword.signature.tezos.reader.tzindex
 
-import com.sword.signature.tezos.TzException
-import com.sword.signature.tezos.tzindex.model.TzBlock
-import com.sword.signature.tezos.tzindex.model.TzOp
+import com.sword.signature.tezos.reader.TzException
+import com.sword.signature.tezos.reader.tzindex.model.TzBlock
+import com.sword.signature.tezos.reader.tzindex.model.TzOp
 import kotlinx.coroutines.reactive.awaitFirst
 import kotlinx.coroutines.reactive.awaitSingle
-import org.apache.http.HttpHeaders
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient

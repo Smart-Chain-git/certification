@@ -7,9 +7,13 @@ data class JobPatch(
     val transactionHash: String? = null,
     val blockHash: String? = null,
     /**
-     * depth of the block at validation date
+     * Block depth at validation date.
      */
     val blockDepth: Long? = null,
+    /**
+     * Expected depth for validation.
+     */
+    val minDepth: Long? = null,
     var state: JobStateType? = null,
     val contractAddress: String? = null
 )

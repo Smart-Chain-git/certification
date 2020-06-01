@@ -22,6 +22,7 @@ dependencies {
     api(project(":lib:common"))
     implementation(project(":lib:model"))
     implementation("com.sword.signature:merkle-tree:$merkleTreeVersion")
+    implementation(project(":lib:tezos-reader"))
 
 
     // Spring
