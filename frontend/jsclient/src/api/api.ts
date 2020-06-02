@@ -4,20 +4,9 @@ import {API_BASE} from "@/api/api.config"
 
 
 export class Api {
-    //private api: AxiosInstance
 
     public constructor(config: AxiosRequestConfig) {
-      //  this.api = globalAxios
-        // this.api.interceptors.request.use((param: AxiosRequestConfig) => {
-        //     const newConfig = {
-        //         ...param,
-        //         baseURL: API_BASE,
-        //     }
-        //
-        //     return {
-        //         ...newConfig,
-        //     }
-        // })
+        //  nothing
     }
 
     public getUri(config?: AxiosRequestConfig): string {
