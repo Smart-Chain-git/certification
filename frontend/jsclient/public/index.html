@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>DigiSign</title>
+  </head>
+  <body>
+    <noscript>
+      <p>
+        <strong>Nous sommes désolés, DigiSign ne fonctionne pas correctement avec Javascript désactivé. Merci de l'activer pour continuer.</strong>
+      </p>
+      <p>
+        <strong>We're sorry but DigiSign doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+      </p>
+    </noscript>
+    <!-- Script to add the favicon with the url of the page in the href (for the favicon to work in Firefox) -->
+    <script>
+      const link = document.createElement('link')
+      link.rel = "shortcut icon"
+      if(typeof InstallTrigger !== 'undefined') { // Firefox
+        link.href = window.origin + "/favicon.ico"
+      } else { // Other browsers
+        link.href = "<%= BASE_URL %>favicon.ico"
+      }
+      document.getElementsByTagName('head')[0].appendChild(link)
+    </script>
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
+  </body>
+</html>

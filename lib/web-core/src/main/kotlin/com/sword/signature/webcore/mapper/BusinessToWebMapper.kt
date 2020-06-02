@@ -1,9 +1,19 @@
 package com.sword.signature.webcore.mapper
 
 import com.sword.signature.api.sign.*
+import com.sword.signature.business.model.Account
 import com.sword.signature.business.model.Algorithm
 import com.sword.signature.business.model.FileMetadata
 import com.sword.signature.business.model.TreeElement
+
+
+fun Account.toWeb() = com.sword.signature.api.sign.Account(
+    id=id,
+    fullName = fullName,
+    isAdmin = isAdmin,
+    login = login,
+    email = email
+)
 
 
 fun com.sword.signature.business.model.Job.toWebSignResponse() =

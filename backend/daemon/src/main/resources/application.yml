@@ -63,7 +63,7 @@ tezos:
   account:
     secret_key: "edskRpm2mUhvoUjHjXgMoDRxMKhtKfww1ixmWiHCWhHuMEEbGzdnz8Ks4vgarKDtxok7HmrEo1JzkXkdkvyw7Rtw6BNtSd7MJ7"
   contract:
-    address: KT19e9TiYeELJJf9PpFoCezEWxdmts5uQ32F
+    address: KT1KPzcYY3Yb7gFGZWa1Eu9wu7t9eU764cDx
   node:
     url: "http://127.0.0.1:18731/"
   indexer:

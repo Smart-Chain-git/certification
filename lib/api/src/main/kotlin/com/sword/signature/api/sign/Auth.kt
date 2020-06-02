@@ -8,3 +8,11 @@ data class AuthRequest(
 data class AuthResponse(
     val token: String
 )
+
+data class  Account (
+    val id: String,
+    val login: String,
+    val email: String,
+    val fullName: String?,
+    val isAdmin: Boolean
+)

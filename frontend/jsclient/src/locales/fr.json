@@ -1,0 +1,16 @@
+{
+  "locale": {
+    "lang": "fr",
+    "date-format": "DD/MM/Y"
+  },
+  "first-day-of-week": "1",
+  "account": {
+    "list": {
+      "login": "Identifiant",
+      "lastName": "Nom",
+      "firstName": "Prénom",
+      "role": "Rôle",
+      "status": "Statut"
+    }
+  }
+}
