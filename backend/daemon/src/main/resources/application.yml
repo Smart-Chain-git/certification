@@ -43,7 +43,7 @@ logging:
       springframework:
         security: info
         data: info
-      ej4tezos: debug
+      ej4tezos: info
 daemon:
   anchoring:
     delay: 5m
@@ -61,10 +61,11 @@ jwt:
   issuer: "Tezos@Signature"
 tezos:
   account:
-    secret_key: "edskRpm2mUhvoUjHjXgMoDRxMKhtKfww1ixmWiHCWhHuMEEbGzdnz8Ks4vgarKDtxok7HmrEo1JzkXkdkvyw7Rtw6BNtSd7MJ7"
+    publicKey: "edpkurPsQ8eUApnLUJ9ZPDvu98E8VNj4KtJa1aZr16Cr5ow5VHKnz4"
+    secretKey: "edsk3RFfvaFaxbHx8BMtEW1rKQcPtDML3LXjNqMNLCzC3wLC1bWbAt"
   contract:
-    address: KT1KPzcYY3Yb7gFGZWa1Eu9wu7t9eU764cDx
+    address: KT1MXYf2RhC7t2JST9gbXhqmuwjgchhcDZM3
   node:
-    url: "http://127.0.0.1:18731/"
+    url: "http://127.0.0.1:18731"
   indexer:
     url: "http://127.0.0.1:8000"

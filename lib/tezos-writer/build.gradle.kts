@@ -35,6 +35,9 @@ dependencies {
     implementation("org.json:json:20180813")
     implementation("org.apache.httpcomponents:httpclient:4.5.7")
     implementation("commons-io:commons-io:2.6")
+
+    // Testing
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
 tasks {
