@@ -1,5 +1,6 @@
 val mockKVersion: String by project.extra
 val springmockkVersion: String by project.extra
+val ej4tezosVersion: String by project.extra
 
 plugins {
     id("kotlin")
@@ -34,6 +35,9 @@ dependencies {
     implementation(project(":lib:model"))
     implementation(project(":lib:tezos-reader"))
     implementation(project(":lib:tezos-writer"))
+
+    // ej4tezos
+    implementation("org.ej4tezos:java-se.model:$ej4tezosVersion")
 }
 
 

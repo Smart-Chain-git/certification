@@ -46,7 +46,7 @@ logging:
       ej4tezos: info
 daemon:
   anchoring:
-    delay: 5m
+    delay: 1m
   callback:
     maxTry : 5
     delay : 2m
@@ -64,7 +64,7 @@ tezos:
     publicKey: "edpkurPsQ8eUApnLUJ9ZPDvu98E8VNj4KtJa1aZr16Cr5ow5VHKnz4"
     secretKey: "edsk3RFfvaFaxbHx8BMtEW1rKQcPtDML3LXjNqMNLCzC3wLC1bWbAt"
   contract:
-    address: KT1MXYf2RhC7t2JST9gbXhqmuwjgchhcDZM3
+    address: KT1Tq22yXWayLbmBKwZUhVXMoYqxtzp9XvTk
   node:
     url: "http://127.0.0.1:18731"
   indexer:

@@ -13,14 +13,14 @@ data class TzOp(
     @JsonProperty("height")
     val height: Long,
     @JsonProperty("big_map_diff")
-    val bigMapDiff: BigMapDiff
+    val bigMapDiff: List<BigMapDiff>
 ) {
     data class BigMapDiff(
         @JsonProperty("key")
         val key: String,
         @JsonProperty("key_hash")
         val keyHash: String,
-        @JsonProperty("contract")
+        @JsonProperty("value")
         val value: Value,
         @JsonProperty("meta")
         val meta: Meta,
@@ -33,6 +33,7 @@ data class TzOp(
             @JsonProperty("1@address")
             val address: String
         )
+
         data class Meta(
             @JsonProperty("contract")
             val contract: String,

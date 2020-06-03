@@ -19,6 +19,8 @@ class AnchorJob(
     private val tezosWriterService: TezosWriterService,
     private val anchoringRetryMessageChannel: MessageChannel,
     private val validationMessageChannel: MessageChannel,
+    @Value("\${tezos.account.publicKey}") private val publicKey: String,
+    @Value("\${tezos.account.secretKey}") private val secretKey: String,
     @Value("\${tezos.contract.address}") private val contractAddress: String
 ) {
 
@@ -30,7 +32,10 @@ class AnchorJob(
         val rootHash = job?.rootHash ?: throw IllegalStateException("An existing job must have a root hash")
         LOGGER.debug("Ready to anchor job ({}) rootHash ({}) into the blockchain.", jobId, rootHash)
         try {
-            val transactionHash = tezosWriterService.anchorHash(rootHash)
+            val signerIdentity =
+                tezosWriterService.retrieveIdentity(publicKeyBase58 = publicKey, secretKeyBase58 = secretKey)
+            val transactionHash = tezosWriterService.anchorHash(rootHash = rootHash, signerIdentity = signerIdentity)
+
             val injectedJob = jobService.patch(
                 requester = adminAccount,
                 jobId = jobId,
@@ -38,7 +43,8 @@ class AnchorJob(
                     transactionHash = transactionHash,
                     state = JobStateType.INJECTED,
                     numberOfTry = job.numberOfTry + 1,
-                    contractAddress = contractAddress
+                    contractAddress = contractAddress,
+                    signerAddress = signerIdentity.publicAddress.value
                 )
             )
             validationMessageChannel.sendPayload(

@@ -7,5 +7,5 @@ import com.sword.signature.business.model.Proof
 interface CheckService {
 
     @Throws(CheckException::class)
-    suspend fun checkDocument(documentHash: String, proof: Proof?): CheckResponse
+    suspend fun checkDocument(documentHash: String, proof: Proof? = null): CheckResponse
 }

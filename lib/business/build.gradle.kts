@@ -2,6 +2,7 @@ val merkleTreeVersion : String by project.extra
 val flapdoodleVersion: String by project.extra
 val mockKVersion: String by project.extra
 val ej4tezosVersion: String by project.extra
+val springmockkVersion: String by project.extra
 
 plugins {
     id("kotlin")
@@ -31,9 +32,12 @@ dependencies {
     implementation("org.springframework.integration:spring-integration-mongodb")
 
     // JWT
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-test") {
+        exclude(module = "mockito-core")
+    }
     testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo:$flapdoodleVersion")
     testImplementation("io.mockk:mockk:$mockKVersion")
+    testImplementation("com.ninja-squad:springmockk:$springmockkVersion")
 }
 
 tasks {

@@ -65,5 +65,10 @@ data class Job(
     /**
      * Address of the smart contract in the blockchain.
      */
-    val contractAddress: String? = null
+    val contractAddress: String? = null,
+
+    /**
+     * Address of the transaction signer.
+     */
+    val signerAddress: String? = null
 )

@@ -77,6 +77,7 @@ class JobServiceImpl(
             transactionHash = patch.transactionHash ?: job.transactionHash,
             blockHash = patch.blockHash ?: job.blockHash,
             blockDepth = patch.blockDepth ?: job.blockDepth,
+            minDepth = patch.minDepth ?: job.minDepth,
             state = patch.state ?: job.state,
             injectedDate = if (patch.state == JobStateType.INJECTED) {
                 OffsetDateTime.now()
@@ -93,7 +94,8 @@ class JobServiceImpl(
             } else {
                 job.stateDate
             },
-            contractAddress = patch.contractAddress ?: job.contractAddress
+            contractAddress = patch.contractAddress ?: job.contractAddress,
+            signerAddress = patch.signerAddress ?: job.signerAddress
         )
 
         val updatedJob = jobRepository.save(toPatch).awaitSingle().toBusiness()

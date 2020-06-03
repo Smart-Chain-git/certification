@@ -48,7 +48,7 @@ class CheckServiceImpl(
                     expectedDepth = job.minDepth!!
                 )
                 JobStateType.VALIDATED -> {
-                    if (job.transactionHash != null) {
+                    if (job.transactionHash == null) {
                         throw CheckException.IncoherentData()
                     }
                     val transaction: TzOp? = tezosReaderService.getTransaction(job.transactionHash!!)
@@ -58,17 +58,45 @@ class CheckServiceImpl(
                         LOGGER.error("No transaction found with hash '{}'", job.transactionHash!!)
                         throw CheckException.IncoherentData()
                     }
-                    if (transaction.bigMapDiff.meta.contract != job.contractAddress) {
+                    if (transaction.bigMapDiff[0].meta.contract != job.contractAddress) {
                         LOGGER.error(
                             "Different contract found for transaction '{}': expected '{}', actual '{}'.",
                             job.transactionHash!!,
                             job.contractAddress,
-                            transaction.bigMapDiff.meta.contract
+                            transaction.bigMapDiff[0].meta.contract
                         )
                         throw CheckException.IncoherentData()
                     }
 
-                    // TODO
+                    if (transaction.bigMapDiff[0].key != rootHash) {
+                        LOGGER.error(
+                            "Different rootHash found for transaction '{}': expected '{}', actual '{}'.",
+                            job.transactionHash,
+                            rootHash,
+                            transaction.bigMapDiff[0].key
+                        )
+                        throw CheckException.IncoherentData()
+                    }
+
+                    if (transaction.bigMapDiff[0].value.address != job.signerAddress) {
+                        LOGGER.error(
+                            "Different signer found for transaction '{}': expected '{}', actual '{}'.",
+                            job.transactionHash,
+                            job.signerAddress,
+                            transaction.bigMapDiff[0].value.address
+                        )
+                        throw CheckException.IncoherentData()
+                    }
+
+                    if (depth == null || depth < job.minDepth!!) {
+                        LOGGER.error(
+                            "Depth is undefined or not deep enough for transaction '{}': expected '{}', actual '{}'",
+                            job.transactionHash,
+                            job.minDepth,
+                            depth
+                        )
+                        throw CheckException.IncoherentData()
+                    }
                 }
             }
         } else {
@@ -87,7 +115,7 @@ class CheckServiceImpl(
             val sibling: TreeElementEntity? =
                 treeElementRepository.findOne(
                     QTreeElementEntity.treeElementEntity.id.ne(current.id)
-                        .and(QTreeElementEntity.treeElementEntity.parentId.eq(current.id))
+                        .and(QTreeElementEntity.treeElementEntity.parentId.eq(current.parentId))
                 ).awaitFirstOrNull()
             // Retrieve parent.
             val parent: TreeElementEntity =

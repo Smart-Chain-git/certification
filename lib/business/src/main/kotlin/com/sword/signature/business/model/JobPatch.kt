@@ -15,5 +15,6 @@ data class JobPatch(
      */
     val minDepth: Long? = null,
     var state: JobStateType? = null,
-    val contractAddress: String? = null
+    val contractAddress: String? = null,
+    val signerAddress: String? = null
 )

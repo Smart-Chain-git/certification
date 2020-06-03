@@ -64,10 +64,7 @@ class TezosWriterServiceImpl(
             init()
         }
 
-        val tezosIdentity: TezosIdentity = retrieveIdentity(publicKey, secretKey)
-
         hashTimestamping = HashTimestamping().apply {
-            setAdminPrivateKey(tezosIdentity.privateKey)
             setTezosContractAddress(TezosContractAddress.toTezosContractAddress(contractAddress))
 
             setBundleContext(null)
@@ -76,15 +73,16 @@ class TezosWriterServiceImpl(
             setTezosCoreService(tezosCoreService)
             setTezosConnectivity(tezosConnectivity)
             setTezosCryptoProvider(tezosCryptoProvider)
-
-            init()
         }
     }
 
     @Throws(TezosException::class)
-    override fun anchorHash(rootHash: String): String {
-        LOGGER.debug("anchorHash (rootHash = {})", rootHash)
-
+    override fun anchorHash(rootHash: String, signerIdentity: TezosIdentity): String {
+        LOGGER.debug("anchorHash (rootHash = {}, signer = {})", rootHash, signerIdentity)
+        hashTimestamping.apply {
+            setAdminPrivateKey(signerIdentity.privateKey)
+            init()
+        }
         return hashTimestamping.timestampHash(rootHash)
     }
 
