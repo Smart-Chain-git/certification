@@ -5,6 +5,7 @@ pluginManagement {
     val dependencyManagementPluginVersion: String by extra
     val sonarqubeVersion: String by extra
     val springBootVersion: String by extra
+    val nodeGradleVersion: String by extra
     plugins {
 
 
@@ -12,6 +13,7 @@ pluginManagement {
         id("io.spring.dependency-management") version dependencyManagementPluginVersion
         kotlin("jvm") version kotlinVersion
         kotlin("plugin.spring") version kotlinVersion
+        id("com.github.node-gradle.node") version nodeGradleVersion
         id("org.sonarqube") version sonarqubeVersion
     }
     repositories {
@@ -34,7 +36,7 @@ include (":lib:web-core")
 include(":lib:tezos")
 
 include (":backend:daemon")
-
+include (":frontend:jsclient")
 include (":frontend:rest")
 include (":frontend:rsocket")
 include (":frontend:ui")

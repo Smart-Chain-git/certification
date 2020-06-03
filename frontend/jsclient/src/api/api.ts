@@ -1,6 +1,5 @@
 import globalAxios, {AxiosInstance, AxiosRequestConfig, AxiosResponse} from "axios"
 
-import {API_BASE} from "@/api/api.config"
 
 
 export class Api {
