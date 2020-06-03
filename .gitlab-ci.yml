@@ -31,6 +31,9 @@ before_script:
 # cache before the stage and zip it back after the stage.
 cache:
   key: tezosservers
+  paths:
+    - frontend/jsclient/node_modules/
+
 
 #
 # Stage: test
