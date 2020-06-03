@@ -14,7 +14,7 @@ spring:
       auto-index-creation: false
       uri: mongodb://root:password@mongo:27017/tezos-signature?authSource=admin
   resources:
-    static-locations: "classpath:/app/public-web-resources/"
+    static-locations: "classpath:/public-web-resources/"
 logging:
   level:
     root: info
