@@ -4,6 +4,13 @@
     "date-format": "DD/MM/Y"
   },
   "first-day-of-week": "1",
+  "login": {
+    "login": "Identifiant",
+    "password": "Mot de passe",
+    "forgotten-password": "Mot de passe oublié ?",
+    "connection": "Connexion",
+    "gcu": "Conditions générales d'utilisation"
+  },
   "account": {
     "list": {
       "login": "Identifiant",
@@ -14,16 +21,20 @@
     }
   },
   "menu": {
-    "dashboard": "Dashboard",
-    "jobs": "Job List",
-    "documents": "Document List",
-    "signatureRequest": "Signature request",
-    "signatureCheck": "Signature check",
-    "resources": "Resources",
-    "settings": "Settings",
-    "hello": "Bonjour",
-    "myAccount": "Mon compte",
-    "channelManagement": "Channel management",
-    "logout": "Déconnexion"
+    "dashboard": "Tableau de bord",
+    "jobs": "Liste des jobs",
+    "documents": "Listes des documents",
+    "signatureRequest": "Requête de signature",
+    "signatureCheck": "Vérification de signature",
+    "resources": "Ressources",
+    "settings": "Paramètres",
+    "hello": "Bonjour"
+  },
+  "errors": {
+    "login": {
+      "invalid": "Erreur sur votre login et/ou mot de passe.",
+      "disabled": "Vous ne pouvez pas vous connecter car votre compte a été désactivé.\nPour plus d'informations, veuillez contacter votre administrateur.",
+      "default": "Connexion impossible, veuillez contacter votre administrateur."
+    }
   }
 }

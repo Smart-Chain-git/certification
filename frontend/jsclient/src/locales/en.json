@@ -1,4 +1,25 @@
 {
+  "locale": {
+    "lang": "en",
+    "date-format": "DD/MM/Y"
+  },
+  "first-day-of-week": "1",
+  "login": {
+    "login" : "Login",
+    "password" : "Password",
+    "forgotten-password" : "Forgot password ?",
+    "connection" : "Login",
+    "gcu" : "Terms of Use"
+  },
+  "account": {
+    "list": {
+      "login": "Login",
+      "lastName": "Name",
+      "firstName": "First name",
+      "role": "Role",
+      "status": "Status"
+    }
+  },
   "menu": {
     "dashboard": "Dashboard",
     "jobs": "Job List",
@@ -7,9 +28,13 @@
     "signatureCheck": "Signature check",
     "resources": "Resources",
     "settings": "Settings",
-    "hello": "Hello",
-    "myAccount": "My Account",
-    "channelManagement": "Channel management",
-    "logout": "Sign out"
+    "hello": "Hello"
+  },
+  "errors": {
+    "login": {
+      "invalid": "Wrong login and/or password.",
+      "disabled": "You cannot log in because your account has been disabled.\nPlease contact your administrator for more information.",
+      "default": "Connection unknowingly failed, please contact your administrator."
+    }
   }
 }
