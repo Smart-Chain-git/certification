@@ -50,8 +50,20 @@ springBoot {
     buildInfo()
 }
 
+
+
+
+
 tasks {
+
+    processResources {
+        from("../jsclient/build/dist") {
+            into("public-web-resources")
+        }
+    }
+
     bootJar {
+        dependsOn(":frontend:jsclient:build")
         archiveBaseName.set(artefactName)
     }
 

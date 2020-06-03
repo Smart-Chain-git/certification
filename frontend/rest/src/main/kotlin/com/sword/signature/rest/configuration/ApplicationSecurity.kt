@@ -29,17 +29,17 @@ class ApplicationSecurity {
         securityContextRepository: SecurityContextRepository
     ): SecurityWebFilterChain {
         http.csrf().disable()
+        http.httpBasic().disable()
         http.securityContextRepository(securityContextRepository)
         http.authorizeExchange { exchanges ->
+            // Authorize every OPTIONS request for browser verification purpose.
             exchanges.pathMatchers(HttpMethod.OPTIONS,"/**").permitAll()
-            exchanges.pathMatchers(
-                "/swagger-ui.html",
-                "/webjars/**",
-                "/v3/api-docs/**",
-                "/v3/api-docs.yaml",
-                "/api/auth"
-            ).permitAll()
-            exchanges.anyExchange().authenticated()
+            // Authorize the login endpoint to be accessed without authentication.
+            exchanges.pathMatchers(HttpMethod.POST, "/api/auth").permitAll()
+            // Require an authentication for all API request apart from the login.
+            exchanges.pathMatchers("/api/**").authenticated()
+            // Authorize all other requests (client, SwaggerUI).
+            exchanges.anyExchange().permitAll()
         }
 
         return http.build()
