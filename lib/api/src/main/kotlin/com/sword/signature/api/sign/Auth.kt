@@ -14,5 +14,6 @@ data class  Account (
     val login: String,
     val email: String,
     val fullName: String?,
-    val isAdmin: Boolean
+    val isAdmin: Boolean,
+    val pubKey: String?
 )

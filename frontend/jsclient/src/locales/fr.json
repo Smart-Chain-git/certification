@@ -12,5 +12,18 @@
       "role": "Rôle",
       "status": "Statut"
     }
+  },
+  "menu": {
+    "dashboard": "Dashboard",
+    "jobs": "Job List",
+    "documents": "Document List",
+    "signatureRequest": "Signature request",
+    "signatureCheck": "Signature check",
+    "resources": "Resources",
+    "settings": "Settings",
+    "hello": "Bonjour",
+    "myAccount": "Mon compte",
+    "channelManagement": "Channel management",
+    "logout": "Déconnexion"
   }
 }

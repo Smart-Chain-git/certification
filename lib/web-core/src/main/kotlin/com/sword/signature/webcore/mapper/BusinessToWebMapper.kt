@@ -12,7 +12,8 @@ fun Account.toWeb() = com.sword.signature.api.sign.Account(
     fullName = fullName,
     isAdmin = isAdmin,
     login = login,
-    email = email
+    email = email,
+    pubKey = pubKey
 )
 
 

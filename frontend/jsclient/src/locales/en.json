@@ -1,2 +1,15 @@
 {
+  "menu": {
+    "dashboard": "Dashboard",
+    "jobs": "Job List",
+    "documents": "Document List",
+    "signatureRequest": "Signature request",
+    "signatureCheck": "Signature check",
+    "resources": "Resources",
+    "settings": "Settings",
+    "hello": "Hello",
+    "myAccount": "My Account",
+    "channelManagement": "Channel management",
+    "logout": "Sign out"
+  }
 }

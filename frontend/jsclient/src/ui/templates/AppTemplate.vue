@@ -6,12 +6,14 @@
 -->
 
 <template>
-    <div>
+    <div id="rootMenu">
         <!-- Mobile header-->
         <div v-if="$vuetify.breakpoint.xs || $vuetify.breakpoint.sm">
             <v-app-bar fixed dense>
                 <v-toolbar class="pa-0 toolbar" dark dense>
-                    <v-toolbar-title class="ml-6">Kami Outside</v-toolbar-title>
+                    <v-toolbar-menu class="ml-6" style="background-color:blue;">
+                        <img src="@/ui/assets/logo_sword_white.png"/>
+                    </v-toolbar-menu>
                     <v-spacer/>
                     <v-menu right>
                         <template v-slot:activator="{ on }">
@@ -20,63 +22,47 @@
                             </v-btn>
                         </template>
                         <v-list id="mobileMenu" class="mt-9">
-                            <v-list-item ref="side-menu-messages" to="/messages">
-                                <v-list-item-action class="centered-icon">
-                                    <v-icon>mail_outline</v-icon>
+                            <v-list-item ref="side-menu-dashboard" to="/dashboard">
+                                <v-list-item-action>
+                                    <v-icon color="var(--var-color-orange-sword)">home</v-icon>
                                 </v-list-item-action>
-                                <v-list-item-title>{{ $t('title.all-messages') }}</v-list-item-title>
+                                <v-list-item-title>{{ $t('menu.dashboard') }}</v-list-item-title>
                             </v-list-item>
-
-                            <v-list-item v-if="canCreateMessage" ref="side-menu-create-message" to="/create-message">
-                                <v-list-item-action class="centered-icon">
-                                    <v-icon>add_circle_outline</v-icon>
+                            <v-list-item ref="side-menu-jobs" to="/jobs">
+                                <v-list-item-action>
+                                    <v-icon color="var(--var-color-orange-sword)">list</v-icon>
                                 </v-list-item-action>
-                                <v-list-item-title>{{ $t('title.create-message') }}</v-list-item-title>
+                                <v-list-item-title>{{ $t('menu.jobs') }}</v-list-item-title>
                             </v-list-item>
-                            <hr/>
-                            <v-list-item ref="side-menu-milestones" to="/campaigns">
-                                <v-list-item-action class="centered-icon">
-                                    <v-icon>date_range</v-icon>
+                            <v-list-item ref="side-menu-documents" to="/documents">
+                                <v-list-item-action>
+                                    <v-icon color="var(--var-color-orange-sword)">description</v-icon>
                                 </v-list-item-action>
-                                <v-list-item-title>{{ $t('title.all-milestones') }}</v-list-item-title>
+                                <v-list-item-title>{{ $t('menu.documents') }}</v-list-item-title>
                             </v-list-item>
-                            <v-list-item v-if="canCreateMessage" to="/create-campaign">
-                                <v-list-item-action class="centered-icon">
-                                    <v-icon>add_circle_outline</v-icon>
+                            <v-list-item v-if="hasPublicKey" ref="side-menu-signature-request" to="/signature-request">
+                                <v-list-item-action>
+                                    <v-icon color="var(--var-color-orange-sword)">alarm_on</v-icon>
                                 </v-list-item-action>
-                                <v-list-item-title>{{ $t('title.create-milestone') }}</v-list-item-title>
+                                <v-list-item-title>{{ $t('menu.signatureRequest') }}</v-list-item-title>
                             </v-list-item>
-                            <v-list-item v-if="canManageExports" to="/campaigns/export">
-                                <v-list-item-action class="centered-icon">
-                                    <v-icon>arrow_downward</v-icon>
+                            <v-list-item ref="side-menu-signature-check" to="/signature-check">
+                                <v-list-item-action>
+                                    <v-icon color="var(--var-color-orange-sword)">check_circle_outline</v-icon>
                                 </v-list-item-action>
-                                <v-list-item-title>{{ $t('title.export-campaigns') }}</v-list-item-title>
+                                <v-list-item-title>{{ $t('menu.signatureCheck') }}</v-list-item-title>
                             </v-list-item>
-                            <hr/>
-                            <v-list-item to="/accounts" v-if="canManageUsers()">
-                                <v-list-item-action class="centered-icon">
-                                    <v-icon>people</v-icon>
+                            <v-list-item ref="side-menu-resources" to="/resources">
+                                <v-list-item-action>
+                                    <v-icon color="var(--var-color-orange-sword)">info</v-icon>
                                 </v-list-item-action>
-                                <v-list-item-content>
-                                    <v-list-item-title>{{ $t('title.all-accounts') }}</v-list-item-title>
-                                </v-list-item-content>
+                                <v-list-item-title>{{ $t('menu.resources') }}</v-list-item-title>
                             </v-list-item>
-                            <v-list-item to="/create-account">
-                                <v-list-item-action class="centered-icon">
-                                    <v-icon>add_circle_outline</v-icon>
+                            <v-list-item v-if="isAdmin" ref="side-menu-settings" to="/settings">
+                                <v-list-item-action>
+                                    <v-icon color="var(--var-color-orange-sword)">settings</v-icon>
                                 </v-list-item-action>
-                                <v-list-item-content>
-                                    <v-list-item-title>{{ $t('title.user-create') }}</v-list-item-title>
-                                </v-list-item-content>
-                            </v-list-item>
-                            <hr/>
-                            <v-list-item to="/roles">
-                                <v-list-item-action class="centered-icon">
-                                    <v-icon>security</v-icon>
-                                </v-list-item-action>
-                                <v-list-item-content>
-                                    <v-list-item-title>{{ $t('title.handleRoles') }}</v-list-item-title>
-                                </v-list-item-content>
+                                <v-list-item-title>{{ $t('menu.settings') }}</v-list-item-title>
                             </v-list-item>
                             <v-list-item to="/profile">
                                 <v-list-item-action class="centered-icon">
@@ -102,73 +88,57 @@
         <div v-else>
             <v-navigation-drawer dark app permanent>
                 <v-toolbar dark dense>
-                    <v-toolbar-title class="toolbar-title ml-4">Kami Outside</v-toolbar-title>
+                    <v-toolbar-menu class="toolbar-menu ml-4">
+                        <img src="@/ui/assets/logo_sword_white.png" height="40"/>
+                    </v-toolbar-menu>
                 </v-toolbar>
                 <v-list dense>
-                    <v-list-item ref="side-menu-messages" to="/messages">
+                    <v-list-item ref="side-menu-dashboard" to="/dashboard">
                         <v-list-item-action>
-                            <v-icon>mail_outline</v-icon>
+                            <v-icon color="var(--var-color-orange-sword)">home</v-icon>
                         </v-list-item-action>
-                        <v-list-item-title>{{ $t('title.all-messages') }}</v-list-item-title>
+                        <v-list-item-title>{{ $t('menu.dashboard') }}</v-list-item-title>
                     </v-list-item>
 
-                    <v-list-item v-if="canCreateMessage" ref="side-menu-create-message" to="/create-message">
+                    <v-list-item ref="side-menu-jobs" to="/jobs">
                         <v-list-item-action>
-                            <v-icon>add_circle_outline</v-icon>
+                            <v-icon color="var(--var-color-orange-sword)">list</v-icon>
                         </v-list-item-action>
-                        <v-list-item-title>{{ $t('title.create-message') }}</v-list-item-title>
+                        <v-list-item-title>{{ $t('menu.jobs') }}</v-list-item-title>
                     </v-list-item>
 
-                    <v-list-group prepend-icon="date_range">
-                        <template v-slot:activator>
-                            <v-list-item-content>
-                                <v-list-item-title>{{ $t('title.manage-milestones') }}</v-list-item-title>
-                            </v-list-item-content>
-                        </template>
-                        <v-list-item to="/campaigns" exact>
-                            <v-list-item-action/>
-                            <v-list-item-content>
-                                <v-list-item-title>{{ $t('title.all-milestones') }}</v-list-item-title>
-                            </v-list-item-content>
-                        </v-list-item>
-                        <v-list-item v-if="canCreateMessage" to="/create-campaign">
-                            <v-list-item-action/>
-                            <v-list-item-content>
-                                <v-list-item-title>{{ $t('title.create-milestone') }}</v-list-item-title>
-                            </v-list-item-content>
-                        </v-list-item>
-                        <v-list-item v-if="canManageExports" to="/campaigns/export">
-                            <v-list-item-action/>
-                            <v-list-item-content>
-                                <v-list-item-title>{{ $t('title.export-campaigns') }}</v-list-item-title>
-                            </v-list-item-content>
-                        </v-list-item>
-                    </v-list-group>
-                    <v-list-group prepend-icon="people" v-if="canManageUsers()">
-                        <template v-slot:activator>
-                            <v-list-item-content>
-                                <v-list-item-title>{{ $t('title.handleUsers') }}</v-list-item-title>
-                            </v-list-item-content>
-                        </template>
-                        <v-list-item to="/accounts">
-                            <v-list-item-action/>
-                            <v-list-item-content>
-                                <v-list-item-title>{{ $t('title.all-accounts') }}</v-list-item-title>
-                            </v-list-item-content>
-                        </v-list-item>
-                        <v-list-item to="/create-account">
-                            <v-list-item-action/>
-                            <v-list-item-content>
-                                <v-list-item-title>{{ $t('title.user-create') }}</v-list-item-title>
-                            </v-list-item-content>
-                        </v-list-item>
-                    </v-list-group>
-
-                    <v-list-item v-if="canManageUsers" ref="side-menu-create-message" to="/roles">
+                    <v-list-item ref="side-menu-documents" to="/documents">
                         <v-list-item-action>
-                            <v-icon>security</v-icon>
+                            <v-icon color="var(--var-color-orange-sword)">description</v-icon>
                         </v-list-item-action>
-                        <v-list-item-title>{{ $t('title.handleRoles') }}</v-list-item-title>
+                        <v-list-item-title>{{ $t('menu.documents') }}</v-list-item-title>
+                    </v-list-item>
+                    <v-list-item v-if="hasPublicKey" ref="side-menu-signature-request" to="/signature-request">
+                        <v-list-item-action>
+                            <v-icon color="var(--var-color-orange-sword)">alarm_on</v-icon>
+                        </v-list-item-action>
+                        <v-list-item-title>{{ $t('menu.signatureRequest') }}</v-list-item-title>
+                    </v-list-item>
+
+                    <v-list-item ref="side-menu-signature-check" to="/signature-check">
+                        <v-list-item-action>
+                            <v-icon color="var(--var-color-orange-sword)">check_circle_outline</v-icon>
+                        </v-list-item-action>
+                        <v-list-item-title>{{ $t('menu.signatureCheck') }}</v-list-item-title>
+                    </v-list-item>
+
+                    <v-list-item ref="side-menu-resources" to="/resources">
+                        <v-list-item-action>
+                            <v-icon color="var(--var-color-orange-sword)">info</v-icon>
+                        </v-list-item-action>
+                        <v-list-item-title>{{ $t('menu.resources') }}</v-list-item-title>
+                    </v-list-item>
+
+                    <v-list-item v-if="isAdmin" ref="side-menu-settings" to="/settings">
+                        <v-list-item-action>
+                            <v-icon color="var(--var-color-orange-sword)">settings</v-icon>
+                        </v-list-item-action>
+                        <v-list-item-title>{{ $t('menu.settings') }}</v-list-item-title>
                     </v-list-item>
                 </v-list>
             </v-navigation-drawer>
@@ -209,10 +179,26 @@
 </template>
 
 <style lang="scss">
+
+    #rootMenu {
+        --var-color-blue-sword: #225588;
+        --var-color-orange-sword: #ffc423;
+        --var-color-light-orange-sword: #506b77;
+    }
+
+    img {
+        margin-left: 30px;
+        margin-top: 20px;
+    }
+
     .centered-icon {
         margin-right: 5px !important;
         margin-left: 0 !important;
         padding: 0 !important;
+    }
+
+    .v-toolbar {
+        contain: none !important;
     }
 
     .v-list-group__header__append-icon {
@@ -223,8 +209,12 @@
         padding: 0px !important;
     }
 
+    .v-navigation-drawer__content {
+        background-color: var(--var-color-blue-sword);
+    }
+
     .v-navigation-drawer__content .v-toolbar__content {
-        background-color: rgb(164, 199, 82);
+        background-color: var(--var-color-blue-sword);
     }
 
     .mobile-content {
@@ -252,38 +242,32 @@
     }
 
     .v-navigation-drawer {
+        .v-list {
+            background-color: var(--var-color-blue-sword) !important;
+        }
+
         .v-list-item:hover {
             opacity: 0.9 !important;
         }
 
-        .v-list-item__title {
+        .v-list-item__menu {
             font-size: 12px !important;
         }
 
         .v-list-group__items .v-list-item {
-            background-color: #505050 !important;
+            background-color: var(--var-color-blue-sword) !important;
         }
 
         .v-list-item__action {
             margin: 0 0 0 0;
         }
 
-        .v-list-group__header.v-list-item--active .v-list-item__title {
-            color: white !important;
-        }
-
-        .v-list > .v-list-item--active .v-list-item__title {
-            color: white !important;
-        }
-
         .v-list-item--active {
-            opacity: 0.8 !important;
+            background-color: var(--var-color-light-orange-sword) !important;
             color: white !important;
-        }
-
-        .v-list-item--active .v-list-item__title {
-
-            font-weight: bold !important;
+            border-left: solid var(--var-color-orange-sword) 10px;
+            box-sizing: border-box;
+            padding-left: 6px;
         }
     }
 </style>
@@ -305,14 +289,6 @@
             }
         }
 
-        private get canCreateMessage() {
-            return true
-        }
-
-        private get canManageExports() {
-            return true
-        }
-
         private logout() {
             this.$router.push("/login")
         }
@@ -321,8 +297,13 @@
             return this.$modules.accounts.meName
         }
 
-        private canManageUsers() {
-            return true
+        private get isAdmin() {
+            return this.$modules.accounts.meAccount?.isAdmin
         }
+
+        private get hasPublicKey() {
+            return this.$modules.accounts.meAccount?.pubKey !== null
+        }
+
     }
 </script>
