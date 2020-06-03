@@ -27,7 +27,7 @@ class ValidationJob(
     @Value("\${daemon.validation.minDepth}") private val minDepth: Long,
     @Value("\${daemon.validation.timeout}") private val validationTimeout: Duration
 ) {
-    private val adminAccount = Account(email = "", login = "", password = "", isAdmin = true, fullName = "", id = "")
+    private val adminAccount = Account(email = "", login = "", password = "", isAdmin = true, fullName = "", id = "", pubKey = null)
 
     suspend fun validate(payload: ValidationJobMessagePayload) {
         val jobId = payload.jobId
