@@ -10,7 +10,8 @@ fun AccountEntity.toBusiness() = Account(
     email = email,
     password = password,
     fullName = fullName,
-    isAdmin = isAdmin
+    isAdmin = isAdmin,
+    pubKey = pubKey
 )
 
 fun TreeElementEntity.Metadata.toBusiness() = FileMetadata(

@@ -22,6 +22,12 @@
   },
   "menu": {
     "dashboard": "Dashboard",
+    "jobs": "Job List",
+    "documents": "Document List",
+    "signatureRequest": "Signature request",
+    "signatureCheck": "Signature check",
+    "resources": "Resources",
+    "settings": "Settings",
     "hello": "Hello",
     "profile": "My account",
     "channelManagement": "Channel management",

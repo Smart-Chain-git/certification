@@ -37,7 +37,8 @@ class JobServiceContextTest @Autowired constructor(
         password = "password",
         fullName = "simple user",
         email = "simplie@toto.net",
-        isAdmin = false
+        isAdmin = false,
+        pubKey = null
     )
 
     private val adminAccount = Account(
@@ -46,7 +47,8 @@ class JobServiceContextTest @Autowired constructor(
         password = "password",
         fullName = "simple user",
         email = "simplie@toto.net",
-        isAdmin = true
+        isAdmin = true,
+        pubKey = null
     )
 
 
@@ -56,7 +58,8 @@ class JobServiceContextTest @Autowired constructor(
         password = "password",
         fullName = "simple user",
         email = "simplie@toto.net",
-        isAdmin = true
+        isAdmin = true,
+        pubKey = null
     )
     private val multipleFileJobId = "5e8c36c49df469062bc658c1"
     private val singleFileJobId = "5e8c36c49df469062bc658c8"

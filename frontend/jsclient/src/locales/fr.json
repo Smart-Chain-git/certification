@@ -22,6 +22,12 @@
   },
   "menu": {
     "dashboard": "Tableau de bord",
+    "jobs": "Liste des jobs",
+    "documents": "Listes des documents",
+    "signatureRequest": "Requête de signature",
+    "signatureCheck": "Vérification de signature",
+    "resources": "Ressources",
+    "settings": "Paramètres",
     "hello": "Bonjour",
     "profile": "Mon compte",
     "channelManagement": "Gestion des canaux",

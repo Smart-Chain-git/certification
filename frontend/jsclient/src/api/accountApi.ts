@@ -15,7 +15,8 @@ export interface Account {
     login: string
     email: string
     fullName: string | undefined
-    isAdmin: boolean
+    isAdmin: boolean,
+    pubKey: string | null
 }
 
 export interface AuthRequest {
