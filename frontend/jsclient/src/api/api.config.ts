@@ -10,6 +10,7 @@ export const apiConfig: AxiosRequestConfig = {
         common: {
             "Content-Type": "application/json",
             "Accept": "application/json",
+            "X-Requested-With": "XMLHttpRequest",
         },
     },
     paramsSerializer: (params) => qs.stringify(params, { indices: false }),

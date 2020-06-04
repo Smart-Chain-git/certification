@@ -3,11 +3,9 @@ import {AxiosRequestConfig, AxiosResponse} from "axios"
 import {Api} from "@/api/api"
 import {apiConfig} from "@/api/api.config"
 
-import {API_BASE} from "@/api/api.config"
-
-export const API_AUTH = API_BASE + "/auth"
-export const API_ME = API_BASE + "/me"
-export const API_GET = API_BASE + "/accounts"
+export const API_AUTH = "/auth"
+export const API_ME = "/me"
+export const API_GET = "/accounts"
 
 
 export interface Account {
