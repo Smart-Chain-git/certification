@@ -17,6 +17,7 @@ import com.sword.signature.model.entity.TreeElementEntity
 import com.sword.signature.model.mapper.toPredicate
 import com.sword.signature.model.repository.JobRepository
 import com.sword.signature.model.repository.TreeElementRepository
+import com.sword.signature.tezos.reader.service.TezosReaderService
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.reactive.awaitFirst
 import kotlinx.coroutines.reactive.awaitFirstOrNull
@@ -34,8 +35,29 @@ class SignServiceImpl(
     @Value("\${sign.tree.maximunLeaf}") val maximunLeaf: Int,
     private val jobRepository: JobRepository,
     private val treeElementRepository: TreeElementRepository,
-    private val anchoringMessageChannel: MessageChannel
+    private val anchoringMessageChannel: MessageChannel,
+    private val tezosReaderService: TezosReaderService
 ) : SignService {
+
+    // Local index of contract creators
+    private val contractCreators = mutableMapOf<String, String>()
+
+    private suspend fun getContractCreator(contractAddress: String): String? {
+        if (contractCreators.containsKey(contractAddress)) {
+            return contractCreators[contractAddress]
+        } else {
+            try {
+                val creator = tezosReaderService.getContract(contractAddress)
+                creator?.let {
+                    contractCreators[contractAddress] = it.manager
+                    return it.manager
+                }
+            } catch (e: Exception) {
+                LOGGER.error("Indexer can't be used to retrieve contract creator.")
+            }
+            return null
+        }
+    }
 
     @Transactional(rollbackFor = [Exception::class])
     override fun batchSign(
@@ -157,7 +179,9 @@ class SignServiceImpl(
             customFields = leafElement.metadata?.customFields,
             contractAddress = job.contractAddress,
             transactionHash = job.transactionHash,
-            blockHash = job.blockHash
+            blockHash = job.blockHash,
+            signerAddress = job.signerAddress,
+            creatorAddress = job.contractAddress?.let { getContractCreator(it) }
         )
     }
 

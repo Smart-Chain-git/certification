@@ -8,6 +8,7 @@ import com.sword.signature.tezos.reader.tzindex.model.TzContract
 import com.sword.signature.tezos.reader.tzindex.model.TzOp
 import io.mockk.coEvery
 import kotlinx.coroutines.runBlocking
+import org.assertj.core.api.SoftAssertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -70,7 +71,10 @@ class CheckServiceContextTest @Autowired constructor(
     inner class CheckDocumentWithoutProof {
         @Test
         fun checkDocumentTestValidatedJob() {
-            importJsonDataset(Path.of("src/test/resources/datasets/check/check_validated.json"))
+            importJsonDatasets(
+                Path.of("src/test/resources/datasets/check/jobs_validated.json"),
+                Path.of("src/test/resources/datasets/check/treeElements_ok.json")
+            )
 
             coEvery { tezosReaderService.getTransaction("ooG3vVwQA51f6YiHd41wvomejuzkBWKJEgvGiYQ4zQK4jrXBFCi") } returns transaction
             coEvery { tezosReaderService.getTransactionDepth("ooG3vVwQA51f6YiHd41wvomejuzkBWKJEgvGiYQ4zQK4jrXBFCi") } returns 100
@@ -79,12 +83,26 @@ class CheckServiceContextTest @Autowired constructor(
             val response =
                 runBlocking { checkService.checkDocument("c866779f483855455631c934d8933bf744f56dcc10833e8a73752ed086325a7a") }
 
-            assertEquals("In Progress", response.status)
+            SoftAssertions().apply {
+                assertEquals("OK", response.status)
+                assertEquals(0, response.code)
+                assertEquals(
+                    "c866779f483855455631c934d8933bf744f56dcc10833e8a73752ed086325a7a",
+                    response.proof.documentHash
+                )
+                assertEquals(
+                    "10cba66df788a0848e397c396b993057c64bb29cadc78152246ad28c1a3b02ef",
+                    response.proof.rootHash
+                )
+            }.assertAll()
         }
 
         @Test
         fun checkDocumentTestInsertedJob() {
-            importJsonDataset(Path.of("src/test/resources/datasets/check/check_inserted.json"))
+            importJsonDatasets(
+                Path.of("src/test/resources/datasets/check/jobs_inserted.json"),
+                Path.of("src/test/resources/datasets/check/treeElements_ok.json")
+            )
 
             assertThrows<CheckException.DocumentKnownUnknownRootHash> {
                 runBlocking { checkService.checkDocument("c866779f483855455631c934d8933bf744f56dcc10833e8a73752ed086325a7a") }
@@ -93,7 +111,10 @@ class CheckServiceContextTest @Autowired constructor(
 
         @Test
         fun checkDocumentTestInjectedJob() {
-            importJsonDataset(Path.of("src/test/resources/datasets/check/check_injected.json"))
+            importJsonDatasets(
+                Path.of("src/test/resources/datasets/check/jobs_injected.json"),
+                Path.of("src/test/resources/datasets/check/treeElements_ok.json")
+            )
 
             assertThrows<CheckException.TransactionNotDeepEnough> {
                 runBlocking { checkService.checkDocument("c866779f483855455631c934d8933bf744f56dcc10833e8a73752ed086325a7a") }
@@ -102,12 +123,20 @@ class CheckServiceContextTest @Autowired constructor(
 
         @Test
         fun checkDocumentTestTreeError() {
-            importJsonDataset(Path.of("src/test/resources/datasets/check/check_treeError.json"))
+            importJsonDatasets(
+                Path.of("src/test/resources/datasets/check/jobs_validated.json"),
+                Path.of("src/test/resources/datasets/check/treeElements_error.json")
+            )
 
             assertThrows<CheckException.IncoherentData> {
                 runBlocking { checkService.checkDocument("c866779f483855455631c934d8933bf744f56dcc10833e8a73752ed086325a7a") }
             }
         }
+    }
+
+    @Nested
+    inner class CheckDocumentWithProof {
+
     }
 
 

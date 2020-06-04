@@ -1,13 +1,12 @@
 package com.sword.signature.webcore.mapper
 
 import com.sword.signature.api.sign.*
-import com.sword.signature.business.model.Account
 import com.sword.signature.business.model.Algorithm
 import com.sword.signature.business.model.FileMetadata
 import com.sword.signature.business.model.TreeElement
 
 
-fun Account.toWeb() = com.sword.signature.api.sign.Account(
+fun com.sword.signature.business.model.Account.toWeb() = Account(
     id=id,
     fullName = fullName,
     isAdmin = isAdmin,
@@ -56,8 +55,8 @@ fun com.sword.signature.business.model.Proof.toWeb(): Proof {
         signatureDate = signatureDate,
         filename = filename,
         algorithm = algorithm,
-        publicKey = "ZpublicKey",
-        originPublicKey = "ZoriginPublicKey",
+        publicKey = signerAddress,
+        originPublicKey = creatorAddress,
         documentHash = documentHash,
         rootHash = rootHash,
         hashes = hashes.map { HashNode(it.first, it.second.name) },

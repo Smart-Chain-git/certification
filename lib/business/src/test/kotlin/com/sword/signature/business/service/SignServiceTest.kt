@@ -193,7 +193,7 @@ class SignServiceTest @Autowired constructor(
 
         @BeforeEach
         fun refreshDatabase() {
-            importJsonDataset(Path.of("src/test/resources/datasets/jobs.json"))
+            importJsonDatasets(Path.of("src/test/resources/datasets/jobs.json"))
         }
 
         private val simpleAccount = Account(

@@ -24,12 +24,14 @@ abstract class AbstractServiceContextTest() {
     abstract val mongoTemplate: ReactiveMongoTemplate
     abstract val migrationHandler : MigrationHandler
 
-    fun importJsonDataset(path: Path) {
-        val collections = Document.parse(Files.readString(path))
-        runBlocking {
-            collections.keys.forEach { collection ->
-                val documents = collections[collection] as List<Document>
-                mongoTemplate.getCollection(collection).awaitSingle().insertMany(documents).awaitLast()
+    fun importJsonDatasets(vararg paths: Path) {
+        paths.forEach {
+            val collections = Document.parse(Files.readString(it))
+            runBlocking {
+                collections.keys.forEach { collection ->
+                    val documents = collections[collection] as List<Document>
+                    mongoTemplate.getCollection(collection).awaitSingle().insertMany(documents).awaitLast()
+                }
             }
         }
     }
