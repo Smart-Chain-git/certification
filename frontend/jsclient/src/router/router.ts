@@ -1,7 +1,7 @@
 import fetchDataAndRedirect from "@/router/guards/fetchDataAndRedirect"
 import checkUserIsAdmin from "@/router/guards/checkUserIsAdmin"
 import checkUserHasPubKey from "@/router/guards/checkUserHasPubKey"
-import { loadAccounts, loadMe } from "@/router/guards/loadAccounts"
+import { loadAccounts, loadMe, loadMeIfAny } from "@/router/guards/loadAccounts"
 import {
     AppTemplate,
     Login,
@@ -42,6 +42,7 @@ const router = new Router({
         {
             path: "/signature-check",
             component: SignatureCheck,
+            beforeEnter: multiguard([fetchDataAndRedirect, loadMe]),
         },
         {
             path: "/",
