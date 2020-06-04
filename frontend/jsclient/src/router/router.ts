@@ -50,7 +50,7 @@ const router = new Router({
             children: [
                 {
                     path: "",
-                    component: Dashboard,
+                    redirect: "/dashboard",
                 },
                 {
                     path: "profile",

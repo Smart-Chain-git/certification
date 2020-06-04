@@ -70,7 +70,6 @@
     }
 
     .v-list-item:hover {
-        color: white !important;
         border-left: solid var(--var-color-orange-sword) 10px !important;
         box-sizing: content-box;
         padding-left: 6px;
