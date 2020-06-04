@@ -5,11 +5,11 @@
   },
   "first-day-of-week": "1",
   "login": {
-    "login" : "Login",
-    "password" : "Password",
-    "forgotten-password" : "Forgot password ?",
-    "connection" : "Login",
-    "gcu" : "Terms of Use"
+    "login": "Login",
+    "password": "Password",
+    "forgotten-password": "Forgot password ?",
+    "connection": "Login",
+    "gcu": "Terms of Use"
   },
   "account": {
     "list": {
@@ -19,6 +19,13 @@
       "role": "Role",
       "status": "Status"
     }
+  },
+  "menu": {
+    "dashboard": "Dashboard",
+    "hello": "Hello",
+    "profile": "My account",
+    "channelManagement": "Channel management",
+    "logout": "Sign out"
   },
   "errors": {
     "login": {

@@ -80,15 +80,22 @@
                             </v-list-item>
                             <v-list-item to="/profile">
                                 <v-list-item-action class="centered-icon">
-                                    <v-icon>person</v-icon>
+                                    <v-icon>account_box</v-icon>
                                 </v-list-item-action>
-                                <v-list-item-title>{{ $t('navbar.profile') }}</v-list-item-title>
+                                <v-list-item-title>{{ $t('menu.profile') }}</v-list-item-title>
+                            </v-list-item>
+
+                            <v-list-item to="/channel-management">
+                                <v-list-item-action class="centered-icon">
+                                    <v-icon>queue</v-icon>
+                                </v-list-item-action>
+                                <v-list-item-title>{{ $t('menu.channelManagement') }}</v-list-item-title>
                             </v-list-item>
                             <v-list-item href="#" @click.native="logout">
                                 <v-list-item-action class="centered-icon">
-                                    <v-icon>power_settings_new</v-icon>
+                                    <v-icon>lock_open</v-icon>
                                 </v-list-item-action>
-                                <v-list-item-title>{{ $t('navbar.logout') }}</v-list-item-title>
+                                <v-list-item-title>{{ $t('menu.logout') }}</v-list-item-title>
                             </v-list-item>
                         </v-list>
                     </v-menu>
@@ -180,22 +187,38 @@
                     <v-menu bottom left>
                         <template v-slot:activator="{ on }">
                             <v-btn class="mr-4" text v-on="on">
-                                {{ meName }}
+                                <div v-if="">
+                                    <v-icon class="mr-1">person</v-icon>
+                                    {{ $t('menu.hello')}} {{ meName }}
+                                </div>
                                 <v-icon>expand_more</v-icon>
                             </v-btn>
                         </template>
                         <v-list class="mt-9">
+                            <v-list-item to="/dashboard">
+                                <v-list-item-action class="centered-icon">
+                                    <v-icon>home</v-icon>
+                                </v-list-item-action>
+                                <v-list-item-title>{{ $t('menu.dashboard') }}</v-list-item-title>
+                            </v-list-item>
                             <v-list-item to="/profile">
                                 <v-list-item-action class="centered-icon">
-                                    <v-icon>person</v-icon>
+                                    <v-icon>account_box</v-icon>
                                 </v-list-item-action>
-                                <v-list-item-title>{{ $t('navbar.profile') }}</v-list-item-title>
+                                <v-list-item-title>{{ $t('menu.profile') }}</v-list-item-title>
+                            </v-list-item>
+
+                            <v-list-item to="/channel-management">
+                                <v-list-item-action class="centered-icon">
+                                    <v-icon>queue</v-icon>
+                                </v-list-item-action>
+                                <v-list-item-title>{{ $t('menu.channelManagement') }}</v-list-item-title>
                             </v-list-item>
                             <v-list-item href="#" @click.native="logout">
                                 <v-list-item-action class="centered-icon">
-                                    <v-icon>power_settings_new</v-icon>
+                                    <v-icon>lock_open</v-icon>
                                 </v-list-item-action>
-                                <v-list-item-title>{{ $t('navbar.logout') }}</v-list-item-title>
+                                <v-list-item-title>{{ $t('menu.logout') }}</v-list-item-title>
                             </v-list-item>
                         </v-list>
                     </v-menu>
@@ -314,7 +337,7 @@
         }
 
         private logout() {
-            this.$router.push("/login")
+            this.$router.push("/signature-check")
         }
 
         private get meName() {
