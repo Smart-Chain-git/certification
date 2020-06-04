@@ -41,7 +41,7 @@ const router = new Router({
             component: AppTemplate,
             beforeEnter: fetchDataAndRedirect,
             children: [
-                {path: "", component: Dashboard,},
+                {path: "", component: Dashboard},
                 {
                     path: "dashboard",
                     component: Dashboard,
