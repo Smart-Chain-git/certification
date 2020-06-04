@@ -99,8 +99,8 @@
 
         private logout() {
             this.$modules.accounts.invalidateToken()
+            this.$modules.accounts.reset()
             if (this.$router.currentRoute.path !== "/signature-check") {
-                console.log("logged out")
                 this.$router.push("/signature-check")
             }
         }
