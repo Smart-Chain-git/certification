@@ -1,7 +1,7 @@
 <template>
     <div>
         <NavbarTop showLogo="true" backgroundColor="var(--var-color-blue-sword)" textColor="white"/>
-        <div>Signature Check</div>
+        <v-content>Signature Check</v-content>
     </div>
 </template>
 

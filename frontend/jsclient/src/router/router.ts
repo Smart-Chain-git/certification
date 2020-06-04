@@ -51,7 +51,6 @@ const router = new Router({
                 {
                     path: "",
                     component: Dashboard,
-                    beforeEnter: loadMe,
                 },
                 {
                     path: "profile",
@@ -83,11 +82,6 @@ const router = new Router({
                     component: SignatureRequest,
                     beforeEnter: multiguard([loadMe, checkUserHasPubKey]),
                 },
-                /*{
-                    path: "signature-check",
-                    component: SignatureCheck,
-                    beforeEnter: loadMe,
-                },*/
                 {
                     path: "resources",
                     component: Resources,
