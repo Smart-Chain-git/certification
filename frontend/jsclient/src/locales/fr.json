@@ -31,6 +31,7 @@
     "hello": "Bonjour",
     "profile": "Mon compte",
     "channelManagement": "Gestion des canaux",
+    "login": "Connexion",
     "logout": "Déconnexion"
   },
   "errors": {

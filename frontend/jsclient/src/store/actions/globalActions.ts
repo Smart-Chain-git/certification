@@ -6,7 +6,6 @@ import {Modules} from "@/store/modules"
  */
 export const fetchData = async (modules: Modules) => {
     await modules.accounts.initToken().then(async () => await Promise.all([
-        modules.accounts.loadMe(),
     ]))
 }
 

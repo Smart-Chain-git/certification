@@ -1,6 +1,7 @@
 import fetchDataAndRedirect from "@/router/guards/fetchDataAndRedirect"
 import checkUserIsAdmin from "@/router/guards/checkUserIsAdmin"
 import checkUserHasPubKey from "@/router/guards/checkUserHasPubKey"
+import { loadAccounts, loadMe } from "@/router/guards/loadAccounts"
 import {
     AppTemplate,
     Login,
@@ -12,6 +13,8 @@ import {
     SignatureCheck,
     Resources,
     Settings,
+    EditAccount,
+    ChannelManagement,
 } from "@/ui/components"
 import Vue from "vue"
 import Router from "vue-router"
@@ -37,40 +40,63 @@ const router = new Router({
             ],
         },
         {
+            path: "/signature-check",
+            component: SignatureCheck,
+        },
+        {
             path: "/",
             component: AppTemplate,
             beforeEnter: fetchDataAndRedirect,
             children: [
-                {path: "", component: Dashboard,},
+                {
+                    path: "",
+                    component: Dashboard,
+                    beforeEnter: loadMe,
+                },
+                {
+                    path: "profile",
+                    component: EditAccount,
+                    beforeEnter: loadMe,
+                },
+                {
+                    path: "channel-management",
+                    component: ChannelManagement,
+                    beforeEnter: loadMe,
+                },
                 {
                     path: "dashboard",
                     component: Dashboard,
+                    beforeEnter: loadMe,
                 },
                 {
                     path: "jobs",
                     component: Jobs,
+                    beforeEnter: loadMe,
                 },
                 {
                     path: "documents",
                     component: Documents,
+                    beforeEnter: loadMe,
                 },
                 {
                     path: "signature-request",
                     component: SignatureRequest,
-                    beforeEnter: checkUserHasPubKey,
+                    beforeEnter: multiguard([loadMe, checkUserHasPubKey]),
                 },
-                {
+                /*{
                     path: "signature-check",
                     component: SignatureCheck,
-                },
+                    beforeEnter: loadMe,
+                },*/
                 {
                     path: "resources",
                     component: Resources,
+                    beforeEnter: loadMe,
                 },
                 {
                     path: "settings",
                     component: Settings,
-                    beforeEnter: checkUserIsAdmin,
+                    beforeEnter: multiguard([loadMe, checkUserIsAdmin]),
                 },
             ],
         },

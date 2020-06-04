@@ -31,6 +31,7 @@
     "hello": "Hello",
     "profile": "My account",
     "channelManagement": "Channel management",
+    "login": "Sign in",
     "logout": "Sign out"
   },
   "errors": {

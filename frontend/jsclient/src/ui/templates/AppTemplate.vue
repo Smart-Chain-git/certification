@@ -7,6 +7,7 @@
 
 <template>
     <div id="rootMenu">
+        <NavbarTop :showLogo="false" :backgroundColor="white" :textColor="black"/>
         <!-- Mobile header-->
         <div v-if="$vuetify.breakpoint.xs || $vuetify.breakpoint.sm">
             <v-app-bar fixed dense>
@@ -149,51 +150,6 @@
                     </v-list-item>
                 </v-list>
             </v-navigation-drawer>
-            <v-app-bar app fixed class="elevation-2" dense>
-                <!-- Takes all the space (puts the next element at the end of the row). -->
-                <div class="flex-grow-1"/>
-                <v-toolbar-items>
-                    <v-divider vertical/>
-                    <v-menu bottom left>
-                        <template v-slot:activator="{ on }">
-                            <v-btn class="mr-4" text v-on="on">
-                                <div v-if="">
-                                    <v-icon class="mr-1">person</v-icon>
-                                    {{ $t('menu.hello')}} {{ meName }}
-                                </div>
-                                <v-icon>expand_more</v-icon>
-                            </v-btn>
-                        </template>
-                        <v-list class="mt-9">
-                            <v-list-item to="/dashboard">
-                                <v-list-item-action class="centered-icon">
-                                    <v-icon>home</v-icon>
-                                </v-list-item-action>
-                                <v-list-item-title>{{ $t('menu.dashboard') }}</v-list-item-title>
-                            </v-list-item>
-                            <v-list-item to="/profile">
-                                <v-list-item-action class="centered-icon">
-                                    <v-icon>account_box</v-icon>
-                                </v-list-item-action>
-                                <v-list-item-title>{{ $t('menu.profile') }}</v-list-item-title>
-                            </v-list-item>
-
-                            <v-list-item to="/channel-management">
-                                <v-list-item-action class="centered-icon">
-                                    <v-icon>queue</v-icon>
-                                </v-list-item-action>
-                                <v-list-item-title>{{ $t('menu.channelManagement') }}</v-list-item-title>
-                            </v-list-item>
-                            <v-list-item href="#" @click.native="logout">
-                                <v-list-item-action class="centered-icon">
-                                    <v-icon>lock_open</v-icon>
-                                </v-list-item-action>
-                                <v-list-item-title>{{ $t('menu.logout') }}</v-list-item-title>
-                            </v-list-item>
-                        </v-list>
-                    </v-menu>
-                </v-toolbar-items>
-            </v-app-bar>
             <v-content>
                 <router-view :key="$route.path"/>
             </v-content>
@@ -296,9 +252,11 @@
 </style>
 
 <script lang="ts">
+    import {NavbarTop} from "@/ui/components"
     import {Component, Vue, Watch} from "vue-property-decorator"
-
-    @Component
+    @Component({
+        components: {NavbarTop},
+    })
     export default class AppTemplate extends Vue {
 
         /**
@@ -312,14 +270,6 @@
             }
         }
 
-        private logout() {
-            this.$router.push("/signature-check")
-        }
-
-        private get meName() {
-            return this.$modules.accounts.meName
-        }
-
         private get isAdmin() {
             return this.$modules.accounts.meAccount?.isAdmin
         }
@@ -327,6 +277,5 @@
         private get hasPublicKey() {
             return this.$modules.accounts.meAccount?.pubKey !== null
         }
-
     }
 </script>
