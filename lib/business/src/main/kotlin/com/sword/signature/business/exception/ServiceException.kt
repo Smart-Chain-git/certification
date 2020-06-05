@@ -23,3 +23,4 @@ open class UserServiceException : ServiceException {
 class EntityNotFoundException(name: String, id: String) : UserServiceException("The $name with id='$id' was not found.")
 class AccountNotFoundException(loginOrEmail: String) : UserServiceException("The account with login or email '$loginOrEmail' was not found.")
 class AlgorithmNotFoundException(algorithmName: String) : UserServiceException("The algorithm with name '$algorithmName' cannot be found.")
+class PasswordTooWeakException() : UserServiceException("Password is too weak : must be 8 characters long, have 1 uppercase, 1 lowercase, 1 number and 1 special character")

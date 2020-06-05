@@ -103,7 +103,7 @@
 
     @Component
     export default class EditAccount extends Vue {
-        @Prop({default: ''}) private readonly id!: string
+        @Prop({default: ""}) private readonly id!: string
         @Prop({default: false}) private readonly selfEditing!: boolean
         @Prop({default: false}) private readonly creating!: boolean
 
@@ -113,12 +113,12 @@
         private draft: draftAccount = {
             id: this.$modules.accounts.meAccount!.id,
             fullName : this.$modules.accounts.meAccount?.fullName,
-            password : '',
-            passwordConfirmation : '',
+            password : "",
+            passwordConfirmation : "",
             email : this.$modules.accounts.meAccount?.email,
             isAdmin : this.$modules.accounts.meAccount?.isAdmin,
             TEZOSPubKey : this.$modules.accounts.meAccount?.pubKey,
-            TEZOSAccount : ''
+            TEZOSAccount : "",
         }
 
 
@@ -128,7 +128,7 @@
 
 
         private get canSave() {
-            if (this.draft.password !== '' || this.draft.passwordConfirmation !== '') {
+            if (this.draft.password !== "" || this.draft.passwordConfirmation !== "") {
                 return this.isPasswordValid && this.draft.password === this.draft.passwordConfirmation
             } else {
                 return this.draft.fullName !== this.$modules.accounts.meAccount?.fullName
@@ -136,15 +136,11 @@
         }
 
         private get isPasswordValid() {
-            return this.draft.password.length >= 8 &&
-                /[a-z]/.test(this.draft.password) &&
-                /[A-Z]/.test(this.draft.password) &&
-                /[0-9]/.test(this.draft.password) &&
-                /[ !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/.test(this.draft.password)
-        }
-
-        private mounted() {
-            console.log(this.$modules.accounts.meAccount)
+            return this.draft.password!.length >= 8 &&
+                /[a-z]/.test(this.draft.password!) &&
+                /[A-Z]/.test(this.draft.password!) &&
+                /[0-9]/.test(this.draft.password!) &&
+                /[ !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/.test(this.draft.password!)
         }
 
         private save() {
@@ -152,7 +148,10 @@
                 email: this.draft.email,
                 fullName : this.draft.fullName,
                 isAdmin : this.draft.isAdmin,
-                password : this.draft.password
+                password : null,
+            }
+            if (this.isPasswordValid) {
+                patch.password = this.draft.password
             }
             return this.$modules.accounts.updateAccount(this.draft.id, patch)
         }

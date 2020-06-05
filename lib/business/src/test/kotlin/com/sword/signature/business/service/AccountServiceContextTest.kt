@@ -170,4 +170,5 @@ class AccountServiceContextTest @Autowired constructor(
     fun deleteNonexistentAccountTest() {
         assertThrows<EntityNotFoundException> { runBlocking { accountService.deleteAccount(accountNonexistentId) } }
     }
+
 }
