@@ -18,7 +18,7 @@
 
 <script lang="ts">
     import {Component, Vue} from "vue-property-decorator"
-    import {Job, jobApi} from "@/api/jobApi"
+    import {Job, jobApi, JobCriteria} from "@/api/jobApi"
 
 
     @Component
@@ -28,7 +28,7 @@
 
 
         private mounted() {
-            jobApi.list("20180626_02236").then((response: Array<Job>) => {
+            jobApi.list({flowName: "b_2020-05-18"}).then((response: Array<Job>) => {
                 this.jobs = response
             })
         }

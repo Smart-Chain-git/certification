@@ -50,8 +50,6 @@ fun JobCriteria.toPredicate(): Predicate {
         )
     }
 
-    println("predicate + $predicates")
-
     return andTogetherPredicates(predicates)
 }
 

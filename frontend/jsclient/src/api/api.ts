@@ -1,4 +1,4 @@
-import globalAxios, { AxiosRequestConfig, AxiosResponse} from "axios"
+import globalAxios, {AxiosRequestConfig, AxiosResponse} from "axios"
 
 
 export class Api {
@@ -8,67 +8,94 @@ export class Api {
         this.config = config
     }
 
-    public getUri(params = {},config: AxiosRequestConfig = this.config): string {
-        let confParam= {
+    public getUri(params = {}, config: AxiosRequestConfig = this.config): string {
+        const confParam = {
             ...config,
-            'params' : {...params}
+            params: {...params},
         }
         return globalAxios.getUri(confParam)
     }
 
-    public request<T, R = AxiosResponse<T>>(params = {},config: AxiosRequestConfig = this.config): Promise<R> {
-        let confParam= {
+    public request<T, R = AxiosResponse<T>>(params = {}, config: AxiosRequestConfig = this.config): Promise<R> {
+        const confParam = {
             ...config,
-            'params' : {...params}
+            params: {...params},
         }
         return globalAxios.request(confParam)
     }
 
-    public get<T, R = AxiosResponse<T>>(url: string,params = {}, config: AxiosRequestConfig = this.config): Promise<R> {
-        let confParam= {
+    public get<T, R = AxiosResponse<T>>(
+        url: string,
+        params = {},
+        config: AxiosRequestConfig = this.config,
+    ): Promise<R> {
+        const confParam = {
             ...config,
-            'params' : {...params}
+            params: {...params},
         }
         return globalAxios.get(url, confParam)
     }
 
-    public delete<T, R = AxiosResponse<T>>(url: string,params = {}, config: AxiosRequestConfig = this.config): Promise<R> {
-        let confParam= {
+    public delete<T, R = AxiosResponse<T>>(
+        url: string,
+        params = {},
+        config: AxiosRequestConfig = this.config,
+    ): Promise<R> {
+        const confParam = {
             ...config,
-            'params' : {...params}
+            params: {...params},
         }
         return globalAxios.delete(url, confParam)
     }
 
-    public head<T, R = AxiosResponse<T>>(url: string,params = {}, config: AxiosRequestConfig = this.config): Promise<R> {
-        let confParam= {
+    public head<T, R = AxiosResponse<T>>(
+        url: string,
+        params = {},
+        config: AxiosRequestConfig = this.config,
+    ): Promise<R> {
+        const confParam = {
             ...config,
-            'params' : {...params}
+            params: {...params},
         }
         return globalAxios.head(url, confParam)
     }
 
-    public post<T, D, R = AxiosResponse<T>>(url: string,params = {}, data: D, config: AxiosRequestConfig = this.config): Promise<R> {
-        let confParam= {
+    public post<T, D, R = AxiosResponse<T>>(
+        url: string,
+        params = {},
+        data: D,
+        config: AxiosRequestConfig = this.config,
+        ): Promise<R> {
+        const confParam = {
             ...config,
-            'params' : {...params}
+            params: {...params},
         }
         return globalAxios.post(url, data, confParam)
     }
 
-    public put<T, D, R = AxiosResponse<T>>(url: string,params = {}, data: D, config: AxiosRequestConfig = this.config): Promise<R> {
-        let confParam= {
+    public put<T, D, R = AxiosResponse<T>>(
+        url: string,
+        params = {},
+        data: D,
+        config: AxiosRequestConfig = this.config,
+    ): Promise<R> {
+        const confParam = {
             ...config,
-            'params' : {...params}
+            params: {...params},
         }
         return globalAxios.put(url, data, confParam)
     }
 
-    public patch<T, R = AxiosResponse<T>>(url: string,params = {}, data?: string, config: AxiosRequestConfig = this.config): Promise<R> {
-        let confParam= {
+    public patch<T, R = AxiosResponse<T>>(
+        url: string,
+        params = {},
+        data?: string,
+        config: AxiosRequestConfig = this.config,
+    ): Promise<R> {
+        const confParam = {
             ...config,
-            'params' : {...params}
+            params: {...params},
         }
-        return globalAxios.patch(url, data, config)
+        return globalAxios.patch(url, data, confParam)
     }
 }
