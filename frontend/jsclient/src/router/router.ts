@@ -42,7 +42,6 @@ const router = new Router({
         {
             path: "/signature-check",
             component: SignatureCheck,
-            beforeEnter: multiguard([fetchDataAndRedirect, loadMe]),
         },
         {
             path: "/",
@@ -76,6 +75,11 @@ const router = new Router({
                 {
                     path: "documents",
                     component: Documents,
+                    beforeEnter: loadMe,
+                },
+                {
+                    path: "/signature-check",
+                    component: SignatureCheck,
                     beforeEnter: loadMe,
                 },
                 {
