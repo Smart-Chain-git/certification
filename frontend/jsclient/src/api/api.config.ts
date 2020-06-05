@@ -1,7 +1,7 @@
 import * as qs from "qs"
 import { AxiosRequestConfig } from "axios"
 
-export const API_BASE  = process.env.VUE_APP_API_BASE
+export const API_BASE  = process.env.VUE_APP_API_URL
 
 export const apiConfig: AxiosRequestConfig = {
     timeout: 15000,
@@ -10,6 +10,7 @@ export const apiConfig: AxiosRequestConfig = {
         common: {
             "Content-Type": "application/json",
             "Accept": "application/json",
+            "X-Requested-With": "XMLHttpRequest",
         },
     },
     paramsSerializer: (params) => qs.stringify(params, { indices: false }),

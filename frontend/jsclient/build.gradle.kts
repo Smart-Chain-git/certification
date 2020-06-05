@@ -8,10 +8,10 @@ node {
 
     // If true, it will download node using above parameters.
     // If false, it will try to use globally installed node.
-    download = true
+    download = false
 
     // Version of node to use
-    version = "10.16.3"
+    version = "10.21.0"
 
     // Set the download directory for unpacking node
     workDir = file("../.gradle/nodejs")

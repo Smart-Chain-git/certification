@@ -24,7 +24,7 @@ class AnchorJob(
     @Value("\${tezos.contract.address}") private val contractAddress: String
 ) {
 
-    private val adminAccount = Account(email = "", login = "", password = "", isAdmin = true, fullName = "", id = "")
+    private val adminAccount = Account(email = "", login = "", password = "", isAdmin = true, fullName = "", id = "", pubKey = null)
 
     suspend fun anchor(payload: AnchorJobMessagePayload) {
         val jobId = payload.jobId

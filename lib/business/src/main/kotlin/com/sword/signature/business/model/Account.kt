@@ -8,5 +8,6 @@ data class Account(
     val email: String,
     val password: String,
     val fullName: String?,
-    val isAdmin: Boolean
+    val isAdmin: Boolean,
+    val pubKey: String?
 ):Serializable

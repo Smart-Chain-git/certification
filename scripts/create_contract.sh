@@ -17,7 +17,7 @@ then
 else
 	cp ../compose-config/application-daemon.yml ../compose-config/application-daemon.yml.save
 fi
-sed "s/KT1RxNPYeX7YvRRgTmwVqWwemGEvmszWBgEC/$CONTRACT_ID/g" ../compose-config/application-daemon.yml.save > app.yml
+sed "s/KT1KPzcYY3Yb7gFGZWa1Eu9wu7t9eU764cDx/$CONTRACT_ID/g" ../compose-config/application-daemon.yml.save > app.yml
 
 mv app.yml ../compose-config/application-daemon.yml
 

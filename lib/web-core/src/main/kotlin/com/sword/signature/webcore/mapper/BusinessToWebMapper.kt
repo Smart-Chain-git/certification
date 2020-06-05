@@ -11,7 +11,8 @@ fun com.sword.signature.business.model.Account.toWeb() = Account(
     fullName = fullName,
     isAdmin = isAdmin,
     login = login,
-    email = email
+    email = email,
+    pubKey = pubKey
 )
 
 
