@@ -15,9 +15,7 @@ class TezosReaderServiceImpl(
         val transaction = getTransaction(transactionHash)
 
         if (transaction != null) {
-            val transactionHeight = transaction.height
             val head = tzIndexConnector.getHead()
-
             return head.height - transaction.height
         }
 

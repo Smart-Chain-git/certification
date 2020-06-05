@@ -44,7 +44,6 @@ fun JobEntity.toBusiness(rootHash: String? = null, files: List<TreeElement.LeafT
     userId = userId,
     transactionHash = transactionHash,
     blockDepth = blockDepth,
-    minDepth = minDepth,
     blockHash = blockHash,
     createdDate = createdDate,
     injectedDate = injectedDate,

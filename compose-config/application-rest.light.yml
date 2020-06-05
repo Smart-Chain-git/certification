@@ -28,6 +28,6 @@ jwt:
   duration : 2h
 tezos:
   indexer:
-    url: "http://tzindex:8000"
+    url: "https://api.carthagenet.tzstats.com"
   validation:
     minDepth: 30

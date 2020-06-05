@@ -10,10 +10,6 @@ data class JobPatch(
      * Block depth at validation date.
      */
     val blockDepth: Long? = null,
-    /**
-     * Expected depth for validation.
-     */
-    val minDepth: Long? = null,
     var state: JobStateType? = null,
     val contractAddress: String? = null,
     val signerAddress: String? = null

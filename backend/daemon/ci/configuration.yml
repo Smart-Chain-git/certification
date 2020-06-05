@@ -47,7 +47,6 @@ daemon:
     maxTry : 5
     delay : 2m
   validation:
-    minDepth: 30
     delay: 1m
     timeout: 10m
   poller:
@@ -65,3 +64,5 @@ tezos:
     url: "http://node:18731"
   indexer:
     url: "http://tzindex:8000"
+  validation:
+    minDepth: 30

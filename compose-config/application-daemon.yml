@@ -65,3 +65,5 @@ tezos:
     url: "http://node:20000"
   indexer:
     url: "http://tzindex:8000"
+  validation:
+    minDepth: 30

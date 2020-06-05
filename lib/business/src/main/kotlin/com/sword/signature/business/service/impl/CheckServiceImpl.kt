@@ -18,6 +18,7 @@ import com.sword.signature.tezos.reader.service.TezosReaderService
 import com.sword.signature.tezos.reader.tzindex.model.TzOp
 import kotlinx.coroutines.reactive.awaitFirstOrNull
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.time.OffsetDateTime
 import java.util.function.Supplier
@@ -27,7 +28,8 @@ class CheckServiceImpl(
     val treeElementRepository: TreeElementRepository,
     val jobRepository: JobRepository,
     val tezosReaderService: TezosReaderService,
-    val signService: SignService
+    val signService: SignService,
+    @Value("\${tezos.validation.minDepth}") private val minDepth: Long
 ) : CheckService {
 
     private val adminAccount =
@@ -54,7 +56,7 @@ class CheckServiceImpl(
                 )
                 JobStateType.INJECTED -> throw CheckException.TransactionNotDeepEnough(
                     currentDepth = job.blockDepth!!,
-                    expectedDepth = job.minDepth!!
+                    expectedDepth = minDepth
                 )
                 JobStateType.VALIDATED -> {
                     if (job.transactionHash == null) {
@@ -97,11 +99,11 @@ class CheckServiceImpl(
                         throw CheckException.IncoherentData()
                     }
 
-                    if (depth == null || job.minDepth == null || depth < job.minDepth!!) {
+                    if (depth == null || depth < minDepth) {
                         LOGGER.error(
                             "Depth is undefined or not deep enough for transaction '{}': expected '{}', actual '{}'",
                             job.transactionHash,
-                            job.minDepth,
+                            minDepth,
                             depth
                         )
                         throw CheckException.IncoherentData()
@@ -123,6 +125,7 @@ class CheckServiceImpl(
             // Check the proof file
             try {
                 checkNotNull(proof.transactionHash)
+                check(proof.documentHash == documentHash)
             } catch (e: Exception) {
                 LOGGER.debug("Proof for {} does not contain every required fields.", documentHash)
                 throw CheckException.IncorrectProofFile()
@@ -146,7 +149,7 @@ class CheckServiceImpl(
                     proof.contractAddress,
                     transaction.bigMapDiff[0].meta.contract
                 )
-                throw CheckException.IncorrectProofFile()
+                throw CheckException.IncorrectTransaction()
             }
 
             if (transaction.bigMapDiff[0].key != proof.rootHash) {
@@ -156,7 +159,7 @@ class CheckServiceImpl(
                     proof.rootHash,
                     transaction.bigMapDiff[0].key
                 )
-                throw CheckException.IncoherentData()
+                throw CheckException.IncorrectTransaction()
             }
 
             if (transaction.bigMapDiff[0].value.address != proof.signerAddress) {
@@ -166,17 +169,20 @@ class CheckServiceImpl(
                     proof.signerAddress,
                     transaction.bigMapDiff[0].value.address
                 )
-                throw CheckException.IncoherentData()
+                throw CheckException.IncorrectTransaction()
             }
 
-            if (depth == null || depth < 30) {
+            if (depth == null || depth < minDepth) {
                 LOGGER.error(
                     "Depth is undefined or not deep enough for transaction '{}': expected '{}', actual '{}'",
                     proof.transactionHash,
                     30,
                     depth
                 )
-                throw CheckException.IncoherentData()
+                throw CheckException.TransactionNotDeepEnough(
+                    currentDepth = depth ?: 0,
+                    expectedDepth = minDepth
+                )
             }
 
             val defaultResponse = Supplier {

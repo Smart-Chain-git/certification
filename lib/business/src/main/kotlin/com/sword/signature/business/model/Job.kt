@@ -29,10 +29,6 @@ data class Job(
      * Block depth at validation date.
      */
     val blockDepth: Long? = null,
-    /**
-     * Expected depth for validation.
-     */
-    val minDepth: Long? = null,
 
     /**
      * Algotithm used to build the Merkel tree

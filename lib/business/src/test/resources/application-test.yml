@@ -34,3 +34,5 @@ jwt:
 tezos:
   indexer:
     url: "http://my-indexer-url.com"
+  validation:
+    minDepth: 30

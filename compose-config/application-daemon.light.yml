@@ -48,7 +48,6 @@ daemon:
     maxTry : 5
     delay : 2m
   validation:
-    minDepth: 30
     delay: 10m
     timeout: 10m
   poller:
@@ -65,3 +64,5 @@ tezos:
     url: "https://carthagenet.smartpy.io"
   indexer:
     url: "https://api.carthagenet.tzstats.com"
+  validation:
+    minDepth: 30

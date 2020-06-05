@@ -24,7 +24,7 @@ class ValidationJob(
     private val validationRetryMessageChannel: MessageChannel,
     private val callbackMessageChannel: MessageChannel,
     private val anchoringMessageChannel: MessageChannel,
-    @Value("\${daemon.validation.minDepth}") private val minDepth: Long,
+    @Value("\${tezos.validation.minDepth}") private val minDepth: Long,
     @Value("\${daemon.validation.timeout}") private val validationTimeout: Duration
 ) {
     private val adminAccount = Account(email = "", login = "", password = "", isAdmin = true, fullName = "", id = "")
@@ -58,8 +58,7 @@ class ValidationJob(
                         patch = JobPatch(
                             state = JobStateType.VALIDATED,
                             blockHash = transaction.block,
-                            blockDepth = transactionDepth,
-                            minDepth = minDepth
+                            blockDepth = transactionDepth
                         )
                     )
                     // Call the callback url
@@ -87,8 +86,7 @@ class ValidationJob(
                     requester = adminAccount,
                     jobId = jobId,
                     patch = JobPatch(
-                        blockDepth = transactionDepth,
-                        minDepth = minDepth
+                        blockDepth = transactionDepth
                     )
                 )
                 // Set the validation for retry later.
