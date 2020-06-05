@@ -39,7 +39,8 @@ fun com.sword.signature.business.model.Job.toWeb() = Job(
     stateDate = stateDate,
     state = state.name,
     contractAddress = contractAddress,
-    transactionHash = transactionHash
+    transactionHash = transactionHash,
+    channelName = channelName
 )
 
 
