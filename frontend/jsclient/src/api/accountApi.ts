@@ -1,3 +1,4 @@
+import {AccountPatch} from '@/store/types'
 import {AxiosRequestConfig, AxiosResponse} from "axios"
 
 import {Api} from "@/api/api"
@@ -60,6 +61,13 @@ export class AccountApi extends Api {
     public list(): Promise<Array<Account>> {
         return this.get<Array<Account>>(API_GET)
             .then((response: AxiosResponse<Array<Account>>) => {
+                return response.data
+            })
+    }
+
+    public patchById(id: string, data: AccountPatch): Promise<Account> {
+        return this.patch<Account, AccountPatch>(API_GET + "/" + id, data)
+            .then((response: AxiosResponse<Account>) => {
                 return response.data
             })
     }

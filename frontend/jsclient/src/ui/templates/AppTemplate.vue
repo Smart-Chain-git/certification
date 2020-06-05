@@ -6,7 +6,7 @@
 -->
 
 <template>
-    <div id="rootMenu">
+    <div>
         <NavbarTop :showLogo="false" :backgroundColor="white" :textColor="black"/>
         <!-- Mobile header-->
         <div v-if="$vuetify.breakpoint.xs || $vuetify.breakpoint.sm">
@@ -159,7 +159,7 @@
 
 <style lang="scss">
 
-    #rootMenu {
+    :root {
         --var-color-blue-sword: #225588;
         --var-color-orange-sword: #ffc423;
         --var-color-light-orange-sword: #506b77;

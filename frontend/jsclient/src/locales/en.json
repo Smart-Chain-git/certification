@@ -18,6 +18,18 @@
       "firstName": "First name",
       "role": "Role",
       "status": "Status"
+    },
+    "edit": {
+      "title": "My account",
+      "login": "Login",
+      "email": "Email",
+      "profile": "Profile",
+      "TEZOSPubKey": "TEZOS public key",
+      "TEZOSAccount": "TEZOS account",
+      "fullName": "Full name",
+      "password": "Change password",
+      "passwordConfirmation" : "Confirm new password",
+      "save": "Save"
     }
   },
   "menu": {
@@ -39,6 +51,10 @@
       "invalid": "Wrong login and/or password.",
       "disabled": "You cannot log in because your account has been disabled.\nPlease contact your administrator for more information.",
       "default": "Connection unknowingly failed, please contact your administrator."
+    },
+    "password": {
+      "differents" : "Passwords must be identical.",
+      "weak": "Password must meet following requirements : 8 characters long, 1 uppercase, 1 lowercase, 1 number, 1 special character."
     }
   }
 }

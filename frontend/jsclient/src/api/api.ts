@@ -36,7 +36,7 @@ export class Api {
         return globalAxios.put(url, data, config)
     }
 
-    public patch<T, R = AxiosResponse<T>>(url: string, data?: string, config: AxiosRequestConfig = this.config): Promise<R> {
+    public patch<T, D, R = AxiosResponse<T>>(url: string, data?: D, config: AxiosRequestConfig = this.config): Promise<R> {
         return globalAxios.patch(url, data, config)
     }
 }

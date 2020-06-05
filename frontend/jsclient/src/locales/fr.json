@@ -18,6 +18,18 @@
       "firstName": "Prénom",
       "role": "Rôle",
       "status": "Statut"
+    },
+    "edit": {
+      "title": "Mon compte",
+      "login": "Identifiant",
+      "email": "Email",
+      "profile": "Profil",
+      "TEZOSPubKey": "Clé publique TEZOS",
+      "TEZOSAccount": "Compte TEZOS",
+      "fullName": "Nom complet",
+      "password": "Nouveau mot de passe",
+      "passwordConfirmation": "Confirmer nouveau mot de passe",
+      "save": "Sauvegarder"
     }
   },
   "menu": {
@@ -39,6 +51,10 @@
       "invalid": "Erreur sur votre login et/ou mot de passe.",
       "disabled": "Vous ne pouvez pas vous connecter car votre compte a été désactivé.\nPour plus d'informations, veuillez contacter votre administrateur.",
       "default": "Connexion impossible, veuillez contacter votre administrateur."
+    },
+    "password": {
+      "differents" : "Les mots de passe doivent être identiques.",
+      "weak": "Le mot de passe doit contenir au moins 8 caractères, 1 majuscule, 1 minuscule, 1 nombre et 1 caractère spécial."
     }
   }
 }

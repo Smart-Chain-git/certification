@@ -56,6 +56,7 @@ const router = new Router({
                 {
                     path: "profile",
                     component: EditAccount,
+                  /*  props: {selfEditing: true},*/
                     beforeEnter: loadMe,
                 },
                 {
