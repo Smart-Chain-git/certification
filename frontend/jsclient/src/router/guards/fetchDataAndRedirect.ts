@@ -6,7 +6,7 @@ export default (to: Route, from: Route, next: NavigationGuardNext) => {
     return fetchData(modules).then(() => {
         next()
     }).catch((_) => {
-        next("/index")
+        next("/signature-check")
     })
 }
 

@@ -1,8 +1,7 @@
 import fetchDataAndRedirect from "@/router/guards/fetchDataAndRedirect"
 import checkUserIsAdmin from "@/router/guards/checkUserIsAdmin"
 import checkUserHasPubKey from "@/router/guards/checkUserHasPubKey"
-import redirectIfLogged from "@/router/guards/redirectIfLogged"
-import { loadAccounts, loadMe, loadMeIfAny } from "@/router/guards/loadAccounts"
+import { loadMeIfLogged } from "@/router/guards/loadAccounts"
 import {
     AppTemplate,
     Login,
@@ -41,14 +40,9 @@ const router = new Router({
             ],
         },
         {
-            path: "/index",
-            component: SignatureCheck,
-            beforeEnter: redirectIfLogged,
-        },
-        {
             path: "/signature-check",
             component: SignatureCheck,
-            beforeEnter: fetchDataAndRedirect,
+            beforeEnter: loadMeIfLogged,
         },
         {
             path: "/",
