@@ -15,9 +15,7 @@ import com.sword.signature.model.entity.QTreeElementEntity
 import com.sword.signature.model.mapper.toPredicate
 import com.sword.signature.model.repository.JobRepository
 import com.sword.signature.model.repository.TreeElementRepository
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.reactive.awaitFirstOrNull
 import kotlinx.coroutines.reactive.awaitSingle
@@ -39,12 +37,13 @@ class JobServiceImpl(
             throw IllegalAccessException("user ${requester.login} does not have role/permission to list jobs for accountId=[${criteria?.accountId}]")
         }
 
-        return if(criteria==null) {
+        return if (criteria == null) {
             jobRepository.findAll(pageable.sort)
         } else {
-            jobRepository.findAll(criteria.toPredicate(),pageable.sort)
-        }.asFlow().map { it.toBusiness() }
-
+            jobRepository.findAll(criteria.toPredicate(), pageable.sort)
+        }.asFlow()
+        .paginate(pageable)
+        .map { it.toBusiness() }
 
     }
 

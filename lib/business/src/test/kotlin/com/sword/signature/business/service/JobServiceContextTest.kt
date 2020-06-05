@@ -21,6 +21,8 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate
 import java.nio.file.Path
 import java.time.LocalDate
@@ -232,6 +234,62 @@ class JobServiceContextTest @Autowired constructor(
                 assertThat(actual).containsExactlyInAnyOrderElementsOf(expected)
             }
         }
+
+        @Test
+        fun `sort by channel name`() {
+            runBlocking {
+                val pageable = PageRequest.of(0, 30, Sort.Direction.ASC, "channelName")
+
+                val actual =
+                    jobService.findAll(requester=adminAccount, pageable=pageable).map { it.id }
+                        .toList()
+
+                val expected = listOf(multipleFileJobId,singleUserJob2Id, singleFileJobId,singleUserJob1Id)
+
+                assertThat(actual).containsExactlyElementsOf(expected)
+            }
+        }
+
+        @Test
+        fun `sort by flowName`() {
+            runBlocking {
+                val pageable = PageRequest.of(0, 30, Sort.Direction.DESC, "flowName")
+                val actual =
+                    jobService.findAll(requester=adminAccount, pageable=pageable).map { it.id }
+                        .toList()
+
+                val expected = listOf(singleUserJob2Id,singleUserJob1Id,multipleFileJobId, singleFileJobId)
+                assertThat(actual).containsExactlyElementsOf(expected)
+            }
+        }
+
+        @Test
+        fun `first page of two`() {
+            runBlocking {
+                val pageable = PageRequest.of(0, 2, Sort.Direction.DESC, "flowName")
+                val actual =
+                    jobService.findAll(requester=adminAccount, pageable=pageable).map { it.id }
+                        .toList()
+
+                val expected = listOf(singleUserJob2Id,singleUserJob1Id)
+                assertThat(actual).containsExactlyElementsOf(expected)
+            }
+        }
+
+        @Test
+        fun `second page of two`() {
+            runBlocking {
+                val pageable = PageRequest.of(1, 2, Sort.Direction.DESC, "flowName")
+                val actual =
+                    jobService.findAll(requester=adminAccount, pageable=pageable).map { it.id }
+                        .toList()
+
+                val expected = listOf(multipleFileJobId, singleFileJobId)
+                assertThat(actual).containsExactlyElementsOf(expected)
+            }
+        }
+
+
 
     }
 
