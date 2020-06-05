@@ -61,5 +61,10 @@ data class Job(
     /**
      * Address of the smart contract in the blockchain.
      */
-    val contractAddress: String? = null
+    val contractAddress: String? = null,
+
+    /**
+     * incoming chanel of the job
+     */
+    val channelName: String? = null
 )

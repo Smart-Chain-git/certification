@@ -7,6 +7,7 @@ import com.sword.signature.business.model.JobPatch
 import com.sword.signature.business.model.TreeElement
 import com.sword.signature.business.model.mapper.toBusiness
 import com.sword.signature.business.service.JobService
+import com.sword.signature.common.criteria.JobCriteria
 import com.sword.signature.common.criteria.TreeElementCriteria
 import com.sword.signature.common.enums.JobStateType
 import com.sword.signature.common.enums.TreeElementType
@@ -22,6 +23,7 @@ import kotlinx.coroutines.reactive.awaitFirstOrNull
 import kotlinx.coroutines.reactive.awaitSingle
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import java.time.OffsetDateTime
 
@@ -32,12 +34,18 @@ class JobServiceImpl(
 
 ) : JobService {
 
-    override fun findAllByUser(requester: Account, account: Account): Flow<Job> {
-        if (!requester.isAdmin && requester.id != account.id) {
-            throw IllegalAccessException("user ${requester.login} does not have role/permission to list ${account.login}'s jobs")
+    override fun findAll(requester: Account, criteria: JobCriteria?, pageable: Pageable): Flow<Job> {
+        if (!requester.isAdmin && requester.id != criteria?.accountId) {
+            throw IllegalAccessException("user ${requester.login} does not have role/permission to list jobs for accountId=[${criteria?.accountId}]")
         }
 
-        return jobRepository.findAllByUserId(account.id).map { it.toBusiness() }
+        return if(criteria==null) {
+            jobRepository.findAll(pageable.sort)
+        } else {
+            jobRepository.findAll(criteria.toPredicate(),pageable.sort)
+        }.asFlow().map { it.toBusiness() }
+
+
     }
 
     override suspend fun findById(requester: Account, jobId: String, withLeaves: Boolean): Job? {

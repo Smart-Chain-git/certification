@@ -30,6 +30,7 @@ dependencies {
     implementation("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
+    implementation("org.springframework.data:spring-data-commons")
 
     // Project libs
     implementation(project(":lib:api"))
