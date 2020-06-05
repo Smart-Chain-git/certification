@@ -1,6 +1,7 @@
 import fetchDataAndRedirect from "@/router/guards/fetchDataAndRedirect"
 import checkUserIsAdmin from "@/router/guards/checkUserIsAdmin"
 import checkUserHasPubKey from "@/router/guards/checkUserHasPubKey"
+import redirectIfLogged from "@/router/guards/redirectIfLogged"
 import { loadAccounts, loadMe, loadMeIfAny } from "@/router/guards/loadAccounts"
 import {
     AppTemplate,
@@ -40,8 +41,14 @@ const router = new Router({
             ],
         },
         {
+            path: "/index",
+            component: SignatureCheck,
+            beforeEnter: redirectIfLogged,
+        },
+        {
             path: "/signature-check",
             component: SignatureCheck,
+            beforeEnter: fetchDataAndRedirect,
         },
         {
             path: "/",
@@ -55,47 +62,36 @@ const router = new Router({
                 {
                     path: "profile",
                     component: EditAccount,
-                    beforeEnter: loadMe,
                 },
                 {
                     path: "channel-management",
                     component: ChannelManagement,
-                    beforeEnter: loadMe,
                 },
                 {
                     path: "dashboard",
                     component: Dashboard,
-                    beforeEnter: loadMe,
                 },
                 {
                     path: "jobs",
                     component: Jobs,
-                    beforeEnter: loadMe,
                 },
                 {
                     path: "documents",
                     component: Documents,
-                    beforeEnter: loadMe,
-                },
-                {
-                    path: "signature-check",
-                    component: SignatureCheck,
-                    beforeEnter: loadMe,
                 },
                 {
                     path: "signature-request",
                     component: SignatureRequest,
-                    beforeEnter: multiguard([loadMe, checkUserHasPubKey]),
+                    beforeEnter: checkUserHasPubKey,
                 },
                 {
                     path: "resources",
                     component: Resources,
-                    beforeEnter: loadMe,
                 },
                 {
                     path: "settings",
                     component: Settings,
-                    beforeEnter: multiguard([loadMe, checkUserIsAdmin]),
+                    beforeEnter: checkUserIsAdmin,
                 },
             ],
         },
