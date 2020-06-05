@@ -78,7 +78,7 @@ const router = new Router({
                     beforeEnter: loadMe,
                 },
                 {
-                    path: "/signature-check",
+                    path: "signature-check",
                     component: SignatureCheck,
                     beforeEnter: loadMe,
                 },
