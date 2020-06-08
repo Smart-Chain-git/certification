@@ -28,7 +28,11 @@
     "signatureCheck": "Vérification de signature",
     "resources": "Ressources",
     "settings": "Paramètres",
-    "hello": "Bonjour"
+    "hello": "Bonjour",
+    "profile": "Mon compte",
+    "channelManagement": "Gestion des canaux",
+    "login": "Connexion",
+    "logout": "Déconnexion"
   },
   "errors": {
     "login": {

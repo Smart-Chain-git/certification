@@ -1,6 +1,7 @@
 import fetchDataAndRedirect from "@/router/guards/fetchDataAndRedirect"
 import checkUserIsAdmin from "@/router/guards/checkUserIsAdmin"
 import checkUserHasPubKey from "@/router/guards/checkUserHasPubKey"
+import { loadMeIfLogged } from "@/router/guards/loadAccounts"
 import {
     AppTemplate,
     Login,
@@ -12,6 +13,8 @@ import {
     SignatureCheck,
     Resources,
     Settings,
+    EditAccount,
+    ChannelManagement,
 } from "@/ui/components"
 import Vue from "vue"
 import Router from "vue-router"
@@ -37,11 +40,27 @@ const router = new Router({
             ],
         },
         {
+            path: "/signature-check",
+            component: SignatureCheck,
+            beforeEnter: loadMeIfLogged,
+        },
+        {
             path: "/",
             component: AppTemplate,
             beforeEnter: fetchDataAndRedirect,
             children: [
-                {path: "", component: Dashboard},
+                {
+                    path: "",
+                    redirect: "/dashboard",
+                },
+                {
+                    path: "profile",
+                    component: EditAccount,
+                },
+                {
+                    path: "channel-management",
+                    component: ChannelManagement,
+                },
                 {
                     path: "dashboard",
                     component: Dashboard,
@@ -58,10 +77,6 @@ const router = new Router({
                     path: "signature-request",
                     component: SignatureRequest,
                     beforeEnter: checkUserHasPubKey,
-                },
-                {
-                    path: "signature-check",
-                    component: SignatureCheck,
                 },
                 {
                     path: "resources",

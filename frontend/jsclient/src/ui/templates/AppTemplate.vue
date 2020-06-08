@@ -6,15 +6,17 @@
 -->
 
 <template>
-    <div id="rootMenu">
+    <div>
+        <NavbarTop :showLogo="false" :backgroundColor="white" :textColor="black"/>
         <!-- Mobile header-->
         <div v-if="$vuetify.breakpoint.xs || $vuetify.breakpoint.sm">
             <v-app-bar fixed dense>
                 <v-toolbar class="pa-0 toolbar" dark dense>
-                    <v-toolbar-menu class="ml-6" style="background-color:blue;">
-                        <img src="@/ui/assets/logo_sword_white.png"/>
+                    <v-toolbar-menu class="ml-6" >
+                        <img src="@/ui/assets/logo_sword_white.png" height="40"/>
                     </v-toolbar-menu>
                     <v-spacer/>
+                    {{ $t('menu.hello')}} {{ meName }}
                     <v-menu right>
                         <template v-slot:activator="{ on }">
                             <v-btn class="mr-6" text v-on="on">
@@ -23,58 +25,65 @@
                         </template>
                         <v-list id="mobileMenu" class="mt-9">
                             <v-list-item ref="side-menu-dashboard" to="/dashboard">
-                                <v-list-item-action>
-                                    <v-icon color="var(--var-color-orange-sword)">home</v-icon>
+                                <v-list-item-action class="centered-icon">
+                                    <v-icon>home</v-icon>
                                 </v-list-item-action>
                                 <v-list-item-title>{{ $t('menu.dashboard') }}</v-list-item-title>
                             </v-list-item>
                             <v-list-item ref="side-menu-jobs" to="/jobs">
-                                <v-list-item-action>
-                                    <v-icon color="var(--var-color-orange-sword)">list</v-icon>
+                                <v-list-item-action class="centered-icon">
+                                    <v-icon>list</v-icon>
                                 </v-list-item-action>
                                 <v-list-item-title>{{ $t('menu.jobs') }}</v-list-item-title>
                             </v-list-item>
                             <v-list-item ref="side-menu-documents" to="/documents">
-                                <v-list-item-action>
-                                    <v-icon color="var(--var-color-orange-sword)">description</v-icon>
+                                <v-list-item-action class="centered-icon">
+                                    <v-icon>description</v-icon>
                                 </v-list-item-action>
                                 <v-list-item-title>{{ $t('menu.documents') }}</v-list-item-title>
                             </v-list-item>
                             <v-list-item v-if="hasPublicKey" ref="side-menu-signature-request" to="/signature-request">
-                                <v-list-item-action>
-                                    <v-icon color="var(--var-color-orange-sword)">alarm_on</v-icon>
+                                <v-list-item-action class="centered-icon">
+                                    <v-icon>alarm_on</v-icon>
                                 </v-list-item-action>
                                 <v-list-item-title>{{ $t('menu.signatureRequest') }}</v-list-item-title>
                             </v-list-item>
                             <v-list-item ref="side-menu-signature-check" to="/signature-check">
-                                <v-list-item-action>
-                                    <v-icon color="var(--var-color-orange-sword)">check_circle_outline</v-icon>
+                                <v-list-item-action class="centered-icon">
+                                    <v-icon>check_circle_outline</v-icon>
                                 </v-list-item-action>
                                 <v-list-item-title>{{ $t('menu.signatureCheck') }}</v-list-item-title>
                             </v-list-item>
                             <v-list-item ref="side-menu-resources" to="/resources">
-                                <v-list-item-action>
-                                    <v-icon color="var(--var-color-orange-sword)">info</v-icon>
+                                <v-list-item-action class="centered-icon">
+                                    <v-icon>info</v-icon>
                                 </v-list-item-action>
                                 <v-list-item-title>{{ $t('menu.resources') }}</v-list-item-title>
                             </v-list-item>
                             <v-list-item v-if="isAdmin" ref="side-menu-settings" to="/settings">
-                                <v-list-item-action>
-                                    <v-icon color="var(--var-color-orange-sword)">settings</v-icon>
+                                <v-list-item-action class="centered-icon">
+                                    <v-icon>settings</v-icon>
                                 </v-list-item-action>
                                 <v-list-item-title>{{ $t('menu.settings') }}</v-list-item-title>
                             </v-list-item>
                             <v-list-item to="/profile">
                                 <v-list-item-action class="centered-icon">
-                                    <v-icon>person</v-icon>
+                                    <v-icon>account_box</v-icon>
                                 </v-list-item-action>
-                                <v-list-item-title>{{ $t('navbar.profile') }}</v-list-item-title>
+                                <v-list-item-title>{{ $t('menu.profile') }}</v-list-item-title>
+                            </v-list-item>
+
+                            <v-list-item to="/channel-management">
+                                <v-list-item-action class="centered-icon">
+                                    <v-icon>queue</v-icon>
+                                </v-list-item-action>
+                                <v-list-item-title>{{ $t('menu.channelManagement') }}</v-list-item-title>
                             </v-list-item>
                             <v-list-item href="#" @click.native="logout">
                                 <v-list-item-action class="centered-icon">
-                                    <v-icon>power_settings_new</v-icon>
+                                    <v-icon>lock_open</v-icon>
                                 </v-list-item-action>
-                                <v-list-item-title>{{ $t('navbar.logout') }}</v-list-item-title>
+                                <v-list-item-title>{{ $t('menu.logout') }}</v-list-item-title>
                             </v-list-item>
                         </v-list>
                     </v-menu>
@@ -142,35 +151,6 @@
                     </v-list-item>
                 </v-list>
             </v-navigation-drawer>
-            <v-app-bar app fixed class="elevation-2" dense>
-                <!-- Takes all the space (puts the next element at the end of the row). -->
-                <div class="flex-grow-1"/>
-                <v-toolbar-items>
-                    <v-divider vertical/>
-                    <v-menu bottom left>
-                        <template v-slot:activator="{ on }">
-                            <v-btn class="mr-4" text v-on="on">
-                                {{ meName }}
-                                <v-icon>expand_more</v-icon>
-                            </v-btn>
-                        </template>
-                        <v-list class="mt-9">
-                            <v-list-item to="/profile">
-                                <v-list-item-action class="centered-icon">
-                                    <v-icon>person</v-icon>
-                                </v-list-item-action>
-                                <v-list-item-title>{{ $t('navbar.profile') }}</v-list-item-title>
-                            </v-list-item>
-                            <v-list-item href="#" @click.native="logout">
-                                <v-list-item-action class="centered-icon">
-                                    <v-icon>power_settings_new</v-icon>
-                                </v-list-item-action>
-                                <v-list-item-title>{{ $t('navbar.logout') }}</v-list-item-title>
-                            </v-list-item>
-                        </v-list>
-                    </v-menu>
-                </v-toolbar-items>
-            </v-app-bar>
             <v-content>
                 <router-view :key="$route.path"/>
             </v-content>
@@ -180,7 +160,7 @@
 
 <style lang="scss">
 
-    #rootMenu {
+    :root {
         --var-color-blue-sword: #225588;
         --var-color-orange-sword: #ffc423;
         --var-color-light-orange-sword: #506b77;
@@ -189,6 +169,7 @@
     img {
         margin-left: 30px;
         margin-top: 20px;
+        max-height: 40px;
     }
 
     .centered-icon {
@@ -273,9 +254,11 @@
 </style>
 
 <script lang="ts">
+    import {NavbarTop} from "@/ui/components"
     import {Component, Vue, Watch} from "vue-property-decorator"
-
-    @Component
+    @Component({
+        components: {NavbarTop},
+    })
     export default class AppTemplate extends Vue {
 
         /**
@@ -289,10 +272,6 @@
             }
         }
 
-        private logout() {
-            this.$router.push("/login")
-        }
-
         private get meName() {
             return this.$modules.accounts.meName
         }
@@ -304,6 +283,5 @@
         private get hasPublicKey() {
             return this.$modules.accounts.meAccount?.pubKey !== null
         }
-
     }
 </script>
