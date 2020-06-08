@@ -46,17 +46,16 @@ class AccountHandler(
             @Parameter(description = "account Id") @PathVariable(value = "accountId") accountId: String,
             @RequestBody accountDetails: AccountPatch
     ): Account {
+
         val accountPatch = AccountPatch(
                 login = accountDetails.login,
                 email = accountDetails.email,
                 isAdmin = accountDetails.isAdmin,
                 fullName = accountDetails.fullName,
-                password = if (accountDetails.password != null) {
-                                checkPassword(accountDetails.password.toString())
-                                bCryptPasswordEncoder.encode(accountDetails.password)
-                            } else {
-                                null
-                            }
+                password = accountDetails.password?.let {
+                    checkPassword(it)
+                    bCryptPasswordEncoder.encode(it)
+                }
         )
 
         val account =
