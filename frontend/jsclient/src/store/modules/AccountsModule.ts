@@ -1,8 +1,8 @@
 import {Account, accountApi, AuthRequest, AuthResponse} from "@/api/accountApi"
 import {resetStore} from "@/store/actions/globalActions"
 import modules from "@/store/modules"
-import {AccountPatch} from '@/store/types'
-import globalAxios, {AxiosResponse} from 'axios'
+import {AccountPatch} from "@/store/types"
+import globalAxios, {AxiosResponse} from "axios"
 import Cookies from "js-cookie"
 import Vue from "vue"
 import {Action, Module, Mutation, VuexModule} from "vuex-class-modules"

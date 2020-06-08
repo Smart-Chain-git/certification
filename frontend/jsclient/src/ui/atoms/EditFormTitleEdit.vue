@@ -40,15 +40,15 @@
         @Prop(String) private readonly label!: string
         @Prop(String) private readonly value!: string
         @Prop(String) private readonly placeholder!: string
-        @Prop({default: 'text'}) private readonly type!: string
-        @Prop({default: ''}) private readonly cssClass!: string
+        @Prop({default: "text"}) private readonly type!: string
+        @Prop({default: ""}) private readonly cssClass!: string
 
         private get title() {
             return this.value
         }
 
         private set title(title) {
-            this.$emit('input', title)
+            this.$emit("input", title)
         }
     }
 </script>

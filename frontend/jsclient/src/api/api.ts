@@ -28,15 +28,18 @@ export class Api {
         return globalAxios.head(url, config)
     }
 
-    public post<T, D, R = AxiosResponse<T>>(url: string, data: D, config: AxiosRequestConfig = this.config): Promise<R> {
+    public post<T, D, R = AxiosResponse<T>>(url: string, data: D, config: AxiosRequestConfig = this.config):
+        Promise<R> {
         return globalAxios.post(url, data, config)
     }
 
-    public put<T, D, R = AxiosResponse<T>>(url: string, data: D, config: AxiosRequestConfig = this.config): Promise<R> {
+    public put<T, D, R = AxiosResponse<T>>(url: string, data: D, config: AxiosRequestConfig = this.config):
+        Promise<R> {
         return globalAxios.put(url, data, config)
     }
 
-    public patch<T, D, R = AxiosResponse<T>>(url: string, data?: D, config: AxiosRequestConfig = this.config): Promise<R> {
+    public patch<T, D, R = AxiosResponse<T>>(url: string, data?: D, config: AxiosRequestConfig = this.config):
+        Promise<R> {
         return globalAxios.patch(url, data, config)
     }
 }

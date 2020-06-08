@@ -122,16 +122,13 @@
             TEZOSAccount: "",
         }
 
-        @Watch('draft.newPassword')
-        @Watch('draft.newPasswordConfirmation')
+        @Watch("draft.newPassword")
+        @Watch("draft.newPasswordConfirmation")
         private updatePassword() {
-            if (this.draft.newPassword !== "" || this.draft.newPasswordConfirmation !== "")
-            {
-                if (this.draft.newPassword !== this.draft.newPasswordConfirmation)
-                {
+            if (this.draft.newPassword !== "" || this.draft.newPasswordConfirmation !== "") {
+                if (this.draft.newPassword !== this.draft.newPasswordConfirmation) {
                     this.fail("errors.password.differents")
-                }
-                else if (!this.isPasswordStrong) {
+                } else if (!this.isPasswordStrong) {
                     this.fail("errors.password.weak")
                 } else {
                     this.message.type = "none"

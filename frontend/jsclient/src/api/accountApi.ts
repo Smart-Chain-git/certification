@@ -1,4 +1,4 @@
-import {AccountPatch} from '@/store/types'
+import {AccountPatch} from "@/store/types"
 import {AxiosRequestConfig, AxiosResponse} from "axios"
 
 import {Api} from "@/api/api"
