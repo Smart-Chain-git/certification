@@ -12,10 +12,11 @@
         <div v-if="$vuetify.breakpoint.xs || $vuetify.breakpoint.sm">
             <v-app-bar fixed dense>
                 <v-toolbar class="pa-0 toolbar" dark dense>
-                    <v-toolbar-menu class="ml-6" style="background-color:blue;">
-                        <img src="@/ui/assets/logo_sword_white.png"/>
+                    <v-toolbar-menu class="ml-6" >
+                        <img src="@/ui/assets/logo_sword_white.png" height="40"/>
                     </v-toolbar-menu>
                     <v-spacer/>
+                    {{ $t('menu.hello')}} {{ meName }}
                     <v-menu right>
                         <template v-slot:activator="{ on }">
                             <v-btn class="mr-6" text v-on="on">
@@ -24,44 +25,44 @@
                         </template>
                         <v-list id="mobileMenu" class="mt-9">
                             <v-list-item ref="side-menu-dashboard" to="/dashboard">
-                                <v-list-item-action>
-                                    <v-icon color="var(--var-color-orange-sword)">home</v-icon>
+                                <v-list-item-action class="centered-icon">
+                                    <v-icon>home</v-icon>
                                 </v-list-item-action>
                                 <v-list-item-title>{{ $t('menu.dashboard') }}</v-list-item-title>
                             </v-list-item>
                             <v-list-item ref="side-menu-jobs" to="/jobs">
-                                <v-list-item-action>
-                                    <v-icon color="var(--var-color-orange-sword)">list</v-icon>
+                                <v-list-item-action class="centered-icon">
+                                    <v-icon>list</v-icon>
                                 </v-list-item-action>
                                 <v-list-item-title>{{ $t('menu.jobs') }}</v-list-item-title>
                             </v-list-item>
                             <v-list-item ref="side-menu-documents" to="/documents">
-                                <v-list-item-action>
-                                    <v-icon color="var(--var-color-orange-sword)">description</v-icon>
+                                <v-list-item-action class="centered-icon">
+                                    <v-icon>description</v-icon>
                                 </v-list-item-action>
                                 <v-list-item-title>{{ $t('menu.documents') }}</v-list-item-title>
                             </v-list-item>
                             <v-list-item v-if="hasPublicKey" ref="side-menu-signature-request" to="/signature-request">
-                                <v-list-item-action>
-                                    <v-icon color="var(--var-color-orange-sword)">alarm_on</v-icon>
+                                <v-list-item-action class="centered-icon">
+                                    <v-icon>alarm_on</v-icon>
                                 </v-list-item-action>
                                 <v-list-item-title>{{ $t('menu.signatureRequest') }}</v-list-item-title>
                             </v-list-item>
                             <v-list-item ref="side-menu-signature-check" to="/signature-check">
-                                <v-list-item-action>
-                                    <v-icon color="var(--var-color-orange-sword)">check_circle_outline</v-icon>
+                                <v-list-item-action class="centered-icon">
+                                    <v-icon>check_circle_outline</v-icon>
                                 </v-list-item-action>
                                 <v-list-item-title>{{ $t('menu.signatureCheck') }}</v-list-item-title>
                             </v-list-item>
                             <v-list-item ref="side-menu-resources" to="/resources">
-                                <v-list-item-action>
-                                    <v-icon color="var(--var-color-orange-sword)">info</v-icon>
+                                <v-list-item-action class="centered-icon">
+                                    <v-icon>info</v-icon>
                                 </v-list-item-action>
                                 <v-list-item-title>{{ $t('menu.resources') }}</v-list-item-title>
                             </v-list-item>
                             <v-list-item v-if="isAdmin" ref="side-menu-settings" to="/settings">
-                                <v-list-item-action>
-                                    <v-icon color="var(--var-color-orange-sword)">settings</v-icon>
+                                <v-list-item-action class="centered-icon">
+                                    <v-icon>settings</v-icon>
                                 </v-list-item-action>
                                 <v-list-item-title>{{ $t('menu.settings') }}</v-list-item-title>
                             </v-list-item>
@@ -168,6 +169,7 @@
     img {
         margin-left: 30px;
         margin-top: 20px;
+        max-height: 40px;
     }
 
     .centered-icon {
@@ -268,6 +270,10 @@
             if (this.$modules.accounts.token === undefined) {
                 this.$router.push("/login")
             }
+        }
+
+        private get meName() {
+            return this.$modules.accounts.meName
         }
 
         private get isAdmin() {
