@@ -44,6 +44,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-devtools")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.2")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.2")
 }
 
 
