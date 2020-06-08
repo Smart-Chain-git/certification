@@ -4,7 +4,6 @@ import com.sword.signature.business.exception.EntityNotFoundException
 import com.sword.signature.business.model.Account
 import com.sword.signature.business.model.TokenCreate
 import com.sword.signature.business.model.TokenPatch
-import com.sword.signature.model.configuration.MongoConfiguration
 import com.sword.signature.model.migration.MigrationHandler
 import io.mockk.every
 import io.mockk.mockkStatic
@@ -64,7 +63,7 @@ class TokenServiceContextTest @Autowired constructor(
     @BeforeEach
     fun refreshDatabase() {
         resetDatabase()
-        importJsonDataset(Path.of("src/test/resources/datasets/tokens.json"))
+        importJsonDatasets(Path.of("src/test/resources/datasets/tokens.json"))
     }
 
     @Test

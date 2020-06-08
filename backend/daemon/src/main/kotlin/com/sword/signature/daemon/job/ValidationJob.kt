@@ -8,8 +8,8 @@ import com.sword.signature.business.model.integration.ValidationJobMessagePayloa
 import com.sword.signature.business.service.JobService
 import com.sword.signature.common.enums.JobStateType
 import com.sword.signature.daemon.sendPayload
-import com.sword.signature.tezos.service.TezosReaderService
-import com.sword.signature.tezos.tzindex.model.TzOp
+import com.sword.signature.tezos.reader.service.TezosReaderService
+import com.sword.signature.tezos.reader.tzindex.model.TzOp
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.messaging.MessageChannel
@@ -24,7 +24,7 @@ class ValidationJob(
     private val validationRetryMessageChannel: MessageChannel,
     private val callbackMessageChannel: MessageChannel,
     private val anchoringMessageChannel: MessageChannel,
-    @Value("\${daemon.validation.minDepth}") private val minDepth: Long,
+    @Value("\${tezos.validation.minDepth}") private val minDepth: Long,
     @Value("\${daemon.validation.timeout}") private val validationTimeout: Duration
 ) {
     private val adminAccount = Account(email = "", login = "", password = "", isAdmin = true, fullName = "", id = "", pubKey = null)
@@ -80,6 +80,14 @@ class ValidationJob(
                 LOGGER.info(
                     "{}/{} confirmations found for transaction {} (job={}).", transactionDepth, minDepth,
                     transactionHash, jobId
+                )
+                // Update transaction depth.
+                jobService.patch(
+                    requester = adminAccount,
+                    jobId = jobId,
+                    patch = JobPatch(
+                        blockDepth = transactionDepth
+                    )
                 )
                 // Set the validation for retry later.
                 validationRetryMessageChannel.sendPayload(payload)

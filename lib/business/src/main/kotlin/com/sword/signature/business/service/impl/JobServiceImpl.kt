@@ -93,7 +93,8 @@ class JobServiceImpl(
             } else {
                 job.stateDate
             },
-            contractAddress = patch.contractAddress ?: job.contractAddress
+            contractAddress = patch.contractAddress ?: job.contractAddress,
+            signerAddress = patch.signerAddress ?: job.signerAddress
         )
 
         val updatedJob = jobRepository.save(toPatch).awaitSingle().toBusiness()

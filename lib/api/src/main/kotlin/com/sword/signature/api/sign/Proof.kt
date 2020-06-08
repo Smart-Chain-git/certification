@@ -17,9 +17,9 @@ data class Proof(
     val urls: List<UrlNode> = emptyList(),
     val algorithm: String,
     @JsonProperty("public_key")
-    val publicKey: String,
+    val publicKey: String? = null,
     @JsonProperty("origin_public_key")
-    val originPublicKey: String,
+    val originPublicKey: String ? = null,
     @JsonProperty("custom_fields")
     val customFields: Map <String, Any>?,
     @JsonProperty("contract_address")

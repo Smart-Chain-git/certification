@@ -1,0 +1,152 @@
+{
+  "treeElements": [
+    {
+      "_id": {
+        "$oid": "5ed7b83b3a635b44c7f8e948"
+      },
+      "hash": "10cba66df788a0848e397c396b993057c64bb29cadc78152246ad28c1a3b02ef",
+      "jobId": "5ed7b83b3a635b44c7f8e946",
+      "type": "NODE"
+    },
+    {
+      "_id": {
+        "$oid": "5ed7b83b3a635b44c7f8e949"
+      },
+      "hash": "804f3c79ae5897a66c9545fac06c27421118ae8cfa17806269bac736f374bd01",
+      "parentId": "5ed7b83b3a635b44c7f8e948",
+      "position": "LEFT",
+      "jobId": "5ed7b83b3a635b44c7f8e946",
+      "type": "NODE"
+    },
+    {
+      "_id": {
+        "$oid": "5ed7b83b3a635b44c7f8e94a"
+      },
+      "hash": "3a864f6e7f3da504bff732c5ec49763e0fb03053f17a1c3d2b8afbd5dd6041c4",
+      "parentId": "5ed7b83b3a635b44c7f8e949",
+      "position": "LEFT",
+      "jobId": "5ed7b83b3a635b44c7f8e946",
+      "type": "NODE"
+    },
+    {
+      "_id": {
+        "$oid": "5ed7b83b3a635b44c7f8e94b"
+      },
+      "hash": "2c1d36914b01370735e97743e2917a961aa6c90ced094f274394a8fc30c6ecd1",
+      "metadata": {
+        "fileName": "PDF_1.pdf",
+        "fileSize": "8.8 Kio",
+        "customFields": {
+          "batchComment": "PDF test",
+          "fileComment": "pdf1"
+        }
+      },
+      "parentId": "5ed7b83b3a635b44c7f8e94a",
+      "position": "LEFT",
+      "jobId": "5ed7b83b3a635b44c7f8e946",
+      "type": "LEAF"
+    },
+    {
+      "_id": {
+        "$oid": "5ed7b83b3a635b44c7f8e94c"
+      },
+      "hash": "786c2b59fd3995f5ac416be53244b06c07b98c18127426f3b733e2d7ef9151ec",
+      "metadata": {
+        "fileName": "PDF_2.pdf",
+        "fileSize": "8.9 Kio",
+        "customFields": {
+          "batchComment": "PDF test",
+          "fileComment": "pdf2"
+        }
+      },
+      "parentId": "5ed7b83b3a635b44c7f8e94a",
+      "position": "RIGHT",
+      "jobId": "5ed7b83b3a635b44c7f8e946",
+      "type": "LEAF"
+    },
+    {
+      "_id": {
+        "$oid": "5ed7b83b3a635b44c7f8e94d"
+      },
+      "hash": "149f0e1d99131b6e5229fb3c7a7bbabe7d7a3ff79bcf5a911a8262ee35802bbb",
+      "parentId": "5ed7b83b3a635b44c7f8e949",
+      "position": "RIGHT",
+      "jobId": "5ed7b83b3a635b44c7f8e946",
+      "type": "NODE"
+    },
+    {
+      "_id": {
+        "$oid": "5ed7b83b3a635b44c7f8e94e"
+      },
+      "hash": "e5d3fe4f843a50f5d713cdd8eb7fcf67710c170fff09d25456366db853adcc38",
+      "metadata": {
+        "fileName": "PDF_3.pdf",
+        "fileSize": "9.0 Kio",
+        "customFields": {
+          "batchComment": "PDF test",
+          "fileComment": "pdf3"
+        }
+      },
+      "parentId": "5ed7b83b3a635b44c7f8e94d",
+      "position": "LEFT",
+      "jobId": "5ed7b83b3a635b44c7f8e946",
+      "type": "LEAF"
+    },
+    {
+      "_id": {
+        "$oid": "5ed7b83b3a635b44c7f8e94f"
+      },
+      "hash": "0e96ad5f1cc69d09d77fc505df4199d80e7386c5b923ccf3b5fc486e77c285fd",
+      "metadata": {
+        "fileName": "PDF_4.pdf",
+        "fileSize": "8.8 Kio",
+        "customFields": {
+          "batchComment": "PDF test",
+          "fileComment": "pdf4"
+        }
+      },
+      "parentId": "5ed7b83b3a635b44c7f8e94d",
+      "position": "RIGHT",
+      "jobId": "5ed7b83b3a635b44c7f8e946",
+      "type": "LEAF"
+    },
+    {
+      "_id": {
+        "$oid": "5ed7b83b3a635b44c7f8e950"
+      },
+      "hash": "1225ae8ed0e99b8bd3bd4fcccc4adab1c72a79dfd951ca702a6f638b5d8b9adb",
+      "parentId": "5ed7b83b3a635b44c7f8e948",
+      "position": "RIGHT",
+      "jobId": "5ed7b83b3a635b44c7f8e946",
+      "type": "NODE"
+    },
+    {
+      "_id": {
+        "$oid": "5ed7b83b3a635b44c7f8e951"
+      },
+      "hash": "648a27d9e2f1717be1928228cf387ca4126267effe57937d0a7c1dba9c352a97",
+      "parentId": "5ed7b83b3a635b44c7f8e950",
+      "position": "LEFT",
+      "jobId": "5ed7b83b3a635b44c7f8e946",
+      "type": "NODE"
+    },
+    {
+      "_id": {
+        "$oid": "5ed7b83b3a635b44c7f8e952"
+      },
+      "hash": "c866779f483855455631c934d8933bf744f56dcc10833e8a73752ed086325a7a",
+      "metadata": {
+        "fileName": "PDF_5.pdf",
+        "fileSize": "8.9 Kio",
+        "customFields": {
+          "batchComment": "PDF test",
+          "fileComment": "pdf5"
+        }
+      },
+      "parentId": "5ed7b83b3a635b44c7f8e951",
+      "position": "LEFT",
+      "jobId": "5ed7b83b3a635b44c7f8e946",
+      "type": "LEAF"
+    }
+  ]
+}

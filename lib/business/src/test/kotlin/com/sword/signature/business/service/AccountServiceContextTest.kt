@@ -4,7 +4,6 @@ import com.sword.signature.business.exception.EntityNotFoundException
 import com.sword.signature.business.model.Account
 import com.sword.signature.business.model.AccountCreate
 import com.sword.signature.business.model.AccountPatch
-import com.sword.signature.model.configuration.MongoConfiguration
 import com.sword.signature.model.migration.MigrationHandler
 import kotlinx.coroutines.flow.count
 import kotlinx.coroutines.reactive.awaitSingle
@@ -41,7 +40,7 @@ class AccountServiceContextTest @Autowired constructor(
     @BeforeEach
     fun refreshDatabase() {
         resetDatabase()
-        importJsonDataset(Path.of("src/test/resources/datasets/accounts.json"))
+        importJsonDatasets(Path.of("src/test/resources/datasets/accounts.json"))
         if (accountsInitialCount == 0L) {
             accountsInitialCount = runBlocking { mongoTemplate.getCollection("accounts").awaitSingle().countDocuments().awaitSingle() }
         }
