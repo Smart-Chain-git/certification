@@ -27,9 +27,13 @@
       "TEZOSPubKey": "TEZOS public key",
       "TEZOSAccount": "TEZOS account",
       "fullName": "Full name",
-      "password": "Change password",
-      "passwordConfirmation" : "Confirm new password",
-      "save": "Save"
+      "password": "Password",
+      "newPassword": "Change password",
+      "newPasswordConfirmation" : "Confirm new password",
+      "save": "Save",
+      "admin": "Administrator",
+      "noAdmin": "User",
+      "updated": "Informations updated."
     }
   },
   "menu": {
@@ -55,6 +59,9 @@
     "password": {
       "differents" : "Passwords must be identical.",
       "weak": "Password must meet following requirements : 8 characters long, 1 uppercase, 1 lowercase, 1 number, 1 special character."
+    },
+    "back": {
+      "generic" : "Informations could not be saved, please contact your administrator."
     }
   }
 }

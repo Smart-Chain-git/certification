@@ -18,7 +18,7 @@
 
 <template>
     <v-row fluid class="mx-0 mb-2 edit-form-input-row">
-        <v-flex xl2 md3 xs12 class="f-title">
+        <v-flex xl2 md3 xs12 class="f-title pr-5">
             {{ title }}
             <slot name="icon"/>
         </v-flex>
