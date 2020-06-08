@@ -60,8 +60,8 @@ jwt:
   issuer: "Tezos@Signature"
 tezos:
   account:
-    publicKey: "edpkurPsQ8eUApnLUJ9ZPDvu98E8VNj4KtJa1aZr16Cr5ow5VHKnz4"
-    secretKey: "edsk3RFfvaFaxbHx8BMtEW1rKQcPtDML3LXjNqMNLCzC3wLC1bWbAt"
+    publicKey: "edpkvGfYw3LyB1UcCahKQk4rF2tvbMUk8GFiTuMjL75uGXrpvKXhjn"
+    secretKey: "edsk3QoqBuvdamxouPhin7swCvkQNgq4jP5KZPbwWNnwdZpSpJiEbq"
   contract:
     address: KT1Tq22yXWayLbmBKwZUhVXMoYqxtzp9XvTk
   node:
