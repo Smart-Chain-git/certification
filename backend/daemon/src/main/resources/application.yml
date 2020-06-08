@@ -1,7 +1,6 @@
 sign:
   tree:
-   maximunLeaf: 3
-
+   maximumLeaf: 3
 spring:
   main:
     web-application-type: none
@@ -63,7 +62,7 @@ tezos:
     publicKey: "edpkvGfYw3LyB1UcCahKQk4rF2tvbMUk8GFiTuMjL75uGXrpvKXhjn"
     secretKey: "edsk3QoqBuvdamxouPhin7swCvkQNgq4jP5KZPbwWNnwdZpSpJiEbq"
   contract:
-    address: KT1Tq22yXWayLbmBKwZUhVXMoYqxtzp9XvTk
+    address: KT1PTSLsKxZ3CgiDqGNLWRt9EADxo3U7ckHC
   node:
     url: "http://127.0.0.1:18731"
   indexer:
