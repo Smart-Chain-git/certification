@@ -26,13 +26,13 @@
     }
 
     .edit-form-title-input {
-        max-width: 400px;
-        width: 400px;
+        max-width: 240px;
+        width: 240px;
     }
 </style>
 
 <script lang="ts">
-    import {Component, Prop, Vue, Watch} from "vue-property-decorator"
+    import {Component, Prop, Vue} from "vue-property-decorator"
 
     @Component
     export default class EditFormTitleEdit extends Vue {

@@ -70,7 +70,6 @@ class AccountServiceImpl(
                 password = accountDetails.password ?: account.password,
                 fullName = accountDetails.fullName ?: account.fullName
         )
-
         val updatedAccount = accountRepository.save(toPatch).awaitSingle().toBusiness()
         LOGGER.trace("Account with id ({}) updated.", accountId)
         return updatedAccount

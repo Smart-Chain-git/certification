@@ -2,10 +2,9 @@ package com.sword.signature.rest.resthandler
 
 import com.sword.signature.api.sign.Account
 import com.sword.signature.business.exception.EntityNotFoundException
-import com.sword.signature.business.exception.PasswordTooWeakException
 import com.sword.signature.business.model.AccountPatch
 import com.sword.signature.business.service.AccountService
-import com.sword.signature.rest.PasswordChecker
+import com.sword.signature.rest.checkPassword
 import com.sword.signature.webcore.authentication.CustomUserDetails
 import com.sword.signature.webcore.mapper.toWeb
 import io.swagger.v3.oas.annotations.Operation
@@ -53,7 +52,7 @@ class AccountHandler(
                 isAdmin = accountDetails.isAdmin,
                 fullName = accountDetails.fullName,
                 password = if (accountDetails.password != null) {
-                                PasswordChecker.checkPassword(accountDetails.password.toString())
+                                checkPassword(accountDetails.password.toString())
                                 bCryptPasswordEncoder.encode(accountDetails.password)
                             } else {
                                 null

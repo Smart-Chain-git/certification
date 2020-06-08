@@ -6,9 +6,9 @@
             </v-col>
         </v-row>
         <v-row>
-            <v-flex>
-                <Card :maxWidth="590">
-                    <v-card-text class="pa-0">
+            <v-flex lg6 md7 sm8 xs11>
+                <Card>
+                    <v-card-text class="pa-0" lg3>
                         <EditFormRow :title="$t('account.edit.login')" :editable="false" :value="draft.id"/>
 
                         <EditFormRow :title="$t('account.edit.email')" :editable="false" :value="draft.email"/>
