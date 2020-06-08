@@ -1,0 +1,31 @@
+{
+	"accounts": [
+		{
+			"_id": {
+				"$oid": "5e734ba4b075db359ea73a68"
+			},
+			"login": "account1",
+			"email": "account1@signature.com",
+			"password": "password",
+			"fullName": "Account 1"
+		},
+		{
+			"_id": {
+				"$oid": "5e7381a2b149956b56388b53"
+			},
+			"login": "account2",
+			"email": "account1@signature.com\"",
+			"password": "password",
+			"fullName": "Account 2"
+		},
+		{
+			"_id": {
+				"$oid": "5e7381bb99dc7fd31dcc48c0"
+			},
+			"login": "account3",
+			"email": "account3@signature.com\"",
+			"password": "password",
+			"fullName": "Account 3"
+		}
+	]
+}

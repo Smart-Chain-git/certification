@@ -5,6 +5,7 @@ import com.sword.signature.business.exception.EntityNotFoundException
 import com.sword.signature.business.exception.PasswordTooWeakException
 import com.sword.signature.business.model.AccountPatch
 import com.sword.signature.business.service.AccountService
+import com.sword.signature.rest.PasswordChecker
 import com.sword.signature.webcore.authentication.CustomUserDetails
 import com.sword.signature.webcore.mapper.toWeb
 import io.swagger.v3.oas.annotations.Operation
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("\${api.base-path:/api}")
 class AccountHandler(
         val accountService: AccountService,
-        private val bCryptPasswordEncoder: BCryptPasswordEncoder
+        val bCryptPasswordEncoder: BCryptPasswordEncoder
 ) {
     @Operation(security = [SecurityRequirement(name = "bearer-key")])
     @RequestMapping(
@@ -47,27 +48,20 @@ class AccountHandler(
             @RequestBody accountDetails: AccountPatch
     ): Account {
         if (accountDetails.password != null) {
-            val pass: String = accountDetails.toString()
-            if (pass.length < 8 ||
-                    !pass.contains(regex = "[a-z]".toRegex()) ||
-                    !pass.contains(regex = "[A-Z]".toRegex()) ||
-                    !pass.contains(regex = "[0-9]".toRegex())
-                    ) {
-                throw PasswordTooWeakException()
-            }
+            PasswordChecker.checkPassword(accountDetails.password.toString())
         }
-        val accountUpdate: AccountPatch = AccountPatch(
+
+        val accountPatch = AccountPatch(
                 login = accountDetails.login,
                 email = accountDetails.email,
-                fullName = accountDetails.fullName,
                 isAdmin = accountDetails.isAdmin,
-                password = if (accountDetails.password != null) {
-                    bCryptPasswordEncoder.encode(accountDetails.password!!)
-                } else { null }
+                fullName = accountDetails.fullName,
+                password = bCryptPasswordEncoder.encode(accountDetails.password)
         )
+
         val account =
-                accountService.patchAccount(accountId, accountUpdate)
+                accountService.patchAccount(accountId, accountPatch)
         return account.toWeb()
     }
-
 }
+

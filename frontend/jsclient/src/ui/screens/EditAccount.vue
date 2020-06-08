@@ -140,7 +140,7 @@
                 /[a-z]/.test(this.draft.password!) &&
                 /[A-Z]/.test(this.draft.password!) &&
                 /[0-9]/.test(this.draft.password!) &&
-                /[ !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/.test(this.draft.password!)
+                /[ !"#$%&'()*+,-./:;<=>?@^_`{|}~]/.test(this.draft.password!)
         }
 
         private save() {
