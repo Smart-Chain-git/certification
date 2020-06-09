@@ -1,5 +1,6 @@
 package com.sword.signature.merkletree.utils
 
+import org.bouncycastle.util.encoders.Hex
 import java.security.MessageDigest
 
 /**
@@ -8,11 +9,7 @@ import java.security.MessageDigest
  * @return The HexString representation of the ByteArray.
  */
 fun byteArrayToHexString(byteArray: ByteArray): String {
-    val hexString = StringBuilder(byteArray.size * 2)
-    for (byte in byteArray) {
-        hexString.append(String.format("%02x", byte))
-    }
-    return hexString.toString()
+    return Hex.toHexString(byteArray)
 }
 
 /**
@@ -21,13 +18,7 @@ fun byteArrayToHexString(byteArray: ByteArray): String {
  * @return The ByteArray representation of the HexString.
  */
 fun hexStringToByteArray(hexString: String): ByteArray {
-    val byteArray = ByteArray(hexString.length / 2)
-    for (i in byteArray.indices) {
-        val index = i * 2
-        val j = Integer.parseInt(hexString.substring(index, index + 2), 16)
-        byteArray[i] = j.toByte()
-    }
-    return byteArray
+    return Hex.decode(hexString)
 }
 
 /**

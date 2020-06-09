@@ -11,8 +11,11 @@ val artifactName = "merkle-tree"
 description = "Merkle tree library"
 
 dependencies {
+    val bouncyCastleVersion: String by project.extra
+
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.slf4j:slf4j-api")
+    implementation("org.bouncycastle:bcprov-jdk15on:$bouncyCastleVersion")
 
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("ch.qos.logback:logback-classic")
