@@ -44,6 +44,7 @@
       "name": "Nom",
       "date": "Date",
       "statusDate": "Date de statut",
+      "status": "Statut",
       "docs": "Docs",
       "channel": "Canal",
       "block": "Blocks",

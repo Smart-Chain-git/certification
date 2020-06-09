@@ -1,3 +1,4 @@
+import {Account} from '@/api/accountApi'
 import {AxiosRequestConfig, AxiosResponse} from "axios"
 
 import {Api} from "@/api/api"
@@ -43,6 +44,13 @@ export class JobApi extends Api {
     public list(criteria: JobCriteria = {}): Promise<Array<Job>> {
         return this.get<Array<Job>>(API_GET, criteria)
             .then((response: AxiosResponse<Array<Job>>) => {
+                return response.data
+            })
+    }
+
+    public getById(id: string): Promise<Job> {
+        return this.get<Job>(API_GET + "/" + id)
+            .then((response: AxiosResponse<Job>) => {
                 return response.data
             })
     }
