@@ -2,6 +2,7 @@ import fetchDataAndRedirect from "@/router/guards/fetchDataAndRedirect"
 import checkUserIsAdmin from "@/router/guards/checkUserIsAdmin"
 import checkUserHasPubKey from "@/router/guards/checkUserHasPubKey"
 import { loadMeIfLogged } from "@/router/guards/loadAccounts"
+import loadCurrentJob from "@/router/guards/loadCurrentJob"
 import {
     AppTemplate,
     Login,
@@ -15,6 +16,7 @@ import {
     Settings,
     EditAccount,
     ChannelManagement,
+    JobDetail,
 } from "@/ui/components"
 import Vue from "vue"
 import Router from "vue-router"
@@ -68,6 +70,12 @@ const router = new Router({
                 {
                     path: "jobs",
                     component: Jobs,
+                },
+                {
+                    path: "jobs/:id",
+                    component: JobDetail,
+                    props: true,
+                    beforeEnter: loadCurrentJob,
                 },
                 {
                     path: "documents",

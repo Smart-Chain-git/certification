@@ -36,6 +36,22 @@
       "updated": "Les informations ont été mises à jour."
     }
   },
+  "job": {
+    "detail": {
+      "title": "Détails du Job",
+      "back": "Retour",
+      "id": "ID",
+      "name": "Nom",
+      "date": "Date",
+      "statusDate": "Date de statut",
+      "docs": "Docs",
+      "channel": "Canal",
+      "block": "Blocks",
+      "transaction": "Transaction",
+      "hash": "Algorithme de hashage",
+      "rootHash": "Racine de hashage"
+    }
+  },
   "menu": {
     "dashboard": "Tableau de bord",
     "jobs": "Liste des jobs",

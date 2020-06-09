@@ -36,6 +36,22 @@
       "updated": "Informations updated."
     }
   },
+  "job": {
+    "detail": {
+      "title": "Job details",
+      "back": "Back",
+      "id": "ID",
+      "name": "Name",
+      "date": "Date",
+      "statusDate": "Status Date",
+      "docs": "Docs",
+      "channel": "Channel",
+      "block": "Block",
+      "transaction": "Transaction",
+      "hash": "Hash algorithm",
+      "rootHash": "root hash"
+    }
+  },
   "menu": {
     "dashboard": "Dashboard",
     "jobs": "Job List",
