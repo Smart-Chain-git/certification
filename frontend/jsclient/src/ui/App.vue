@@ -10,6 +10,7 @@
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         font-size: 14px;
+        background-color: #f0f0f7;
     }
 
     h1 {

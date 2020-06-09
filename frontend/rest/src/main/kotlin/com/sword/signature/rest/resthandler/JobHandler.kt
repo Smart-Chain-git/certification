@@ -40,13 +40,13 @@ class JobHandler(
         @RequestParam(value = "id", required = false) id: String?,
         @RequestParam(value = "accountId", required = false) accountId: String?,
         @RequestParam(value = "flowName", required = false) flowName: String?,
-        @RequestParam(value = "dateStart", required = false)
+        @RequestParam(value = "dateBegin", required = false)
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) dateStart: LocalDate?,
 
         @RequestParam(value = "dateEnd", required = false)
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) dateEnd: LocalDate?,
 
-        @RequestParam(value = "channelName", required = false) channelName: String?,
+        @RequestParam(value = "channel", required = false) channelName: String?,
         @RequestParam(value = "sort", required = false) sort: List<String>?,
         @RequestParam(value = "page", required = false) page: Int?,
         @RequestParam(value = "size", required = false) size: Int?
@@ -62,6 +62,7 @@ class JobHandler(
             dateEnd = dateEnd,
             channelName = channelName
         )
+
         return jobService.findAll(user.account, criteria, paged).map { it.toWeb() }
     }
 

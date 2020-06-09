@@ -20,6 +20,18 @@
       "status": "Statut"
     }
   },
+  "job": {
+    "list": {
+      "title": "Jobs",
+      "id": "ID",
+      "name": "Nom",
+      "creationDate": "Date de création",
+      "statusDate": "Date de statut",
+      "status":"statut",
+      "docs": "Docs",
+      "channel": "Canal"
+    }
+  },
   "menu": {
     "dashboard": "Tableau de bord",
     "jobs": "Liste des jobs",
@@ -36,5 +48,11 @@
       "disabled": "Vous ne pouvez pas vous connecter car votre compte a été désactivé.\nPour plus d'informations, veuillez contacter votre administrateur.",
       "default": "Connexion impossible, veuillez contacter votre administrateur."
     }
+  },
+  "message": {
+  "footer": {
+    "items-per-page-text":"Lignes par page",
+    "page-text": "{0}-{1} sur {2}"
   }
+}
 }

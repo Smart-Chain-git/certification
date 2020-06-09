@@ -30,11 +30,29 @@
     "settings": "Settings",
     "hello": "Hello"
   },
+  "job": {
+    "list": {
+      "title": "Jobs",
+      "id": "ID",
+      "name": "Name",
+      "creationDate": "Creation date",
+      "statusDate": "Status date",
+      "status":"Status",
+      "docs": "Docs",
+      "channel": "Channel"
+    }
+  },
   "errors": {
     "login": {
       "invalid": "Wrong login and/or password.",
       "disabled": "You cannot log in because your account has been disabled.\nPlease contact your administrator for more information.",
       "default": "Connection unknowingly failed, please contact your administrator."
+    }
+  },
+  "message": {
+    "footer": {
+      "items-per-page-text":"Rows per page",
+      "page-text": "{0}-{1} of {2}"
     }
   }
 }

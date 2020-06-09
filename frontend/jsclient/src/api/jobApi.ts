@@ -40,7 +40,7 @@ export class JobApi extends Api {
         this.list = this.list.bind(this)
     }
 
-    public list(criteria: JobCriteria): Promise<Array<Job>> {
+    public list(criteria: JobCriteria={}): Promise<Array<Job>> {
         return this.get<Array<Job>>(API_GET, criteria)
             .then((response: AxiosResponse<Array<Job>>) => {
                 return response.data
