@@ -38,7 +38,7 @@ export class AccountApi extends Api {
 
 
     public auth(credentials: AuthRequest): Promise<AuthResponse> {
-        return this.post<AuthResponse, AuthRequest>(API_AUTH, credentials)
+        return this.post<AuthResponse, AuthRequest>(API_AUTH, {}, credentials)
             .then((response: AxiosResponse<AuthResponse>) => {
                 return response.data
             })

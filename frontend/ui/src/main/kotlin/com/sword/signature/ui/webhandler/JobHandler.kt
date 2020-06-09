@@ -2,6 +2,7 @@ package com.sword.signature.ui.webhandler
 
 import com.sword.signature.business.service.JobService
 import com.sword.signature.business.service.SignService
+import com.sword.signature.common.criteria.JobCriteria
 import com.sword.signature.webcore.mapper.toWeb
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
@@ -15,7 +16,7 @@ class JobHandler(
 
     suspend fun jobs(request: ServerRequest): ServerResponse {
         val account = request.getAccount() ?: throw IllegalAccessException("not connected")
-        val jobs = jobService.findAllByUser(requester = account, account = account)
+        val jobs = jobService.findAll(requester = account, criteria = JobCriteria(accountId = account.id) )
         val model = mapOf<String, Any>(
             "jobs" to jobs
         )

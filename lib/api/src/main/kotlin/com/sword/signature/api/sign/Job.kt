@@ -17,7 +17,8 @@ data class Job(
     var stateDate: OffsetDateTime,
     var state: String,
     val contractAddress: String?,
-    val transactionHash: String?
+    val transactionHash: String?,
+    val channelName: String?
 )
 
 @JsonInclude(JsonInclude.Include.NON_NULL)

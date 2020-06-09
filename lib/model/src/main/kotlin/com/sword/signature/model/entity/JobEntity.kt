@@ -69,6 +69,11 @@ data class JobEntity(
     val contractAddress: String? = null,
 
     /**
+     * incoming chanel of the job
+     */
+    val channelName : String? = null,
+
+    /**
      * Address of the transaction signer.
      */
     val signerAddress: String? = null
