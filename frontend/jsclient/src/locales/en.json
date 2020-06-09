@@ -29,7 +29,7 @@
       "fullName": "Full name",
       "password": "Password",
       "newPassword": "Change password",
-      "newPasswordConfirmation" : "Confirm new password",
+      "newPasswordConfirmation": "Confirm new password",
       "save": "Save",
       "admin": "Administrator",
       "noAdmin": "User",
@@ -57,9 +57,14 @@
       "name": "Name",
       "creationDate": "Creation date",
       "statusDate": "Status date",
-      "status":"Status",
+      "status": "Status",
       "docs": "Docs",
-      "channel": "Channel"
+      "channel": "Channel",
+      "dates": "Date range",
+      "search": "Search",
+      "records": "records",
+      "export": "Export .csv",
+      "copyId": "Copy"
     }
   },
   "errors": {
@@ -69,17 +74,23 @@
       "default": "Connection unknowingly failed, please contact your administrator."
     },
     "password": {
-      "differents" : "Passwords must be identical.",
+      "differents": "Passwords must be identical.",
       "weak": "Password must meet following requirements : 8 characters long, 1 uppercase, 1 lowercase, 1 number, 1 special character."
     },
     "back": {
-      "generic" : "Informations could not be saved, please contact your administrator."
+      "generic": "Informations could not be saved, please contact your administrator."
     }
   },
   "message": {
     "footer": {
-      "items-per-page-text":"Rows per page",
+      "items-per-page-text": "Rows per page",
       "page-text": "{0}-{1} of {2}"
     }
+  },
+  "calendar": {
+  "label": {
+    "reset": "Effacer",
+    "close": "Fermer"
   }
+}
 }

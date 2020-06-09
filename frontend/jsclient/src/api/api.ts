@@ -86,10 +86,10 @@ export class Api {
         return globalAxios.put(url, data, confParam)
     }
 
-    public patch<T, R = AxiosResponse<T>>(
+    public patch<T, D, R = AxiosResponse<T>>(
         url: string,
         params = {},
-        data?: string,
+        data?: D,
         config: AxiosRequestConfig = this.config,
     ): Promise<R> {
         const confParam = {

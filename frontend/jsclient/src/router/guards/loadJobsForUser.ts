@@ -1,4 +1,3 @@
-import {JobCriteria} from '@/api/jobApi'
 import modules from "@/store/modules"
 import {Route, NavigationGuardNext} from "vue-router"
 

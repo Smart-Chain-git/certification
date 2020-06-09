@@ -43,9 +43,14 @@
       "name": "Nom",
       "creationDate": "Date de création",
       "statusDate": "Date de statut",
-      "status":"statut",
+      "status": "Statut",
       "docs": "Docs",
-      "channel": "Canal"
+      "channel": "Canal",
+      "dates": "Dates",
+      "search": "Rechercher",
+      "records": "résultats",
+      "export": "Exporter .csv",
+      "copyId": "Copier"
     }
   },
   "menu": {
@@ -69,17 +74,23 @@
       "default": "Connexion impossible, veuillez contacter votre administrateur."
     },
     "password": {
-      "differents" : "Les mots de passe doivent être identiques.",
+      "differents": "Les mots de passe doivent être identiques.",
       "weak": "Le mot de passe doit contenir au moins 8 caractères, 1 majuscule, 1 minuscule, 1 nombre et 1 caractère spécial."
     },
     "back": {
-      "generic" : "Les informations n'ont pas pu être mises à jour, veuillez contacter votre administrateur."
+      "generic": "Les informations n'ont pas pu être mises à jour, veuillez contacter votre administrateur."
     }
   },
   "message": {
-  "footer": {
-    "items-per-page-text":"Lignes par page",
-    "page-text": "{0}-{1} sur {2}"
+    "footer": {
+      "items-per-page-text": "Lignes par page",
+      "page-text": "{0}-{1} sur {2}"
+    }
+  },
+  "calendar": {
+    "label": {
+      "reset": "Effacer",
+      "close": "Fermer"
+    }
   }
-}
 }

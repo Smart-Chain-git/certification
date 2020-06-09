@@ -1,5 +1,5 @@
 import {VuexModule, Module, Mutation, Action} from "vuex-class-modules"
-import {Job, jobApi, JobCriteria} from '@/api/jobApi'
+import {Job, jobApi, JobCriteria} from "@/api/jobApi"
 
 @Module
 export default class JobsModule extends VuexModule {

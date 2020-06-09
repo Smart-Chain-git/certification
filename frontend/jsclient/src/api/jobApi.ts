@@ -28,9 +28,9 @@ export interface JobCriteria {
     id?: string
     accountId?: string
     flowName?: string
-    dateStart?: Date
-    dateEnd?: Date
-    channelName?: string
+    dateBegin?: string
+    dateEnd?: string
+    channel?: string
 }
 
 
@@ -40,7 +40,7 @@ export class JobApi extends Api {
         this.list = this.list.bind(this)
     }
 
-    public list(criteria: JobCriteria={}): Promise<Array<Job>> {
+    public list(criteria: JobCriteria = {}): Promise<Array<Job>> {
         return this.get<Array<Job>>(API_GET, criteria)
             .then((response: AxiosResponse<Array<Job>>) => {
                 return response.data
