@@ -1,20 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
-buildscript {
-
-    val springBootVersion: String by extra
-    val kotlinVersion: String by extra
-    val openApiGeneratorVersion: String by extra
-
-    dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
-        classpath("org.jetbrains.kotlin:kotlin-allopen:$kotlinVersion")
-        classpath("org.jetbrains.kotlin:kotlin-noarg:$kotlinVersion")
-        classpath("org.openapitools:openapi-generator-gradle-plugin:$openApiGeneratorVersion")
-    }
-}
-
 plugins {
     id("io.spring.dependency-management")
     kotlin("jvm")
@@ -23,8 +6,13 @@ plugins {
     id("maven-publish")
 }
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
 
-description = "application de signature vie blockchain"
+description = "Signature application using Tezos blockchain."
+
 allprojects {
     apply(plugin = "io.spring.dependency-management")
     apply(plugin = "jacoco")
@@ -34,9 +22,9 @@ allprojects {
     group = "com.sword.signature"
     version = "0.0.1-SNAPSHOT"
 
-    val mavenProxyUrl: String by extra
-
     repositories {
+        val mavenProxyUrl: String by extra
+
         mavenLocal()
         maven { url = uri(mavenProxyUrl); isAllowInsecureProtocol = true }
         maven { url = uri("https://repo.spring.io/snapshot") }
@@ -45,22 +33,23 @@ allprojects {
         gradlePluginPortal()
     }
 
-
-    tasks.withType<Test> {
-        useJUnitPlatform()
-    }
-
-    tasks.withType<KotlinCompile> {
-        kotlinOptions {
-            freeCompilerArgs = listOf("-Xjsr305=strict")
-            jvmTarget = "1.8"
+    tasks {
+        withType<Test> {
+            useJUnitPlatform()
         }
-    }
 
-    tasks.withType<JacocoReport> {
-        reports {
-            //necessaire car pour lr moment sonarcube ne lit pas les .exec de jacoco mais juste le xml
-            xml.isEnabled = true
+        withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class) {
+            kotlinOptions {
+                freeCompilerArgs = listOf("-Xjsr305=strict")
+                jvmTarget = "11"
+            }
+        }
+
+        withType<JacocoReport> {
+            reports {
+                // Require by sonarqube because it does not read .exec jacoco files but just .xml files.
+                xml.isEnabled = true
+            }
         }
     }
 
@@ -69,10 +58,10 @@ allprojects {
         toolVersion = jacocoToolVersion
     }
 
-    val springBootVersion: String by extra
-    val kotlinVersion: String by extra
-
     dependencyManagement {
+        val springBootVersion: String by extra
+        val kotlinVersion: String by extra
+
         imports {
             mavenBom("org.springframework.boot:spring-boot-dependencies:$springBootVersion") {
                 // alignement des versions de kotlins
@@ -82,13 +71,11 @@ allprojects {
     }
 
     publishing {
-
         val nexusUrl: String by project.extra
         val nexusUser: String by project.extra
         val nexusPassword: String by project.extra
         val releasesRepo: String by project.extra
         val snapshotsRepo: String by project.extra
-
 
         repositories {
             maven {
@@ -118,20 +105,20 @@ sonarqube {
     }
 }
 
-task<JacocoReport>("jacocoRootReport") {
-    dependsOn(subprojects.map { it.tasks.withType<Test>() })
-    dependsOn(subprojects.map { it.tasks.withType<JacocoReport>() })
-    additionalSourceDirs.setFrom(subprojects.map { it.the<SourceSetContainer>()["main"].allSource.srcDirs })
-    sourceDirectories.setFrom(subprojects.map { it.project.the<SourceSetContainer>()["main"].allSource.srcDirs })
-    classDirectories.setFrom(subprojects.map { it.project.the<SourceSetContainer>()["main"].output })
-    executionData.setFrom(project.fileTree(".") {
-        include("**/build/jacoco/test.exec")
-    })
-    reports {
-        xml.isEnabled = true
-        csv.isEnabled = false
-        html.isEnabled = true
+tasks {
+    val jacocoRootReport by registering(JacocoReport::class) {
+        dependsOn(subprojects.map { it.tasks.withType<Test>() })
+        dependsOn(subprojects.map { it.tasks.withType<JacocoReport>() })
+        additionalSourceDirs.setFrom(subprojects.map { it.the<SourceSetContainer>()["main"].allSource.srcDirs })
+        sourceDirectories.setFrom(subprojects.map { it.project.the<SourceSetContainer>()["main"].allSource.srcDirs })
+        classDirectories.setFrom(subprojects.map { it.project.the<SourceSetContainer>()["main"].output })
+        executionData.setFrom(project.fileTree(".") {
+            include("**/build/jacoco/test.exec")
+        })
+        reports {
+            xml.isEnabled = true
+            csv.isEnabled = false
+            html.isEnabled = true
+        }
     }
 }
-
-
