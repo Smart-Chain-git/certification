@@ -34,7 +34,7 @@ data class JobEntity(
     val transactionHash: String? = null,
     val blockHash: String? = null,
     /**
-     * depth of the block at validation date
+     * Block depth at validation date.
      */
     val blockDepth: Long? = null,
 
@@ -68,10 +68,14 @@ data class JobEntity(
      */
     val contractAddress: String? = null,
 
-
     /**
      * incoming chanel of the job
      */
     val channelName : String? = null
+
+    /**
+     * Address of the transaction signer.
+     */
+    val signerAddress: String? = null
 )
 

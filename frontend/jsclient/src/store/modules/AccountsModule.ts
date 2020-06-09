@@ -1,6 +1,7 @@
 import {Account, accountApi, AuthRequest, AuthResponse} from "@/api/accountApi"
 import {resetStore} from "@/store/actions/globalActions"
 import modules from "@/store/modules"
+import {AccountPatch} from "@/store/types"
 import globalAxios from "axios"
 import Cookies from "js-cookie"
 import Vue from "vue"
@@ -177,6 +178,13 @@ export default class AccountsModule extends VuexModule {
     public async loadAccounts() {
         await accountApi.list().then((response: Array<Account>) => {
             this.setAccounts(response)
+        })
+    }
+
+
+    public async updateAccount(id: string, patch: AccountPatch) {
+        await accountApi.patchById(id, patch).then((response: Account) => {
+            this.setAccount(response)
         })
     }
 

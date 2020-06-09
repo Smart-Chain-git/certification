@@ -99,7 +99,7 @@ class JobServiceContextTest @Autowired constructor(
     @BeforeEach
     fun refreshDatabase() {
         resetDatabase()
-        importJsonDataset(Path.of("src/test/resources/datasets/jobs.json"))
+        importJsonDatasets(Path.of("src/test/resources/datasets/jobs.json"))
     }
 
     @Nested

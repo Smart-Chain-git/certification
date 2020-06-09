@@ -35,3 +35,8 @@ logging:
 jwt:
   secret: ffe50f21d8359de7245dc13777812c2a
   issuer: "Tezos@Signature"
+tezos:
+  indexer:
+    url: "http://127.0.0.1:8000"
+  validation:
+    minDepth: 30

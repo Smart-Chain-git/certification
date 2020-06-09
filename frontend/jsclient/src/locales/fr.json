@@ -18,6 +18,22 @@
       "firstName": "Prénom",
       "role": "Rôle",
       "status": "Statut"
+    },
+    "edit": {
+      "title": "Mon compte",
+      "login": "Identifiant",
+      "email": "Email",
+      "profile": "Profil",
+      "TEZOSPubKey": "Clé publique TEZOS",
+      "TEZOSAccount": "Compte TEZOS",
+      "fullName": "Nom complet",
+      "password": "Mot de passe",
+      "newPassword": "Nouveau mot de passe",
+      "newPasswordConfirmation": "Confirmer nouveau mot de passe",
+      "save": "Sauvegarder",
+      "admin": "Administrateur",
+      "noAdmin": "Utilisateur",
+      "updated": "Les informations ont été mises à jour."
     }
   },
   "job": {
@@ -40,13 +56,24 @@
     "signatureCheck": "Vérification de signature",
     "resources": "Ressources",
     "settings": "Paramètres",
-    "hello": "Bonjour"
+    "hello": "Bonjour",
+    "profile": "Mon compte",
+    "channelManagement": "Gestion des canaux",
+    "login": "Connexion",
+    "logout": "Déconnexion"
   },
   "errors": {
     "login": {
       "invalid": "Erreur sur votre login et/ou mot de passe.",
       "disabled": "Vous ne pouvez pas vous connecter car votre compte a été désactivé.\nPour plus d'informations, veuillez contacter votre administrateur.",
       "default": "Connexion impossible, veuillez contacter votre administrateur."
+    },
+    "password": {
+      "differents" : "Les mots de passe doivent être identiques.",
+      "weak": "Le mot de passe doit contenir au moins 8 caractères, 1 majuscule, 1 minuscule, 1 nombre et 1 caractère spécial."
+    },
+    "back": {
+      "generic" : "Les informations n'ont pas pu être mises à jour, veuillez contacter votre administrateur."
     }
   },
   "message": {

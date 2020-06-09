@@ -57,7 +57,8 @@ fun JobEntity.toBusiness(rootHash: String? = null, files: List<TreeElement.LeafT
     files = files,
     callBackUrl = callBackUrl,
     contractAddress = contractAddress,
-    channelName = channelName
+    channelName = channelName,
+    signerAddress = signerAddress
 )
 
 fun AlgorithmEntity.toBusiness() = Algorithm(

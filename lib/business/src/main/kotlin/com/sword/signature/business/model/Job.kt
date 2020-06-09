@@ -26,7 +26,7 @@ data class Job(
 
     val blockHash: String? = null,
     /**
-     * depth of the block at validation date
+     * Block depth at validation date.
      */
     val blockDepth: Long? = null,
 
@@ -66,5 +66,10 @@ data class Job(
     /**
      * incoming chanel of the job
      */
-    val channelName: String? = null
+    val channelName: String? = null,
+
+    /**
+     * Address of the transaction signer.
+     */
+    val signerAddress: String? = null
 )

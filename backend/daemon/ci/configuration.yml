@@ -47,7 +47,6 @@ daemon:
     maxTry : 5
     delay : 2m
   validation:
-    minDepth: 30
     delay: 1m
     timeout: 10m
   poller:
@@ -57,10 +56,13 @@ jwt:
   issuer: "Tezos@Signature"
 tezos:
   account:
-    secret_key: "edskRpm2mUhvoUjHjXgMoDRxMKhtKfww1ixmWiHCWhHuMEEbGzdnz8Ks4vgarKDtxok7HmrEo1JzkXkdkvyw7Rtw6BNtSd7MJ7"
+    publicKey: "edpkvGfYw3LyB1UcCahKQk4rF2tvbMUk8GFiTuMjL75uGXrpvKXhjn"
+    secretKey: "edsk3QoqBuvdamxouPhin7swCvkQNgq4jP5KZPbwWNnwdZpSpJiEbq"
   contract:
     address: "KT1MDJeDXHDeq1SojdCoiQKx7ZktrV12Zpk7"
   node:
-    url: "http://edivtezosnode.ren-dev2.lan:18732"
+    url: "http://node:18731"
   indexer:
     url: "http://tzindex:8000"
+  validation:
+    minDepth: 30

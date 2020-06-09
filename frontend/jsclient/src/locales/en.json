@@ -5,11 +5,11 @@
   },
   "first-day-of-week": "1",
   "login": {
-    "login" : "Login",
-    "password" : "Password",
-    "forgotten-password" : "Forgot password ?",
-    "connection" : "Login",
-    "gcu" : "Terms of Use"
+    "login": "Login",
+    "password": "Password",
+    "forgotten-password": "Forgot password ?",
+    "connection": "Login",
+    "gcu": "Terms of Use"
   },
   "account": {
     "list": {
@@ -18,6 +18,22 @@
       "firstName": "First name",
       "role": "Role",
       "status": "Status"
+    },
+    "edit": {
+      "title": "My account",
+      "login": "Login",
+      "email": "Email",
+      "profile": "Profile",
+      "TEZOSPubKey": "TEZOS public key",
+      "TEZOSAccount": "TEZOS account",
+      "fullName": "Full name",
+      "password": "Password",
+      "newPassword": "Change password",
+      "newPasswordConfirmation" : "Confirm new password",
+      "save": "Save",
+      "admin": "Administrator",
+      "noAdmin": "User",
+      "updated": "Informations updated."
     }
   },
   "menu": {
@@ -28,7 +44,11 @@
     "signatureCheck": "Signature check",
     "resources": "Resources",
     "settings": "Settings",
-    "hello": "Hello"
+    "hello": "Hello",
+    "profile": "My account",
+    "channelManagement": "Channel management",
+    "login": "Sign in",
+    "logout": "Sign out"
   },
   "job": {
     "list": {
@@ -47,6 +67,13 @@
       "invalid": "Wrong login and/or password.",
       "disabled": "You cannot log in because your account has been disabled.\nPlease contact your administrator for more information.",
       "default": "Connection unknowingly failed, please contact your administrator."
+    },
+    "password": {
+      "differents" : "Passwords must be identical.",
+      "weak": "Password must meet following requirements : 8 characters long, 1 uppercase, 1 lowercase, 1 number, 1 special character."
+    },
+    "back": {
+      "generic" : "Informations could not be saved, please contact your administrator."
     }
   },
   "message": {
