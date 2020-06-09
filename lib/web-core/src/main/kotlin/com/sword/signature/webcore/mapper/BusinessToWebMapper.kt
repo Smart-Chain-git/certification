@@ -7,7 +7,7 @@ import com.sword.signature.business.model.TreeElement
 
 
 fun com.sword.signature.business.model.Account.toWeb() = Account(
-    id=id,
+    id = id,
     fullName = fullName,
     isAdmin = isAdmin,
     login = login,
@@ -42,7 +42,7 @@ fun com.sword.signature.business.model.Job.toWeb() = Job(
 )
 
 
-fun TreeElement.LeafTreeElement.toWeb(proof: com.sword.signature.business.model.Proof?) = JobFile(
+fun TreeElement.LeafTreeElement.toWeb(proof: com.sword.signature.business.model.Proof? = null) = JobFile(
     id = id,
     hash = hash,
     jobId = jobId,
