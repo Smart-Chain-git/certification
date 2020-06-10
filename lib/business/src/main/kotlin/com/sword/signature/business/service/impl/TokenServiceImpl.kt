@@ -27,7 +27,6 @@ class TokenServiceImpl(
     private val tokenRepository: TokenRepository
 ) : TokenService {
 
-
     @Transactional(rollbackFor = [ServiceException::class])
     override suspend fun createToken(tokenDetails: TokenCreate): Token {
         LOGGER.debug("Creating new token.")
@@ -40,6 +39,11 @@ class TokenServiceImpl(
         val createdToken = tokenRepository.save(toCreate).awaitSingle().toBusiness()
         LOGGER.debug("New token created with id '{}'", createdToken.id)
         return createdToken
+    }
+
+    @Transactional(rollbackFor = [ServiceException::class])
+    override suspend fun findAll(requester: Account): Flow<Token> {
+        return tokenRepository.findAllByAccountId(requester.id).map { it.toBusiness() }
     }
 
     @Transactional(rollbackFor = [ServiceException::class])

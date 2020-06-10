@@ -17,14 +17,16 @@
                                                       outlined
                                                       dense
                                                       v-model="filter.flowName"
-                                                      color="var(--var-color-blue-sword)"/>
+                                                      color="var(--var-color-blue-sword)"
+                                                      clearable/>
                                     </v-col>
                                     <v-col class="col-2 filter-frame">
                                         <v-text-field :label="$t('job.list.id')"
                                                       outlined
                                                       dense
                                                       v-model="filter.id"
-                                                      color="var(--var-color-blue-sword)"/>
+                                                      color="var(--var-color-blue-sword)"
+                                                      clearable/>
                                     </v-col>
                                     <v-col class="col-2 filter-frame">
                                         <EditFormDateRange
@@ -42,6 +44,7 @@
                                                     :label="$t('job.list.channel')"
                                                     color="var(--var-color-blue-sword)"
                                                     hide-details
+                                                    clearable
                                         />
                                     </v-col>
                                     <v-col class="col-4">
@@ -229,10 +232,9 @@
         }
 
         private mounted() {
-            /*this.allChannels = this.$modules.jobs.getJobs().map((j) => j.channelName).filter((c) => c !== undefined)
-            this.allChannels = ["", ...this.allChannels]
-            this.jobList = this.$modules.jobs.getJobs()
-            this.jobCount = this.$modules.jobs.getJobCount()*/
+            this.$modules.tokens.loadTokens().then(() => {
+                this.allChannels = [...new Set(this.$modules.tokens.getTokens().map(t => t.name))]
+            })
         }
 
         @Watch("pagination")
