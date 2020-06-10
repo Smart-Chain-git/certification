@@ -124,6 +124,7 @@ class SignServiceImpl(
         anchoringMessageChannel.send(
             MessageBuilder.withPayload(
                 AnchorJobMessagePayload(
+                    requesterId = requester.id,
                     jobId = jobEntity.id!!
                 )
             ).build()

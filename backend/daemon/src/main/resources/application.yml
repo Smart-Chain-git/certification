@@ -59,15 +59,18 @@ jasypt:
   encryptor:
     password: secret
     algorithm: PBEWithMD5AndDES
+    iv-generator-classname: org.jasypt.iv.NoIvGenerator
 jwt:
   secret: ffe50f21d8359de7245dc13777812c2a
   issuer: "Tezos@Signature"
 tezos:
-  account:
-    publicKey: "edpkvGfYw3LyB1UcCahKQk4rF2tvbMUk8GFiTuMjL75uGXrpvKXhjn"
-    secretKey: ENC(Sjy2KdrcmMKKyo294ZaFmpuw2gIEj7jArV/0PM530EOGm4MGXrIP6OWY4It6HTpKks0GinKiA+vWJdAZRpbSyA==)
+  keys:
+    admin:
+      address: tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb
+      publicKey: "edpkvGfYw3LyB1UcCahKQk4rF2tvbMUk8GFiTuMjL75uGXrpvKXhjn"
+      secretKey: ENC(7IpOdQ6/9gwjZPE3HF1ab8uGlk4KoELm0NChxzUaGL2A7BFXMoL41P5j7f76L4Ap/CoiDk/6I6gtXwQFOY5JRg==)
   contract:
-    address: KT1GEBsNdGxFAeqU1bL5UJ6gAd7PvxWwnguT
+    address: KT1XMzkvjfiwLFYbHN5uGymNffL8vquTnAzq
   node:
     url: "http://127.0.0.1:18731"
   indexer:

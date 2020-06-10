@@ -26,8 +26,6 @@ import java.security.SecureRandom
 
 @Service
 class TezosWriterServiceImpl(
-    @Value("\${tezos.account.publicKey}") private val publicKey: String,
-    @Value("\${tezos.account.secretKey}") private val secretKey: String,
     @Value("\${tezos.contract.address}") private val contractAddress: String,
     @Value("\${tezos.node.url}") private val nodeUrl: String
 ) : TezosWriterService {
@@ -88,7 +86,7 @@ class TezosWriterServiceImpl(
 
     @Throws(TezosException::class)
     override fun retrieveIdentity(publicKeyBase58: String, secretKeyBase58: String): TezosIdentity {
-        LOGGER.debug("retrieveIdentity (publicKey = {}, secretKey = {})", publicKey, secretKey)
+        LOGGER.debug("retrieveIdentity (publicKey = {}, secretKey = {})", publicKeyBase58, secretKeyBase58)
 
         // Retrieve the key pair:
         // Note that extraRawPublicKey is used to extract secret key as well due to key length consideration.
