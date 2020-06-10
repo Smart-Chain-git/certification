@@ -233,7 +233,7 @@
 
         private mounted() {
             this.$modules.tokens.loadTokens().then(() => {
-                this.allChannels = [...new Set(this.$modules.tokens.getTokens().map(t => t.name))]
+                this.allChannels = [...new Set(this.$modules.tokens.getTokens().map((t) => t.name))]
             })
         }
 
