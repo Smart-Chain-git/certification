@@ -55,7 +55,7 @@ class CheckServiceImpl(
                 jobRepository.findById(treeElement.jobId).awaitFirstOrNull() ?: throw CheckException.IncoherentData()
             // Check the tree and retrieve the root hash.
             val branchHashes = checkExistingTree(job.algorithm, treeElement)
-            val rootHash: String = branchHashes[branchHashes.size - 1]
+            val rootHash: String = if(branchHashes.isNotEmpty()) branchHashes[branchHashes.size - 1] else documentHash
             when (job.state) {
                 JobStateType.INSERTED -> throw CheckException.DocumentKnownUnknownRootHash(
                     signer = "signer",
