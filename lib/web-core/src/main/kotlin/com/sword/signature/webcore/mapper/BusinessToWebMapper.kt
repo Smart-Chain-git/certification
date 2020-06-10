@@ -76,3 +76,8 @@ fun Algorithm.toWeb() = com.sword.signature.api.sign.Algorithm(
     digestLength = digestLength,
     name = name
 )
+
+fun com.sword.signature.business.model.Token.toWeb() = Token(
+        id = id,
+        name = name
+)

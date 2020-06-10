@@ -19,6 +19,7 @@
                         readonly
                         dense
                         :color="color"
+                        clearable
                 />
             </v-flex>
             <v-flex class="mt-n1 pa-0" sm="2" md="6">

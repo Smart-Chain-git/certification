@@ -47,6 +47,18 @@ class JobServiceImpl(
 
     }
 
+    override fun countAll(requester: Account, criteria: JobCriteria?): Long {
+        if (!requester.isAdmin && requester.id != criteria?.accountId) {
+            throw IllegalAccessException("user ${requester.login} does not have role/permission to list jobs for accountId=[${criteria?.accountId}]")
+        }
+
+        return if (criteria == null) {
+            jobRepository.count()
+        } else {
+            jobRepository.count(criteria.toPredicate())
+        }.block()!!
+    }
+
     override suspend fun findById(requester: Account, jobId: String, withLeaves: Boolean): Job? {
         val job = jobRepository.findById(jobId).awaitFirstOrNull() ?: return null
         LOGGER.debug("id : {}, found {}", jobId, job)

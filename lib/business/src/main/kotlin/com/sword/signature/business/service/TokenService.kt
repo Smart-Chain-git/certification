@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.Flow
 interface TokenService {
 
     suspend fun createToken(tokenDetails: TokenCreate): Token
+    suspend fun findAll(requester: Account): Flow<Token>
     suspend fun getToken(jwtToken: String): Token?
     suspend fun getAndCheckToken(jwtToken: String): Token
     suspend fun getTokensByAccountId(accountId: String): Flow<Token>

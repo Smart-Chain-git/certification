@@ -16,19 +16,21 @@
                                         <v-text-field :label="$t('job.list.name')"
                                                       outlined
                                                       dense
-                                                      v-model="selectedName"
-                                                      color="var(--var-color-blue-sword)"/>
+                                                      v-model="filter.flowName"
+                                                      color="var(--var-color-blue-sword)"
+                                                      clearable/>
                                     </v-col>
                                     <v-col class="col-2 filter-frame">
                                         <v-text-field :label="$t('job.list.id')"
                                                       outlined
                                                       dense
-                                                      v-model="selectedID"
-                                                      color="var(--var-color-blue-sword)"/>
+                                                      v-model="filter.id"
+                                                      color="var(--var-color-blue-sword)"
+                                                      clearable/>
                                     </v-col>
                                     <v-col class="col-2 filter-frame">
                                         <EditFormDateRange
-                                                v-model="selectedDates"
+                                                v-model="filter.dates"
                                                 :updateRange="updateRange"
                                                 :label="$t('job.list.dates')"
                                                 color="var(--var-color-blue-sword)"
@@ -36,12 +38,13 @@
                                     </v-col>
                                     <v-col class="col-2 filter-frame">
                                         <v-combobox :items="allChannels"
-                                                    v-model="selectedChannel"
+                                                    v-model="filter.channelName"
                                                     outlined
                                                     dense
                                                     :label="$t('job.list.channel')"
                                                     color="var(--var-color-blue-sword)"
                                                     hide-details
+                                                    clearable
                                         />
                                     </v-col>
                                     <v-col class="col-4">
@@ -50,7 +53,7 @@
                                                     leftIcon="zoom_in">
                                             {{ $t("job.list.search") }}
                                         </IconButton>
-                                        <span class="ml-2 records">{{ jobList.length }} {{ $t("job.list.records")}}</span>
+                                        <span class="ml-2 records">{{ jobCount }} {{ $t("job.list.records")}}</span>
                                     </v-col>
                                 </v-row>
                             </v-col>
@@ -70,9 +73,12 @@
                     <v-data-table class="table-header"
                                   :headers="headers"
                                   :items="jobList"
-                                  :sort-by="sortBy"
-                                  :sort-desc="sortDesc"
-                                  :footer-props="footer">
+                                  :footer-props="footer"
+                                  :options.sync="pagination"
+                                  :server-items-length="jobCount"
+                                  :loading="loading"
+                                  must-sort
+                                  >
                         <template v-slot:body="{items}">
                             <tbody>
                                 <tr :key="job.id" v-for="job in items" class="outlined">
@@ -160,23 +166,34 @@
 
 </style>
 <script lang="ts">
-    import {JobCriteria} from "@/api/jobApi"
+    import {Job, JobCriteria} from "@/api/jobApi"
     import {tableFooter} from "@/plugins/i18n"
-    import {Component, Vue} from "vue-property-decorator"
+    import {FilterOption, PaginationOption} from "@/store/types"
+    import {Component, Vue, Watch} from "vue-property-decorator"
 
     @Component
     export default class Jobs extends Vue {
 
-        private sortBy = []
-        private sortDesc = []
-        private selectedName: string | undefined = undefined
-        private selectedID: string | undefined = undefined
-        private selectedDates: Array<string | undefined> = []
-        private selectedChannel: string | undefined = undefined
         private allChannels: Array<string | undefined> = []
+        private loading: boolean = false
 
-        private get jobList() {
-            return this.$modules.jobs.getJobs()
+        private jobList: Array<Job> = []
+        private jobCount: number = 0
+
+        private get pagination() {
+            return this.$modules.jobs.getPagination()
+        }
+
+        private set pagination(pagination: PaginationOption) {
+            this.$modules.jobs.setPagination(pagination)
+        }
+
+        private get filter() {
+            return this.$modules.jobs.getFilter()
+        }
+
+        private set filter(filter: FilterOption) {
+            this.$modules.jobs.setFilter(filter)
         }
 
         private get headers() {
@@ -196,55 +213,56 @@
         }
 
         private updateRange() {
-            this.selectedDates.sort((a: string | undefined, b: string | undefined) => {
+            this.filter.dates.sort((a: string | undefined, b: string | undefined) => {
                 return (Date.parse(a!) > Date.parse(b!)) ? 1 : -1
             })
 
-            if (this.selectedDates[0] != null && this.selectedDates[1] != null) {
-                const date: Date = new Date(this.selectedDates[0])
-                const toDate: Date = new Date(Date.parse(this.selectedDates[1]))
+            if (this.filter.dates[0] != null && this.filter.dates[1] != null) {
+                const date: Date = new Date(this.filter.dates[0])
+                const toDate: Date = new Date(Date.parse(this.filter.dates[1]))
                 // Set the same time for both hours to avoid time issues when comparing dates of different timezones.
                 date.setHours(23, 59, 59, 999)
                 toDate.setHours(23, 59, 59, 999)
 
                 while (date <= toDate) {
-                    this.selectedDates[1] = date.toISOString().split("T")[0]
+                    this.filter.dates[1] = date.toISOString().split("T")[0]
                     date.setDate(date.getDate() + 1)
                 }
             }
         }
 
         private mounted() {
-            this.allChannels = this.$modules.jobs.getJobs().map((j) => j.channelName).filter((c) => c !== undefined)
-            this.allChannels = ["", ...this.allChannels]
+            this.$modules.tokens.loadTokens().then(() => {
+                this.allChannels = [...new Set(this.$modules.tokens.getTokens().map((t) => t.name))]
+            })
         }
 
-        private async search() {
-            if (this.selectedName === "") {
-                this.selectedName = undefined
-            }
-            if (this.selectedID === "") {
-                this.selectedID = undefined
-            }
-            if (this.selectedChannel === "") {
-                this.selectedChannel = undefined
-            }
-            if (this.selectedDates[0] === "") {
-                this.selectedDates[0] = undefined
-            }
-            if (this.selectedDates[1] === "") {
-                this.selectedDates[1] = undefined
+        @Watch("pagination")
+        private search() {
+            this.$modules.jobs.filterUpdate()
+
+            const sorts: Array<string> = []
+            for (let i = 0 ; i < this.pagination.sortBy.length ; ++i) {
+                sorts.push(this.pagination.sortBy[i] + ":" + ((this.pagination.sortDesc[i]) ? "desc" : "asc"))
             }
 
             const criteria: JobCriteria = {
                 accountId: this.$modules.accounts.meAccount?.id,
-                flowName: this.selectedName,
-                id: this.selectedID,
-                dateBegin: this.selectedDates[0],
-                dateEnd: this.selectedDates[1],
-                channel: this.selectedChannel,
+                flowName: this.filter.flowName,
+                id: this.filter.id,
+                dateBegin: this.filter.dates[0],
+                dateEnd: this.filter.dates[1],
+                channel: this.filter.channelName,
+                sort: sorts,
+                page: this.pagination.page - 1,
+                size: this.pagination.itemsPerPage,
             }
-            await this.$modules.jobs.loadJobs(criteria)
+            this.loading = true
+            this.$modules.jobs.loadJobs(criteria).then(() => {
+                this.jobList = this.$modules.jobs.getJobs()
+                this.jobCount = this.$modules.jobs.getJobCount()
+                this.loading = false
+            })
         }
 
         private async exportCSV() {
@@ -258,6 +276,5 @@
         private gotoDocument(jobId: string) {
             this.$router.push("/documents/" + jobId)
         }
-
     }
 </script>

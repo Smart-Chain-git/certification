@@ -1,4 +1,3 @@
-import {Account} from '@/api/accountApi'
 import {AxiosRequestConfig, AxiosResponse} from "axios"
 
 import {Api} from "@/api/api"
@@ -6,6 +5,7 @@ import {apiConfig} from "@/api/api.config"
 
 
 export const API_GET = "/jobs"
+export const API_GET_COUNT = "/jobs-count"
 
 
 export interface Job {
@@ -32,6 +32,10 @@ export interface JobCriteria {
     dateBegin?: string
     dateEnd?: string
     channel?: string
+    sort?: Array<string>
+    desc?: Array<boolean>
+    page?: number
+    size?: number
 }
 
 
@@ -55,7 +59,12 @@ export class JobApi extends Api {
             })
     }
 
-
+    public count(criteria: JobCriteria = {}): Promise<number> {
+        return this.get<number>(API_GET_COUNT, criteria)
+            .then((response: AxiosResponse<number>) => {
+                return response.data
+            })
+    }
 }
 
 export const jobApi = new JobApi(apiConfig)
