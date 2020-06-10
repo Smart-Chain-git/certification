@@ -55,15 +55,19 @@ daemon:
     timeout: 10m
   poller:
     fixedRate: 10000
+jasypt:
+  encryptor:
+    password: secret
+    algorithm: PBEWithMD5AndDES
 jwt:
   secret: ffe50f21d8359de7245dc13777812c2a
   issuer: "Tezos@Signature"
 tezos:
   account:
     publicKey: "edpkvGfYw3LyB1UcCahKQk4rF2tvbMUk8GFiTuMjL75uGXrpvKXhjn"
-    secretKey: "edsk3QoqBuvdamxouPhin7swCvkQNgq4jP5KZPbwWNnwdZpSpJiEbq"
+    secretKey: ENC(Sjy2KdrcmMKKyo294ZaFmpuw2gIEj7jArV/0PM530EOGm4MGXrIP6OWY4It6HTpKks0GinKiA+vWJdAZRpbSyA==)
   contract:
-    address: KT1Tq22yXWayLbmBKwZUhVXMoYqxtzp9XvTk
+    address: KT1GEBsNdGxFAeqU1bL5UJ6gAd7PvxWwnguT
   node:
     url: "http://127.0.0.1:18731"
   indexer:

@@ -52,12 +52,17 @@ daemon:
     timeout: 10m
   poller:
     fixedRate: 10000
+jasypt:
+  encryptor:
+    password: secret
+    algorithm: PBEWithMD5AndDES
 jwt:
   secret: ffe50f21d8359de7245dc13777812c2a
   issuer: "Tezos@Signature"
 tezos:
   account:
-    secret_key: "TO_REPLACE_WITH_YOUR_COMPUTED_KEY"
+    publicKey: "TO_REPLACE_WITH_YOUR_PUBLIC_KEY"
+    secretKey: "TO_REPLACE_WITH_YOUR_SECRET_KEY"
   contract:
     address: "KT1Uz3ZPgVqKYTt8jJpbeRaZkq8b8PqFkRyg" # Carthagenet contract address
   node:
