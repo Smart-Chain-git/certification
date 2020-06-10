@@ -11,6 +11,8 @@ interface JobService {
 
     fun findAll(requester: Account, criteria: JobCriteria? = null, pageable: Pageable = Pageable.unpaged()): Flow<Job>
 
+    fun countAll(requester: Account, criteria: JobCriteria? = null): Long
+
     suspend fun findById(requester: Account, jobId: String, withLeaves: Boolean = false): Job?
 
     suspend fun patch(requester: Account, jobId: String, patch: JobPatch): Job

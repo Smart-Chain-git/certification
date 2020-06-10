@@ -66,6 +66,38 @@ class JobHandler(
         return jobService.findAll(user.account, criteria, paged).map { it.toWeb() }
     }
 
+    @Operation(security = [SecurityRequirement(name = "bearer-key")])
+    @RequestMapping(
+            value = ["/jobs-count"],
+            produces = ["application/json"],
+            method = [RequestMethod.GET]
+    )
+    suspend fun jobCount(
+            @AuthenticationPrincipal user: CustomUserDetails,
+            @RequestParam(value = "id", required = false) id: String?,
+            @RequestParam(value = "accountId", required = false) accountId: String?,
+            @RequestParam(value = "flowName", required = false) flowName: String?,
+            @RequestParam(value = "dateBegin", required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) dateStart: LocalDate?,
+
+            @RequestParam(value = "dateEnd", required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) dateEnd: LocalDate?,
+
+            @RequestParam(value = "channel", required = false) channelName: String?
+    ): Long {
+
+        val criteria = JobCriteria(
+                accountId = accountId,
+                id = id,
+                flowName = flowName,
+                dateStart = dateStart,
+                dateEnd = dateEnd,
+                channelName = channelName
+        )
+
+        return jobService.countAll(user.account, criteria)
+    }
+
 
     @Operation(security = [SecurityRequirement(name = "bearer-key")])
     @RequestMapping(
