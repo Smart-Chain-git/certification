@@ -13,27 +13,17 @@
                 <Card>
                     <v-flex>
                         <EditFormRow :title="$t('job.detail.id')" :editable="false" :value="currentJob.id"/>
-
                         <EditFormRow :title="$t('job.detail.name')" :editable="false" :value="currentJob.flowName"/>
-
                         <EditFormRow :title="$t('job.detail.date')" :editable="false" :value="currentJob.createdDate"/>
-
                         <EditFormRow :title="$t('job.detail.statusDate')" :editable="false" :value="currentJob.stateDate"/>
-
                         <EditFormRow :title="$t('job.detail.status')" :editable="false" :value="currentJob.state"/>
-
                         <EditFormRow :title="$t('job.detail.docs')" :editable="true">
-                            <a :href="'#/documents/'+currentJob.id">55 {{ currentJob.docsNumber }}</a>
+                            <a class="mt-3" :href="'#/documents/' + currentJob.id">TODO {{ currentJob.docsNumber }}</a>
                         </EditFormRow>
-
                         <EditFormRow :title="$t('job.detail.channel')" :editable="false" :value="currentJob.channelName"/>
-
                         <EditFormRow :title="$t('job.detail.block')" :editable="false" :value="currentJob.blockHash"/>
-
                         <EditFormRow :title="$t('job.detail.transaction')" :editable="false" :value="currentJob.txHash"/>
-
                         <EditFormRow :title="$t('job.detail.hash')" :editable="false" :value="currentJob.algorithm"/>
-
                         <EditFormRow :title="$t('job.detail.rootHash')" :editable="false" :value="currentJob.rootHash"/>
                     </v-flex>
                 </Card>
@@ -43,7 +33,6 @@
 </template>
 
 <style scoped>
-
 </style>
 <script lang="ts">
     import {Component, Vue} from "vue-property-decorator"
