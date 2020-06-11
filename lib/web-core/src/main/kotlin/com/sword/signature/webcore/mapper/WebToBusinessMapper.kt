@@ -5,7 +5,7 @@ import com.sword.signature.api.sign.SignRequest
 import com.sword.signature.business.model.FileMetadata
 
 fun SignRequest.toBusiness() = Pair(
-    first = hash,
+    first = hash.toLowerCase(),
     second = metadata.toBusiness()
 )
 

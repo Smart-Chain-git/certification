@@ -94,7 +94,7 @@ class SignServiceImpl(
         algorithm: Algorithm,
         flowName: String,
         callBackUrl: String?,
-        fileHashs: List<Pair<String, FileMetadata>>
+        fileHashes: List<Pair<String, FileMetadata>>
     ): Job {
 
         // Job creation.
@@ -110,7 +110,7 @@ class SignServiceImpl(
         ).awaitSingle()
 
         // Merkle tree creation.
-        val merkleTree = TreeBuilder<String>(algorithm.name).elements(fileHashs).build()
+        val merkleTree = TreeBuilder<String>(algorithm.name).elements(fileHashes).build()
         // Compute all merkle tree nodes value.
         SimpleAlgorithmTreeBrowser(algorithm.name).visitTree(merkleTree)
 
