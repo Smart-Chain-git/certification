@@ -33,8 +33,11 @@ class TokenServiceContextTest @Autowired constructor(
         password = "simple",
         email = "simple@signature.com",
         fullName = "Simple",
-        isAdmin = false,
-        pubKey = null
+        company = null,
+        country = null,
+        publicKey = null,
+        hash = null,
+        isAdmin = false
     )
 
     private val adminAccount = Account(
@@ -43,8 +46,11 @@ class TokenServiceContextTest @Autowired constructor(
         password = "admin",
         email = "admin@signature.com",
         fullName = "Admin",
-        isAdmin = true,
-        pubKey = null
+        company = null,
+        country = null,
+        publicKey = null,
+        hash = null,
+        isAdmin = true
     )
 
     private val token1Id = "5e8b4c28e2018ef99f6a98fe"

@@ -46,8 +46,11 @@ class SignServiceTest @Autowired constructor(
         email = "admin@signature.com",
         password = "\$2a\$10\$TEQbC2lNT.dWnYVLOi8L4e5VUST7zyCV6demNJCQzNG6up3dr25Se",
         fullName = "Administrator",
-        isAdmin = true,
-        pubKey = null
+        company = null,
+        country = null,
+        publicKey = null,
+        hash = null,
+        isAdmin = true
     )
     private final val sha256 = Algorithm(id = "SHA-256", name = "SHA-256", digestLength = 32)
 
@@ -203,8 +206,11 @@ class SignServiceTest @Autowired constructor(
             password = "password",
             fullName = "simple user",
             email = "simplie@toto.net",
-            isAdmin = false,
-            pubKey = null
+            company = null,
+            country = null,
+            publicKey = null,
+            hash = null,
+            isAdmin = false
         )
 
         private val secondAdmin = Account(
@@ -213,8 +219,11 @@ class SignServiceTest @Autowired constructor(
             password = "password",
             fullName = "simple user",
             email = "simplie@toto.net",
-            isAdmin = true,
-            pubKey = null
+            company = null,
+            country = null,
+            publicKey = null,
+            hash = null,
+            isAdmin = true
         )
 
 

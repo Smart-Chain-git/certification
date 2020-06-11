@@ -8,12 +8,9 @@ import com.sword.signature.model.migration.MigrationHandler
 import kotlinx.coroutines.flow.count
 import kotlinx.coroutines.reactive.awaitSingle
 import kotlinx.coroutines.runBlocking
+import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertAll
-import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.dao.DuplicateKeyException
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate
@@ -21,9 +18,9 @@ import java.nio.file.Path
 
 
 class AccountServiceContextTest @Autowired constructor(
-        private val accountService: AccountService,
-        override val mongoTemplate: ReactiveMongoTemplate,
-        override val migrationHandler : MigrationHandler
+    private val accountService: AccountService,
+    override val mongoTemplate: ReactiveMongoTemplate,
+    override val migrationHandler: MigrationHandler
 ) : AbstractServiceContextTest() {
 
     private var accountsInitialCount: Long = 0L
@@ -42,50 +39,70 @@ class AccountServiceContextTest @Autowired constructor(
         resetDatabase()
         importJsonDatasets(Path.of("src/test/resources/datasets/accounts.json"))
         if (accountsInitialCount == 0L) {
-            accountsInitialCount = runBlocking { mongoTemplate.getCollection("accounts").awaitSingle().countDocuments().awaitSingle() }
+            accountsInitialCount =
+                runBlocking { mongoTemplate.getCollection("accounts").awaitSingle().countDocuments().awaitSingle() }
         }
     }
 
-    @Test
-    fun createAccountTest() {
-        val login = "test"
-        val email = "test@test.com"
-        val password = "secured"
-        val fullName = "fullName"
-        val toCreate = AccountCreate(login, email, password, fullName)
-        runBlocking {
-            val createdAccount = accountService.createAccount(toCreate)
+    @Nested
+    inner class CreateAccountTest {
 
-            assertAll("createdAccount",
-                    { assertEquals(login, createdAccount.login) },
-                    { assertEquals(email, createdAccount.email) },
-                    { assertEquals(password, createdAccount.password) },
-                    { assertEquals(fullName, createdAccount.fullName) }
+        private val newLogin = "test"
+        private val newEmail = "test@test.com"
+        private val newPassword = "secured"
+        private val newFullName = "fullName"
+        private val newCompany = "Great Company"
+        private val newCountry = "France"
+        private val newPublicKey = "edpkvGfYw3LyB1UcCahKQk4rF2tvbMUk8GFiTuMjL75uGXrpvKXhjn"
+        private val newHash = "tz1YEuW1erL1kXhUKuy7NLYrbzxQsPcn46wQ"
+
+        @Test
+        fun createAccountTest() {
+            val toCreate = AccountCreate(
+                login = newLogin, email = newEmail, password = newPassword, fullName = newFullName,
+                company = newCompany, country = newCountry, publicKey = newPublicKey, hash = newHash
             )
-            assertEquals(accountsInitialCount + 1, mongoTemplate.getCollection("accounts").awaitSingle().countDocuments().awaitSingle())
+            runBlocking {
+                val createdAccount = accountService.createAccount(toCreate)
+
+                assertAll("createdAccount",
+                    { assertEquals(newLogin, createdAccount.login) },
+                    { assertEquals(newEmail, createdAccount.email) },
+                    { assertEquals(newPassword, createdAccount.password) },
+                    { assertEquals(newFullName, createdAccount.fullName) },
+                    { assertEquals(newCompany, createdAccount.company) },
+                    { assertEquals(newCountry, createdAccount.country) },
+                    { assertEquals(newPublicKey, createdAccount.publicKey) },
+                    { assertEquals(newHash, createdAccount.hash) }
+                )
+                assertEquals(
+                    accountsInitialCount + 1,
+                    mongoTemplate.getCollection("accounts").awaitSingle().countDocuments().awaitSingle()
+                )
+            }
         }
-    }
 
-    @Test
-    fun createAccountWithExistingLoginTest() {
-        val login = accountLogin1
-        val email = "test@test.com"
-        val password = "secured"
-        val fullName = "fullName"
-        val toCreate = AccountCreate(login, email, password, fullName)
+        @Test
+        fun createAccountWithExistingLoginTest() {
+            val login = accountLogin1
+            val toCreate = AccountCreate(
+                login = login, email = newEmail, password = newPassword, fullName = newFullName,
+                company = newCompany, country = newCountry, publicKey = newPublicKey, hash = newHash
+            )
 
-        assertThrows<DuplicateKeyException> { runBlocking { accountService.createAccount(toCreate) } }
-    }
+            assertThrows<DuplicateKeyException> { runBlocking { accountService.createAccount(toCreate) } }
+        }
 
-    @Test
-    fun createAccountWithExistingEmailTest() {
-        val login = "test"
-        val email = accountEmail1
-        val password = "secured"
-        val fullName = "fullName"
-        val toCreate = AccountCreate(login, email, password, fullName)
+        @Test
+        fun createAccountWithExistingEmailTest() {
+            val email = accountEmail1
+            val toCreate = AccountCreate(
+                login = newLogin, email = email, password = newPassword, fullName = newFullName,
+                company = newCompany, country = newCountry, publicKey = newPublicKey, hash = newHash
+            )
 
-        assertThrows<DuplicateKeyException> { runBlocking { accountService.createAccount(toCreate) } }
+            assertThrows<DuplicateKeyException> { runBlocking { accountService.createAccount(toCreate) } }
+        }
     }
 
     @Test
@@ -94,10 +111,10 @@ class AccountServiceContextTest @Autowired constructor(
         assertNotNull(account)
         account as Account
         assertAll("account",
-                { assertEquals(accountLogin1, account.login) },
-                { assertEquals(accountEmail1, account.email) },
-                { assertEquals(accountPassword1, account.password) },
-                { assertEquals(accountFullName1, account.fullName) })
+            { assertEquals(accountLogin1, account.login) },
+            { assertEquals(accountEmail1, account.email) },
+            { assertEquals(accountPassword1, account.password) },
+            { assertEquals(accountFullName1, account.fullName) })
     }
 
     @Test
@@ -107,67 +124,88 @@ class AccountServiceContextTest @Autowired constructor(
         assertEquals(accountsInitialCount, accounts.toLong())
     }
 
-    @Test
-    fun patchAccountTest() {
-        val password = "newPassword"
-        val toPatch = AccountPatch(password = password)
+    @Nested
+    inner class PatchAccountTest {
 
-        val patchedAccount = runBlocking { accountService.patchAccount(accountId1, toPatch) }
+        private val newLogin = "newLogin"
+        private val newEmail = "newEmail"
+        private val newPassword = "newPassword"
+        private val newFullName = "newFullName"
+        private val newCompany = "newCompany"
+        private val newCountry = "newCountry"
+        private val newPublicKey = "newPublicKey"
+        private val newHash = "newHash"
+        private val newIsAdmin = true
 
-        assertAll("patchedAccount",
+        @Test
+        fun patchAccountTest() {
+            val toPatch = AccountPatch(password = newPassword)
+
+            val patchedAccount = runBlocking { accountService.patchAccount(accountId1, toPatch) }
+
+            assertAll("patchedAccount",
                 { assertEquals(accountLogin1, patchedAccount.login) },
                 { assertEquals(accountEmail1, patchedAccount.email) },
-                { assertEquals(password, patchedAccount.password) },
+                { assertEquals(newPassword, patchedAccount.password) },
                 { assertEquals(accountFullName1, patchedAccount.fullName) })
-    }
+        }
 
-    @Test
-    fun patchAccountFullTest() {
-        val login = "newLogin"
-        val email = "new@mail.com"
-        val password = "newPassword"
-        val fullName = "newName"
-        val toPatch = AccountPatch(login, email, password, fullName)
+        @Test
+        fun patchAccountFullTest() {
+            val toPatch = AccountPatch(
+                login = newLogin, email = newEmail, password = newPassword, fullName = newFullName,
+                company = newCompany, country = newCountry, publicKey = newPublicKey, hash = newHash,
+                isAdmin = newIsAdmin
+            )
 
-        val patchedAccount = runBlocking { accountService.patchAccount(accountId1, toPatch) }
+            val patchedAccount = runBlocking { accountService.patchAccount(accountId1, toPatch) }
 
-        assertAll("patchedAccount",
-                { assertEquals(login, patchedAccount.login) },
-                { assertEquals(email, patchedAccount.email) },
-                { assertEquals(password, patchedAccount.password) },
-                { assertEquals(fullName, patchedAccount.fullName) })
-    }
+            assertAll("patchedAccount",
+                { assertEquals(newLogin, patchedAccount.login) },
+                { assertEquals(newEmail, patchedAccount.email) },
+                { assertEquals(newPassword, patchedAccount.password) },
+                { assertEquals(newFullName, patchedAccount.fullName) },
+                { assertEquals(newCompany, patchedAccount.company) },
+                { assertEquals(newCountry, patchedAccount.country) },
+                { assertEquals(newPublicKey, patchedAccount.publicKey) },
+                { assertEquals(newHash, patchedAccount.hash) },
+                { assertEquals(newIsAdmin, patchedAccount.isAdmin) }
+            )
+        }
 
-    @Test
-    fun patchNonexistentAccountTest() {
-        val password = "newPassword"
-        val toPatch = AccountPatch(password = password)
+        @Test
+        fun patchNonexistentAccountTest() {
+            val toPatch = AccountPatch(password = newPassword)
 
-        assertThrows<EntityNotFoundException> {
-            runBlocking {
-                accountService.patchAccount(
+            assertThrows<EntityNotFoundException> {
+                runBlocking {
+                    accountService.patchAccount(
                         accountNonexistentId,
                         toPatch
-                )
+                    )
+                }
             }
         }
     }
 
-    @Test
-    fun deleteAccountTest() {
-        runBlocking {
-            accountService.deleteAccount(accountId1)
+    @Nested
+    inner class DeleteAccountTest {
 
-            assertEquals(
+        @Test
+        fun deleteAccountTest() {
+            runBlocking {
+                accountService.deleteAccount(accountId1)
+
+                assertEquals(
                     accountsInitialCount - 1,
                     mongoTemplate.getCollection("accounts").awaitSingle().countDocuments().awaitSingle()
-            )
+                )
+            }
+        }
+
+        @Test
+        fun deleteNonexistentAccountTest() {
+            assertThrows<EntityNotFoundException> { runBlocking { accountService.deleteAccount(accountNonexistentId) } }
         }
     }
-
-    @Test
-    fun deleteNonexistentAccountTest() {
-        assertThrows<EntityNotFoundException> { runBlocking { accountService.deleteAccount(accountNonexistentId) } }
-    }
-
 }

@@ -2,6 +2,7 @@ package com.sword.signature.rest.resthandler
 
 import com.sword.signature.api.sign.Account
 import com.sword.signature.business.exception.EntityNotFoundException
+import com.sword.signature.business.model.AccountCreate
 import com.sword.signature.business.model.AccountPatch
 import com.sword.signature.business.service.AccountService
 import com.sword.signature.rest.checkPassword
@@ -17,49 +18,67 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("\${api.base-path:/api}")
 class AccountHandler(
-        val accountService: AccountService,
-        val bCryptPasswordEncoder: BCryptPasswordEncoder
+    val accountService: AccountService,
+    val bCryptPasswordEncoder: BCryptPasswordEncoder
 ) {
     @Operation(security = [SecurityRequirement(name = "bearer-key")])
     @RequestMapping(
-            value = ["/accounts/{accountId}"],
-            produces = ["application/json"],
-            method = [RequestMethod.GET]
+        value = ["/accounts"],
+        produces = ["application/json"],
+        consumes = ["application/json"],
+        method = [RequestMethod.POST]
     )
-    suspend fun account(
-            @AuthenticationPrincipal user: CustomUserDetails,
-            @Parameter(description = "account Id") @PathVariable(value = "accountId") accountId: String
+    suspend fun createAccount(
+        @AuthenticationPrincipal user: CustomUserDetails,
+        @RequestBody accountDetails: AccountCreate
+    ): Account {
+        return accountService.createAccount(accountDetails).toWeb()
+    }
+
+    @Operation(security = [SecurityRequirement(name = "bearer-key")])
+    @RequestMapping(
+        value = ["/accounts/{accountId}"],
+        produces = ["application/json"],
+        method = [RequestMethod.GET]
+    )
+    suspend fun getAccount(
+        @AuthenticationPrincipal user: CustomUserDetails,
+        @Parameter(description = "account Id") @PathVariable(value = "accountId") accountId: String
     ): Account {
         val account =
-                accountService.getAccount(accountId) ?: throw EntityNotFoundException("account", accountId)
+            accountService.getAccount(accountId) ?: throw EntityNotFoundException("account", accountId)
         return account.toWeb()
     }
 
     @Operation(security = [SecurityRequirement(name = "bearer-key")])
     @RequestMapping(
-            value = ["/accounts/{accountId}"],
-            produces = ["application/json"],
-            method = [RequestMethod.PATCH]
+        value = ["/accounts/{accountId}"],
+        produces = ["application/json"],
+        method = [RequestMethod.PATCH]
     )
     suspend fun patchAccount(
-            @AuthenticationPrincipal user: CustomUserDetails,
-            @Parameter(description = "account Id") @PathVariable(value = "accountId") accountId: String,
-            @RequestBody accountDetails: AccountPatch
+        @AuthenticationPrincipal user: CustomUserDetails,
+        @Parameter(description = "account Id") @PathVariable(value = "accountId") accountId: String,
+        @RequestBody accountDetails: AccountPatch
     ): Account {
 
         val accountPatch = AccountPatch(
-                login = accountDetails.login,
-                email = accountDetails.email,
-                isAdmin = accountDetails.isAdmin,
-                fullName = accountDetails.fullName,
-                password = accountDetails.password?.let {
-                    checkPassword(it)
-                    bCryptPasswordEncoder.encode(it)
-                }
+            login = accountDetails.login,
+            email = accountDetails.email,
+            isAdmin = accountDetails.isAdmin,
+            fullName = accountDetails.fullName,
+            password = accountDetails.password?.let {
+                checkPassword(it)
+                bCryptPasswordEncoder.encode(it)
+            },
+            company = accountDetails.company,
+            country = accountDetails.country,
+            publicKey = accountDetails.publicKey,
+            hash = accountDetails.hash
         )
 
         val account =
-                accountService.patchAccount(accountId, accountPatch)
+            accountService.patchAccount(accountId, accountPatch)
         return account.toWeb()
     }
 }

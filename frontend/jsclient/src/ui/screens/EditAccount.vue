@@ -15,9 +15,9 @@
 
                         <EditFormRow :title="$t('account.edit.profile')" :editable="false" :value="draft.isAdmin ? $t('account.edit.admin') : $t('account.edit.noAdmin')"/>
 
-                        <EditFormRow :title="$t('account.edit.TEZOSPubKey')" :editable="false" :value="draft.TEZOSPubKey"/>
+                        <EditFormRow :title="$t('account.edit.TEZOSPubKey')" :editable="false" :value="draft.publicKey"/>
 
-                        <EditFormRow :title="$t('account.edit.TEZOSAccount')" :editable="false" :value="draft.TEZOSAccount"/>
+                        <EditFormRow :title="$t('account.edit.TEZOSAccount')" :editable="false" :value="draft.hash"/>
 
                         <EditFormRow :title="$t('account.edit.fullName')" :editable="true">
                             <EditFormTitleEdit v-model.trim="draft.fullName"/>
@@ -90,14 +90,16 @@
     import {Component, Prop, Vue, Watch} from "vue-property-decorator"
 
     interface DraftAccount {
-        id: string,
-        newPassword: string,
-        newPasswordConfirmation: string,
-        fullName: string | undefined,
-        email: string | undefined,
-        isAdmin: boolean | undefined,
-        TEZOSPubKey: string | undefined | null,
-        TEZOSAccount: string
+        id: string
+        newPassword: string
+        newPasswordConfirmation: string
+        fullName: string | undefined
+        email: string | undefined
+        company: string | undefined
+        country: string | undefined
+        publicKey: string | undefined | null
+        hash: string | undefined
+        isAdmin: boolean | undefined
     }
 
     interface Message {
@@ -117,9 +119,11 @@
             newPassword: "",
             newPasswordConfirmation: "",
             email: this.$modules.accounts.meAccount?.email,
+            company: this.$modules.accounts.meAccount?.company,
+            country: this.$modules.accounts.meAccount?.country,
+            publicKey: this.$modules.accounts.meAccount?.publicKey,
+            hash: this.$modules.accounts.meAccount?.hash,
             isAdmin: this.$modules.accounts.meAccount?.isAdmin,
-            TEZOSPubKey: this.$modules.accounts.meAccount?.pubKey,
-            TEZOSAccount: "",
         }
 
         @Watch("draft.newPassword")

@@ -33,7 +33,10 @@ class CheckServiceImpl(
 ) : CheckService {
 
     private val adminAccount =
-        Account(id = "", login = "", email = "", password = "", fullName = "checkService", isAdmin = true, pubKey = null)
+        Account(
+            id = "", login = "", email = "", password = "", fullName = "checkService",
+            company = "", country = "", publicKey = "", hash = "", isAdmin = true
+        )
 
     override suspend fun checkDocument(documentHash: String, proof: Proof?): CheckResponse {
         LOGGER.debug("Checking document for hash: {}", documentHash)

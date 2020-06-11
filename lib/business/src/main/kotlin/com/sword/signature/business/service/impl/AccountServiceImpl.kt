@@ -20,16 +20,21 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class AccountServiceImpl(
-        private val accountRepository: AccountRepository
+    private val accountRepository: AccountRepository
 ) : AccountService {
     @Transactional(rollbackFor = [ServiceException::class])
     override suspend fun createAccount(accountDetails: AccountCreate): Account {
         LOGGER.trace("Creating new account.")
         val toCreate = AccountEntity(
-                login = accountDetails.login,
-                email = accountDetails.email,
-                password = accountDetails.password,
-                fullName = accountDetails.fullName
+            login = accountDetails.login,
+            email = accountDetails.email,
+            password = accountDetails.password,
+            fullName = accountDetails.fullName,
+            company = accountDetails.company,
+            country = accountDetails.country,
+            publicKey = accountDetails.publicKey,
+            hash = accountDetails.hash,
+            isAdmin = accountDetails.isAdmin
         )
 
         val createdAccount = accountRepository.save(toCreate).awaitSingle().toBusiness()
@@ -63,12 +68,17 @@ class AccountServiceImpl(
     override suspend fun patchAccount(accountId: String, accountDetails: AccountPatch): Account {
         LOGGER.trace("Update account with id({}).", accountId)
         val account: AccountEntity = accountRepository.findById(accountId).awaitFirstOrNull()
-                ?: throw EntityNotFoundException("account", accountId)
+            ?: throw EntityNotFoundException("account", accountId)
         val toPatch = account.copy(
-                login = accountDetails.login ?: account.login,
-                email = accountDetails.email ?: account.email,
-                password = accountDetails.password ?: account.password,
-                fullName = accountDetails.fullName ?: account.fullName
+            login = accountDetails.login ?: account.login,
+            email = accountDetails.email ?: account.email,
+            password = accountDetails.password ?: account.password,
+            fullName = accountDetails.fullName ?: account.fullName,
+            company = accountDetails.company ?: account.company,
+            country = accountDetails.country ?: account.country,
+            publicKey = accountDetails.publicKey ?: account.publicKey,
+            hash = accountDetails.hash ?: account.hash,
+            isAdmin = accountDetails.isAdmin ?: account.isAdmin
         )
         val updatedAccount = accountRepository.save(toPatch).awaitSingle().toBusiness()
         LOGGER.trace("Account with id ({}) updated.", accountId)
@@ -79,7 +89,7 @@ class AccountServiceImpl(
     override suspend fun deleteAccount(accountId: String) {
         LOGGER.trace("Delete account with id ({}).", accountId)
         val account: AccountEntity = accountRepository.findById(accountId).awaitFirstOrNull()
-                ?: throw EntityNotFoundException("account", accountId)
+            ?: throw EntityNotFoundException("account", accountId)
         accountRepository.delete(account).awaitFirstOrNull()
         LOGGER.trace("Account with id ({}) deleted.", accountId)
     }

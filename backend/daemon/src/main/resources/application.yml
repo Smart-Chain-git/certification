@@ -66,11 +66,15 @@ jwt:
 tezos:
   keys:
     admin:
-      address: tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb
+      hash: "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb"
       publicKey: "edpkvGfYw3LyB1UcCahKQk4rF2tvbMUk8GFiTuMjL75uGXrpvKXhjn"
-      secretKey: ENC(7IpOdQ6/9gwjZPE3HF1ab8uGlk4KoELm0NChxzUaGL2A7BFXMoL41P5j7f76L4Ap/CoiDk/6I6gtXwQFOY5JRg==)
+      secretKey: ENC(Sjy2KdrcmMKKyo294ZaFmpuw2gIEj7jArV/0PM530EOGm4MGXrIP6OWY4It6HTpKks0GinKiA+vWJdAZRpbSyA==)
+    frodon:
+      hash: "tz1aSkwEot3L2kmUvcoxzjMomb9mvBNuzFK6"
+      publicKey: "edpkurPsQ8eUApnLUJ9ZPDvu98E8VNj4KtJa1aZr16Cr5ow5VHKnz4"
+      secretKey: ENC(LvGfsJLxfwNoOIrKgdp9Y4E9EXyJZGe+bBhacjAuxDUIJZBj54O09suxCx6Y/Nzdq4+p8xbs0fdyXyPT+HY1vQ==)
   contract:
-    address: KT1XMzkvjfiwLFYbHN5uGymNffL8vquTnAzq
+    address: KT1XR5tZHWxMU36eTq3qFn3fvnmDvCTc8NTD
   node:
     url: "http://127.0.0.1:18731"
   indexer:

@@ -9,6 +9,10 @@
         "email": "admin@signature.com",
         "password": "$2a$10$TEQbC2lNT.dWnYVLOi8L4e5VUST7zyCV6demNJCQzNG6up3dr25Se",
         "fullName": "Administrator",
+        "company": "Digisign",
+        "country": "France",
+        "publicKey": "edpkvGfYw3LyB1UcCahKQk4rF2tvbMUk8GFiTuMjL75uGXrpvKXhjn",
+        "hash": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb",
         "isAdmin": true
       }
     ]
