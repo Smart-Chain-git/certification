@@ -1,4 +1,3 @@
-val merkleTreeVersion : String by project.extra
 val flapdoodleVersion: String by project.extra
 val mockKVersion: String by project.extra
 val ej4tezosVersion: String by project.extra
@@ -22,7 +21,7 @@ dependencies {
     // Project
     api(project(":lib:common"))
     implementation(project(":lib:model"))
-    implementation("com.sword.signature:merkle-tree:$merkleTreeVersion")
+    implementation(project(":lib:merkle-tree"))
     implementation(project(":lib:tezos-reader"))
 
 

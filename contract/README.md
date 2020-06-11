@@ -1,4 +1,4 @@
-[Index](../README.md) [Smart contract](./README.md) [Docker Deployment](../DockerDeployment.md)
+[Index](../README.md) | [Smart contract](./README.md) | [Docker Deployment](../DockerDeployment.md)
 
 # Smart contract
 
