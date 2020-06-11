@@ -32,7 +32,7 @@ import java.time.OffsetDateTime
 
 @Service
 class SignServiceImpl(
-    @Value("\${sign.tree.maximunLeaf}") val maximunLeaf: Int,
+    @Value("\${sign.tree.maximumLeaf}") val maximumLeaf: Int,
     private val jobRepository: JobRepository,
     private val treeElementRepository: TreeElementRepository,
     private val anchoringMessageChannel: MessageChannel,
@@ -77,7 +77,7 @@ class SignServiceImpl(
                     throw UserServiceException("bad ${algorithm.name} hash for file ${fileHash.second}")
                 }
                 intermediary.add(fileHash)
-                if (intermediary.size >= maximunLeaf) {
+                if (intermediary.size >= maximumLeaf) {
                     emit(anchorTree(requester, algorithm, flowName, callBackUrl, intermediary))
                     intermediary.clear()
                 }

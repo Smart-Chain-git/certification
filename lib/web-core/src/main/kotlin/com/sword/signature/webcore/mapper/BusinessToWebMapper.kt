@@ -1,13 +1,13 @@
 package com.sword.signature.webcore.mapper
 
 import com.sword.signature.api.sign.*
-import com.sword.signature.business.model.Algorithm
+import com.sword.signature.business.exception.CheckException
 import com.sword.signature.business.model.FileMetadata
 import com.sword.signature.business.model.TreeElement
 
 
 fun com.sword.signature.business.model.Account.toWeb() = Account(
-    id=id,
+    id = id,
     fullName = fullName,
     isAdmin = isAdmin,
     login = login,
@@ -50,28 +50,77 @@ fun TreeElement.LeafTreeElement.toWeb(proof: com.sword.signature.business.model.
     proof = proof?.toWeb()
 )
 
-fun com.sword.signature.business.model.Proof.toWeb(): Proof {
+fun com.sword.signature.business.model.Proof.toWeb() = Proof(
+    signatureDate = signatureDate,
+    filename = filename,
+    algorithm = algorithm,
+    signerAddress = signerAddress,
+    creatorAddress = creatorAddress,
+    documentHash = documentHash,
+    rootHash = rootHash,
+    hashes = hashes.map { HashNode(it.first, it.second.name) },
+    customFields = customFields,
+    contractAddress = contractAddress,
+    transactionHash = transactionHash,
+    blockHash = blockHash
+)
 
-    return Proof(
-        signatureDate = signatureDate,
-        filename = filename,
-        algorithm = algorithm,
-        publicKey = signerAddress,
-        originPublicKey = creatorAddress,
-        documentHash = documentHash,
-        rootHash = rootHash,
-        hashes = hashes.map { HashNode(it.first, it.second.name) },
-        customFields = customFields,
-        contractAddress = contractAddress,
-        transactionHash = transactionHash,
-        blockHash = blockHash
-    )
-
-}
-
-
-fun Algorithm.toWeb() = com.sword.signature.api.sign.Algorithm(
+fun com.sword.signature.business.model.Algorithm.toWeb() = Algorithm(
     id = id,
     digestLength = digestLength,
     name = name
 )
+
+fun com.sword.signature.business.model.CheckResponse.toWeb() = CheckOutput.Ok(
+    status = status,
+    signer = signer,
+    timestamp = timestamp,
+    process = trace,
+    proof = proof.toWeb()
+)
+
+fun com.sword.signature.business.exception.CheckException.toWeb(): CheckOutput.Ko {
+    return when (this) {
+        is CheckException.HashNotPresent -> CheckOutput.Ko(
+            error = message,
+            documentHash = documentHash
+        )
+        is CheckException.HashInconsistent -> CheckOutput.Ko(
+            error = message,
+            documentHash = documentHash,
+            proofDocumentHash = proofDocumentHash
+        )
+        is CheckException.IncorrectRootHash -> CheckOutput.Ko(
+            error = message,
+            documentHash = documentHash,
+            proofDocumentHash = proofDocumentHash
+        )
+        is CheckException.UnknownRootHash -> CheckOutput.Ko(
+            error = message,
+            rootHash = rootHash
+        )
+        is CheckException.DocumentKnownUnknownRootHash -> CheckOutput.Ko(
+            error = message,
+            signer = signer,
+            publicKey = publicKey,
+            date = date
+        )
+        is CheckException.IncorrectProofFile -> CheckOutput.Ko(
+            error = message
+        )
+        is CheckException.IncorrectTransaction -> CheckOutput.Ko(
+            error = message
+        )
+        is CheckException.TransactionNotDeepEnough -> CheckOutput.Ko(
+            error = message,
+            currentDepth = currentDepth,
+            expectedDepth = expectedDepth
+        )
+        is CheckException.IncoherentData -> CheckOutput.Ko(
+            error = message
+        )
+        is CheckException.NoTransaction -> CheckOutput.Ko(
+            error = message
+        )
+    }
+}

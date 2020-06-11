@@ -41,6 +41,8 @@ class ApplicationSecurity {
             exchanges.pathMatchers(HttpMethod.OPTIONS, "/**").permitAll()
             // Authorize the login endpoint to be accessed without authentication.
             exchanges.pathMatchers(HttpMethod.POST, "/api/auth").permitAll()
+            // Authorize the check endpoint for any user.
+            exchanges.pathMatchers(HttpMethod.POST, "/api/check/**").permitAll()
             // Require an authentication for all API request apart from the login.
             exchanges.pathMatchers("/api/**").authenticated()
             // Authorize all other requests (client, SwaggerUI).

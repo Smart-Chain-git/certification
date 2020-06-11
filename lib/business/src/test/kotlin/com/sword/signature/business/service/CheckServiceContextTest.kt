@@ -219,8 +219,7 @@ class CheckServiceContextTest @Autowired constructor(
                 runBlocking { checkService.checkDocument("c866779f483855455631c934d8933bf744f56dcc10833e8a73752ed086325a7a") }
 
             SoftAssertions().apply {
-                assertEquals("OK", response.status)
-                assertEquals(0, response.code)
+                assertEquals(0, response.status)
                 assertEquals(
                     "c866779f483855455631c934d8933bf744f56dcc10833e8a73752ed086325a7a",
                     response.proof.documentHash
@@ -272,7 +271,7 @@ class CheckServiceContextTest @Autowired constructor(
 
         @Test
         fun checkDocumentTestKODifferentDocumentHash() {
-            assertThrows<CheckException.IncorrectProofFile> {
+            assertThrows<CheckException.HashInconsistent> {
                 runBlocking {
                     checkService.checkDocument(
                         "804f3c79ae5897a66c9545fac06c27421118ae8cfa17806269bac736f374bd01",
@@ -414,8 +413,7 @@ class CheckServiceContextTest @Autowired constructor(
             }
 
             SoftAssertions().apply {
-                assertEquals("OK", response.status)
-                assertEquals(2, response.code)
+                assertEquals(2, response.status)
                 assertEquals(
                     "c866779f483855455631c934d8933bf744f56dcc10833e8a73752ed086325a7a",
                     response.proof.documentHash
@@ -447,8 +445,7 @@ class CheckServiceContextTest @Autowired constructor(
             }
 
             SoftAssertions().apply {
-                assertEquals("OK", response.status)
-                assertEquals(1, response.code)
+                assertEquals(1, response.status)
                 assertEquals("tz1aSkwEot3L2kmUvcoxzjMomb9mvBNuzFK6" ,response.signer)
                 assertEquals(
                     "c866779f483855455631c934d8933bf744f56dcc10833e8a73752ed086325a7a",
