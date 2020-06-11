@@ -50,6 +50,35 @@
     "login": "Sign in",
     "logout": "Sign out"
   },
+  "signatureCheck": {
+    "check": "Check your files",
+    "about": "About the project",
+    "contact": "Contact us",
+    "title": "Welcome to the Tezos DigiSign verification page.",
+    "subtitle": "You can here check the authenticity of documents signed using the Tezos DigiSign protocol and tools.",
+    "text1": "We invite you to drag and drop or upload the file you want to check. If this file has been signed by Sword Group or by a Sword Group partners who informed us of their signatures, and if this file has not been modified since its signature, we will confirm you immediately its authenticity.",
+    "text2": "If our platform does not recognize the file, but if you know the file has been certified using Tezos DigiSign, you should have been given a proof document. This document, in the JSON format, will give us all the information we need to check the document authenticity. In such case, we invite you to upload both the file to check and the proof document before you click on the check button.",
+    "upload": "Upload your file",
+    "uploadProof": "Upload your proof file",
+    "optional": "(optional)",
+    "generate": "Check a document",
+    "drop" : "Drop file here to upload or browse",
+    "com": "SWORD. All rights reserved.",
+    "GCU": "Terms of Use",
+    "policy": "Privacy Policy",
+    "errors": {
+      "hash_not_present": "",
+      "hash_inconsistent": "",
+      "incorrect_root_hash": "",
+      "unknown_root_hash": "",
+      "document_known_unknown_root_hash": "",
+      "incorrect_proof_file": "",
+      "incorrect_transaction": "",
+      "transaction_not_deep_enough": "",
+      "incoherent_data": "",
+      "no_transaction": ""
+    }
+  },
   "errors": {
     "login": {
       "invalid": "Wrong login and/or password.",

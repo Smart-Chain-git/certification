@@ -1,22 +1,271 @@
 <template>
-    <div>
-        <NavbarTop showLogo="true" backgroundColor="var(--var-color-blue-sword)" textColor="white"/>
-        <v-content>Signature Check</v-content>
-    </div>
+    <v-container fluid>
+        <v-flex xs11>
+        <Card>
+            <h2>{{ $t("signatureCheck.title") }}</h2>
+            <h2>{{ $t("signatureCheck.subtitle") }}</h2>
+            <span>{{ $t("signatureCheck.text1") }}</span>
+            <br/>
+            <span>{{ $t("signatureCheck.text2") }}</span>
+            <br/>
+            <v-flex class="mt-12">
+                <v-row>
+                    <v-col class="col-4"><h1>{{ $t("signatureCheck.upload") }}</h1></v-col>
+                    <v-col class="col-5">
+                        <v-file-input prepend-icon="" prepend-inner-icon="publish" filled :placeholder="$t('signatureCheck.drop')" outlined v-model="file">
+                        </v-file-input>
+                    </v-col>
+                </v-row>
+                <v-row>
+                    <v-col class="col-4"><h1>{{ $t("signatureCheck.uploadProof") }}</h1><span>{{ $t("signatureCheck.optional")}}</span></v-col>
+                    <v-col class="col-5">
+                        <v-file-input prepend-icon="" prepend-inner-icon="publish" filled :placeholder="$t('signatureCheck.drop')" outlined v-model="proof">
+                        </v-file-input>
+                    </v-col>
+                </v-row>
+            </v-flex>
+            <v-flex v-if="checkResponse">
+                <v-row :class="'banner_'+(checkSucceeded ? 'success' : 'error')">
+                    <v-col class="col-2">
+                        <v-icon size="100" :color="checkSucceeded ? 'green' : 'red'">{{ checkSucceeded ? "check_circle_outline" : "cancel"}}</v-icon>
+                    </v-col>
+                    <v-col class="col-10">
+                        <h1 :class="'title_'+(checkSucceeded ? 'success' : 'error')"> {{ $t(title) }}</h1>
+                        <div class="pt-5">{{ parse(message) }} </div>
+                    </v-col>
+                </v-row>
+                <v-row v-if="checkSucceeded">
+                    <v-expansion-panels>
+                        <v-expansion-panel class="more_info">
+                            <v-expansion-panel-header>{{ $t("signatureCheck.more") }}</v-expansion-panel-header>
+                            <v-expansion-panel-content v-if="checkResponse.check_status === 1">
+                                {{ parse("signatureCheck.success.message1.block2.line1") }}<br/><br/>
+                                {{ parse("signatureCheck.success.message1.block2.line2") }}<br/>
+                                {{ parse("signatureCheck.success.message1.block2.line3") }}<br/>
+                                {{ parse("signatureCheck.success.message1.block2.line4") }}<br/>
+                                {{ parse("signatureCheck.success.message1.block2.line5") }}<br/>
+                                {{ parse_link("signatureCheck.success.message1.block2.line6", "cc", "here") }}<br/>
+                                {{ parse_link("signatureCheck.success.message1.block2.line7") }}<br/>
+                            </v-expansion-panel-content>
+                            <v-expansion-panel v-if="checkResponse.check_status === 2">
+                                {{ parse("signatureCheck.success.message2.block2.line1") }}<br/><br/>
+                                {{ parse("signatureCheck.success.message2.block2.line2") }}<br/>
+                                {{ parse("signatureCheck.success.message2.block2.line3") }}<br/>
+                                {{ parse("signatureCheck.success.message2.block2.line4") }}<br/>
+                                {{ parse("signatureCheck.success.message2.block2.line5") }}<br/>
+                                {{ parse("signatureCheck.success.message2.block2.line6") }}<br/>
+                                {{ parse("signatureCheck.success.message2.block2.line7") }}<br/>
+                                {{ parse("signatureCheck.success.message2.block2.line8") }}<br/>
+                                {{ parse("signatureCheck.success.message2.block2.line9") }}<br/>
+                                {{ parse("signatureCheck.success.message2.block2.line10") }}<br/>
+                            </v-expansion-panel>
+                        </v-expansion-panel>
+                    </v-expansion-panels>
+                </v-row>
+            </v-flex>
+            <v-flex v-if="checkSucceeded" class="mt-5">
+                <v-row>
+                    <v-col class="col-2"></v-col>
+                    <v-col class="col-8 small">{{ $t("signatureCheck.success.info.title")}}</v-col>
+                </v-row>
+                <v-row>
+                    <v-col class="col-2"></v-col>
+                    <v-col class="col-4 small">
+                        <h3>{{ $t("signatureCheck.success.info.col1.title")}}</h3>
+                        <ol>
+                            <li>{{ $t("signatureCheck.success.info.col1.step1")}}</li>
+                            <li>{{ $t("signatureCheck.success.info.col1.step2")}}</li>
+                            <li>{{ $t("signatureCheck.success.info.col1.step3")}}</li>
+                            <li>{{ $t("signatureCheck.success.info.col1.step4")}}</li>
+                        </ol>
+                    </v-col>
+                    <v-col class="col-5 small">
+                        <h3>{{ $t("signatureCheck.success.info.col2.title")}}</h3>
+                        <ol>
+                            <li>{{ $t("signatureCheck.success.info.col2.step1")}}</li>
+                            <li>{{ $t("signatureCheck.success.info.col2.step2")}}</li>
+                            <li>{{ $t("signatureCheck.success.info.col2.step3")}}</li>
+                            <li>{{ $t("signatureCheck.success.info.col2.step4")}}</li>
+                            <li>{{ $t("signatureCheck.success.info.col2.step5")}}</li>
+                            <li>{{ $t("signatureCheck.success.info.col2.step6")}}</li>
+                            <li>{{ $t("signatureCheck.success.info.col2.step7")}}</li>
+                        </ol>
+                    </v-col>
+                    <v-col class="col-1"> </v-col>
+                </v-row>
+            </v-flex>
+            <div class="text-center mt-5">
+                <IconButton leftIcon="double_arrow" @click="check" color="var(--var-color-blue-sword)" :disabled="file == null">{{ $t("signatureCheck.generate") }}</IconButton>
+            </div>
+
+            <v-flex id="bottom">
+                <span class="ml-10 mr-10">{{ $t("signatureCheck.com") }}</span>
+                <a class="ml-10 mr-10" href="#/GCU">{{ $t("signatureCheck.GCU") }}</a>
+                <a class="ml-10 mr-10" href="#/policy">{{ $t("signatureCheck.policy") }}</a>
+            </v-flex>
+        </Card>
+        </v-flex>
+    </v-container>
 </template>
 
 <style lang="scss" scoped>
+    h2 {
+        color: var(--var-color-blue-sword);
+        text-align: center;
+        padding-bottom: 1rem;
+    }
 
+    span {
+        padding-bottom: 1rem;
+    }
+
+    #bottom {
+        margin-top: 50px;
+        text-align: center;
+        font-size: 8px;
+    }
+
+    .banner_success {
+        background-color: lightgreen;
+    }
+
+    .banner_error {
+        background-color: lightsalmon;
+    }
+
+    .small {
+        font-size: 10px;
+    }
+
+    .title_success{
+        color: green;
+    }
+
+    .title_error {
+        color: red;
+    }
+
+    .more_info {
+        font-size: 12px;
+        background-color: #eeeeee !important;
+    }
 </style>
 <script lang="ts">
-    import {NavbarTop} from "@/ui/components"
+    import {SignatureCheckRequest} from "@/api/signatureApi"
     import {Component, Vue} from "vue-property-decorator"
+    import * as CryptoJS from "crypto-js"
 
-    @Component({
-        components: {NavbarTop},
-    })
-
+    @Component
     export default class SignatureCheck extends Vue {
+        private file: Blob | null = null
+        private proof: Blob | null = null
+        private contentFile: string | undefined = undefined
+        private contentProof: string | undefined = undefined
+
+        private mounted() {
+            this.file = null
+            this.proof = null
+            this.$modules.signatures.reset()
+        }
+
+        public get checkSucceeded() {
+            return this.$modules.signatures.getCheckResponse()?.check === "OK"
+        }
+
+        private static format(str: string, values: Array<string>) {
+            for (let i = 0 ; i < values.length ; ++i) {
+                str = str.replace("{" + i + "}", values[i])
+            }
+            return str
+        }
+
+        private get checkResponse() {
+            return this.$modules.signatures.getCheckResponse()
+        }
+
+        private parse(message: string) {
+            if (this.checkResponse) {
+                let res: string = this.$t(message).toString()
+
+                switch (message) {
+                    case "signatureCheck.success.message1.block1.message":
+                        return SignatureCheck.format(res, [this.checkResponse.signer, this.checkResponse.date.toString()])
+                    case "signatureCheck.success.message1.block2.line1":
+                        return SignatureCheck.format(res, [this.checkResponse.proof.file_name])
+                    case "signatureCheck.success.message1.block2.line2":
+                        return SignatureCheck.format(res, [this.checkResponse.proof.algorithm, this.checkResponse.timestamp.toString()])
+                    case "signatureCheck.success.message1.block2.line3":
+                        return SignatureCheck.format(res, [this.checkResponse.signer, this.checkResponse.timestamp.toString()])
+                    case "signatureCheck.success.message1.block2.line4":
+                        return SignatureCheck.format(res, [this.checkResponse.signer, this.checkResponse.timestamp.toString()])
+                    case "signatureCheck.success.message1.block2.line5":
+                        return SignatureCheck.format(res, [this.checkResponse.signer, this.checkResponse.timestamp.toString()])
+                    case "signatureCheck.success.message1.block2.line6":
+                        return SignatureCheck.format(res, [this.checkResponse.signer, this.checkResponse.timestamp.toString()])
+                    case "signatureCheck.success.message1.block2.line7":
+                        return SignatureCheck.format(res, [this.checkResponse.signer, this.checkResponse.timestamp.toString()])
+                    default:
+                        return res
+                }
+            }
+        }
+
+        private parse_link(message: string, to: string, text:string) {
+            let res = this.parse(message)
+            return res?.replace("{link}", "<a href=\"" + to + "\">"+text+"</a>")
+        }
+
+        private get title() {
+            if (!this.checkSucceeded) {
+                return "signatureCheck.errors." + this.checkResponse?.error?.toLowerCase() + ".title"
+            } else {
+                return "signatureCheck.success.message" + this.checkResponse?.check_status + ".block1.title"
+            }
+        }
+
+        private get message() {
+            if (!this.checkSucceeded) {
+                return this.checkResponse?.error?.toLowerCase() + ".message"
+            } else {
+                return "signatureCheck.success.message" + this.checkResponse?.check_status + ".block1.message"
+            }
+        }
+
+        private check() {
+            if (this.file !== null) {
+                const reader = new FileReader()
+                reader.onload = () => {
+                    this.contentFile = reader.result?.toString()
+
+                    if (this.proof !== null) {
+                        const readerProof = new FileReader()
+                        readerProof.onload = () => {
+                            this.contentProof = readerProof.result?.toString()
+                            this.encodeSend()
+                        }
+                        readerProof.readAsText(this.proof)
+                    } else {
+                        this.encodeSend()
+                    }
+                }
+                reader.readAsText(this.file)
+            }
+        }
+
+        private encodeSend() {
+            const hashFile: string = CryptoJS.SHA256(this.contentFile!).toString()
+            let proof: string | undefined = undefined
+
+            if (this.contentProof !== undefined) {
+                proof = btoa(this.contentProof).toString()
+            }
+
+            const sigCheck: SignatureCheckRequest = {
+                hash: hashFile,
+                proof: proof,
+            }
+            this.$modules.signatures.check(sigCheck)
+        }
     }
 </script>
 

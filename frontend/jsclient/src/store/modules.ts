@@ -1,4 +1,5 @@
 import AccountsModule from "@/store/modules/AccountsModule"
+import SignaturesModule from '@/store/modules/SignatureModule'
 import store from "@/store/store"
 
 const accounts = new AccountsModule({
@@ -6,10 +7,14 @@ const accounts = new AccountsModule({
     name: "accounts",
 })
 
-
+const signatures = new SignaturesModule({
+    store,
+    name: "signatures",
+})
 
 const modules = {
     accounts,
+    signatures,
 }
 
 export type Modules = typeof modules
