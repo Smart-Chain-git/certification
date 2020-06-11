@@ -189,21 +189,33 @@
 
                 switch (message) {
                     case "signatureCheck.success.message1.block1.message":
-                        return SignatureCheck.format(res, [this.checkResponse.signer, this.checkResponse.date.toString()])
+                    case "signatureCheck.success.message2.block1.message":
+                        return SignatureCheck.format(res, [this.checkResponse.signer!, this.checkResponse.date.toString()])
+
                     case "signatureCheck.success.message1.block2.line1":
-                        return SignatureCheck.format(res, [this.checkResponse.proof.file_name])
+                        return SignatureCheck.format(res, [this.checkResponse.proof.filename])
+
                     case "signatureCheck.success.message1.block2.line2":
-                        return SignatureCheck.format(res, [this.checkResponse.proof.algorithm, this.checkResponse.timestamp.toString()])
+                    case "signatureCheck.success.message2.block2.line1":
+                        return SignatureCheck.format(res, [this.checkResponse.proof.algorithm, this.checkResponse.proof.documentHash])
+
                     case "signatureCheck.success.message1.block2.line3":
-                        return SignatureCheck.format(res, [this.checkResponse.signer, this.checkResponse.timestamp.toString()])
+                    case "signatureCheck.success.message2.block2.line2":
+                        return SignatureCheck.format(res, [this.checkResponse.proof.rootHash])
+
                     case "signatureCheck.success.message1.block2.line4":
-                        return SignatureCheck.format(res, [this.checkResponse.signer, this.checkResponse.timestamp.toString()])
+                        return SignatureCheck.format(res, [this.checkResponse])
+
+                    case "signatureCheck.success.message2.block2.line4":
+                        return SignatureCheck.format(res, [this.checkResponse.proof.documentHash])
+
                     case "signatureCheck.success.message1.block2.line5":
                         return SignatureCheck.format(res, [this.checkResponse.signer, this.checkResponse.timestamp.toString()])
                     case "signatureCheck.success.message1.block2.line6":
                         return SignatureCheck.format(res, [this.checkResponse.signer, this.checkResponse.timestamp.toString()])
                     case "signatureCheck.success.message1.block2.line7":
                         return SignatureCheck.format(res, [this.checkResponse.signer, this.checkResponse.timestamp.toString()])
+
                     default:
                         return res
                 }
@@ -261,7 +273,7 @@
             }
 
             const sigCheck: SignatureCheckRequest = {
-                hash: hashFile,
+                documentHash: hashFile,
                 proof: proof,
             }
             this.$modules.signatures.check(sigCheck)

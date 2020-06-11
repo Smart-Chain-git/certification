@@ -60,7 +60,7 @@ tezos:
     publicKey: "edpkvGfYw3LyB1UcCahKQk4rF2tvbMUk8GFiTuMjL75uGXrpvKXhjn"
     secretKey: "edsk3QoqBuvdamxouPhin7swCvkQNgq4jP5KZPbwWNnwdZpSpJiEbq"
   contract:
-    address: "KT1KPzcYY3Yb7gFGZWa1Eu9wu7t9eU764cDx" # To replace by the actual contract address.
+    address: "" # To replace by the actual contract address.
   node:
     url: "http://node:20000"
   indexer:
