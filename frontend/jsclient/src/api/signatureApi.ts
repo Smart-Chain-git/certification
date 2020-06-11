@@ -30,11 +30,11 @@ export interface SignatureCheckResponse {
     hash_document?: string,
     hash_document_proof?: string,
     hash_root?: string,
-    current_depth: number,
-    expected_depth: number,
-    check_process: Array<string>
-    date: Date,
-    public_key: string
+    current_depth?: number,
+    expected_depth?: number,
+    check_process?: Array<string>
+    date?: Date,
+    public_key?: string
 }
 
 export class SignatureApi extends Api {

@@ -21,13 +21,17 @@ export default class SignaturesModule extends VuexModule {
                 timestamp: 0,
                 error: "",
                 hash_document: "hashdoc",
-                hash_document_roof: "hash_doc_root",
-                id: "id",
-                jobId: "jobId",
+                hash_root: "hash_doc_root",
                 signer: "signer",
                 check_process: [],
-                proof: "proof",
-            date: "date"})
+                proof: {
+                    filename:"",
+                    rootHash:"",
+                    documentHash:"",
+                    algorithm:""
+
+                },
+                date: new Date()})
         })
     }
 

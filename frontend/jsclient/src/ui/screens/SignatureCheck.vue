@@ -190,7 +190,7 @@
                 switch (message) {
                     case "signatureCheck.success.message1.block1.message":
                     case "signatureCheck.success.message2.block1.message":
-                        return SignatureCheck.format(res, [this.checkResponse.signer!, this.checkResponse.date.toString()])
+                        return SignatureCheck.format(res, [(this.checkResponse.signer !== undefined) ? this.checkResponse.signer : "ere" , this.checkResponse.date!.toString()])
 
                     case "signatureCheck.success.message1.block2.line1":
                         return SignatureCheck.format(res, [this.checkResponse.proof.filename])
@@ -204,17 +204,17 @@
                         return SignatureCheck.format(res, [this.checkResponse.proof.rootHash])
 
                     case "signatureCheck.success.message1.block2.line4":
-                        return SignatureCheck.format(res, [this.checkResponse])
+                        //return SignatureCheck.format(res, [this.checkResponse])
 
                     case "signatureCheck.success.message2.block2.line4":
                         return SignatureCheck.format(res, [this.checkResponse.proof.documentHash])
 
                     case "signatureCheck.success.message1.block2.line5":
-                        return SignatureCheck.format(res, [this.checkResponse.signer, this.checkResponse.timestamp.toString()])
+                       // return SignatureCheck.format(res, [this.checkResponse.signer, this.checkResponse.timestamp.toString()])
                     case "signatureCheck.success.message1.block2.line6":
-                        return SignatureCheck.format(res, [this.checkResponse.signer, this.checkResponse.timestamp.toString()])
+                        //return SignatureCheck.format(res, [this.checkResponse.signer, this.checkResponse.timestamp.toString()])
                     case "signatureCheck.success.message1.block2.line7":
-                        return SignatureCheck.format(res, [this.checkResponse.signer, this.checkResponse.timestamp.toString()])
+                        //return SignatureCheck.format(res, [this.checkResponse.signer, this.checkResponse.timestamp.toString()])
 
                     default:
                         return res
