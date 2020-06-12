@@ -1,6 +1,6 @@
 <template>
     <div>
-        <NavbarTop showLogo="true" backgroundColor="var(--var-color-blue-sword)" textColor="white"/>
+        <NavbarTop :showLogo="true" backgroundColor="var(--var-color-blue-sword)" textColor="white"/>
         <v-content>Signature Check</v-content>
     </div>
 </template>
