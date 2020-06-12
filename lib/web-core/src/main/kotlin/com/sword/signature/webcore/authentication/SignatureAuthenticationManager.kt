@@ -35,7 +35,10 @@ class SignatureAuthenticationManager(
 
                 val user = if (tokenInfo.persisted) {
                     val token = tokenService.getAndCheckToken(bearerToken)
-                    userDetailsService.findById(token.accountId)
+                    userDetailsService.findById(token.accountId).apply {
+                        this as CustomUserDetails
+                        this.channelName = token.name
+                    }
                 } else {
                     val now = OffsetDateTime.now()
                     if (tokenInfo.expirationTime?.isAfter(now) == true) {

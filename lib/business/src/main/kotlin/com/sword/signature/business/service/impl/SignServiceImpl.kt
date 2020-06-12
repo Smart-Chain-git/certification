@@ -62,6 +62,7 @@ class SignServiceImpl(
     @Transactional(rollbackFor = [Exception::class])
     override fun batchSign(
         requester: Account,
+        channelName: String?,
         algorithm: Algorithm,
         flowName: String,
         callBackUrl: String?,
@@ -78,19 +79,20 @@ class SignServiceImpl(
                 }
                 intermediary.add(fileHash)
                 if (intermediary.size >= maximunLeaf) {
-                    emit(anchorTree(requester, algorithm, flowName, callBackUrl, intermediary))
+                    emit(anchorTree(requester, channelName, algorithm, flowName, callBackUrl, intermediary))
                     intermediary.clear()
                 }
             }
             // emission des derniers hash
             if (intermediary.isNotEmpty()) {
-                emit(anchorTree(requester, algorithm, flowName, callBackUrl, intermediary))
+                emit(anchorTree(requester, channelName, algorithm, flowName, callBackUrl, intermediary))
             }
         }
     }
 
     private suspend fun anchorTree(
         requester: Account,
+        channelName: String?,
         algorithm: Algorithm,
         flowName: String,
         callBackUrl: String?,
@@ -106,7 +108,8 @@ class SignServiceImpl(
                 callBackUrl = callBackUrl,
                 state = JobStateType.INSERTED,
                 stateDate = OffsetDateTime.now(),
-                docsNumber = fileHashs.size
+                docsNumber = fileHashs.size,
+                channelName = channelName
             )
         ).awaitSingle()
 

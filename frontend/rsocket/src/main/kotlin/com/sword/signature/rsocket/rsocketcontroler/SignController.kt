@@ -6,6 +6,7 @@ import com.sword.signature.business.exception.AccountNotFoundException
 import com.sword.signature.business.service.AccountService
 import com.sword.signature.business.service.AlgorithmService
 import com.sword.signature.business.service.SignService
+import com.sword.signature.webcore.authentication.CustomUserDetails
 import com.sword.signature.webcore.mapper.toBusiness
 import com.sword.signature.webcore.mapper.toWebSignResponse
 import kotlinx.coroutines.flow.Flow
@@ -26,7 +27,7 @@ class SignController(
 
     @MessageMapping("newJobs")
     fun batchSign(
-        @AuthenticationPrincipal user: UserDetails,
+        @AuthenticationPrincipal user: CustomUserDetails,
         @Header(name = "algorithm") algorithmParameter: String?,
         @Header(name = "flowName") flowName: String?,
         @Header(name = "callBackUrl") callBackUrl: String?,
@@ -41,18 +42,9 @@ class SignController(
             throw IllegalArgumentException("missing flowName parameter")
         }
 
-        // BOF BIDOUILLE
-        // je fait un runBlocking pour appeler un truc non bloquant
-        // car sinon  le return de mon flow me lance une erreur de netty
-        // c'ets tolerable car on bloque que sur un petit appel de la table des utilisateur et des algo
-        val account = runBlocking {
-            accountService.getAccountByLoginOrEmail(user.username) ?: throw AccountNotFoundException(user.username)
-        }
-
-
         val algorithm = runBlocking { algorithmService.getAlgorithmByName(algorithmParameter) }
 
-        return signService.batchSign(account, algorithm, flowName, callBackUrl, requests.map { it.toBusiness() })
+        return signService.batchSign(user.account,user.channelName, algorithm, flowName, callBackUrl, requests.map { it.toBusiness() })
             .map { it.toWebSignResponse() }
     }
 }
