@@ -21,8 +21,9 @@ export interface Job {
     stateDate: Date,
     state: string,
     contractAddress?: string,
-    transactionHash?: string
-    channelName?: string
+    transactionHash?: string,
+    channelName?: string,
+    docsNumber: number
 }
 
 export interface JobCriteria {

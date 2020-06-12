@@ -18,7 +18,8 @@ data class Job(
     var state: String,
     val contractAddress: String?,
     val transactionHash: String?,
-    val channelName: String?
+    val channelName: String?,
+    val docsNumber: Int
 )
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
