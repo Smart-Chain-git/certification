@@ -1,33 +1,70 @@
 import {FilterOption, PaginationOption} from "@/store/types"
 import {VuexModule, Module, Mutation, Action} from "vuex-class-modules"
 import {Job, jobApi, JobCriteria} from "@/api/jobApi"
+import AccountsModule from "@/store/modules/AccountsModule"
 
 @Module
 export default class JobsModule extends VuexModule {
+
+    private accountsModule: AccountsModule
+
+    private isLoading: boolean = false
     private jobList: Array<Job> = []
     private jobCount: number = 0
-    private navigationOptions: PaginationOption = {
+    private paginationOption: PaginationOption = {
         page: 1,
         itemsPerPage: 10,
         sortBy: [],
         sortDesc: [],
     }
-    private filters: FilterOption = {
+    private filter: FilterOption = {
         flowName: "",
         id: "",
         dates: [],
         channelName: "",
     }
 
+    constructor(options: any) {
+        super(options)
+        this.accountsModule = options.accountsModule
+    }
+
     @Action
-    public async loadJobs(criteria: JobCriteria = {}) {
+    public async loadJobs() {
+        this.setLoading(true)
+        this.filterUpdate()
+        const sorts: Array<string> = []
+        for (let i = 0; i < this.paginationOption.sortBy.length; ++i) {
+            sorts.push(this.paginationOption.sortBy[i] + ":" + ((this.paginationOption.sortDesc[i]) ? "desc" : "asc"))
+        }
+
+        const criteria: JobCriteria = {
+            accountId: this.accountsModule.meAccount?.id,
+            flowName: this.filter.flowName,
+            id: this.filter.id,
+            dateBegin: this.filter.dates[0],
+            dateEnd: this.filter.dates[1],
+            channel: this.filter.channelName,
+            sort: sorts,
+            page: this.paginationOption.page - 1,
+            size: this.paginationOption.itemsPerPage,
+        }
+
+
         await jobApi.list(criteria).then((response: Array<Job>) => {
             this.setJobs(response)
         })
         await jobApi.count(criteria).then((response: number) => {
             this.setJobCount(response)
         })
+        this.setLoading(false)
     }
+
+
+    public getLoading(): boolean {
+        return this.isLoading
+    }
+
 
     @Mutation
     public setJobs(jobs: Array<Job>) {
@@ -49,38 +86,43 @@ export default class JobsModule extends VuexModule {
 
     @Mutation
     public setPagination(pg: PaginationOption) {
-        this.navigationOptions = pg
+        this.paginationOption = pg
     }
 
     public getPagination() {
-        return this.navigationOptions
+        return this.paginationOption
     }
 
     @Mutation
     public setFilter(f: FilterOption) {
-        this.filters = f
+        this.filter = f
     }
 
     public getFilter() {
-        return this.filters
+        return { ...this.filter }
     }
 
-    @Action
-    public filterUpdate() {
-        if (this.filters.flowName === "") {
-            this.filters.flowName = undefined
+    @Mutation
+    private setLoading(isLoading: boolean) {
+        this.isLoading = isLoading
+    }
+
+    @Mutation
+    private filterUpdate() {
+        if (this.filter.flowName === "") {
+            this.filter.flowName = undefined
         }
-        if (this.filters.id === "") {
-            this.filters.id = undefined
+        if (this.filter.id === "") {
+            this.filter.id = undefined
         }
-        if (this.filters.channelName === "") {
-            this.filters.channelName = undefined
+        if (this.filter.channelName === "") {
+            this.filter.channelName = undefined
         }
-        if (this.filters.dates[0] === "") {
-            this.filters.dates[0] = undefined
+        if (this.filter.dates[0] === "") {
+            this.filter.dates[0] = undefined
         }
-        if (this.filters.dates[1] === "") {
-            this.filters.dates[1] = undefined
+        if (this.filter.dates[1] === "") {
+            this.filter.dates[1] = undefined
         }
     }
 
