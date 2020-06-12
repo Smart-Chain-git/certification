@@ -10,7 +10,8 @@
 			"userId": "5e74a073a386f170f3850b4b",
 			"flowName": "ARS_20180626_02236_130006",
 			"stateDate": "2020-04-07T08:16:04.028Z",
-			"state": "INSERTED"
+			"state": "INSERTED",
+			"docsNumber": 3
 		},
 		{
 			"_id": {
@@ -23,7 +24,8 @@
 			"flowName": "ARS_20180626_02236_130006",
 			"stateDate": "2020-04-07T08:16:04.113Z",
 			"state": "INSERTED",
-			"channelName" : "chaine editique"
+			"channelName" : "chaine editique",
+			"docsNumber": 1
 		},
 		{
 			"_id": {

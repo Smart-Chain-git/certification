@@ -79,8 +79,8 @@ class JobServiceContextTest @Autowired constructor(
         userId = "5e74a073a386f170f3850b4b",
         flowName = "ARS_20180626_02236_130006",
         stateDate = OffsetDateTime.parse("2020-04-07T08:16:04.028Z"),
-        state = JobStateType.INSERTED
-
+        state = JobStateType.INSERTED,
+        docsNumber = 3
     )
 
     private val singleFileJob = Job(
@@ -92,7 +92,8 @@ class JobServiceContextTest @Autowired constructor(
         flowName = "ARS_20180626_02236_130006",
         stateDate = OffsetDateTime.parse("2020-04-07T08:16:04.113Z"),
         state = JobStateType.INSERTED,
-        channelName = "chaine editique"
+        channelName = "chaine editique",
+        docsNumber = 1
     )
 
 
