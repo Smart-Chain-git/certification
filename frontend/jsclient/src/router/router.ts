@@ -1,7 +1,7 @@
 import fetchDataAndRedirect from "@/router/guards/fetchDataAndRedirect"
 import checkUserIsAdmin from "@/router/guards/checkUserIsAdmin"
 import checkUserHasPubKey from "@/router/guards/checkUserHasPubKey"
-import { loadMeIfLogged } from "@/router/guards/loadAccounts"
+import {loadMeIfLogged, loadTokens} from "@/router/guards/loadAccounts"
 import {
     AppTemplate,
     Login,
@@ -66,6 +66,7 @@ const router = new Router({
                 {
                     path: "jobs",
                     component: Jobs,
+                    beforeEnter: loadTokens,
                 },
                 {
                     path: "documents",

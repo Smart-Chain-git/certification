@@ -174,7 +174,7 @@
     @Component
     export default class Jobs extends Vue {
 
-        private allChannels: Array<string | undefined> = []
+
         private loading: boolean = false
 
         private jobList: Array<Job> = []
@@ -186,6 +186,10 @@
 
         private set pagination(pagination: PaginationOption) {
             this.$modules.jobs.setPagination(pagination)
+        }
+
+        private get allChannels(): Array<string | undefined> {
+            return [...new Set(this.$modules.tokens.getTokens().map((t) => t.name))]
         }
 
         private get filter() {
@@ -229,12 +233,6 @@
                     date.setDate(date.getDate() + 1)
                 }
             }
-        }
-
-        private mounted() {
-            this.$modules.tokens.loadTokens().then(() => {
-                this.allChannels = [...new Set(this.$modules.tokens.getTokens().map((t) => t.name))]
-            })
         }
 
         @Watch("pagination")
