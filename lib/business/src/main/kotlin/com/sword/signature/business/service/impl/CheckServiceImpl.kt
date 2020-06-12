@@ -33,7 +33,15 @@ class CheckServiceImpl(
 ) : CheckService {
 
     private val adminAccount =
-        Account(id = "", login = "", email = "", password = "", fullName = "checkService", isAdmin = true, pubKey = null)
+        Account(
+            id = "",
+            login = "",
+            email = "",
+            password = "",
+            fullName = "checkService",
+            isAdmin = true,
+            pubKey = null
+        )
 
     override suspend fun checkDocument(documentHash: String, providedProof: Proof?): CheckResponse {
         LOGGER.debug("Checking document for hash: {}", documentHash)
@@ -47,7 +55,7 @@ class CheckServiceImpl(
                 jobRepository.findById(treeElement.jobId).awaitFirstOrNull() ?: throw CheckException.IncoherentData()
             // Check the tree and retrieve the root hash.
             val branchHashes = checkExistingTree(job.algorithm, treeElement)
-            val rootHash: String = branchHashes[branchHashes.size - 1]
+            val rootHash: String = if(branchHashes.isNotEmpty()) branchHashes[branchHashes.size - 1] else documentHash
             when (job.state) {
                 JobStateType.INSERTED -> throw CheckException.DocumentKnownUnknownRootHash(
                     signer = "signer",
@@ -108,14 +116,14 @@ class CheckServiceImpl(
                         )
                         throw CheckException.IncoherentData()
                     }
-                    val proof = signService.getFileProof(adminAccount, treeElement.id!!)
+                    val computedProof = signService.getFileProof(adminAccount, treeElement.id!!)
                         ?: throw CheckException.IncoherentData()
                     return CheckResponse(
-                        code = 0,
+                        status = 0,
                         signer = job.signerAddress,
                         timestamp = transaction.bigMapDiff[0].value.timestamp,
                         trace = branchHashes,
-                        proof = proof
+                        proof = computedProof
                     )
                 }
                 else -> throw CheckException.IncoherentData()
@@ -125,10 +133,21 @@ class CheckServiceImpl(
             // Check the proof file
             try {
                 checkNotNull(providedProof.transactionHash)
-                check(providedProof.documentHash == documentHash)
             } catch (e: Exception) {
                 LOGGER.debug("Proof for {} does not contain every required fields.", documentHash)
                 throw CheckException.IncorrectProofFile()
+            }
+
+            if (documentHash != providedProof.documentHash) {
+                LOGGER.error(
+                    "Provided hash ({}) is not compliant with proof hash ({}).",
+                    documentHash,
+                    providedProof.documentHash
+                )
+                throw CheckException.HashInconsistent(
+                    documentHash = documentHash,
+                    proofDocumentHash = providedProof.documentHash
+                )
             }
 
             // Check the proof compliance
@@ -187,7 +206,7 @@ class CheckServiceImpl(
 
             val defaultResponse = Supplier {
                 CheckResponse(
-                    code = 2,
+                    status = 2,
                     timestamp = transaction.bigMapDiff[0].value.timestamp,
                     trace = branchHashes,
                     proof = providedProof
@@ -209,7 +228,7 @@ class CheckServiceImpl(
                 signService.getFileProof(adminAccount, treeElement.id!!) ?: return defaultResponse.get()
 
             return CheckResponse(
-                code = 1,
+                status = 1,
                 signer = job.signerAddress,
                 timestamp = OffsetDateTime.now(),
                 trace = branchHashes,
