@@ -29,12 +29,12 @@
                                                       clearable/>
                                     </v-col>
                                     <v-col class="col-2 filter-frame">
-<!--                                        <EditFormDateRange-->
-<!--                                                v-model="filter.dates"-->
-<!--                                                :updateRange="updateRange"-->
-<!--                                                :label="$t('job.list.dates')"-->
-<!--                                                color="var(&#45;&#45;var-color-blue-sword)"-->
-<!--                                        />-->
+                                        <EditFormDateRange
+                                                v-model="filter.dates"
+                                                :updateRange="updateRange"
+                                                :label="$t('job.list.dates')"
+                                                color="var(--var-color-blue-sword)"
+                                        />
                                     </v-col>
                                     <v-col class="col-2 filter-frame">
                                         <v-combobox :items="allChannels"
@@ -176,22 +176,25 @@
 
 
         private get loading() {
-            return this.$modules.jobs.getLoading()
+            return this.$modules.jobs.getLoading
         }
 
         private get jobList() {
-            return this.$modules.jobs.getJobs()
+            return this.$modules.jobs.getJobs
         }
 
         private get jobCount() {
-            return this.$modules.jobs.getJobCount()
+            return this.$modules.jobs.getJobCount
         }
 
         private pagination: PaginationOption = {...this.$modules.jobs.getPagination()}
 
         private allChannels: Array<string> = [...new Set(this.$modules.tokens.getTokens().map((t) => t.name))]
 
-        private filter: FilterOption = this.$modules.jobs.getFilter()
+
+        private get filter(): FilterOption {
+            return this.$modules.jobs.getFilter
+        }
 
 
         private get headers() {

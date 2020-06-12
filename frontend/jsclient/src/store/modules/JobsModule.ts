@@ -2,7 +2,7 @@ import {FilterOption, PaginationOption} from "@/store/types"
 import {VuexModule, Module, Mutation, Action} from "vuex-class-modules"
 import {Job, jobApi, JobCriteria} from "@/api/jobApi"
 import AccountsModule from "@/store/modules/AccountsModule"
-
+import deepcopy from "ts-deepcopy";
 @Module
 export default class JobsModule extends VuexModule {
 
@@ -61,7 +61,7 @@ export default class JobsModule extends VuexModule {
     }
 
 
-    public getLoading(): boolean {
+    public get getLoading(): boolean {
         return this.isLoading
     }
 
@@ -71,7 +71,7 @@ export default class JobsModule extends VuexModule {
         this.jobList = jobs
     }
 
-    public getJobs() {
+    public get getJobs(): Array<Job> {
         return this.jobList
     }
 
@@ -80,7 +80,7 @@ export default class JobsModule extends VuexModule {
         this.jobCount = count
     }
 
-    public getJobCount() {
+    public get getJobCount(): number {
         return this.jobCount
     }
 
@@ -90,7 +90,7 @@ export default class JobsModule extends VuexModule {
     }
 
     public getPagination() {
-        return this.paginationOption
+        return deepcopy<PaginationOption>(this.paginationOption)
     }
 
     @Mutation
@@ -98,8 +98,8 @@ export default class JobsModule extends VuexModule {
         this.filter = f
     }
 
-    public getFilter() {
-        return { ...this.filter }
+    get getFilter() {
+        return deepcopy<FilterOption>(this.filter)
     }
 
     @Mutation
