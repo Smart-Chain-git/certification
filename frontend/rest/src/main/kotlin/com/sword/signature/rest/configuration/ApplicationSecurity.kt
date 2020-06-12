@@ -48,7 +48,7 @@ class ApplicationSecurity {
             // Authorize all other requests (client, SwaggerUI).
             exchanges.anyExchange().permitAll()
         }
-        http.exceptionHandling().authenticationEntryPoint { exchange: ServerWebExchange, e: AuthenticationException ->
+        http.exceptionHandling().authenticationEntryPoint { exchange: ServerWebExchange, _: AuthenticationException ->
             val response = exchange.response
             response.statusCode = HttpStatus.UNAUTHORIZED
             val requestedWith = exchange.request.headers["X-Requested-With"]
