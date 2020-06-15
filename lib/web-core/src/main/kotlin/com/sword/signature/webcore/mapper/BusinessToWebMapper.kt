@@ -75,7 +75,9 @@ fun com.sword.signature.business.model.Algorithm.toWeb() = Algorithm(
 
 fun com.sword.signature.business.model.Token.toWeb() = Token(
         id = id,
-        name = name
+        name = name,
+        revoked = revoked,
+        expirationDate = expirationDate
 )
 
 fun com.sword.signature.business.model.CheckResponse.toWeb() = CheckOutput.Ok(

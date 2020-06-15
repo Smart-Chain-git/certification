@@ -1,4 +1,5 @@
-import {tokenApi, Token} from "@/api/tokenApi"
+import {tokenApi, Token, TokenCreateRequest, TokenPatch} from "@/api/tokenApi"
+import Vue from "vue"
 import {Action, Module, Mutation, VuexModule} from "vuex-class-modules"
 
 
@@ -19,7 +20,29 @@ export default class TokensModule extends VuexModule {
         this.tokensList = tokens
     }
 
+    @Mutation
+    public addToken(token: Token) {
+        this.tokensList.push(token)
+    }
+
     public getTokens() {
        return this.tokensList
+    }
+
+    public async updateToken(tokenId: string, tokenPatch: TokenPatch) {
+        await tokenApi.updateById(tokenId, tokenPatch).then((response: Token) => {
+            for (let i = 0 ; i < this.tokensList.length ; i++) {
+                if (this.tokensList[i].id === response.id) {
+                    Vue.set(this.tokensList, i, response)
+                    break
+                }
+            }
+        })
+    }
+
+    public async createToken(tokenCreate: TokenCreateRequest) {
+        await tokenApi.create(tokenCreate).then((response: Token) => {
+            this.addToken(response)
+        })
     }
 }

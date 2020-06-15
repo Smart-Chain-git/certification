@@ -58,6 +58,7 @@ const router = new Router({
                 {
                     path: "channel-management",
                     component: ChannelManagement,
+                    beforeEnter: loadTokens,
                 },
                 {
                     path: "dashboard",

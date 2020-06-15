@@ -36,6 +36,16 @@
       "updated": "Informations updated."
     }
   },
+  "channelManagement": {
+    "title":"Channel management",
+    "new": "New token",
+    "all": "All tokens",
+    "name": "Name",
+    "date": "Date",
+    "expirationDate": "Expiration Date",
+    "add": "Create",
+    "revoke": "Revoke"
+  },
   "menu": {
     "dashboard": "Dashboard",
     "jobs": "Job List",

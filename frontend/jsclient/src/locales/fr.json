@@ -53,6 +53,16 @@
       "copyId": "Copier"
     }
   },
+  "channelManagement": {
+    "title":"Channel management",
+    "new": "New token",
+    "all": "All tokens",
+    "name": "Name",
+    "date": "Date",
+    "expirationDate": "Expiration Date",
+    "add": "Create",
+    "revoke": "Revoke"
+  },
   "menu": {
     "dashboard": "Tableau de bord",
     "jobs": "Liste des jobs",
