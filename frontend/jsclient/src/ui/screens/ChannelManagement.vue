@@ -26,7 +26,7 @@
                             </IconButton>
                         </EditFormRow>
                     </v-flex>
-                    <CardTitle icon="list">{{ $t("channelManagement.all") }}</CardTitle>
+                    <CardTitle icon="list" class="mt-7">{{ $t("channelManagement.all") }}</CardTitle>
                     <v-data-table
                             :items="tokens"
                             class="table-header"
