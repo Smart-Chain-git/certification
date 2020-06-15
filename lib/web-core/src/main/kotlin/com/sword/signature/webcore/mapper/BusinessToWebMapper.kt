@@ -1,10 +1,17 @@
 package com.sword.signature.webcore.mapper
 
-import com.sword.signature.api.sign.*
+import com.sword.signature.api.account.Account
+import com.sword.signature.api.algorithm.Algorithm
+import com.sword.signature.api.check.CheckOutput
+import com.sword.signature.api.job.Job
+import com.sword.signature.api.job.JobFile
+import com.sword.signature.api.proof.Proof
+import com.sword.signature.api.sign.SignMetadata
+import com.sword.signature.api.sign.SignResponse
+import com.sword.signature.api.token.Token
 import com.sword.signature.business.exception.CheckException
 import com.sword.signature.business.model.FileMetadata
 import com.sword.signature.business.model.TreeElement
-
 
 fun com.sword.signature.business.model.Account.toWeb() = Account(
     id = id,
@@ -44,13 +51,14 @@ fun com.sword.signature.business.model.Job.toWeb() = Job(
 )
 
 
-fun TreeElement.LeafTreeElement.toWeb(proof: com.sword.signature.business.model.Proof? = null) = JobFile(
-    id = id,
-    hash = hash,
-    jobId = jobId,
-    metadata = metadata.toWeb(),
-    proof = proof?.toWeb()
-)
+fun TreeElement.LeafTreeElement.toWeb(proof: com.sword.signature.business.model.Proof? = null) =
+    JobFile(
+        id = id,
+        hash = hash,
+        jobId = jobId,
+        metadata = metadata.toWeb(),
+        proof = proof?.toWeb()
+    )
 
 fun com.sword.signature.business.model.Proof.toWeb() = Proof(
     signatureDate = signatureDate,
@@ -60,22 +68,24 @@ fun com.sword.signature.business.model.Proof.toWeb() = Proof(
     creatorAddress = creatorAddress,
     documentHash = documentHash,
     rootHash = rootHash,
-    hashes = hashes.map { HashNode(it.first, it.second.name) },
+    hashes = hashes.map { Proof.HashNode(it.first, it.second.name) },
     customFields = customFields,
     contractAddress = contractAddress,
     transactionHash = transactionHash,
     blockHash = blockHash
 )
 
-fun com.sword.signature.business.model.Algorithm.toWeb() = Algorithm(
-    id = id,
-    digestLength = digestLength,
-    name = name
-)
+fun com.sword.signature.business.model.Algorithm.toWeb() =
+    Algorithm(
+        id = id,
+        digestLength = digestLength,
+        name = name
+    )
 
 fun com.sword.signature.business.model.Token.toWeb() = Token(
-        id = id,
-        name = name
+    id = id,
+    name = name,
+    expirationDate = expirationDate
 )
 
 fun com.sword.signature.business.model.CheckResponse.toWeb() = CheckOutput.Ok(

@@ -1,8 +1,8 @@
 package com.sword.signature.rest.resthandler
 
 
-import com.sword.signature.api.sign.Job
-import com.sword.signature.api.sign.JobFile
+import com.sword.signature.api.job.Job
+import com.sword.signature.api.job.JobFile
 import com.sword.signature.business.exception.EntityNotFoundException
 import com.sword.signature.business.service.JobService
 import com.sword.signature.business.service.SignService
