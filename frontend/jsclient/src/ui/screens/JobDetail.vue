@@ -18,7 +18,7 @@
                         <EditFormRow :title="$t('job.detail.statusDate')" :editable="false" :value="currentJob.stateDate"/>
                         <EditFormRow :title="$t('job.detail.status')" :editable="false" :value="currentJob.state"/>
                         <EditFormRow :title="$t('job.detail.docs')" :editable="true">
-                            <a class="mt-3" :href="'#/documents/' + currentJob.id">TODO {{ currentJob.docsNumber }}</a>
+                            <a class="mt-3" :href="'#/documents/' + currentJob.id">{{ currentJob.docsNumber }}</a>
                         </EditFormRow>
                         <EditFormRow :title="$t('job.detail.channel')" :editable="false" :value="currentJob.channelName"/>
                         <EditFormRow :title="$t('job.detail.block')" :editable="false" :value="currentJob.blockHash"/>
