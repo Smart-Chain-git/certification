@@ -9,22 +9,23 @@
             <v-flex lg8 md8 sm8 xs11>
                 <Card>
                     <CardTitle icon="add">{{ $t("channelManagement.new")}}</CardTitle>
-                    <EditFormRow :title="$t('channelManagement.name')" :editable="true">
-                        <EditFormTitleEdit v-model.trim="name"></EditFormTitleEdit>
-                    </EditFormRow>
-                    <EditFormRow :title="$t('channelManagement.expirationDate')" :editable="true">
-                        <EditFormDate
-                                v-model="date"
-                                :label="$t('job.list.dates')"
-                                color="var(--var-color-blue-sword)"
-                        />
-                    </EditFormRow>
-                    <v-flex class="align-right">
-                        <IconButton color="var(--var-color-blue-sword)" @click="add" :disabled="name === '' || date === ''" leftIcon="block">
-                            {{ $t('channelManagement.add') }}
-                        </IconButton>
-                   </v-flex>
-
+                    <v-flex xs5>
+                        <EditFormRow :title="$t('channelManagement.name')" :editable="true">
+                            <EditFormTitleEdit v-model.trim="name"></EditFormTitleEdit>
+                        </EditFormRow>
+                        <EditFormRow :title="$t('channelManagement.expirationDate')" :editable="true">
+                            <EditFormDate
+                                    v-model="date"
+                                    :label="$t('job.list.dates')"
+                                    color="var(--var-color-blue-sword)"
+                            />
+                        </EditFormRow>
+                        <v-flex class="align-right">
+                            <IconButton color="var(--var-color-blue-sword)" @click="add" :disabled="name === '' || date === ''" leftIcon="block">
+                                {{ $t('channelManagement.add') }}
+                            </IconButton>
+                       </v-flex>
+                    </v-flex>
                     <CardTitle icon="list">{{ $t("channelManagement.all") }}</CardTitle>
                     <v-data-table
                             :items="tokens"
@@ -60,7 +61,7 @@
 </style>
 
 <script lang="ts">
-    import {TokenCreateRequest, TokenPatch} from "@/api/tokenApi"
+    import {Token, TokenCreateRequest, TokenPatch} from "@/api/tokenApi"
     import {tableFooter} from "@/plugins/i18n"
     import {EditFormRow, Card, CardTitle, EditFormTitleEdit} from "@/ui/components"
     import {Component, Vue} from "vue-property-decorator"
@@ -71,16 +72,19 @@
         private date: string = ""
         private now: Date = new Date()
 
+        private sortBy: Array<string> = ["revoked"]
+        private sortDesc: Array<boolean> = [true]
+
         private get tokens() {
             return this.$modules.tokens.getTokens()
         }
 
         private get headers() {
             return [
-                {text: this.$t("channelManagement.name"), align: "center", value: "name"},
-                {text: this.$t("channelManagement.date"), align: "center"},
-                {text: this.$t("channelManagement.expirationDate"), align: "center", value: "expirationDate"},
-                {text: "", sortable: false},
+                {text: this.$t("channelManagement.name"), align: "center", value: "name", width: "25%"},
+                {text: this.$t("channelManagement.date"), align: "center", width: "25%"},
+                {text: this.$t("channelManagement.expirationDate"), align: "center", value: "expirationDate", width: "25%"},
+                {text: "", sortable: false, width: "25%"},
             ]
         }
 
@@ -103,6 +107,7 @@
 
             this.$modules.tokens.createToken(token)
         }
+
     }
 </script>
 
