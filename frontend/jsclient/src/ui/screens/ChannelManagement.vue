@@ -72,9 +72,6 @@
         private date: string = ""
         private now: Date = new Date()
 
-        private sortBy: Array<string> = ["revoked"]
-        private sortDesc: Array<boolean> = [true]
-
         private get tokens() {
             return this.$modules.tokens.getTokens()
         }
