@@ -88,7 +88,7 @@ class SignServiceTest @Autowired constructor(
                         requester = accountAdmin,
                         algorithm = sha256,
                         flowName = "monflow",
-                        fileHashs = monFlow
+                        fileHashes = monFlow
                     ).collect()
                 }
             }.isInstanceOf(UserServiceException::class.java)
@@ -103,7 +103,7 @@ class SignServiceTest @Autowired constructor(
             comments: String,
             account: Account,
             algorithm: String,
-            hashs: List<Pair<String, FileMetadata>>,
+            hashes: List<Pair<String, FileMetadata>>,
             expectedJobsResponse: Int,
             expectedTreeElements: Int
         ) {
@@ -112,7 +112,7 @@ class SignServiceTest @Autowired constructor(
                 val actualJobResponse =
                     signService.batchSign(
                         requester = account, algorithm = sha256,
-                        flowName = "monflow", fileHashs = hashs.asFlow()
+                        flowName = "monflow", fileHashes = hashes.asFlow()
                     ).toList()
 
                 assertThat(actualJobResponse).hasSize(expectedJobsResponse)
@@ -138,7 +138,7 @@ class SignServiceTest @Autowired constructor(
                     assertThat(nodes.filter { it.parentId == null }).describedAs("il devrait y avoir $expectedJobsResponse racine")
                         .hasSize(expectedJobsResponse)
                     assertThat(nodes.filter { it.type == TreeElementType.LEAF }).describedAs("mauvais nombre de feuille cree")
-                        .hasSize(hashs.size)
+                        .hasSize(hashes.size)
                 }.assertAll()
 
             }
