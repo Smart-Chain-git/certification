@@ -7,5 +7,8 @@ import java.time.LocalDate
 data class Token(
     val id: String,
     val name: String,
-    val expirationDate: LocalDate?
+    val jwtToken: String,
+    val expirationDate: LocalDate?,
+    val accountId: String,
+    val revoked: Boolean
 )
