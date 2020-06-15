@@ -32,7 +32,7 @@ import java.time.OffsetDateTime
 
 @Service
 class SignServiceImpl(
-    @Value("\${sign.tree.maximunLeaf}") val maximunLeaf: Int,
+    @Value("\${sign.tree.maximumLeaf}") val maximumLeaf: Int,
     private val jobRepository: JobRepository,
     private val treeElementRepository: TreeElementRepository,
     private val anchoringMessageChannel: MessageChannel,
@@ -62,6 +62,7 @@ class SignServiceImpl(
     @Transactional(rollbackFor = [Exception::class])
     override fun batchSign(
         requester: Account,
+        channelName: String?,
         algorithm: Algorithm,
         flowName: String,
         callBackUrl: String?,
@@ -77,20 +78,21 @@ class SignServiceImpl(
                     throw UserServiceException("bad ${algorithm.name} hash for file ${fileHash.second}")
                 }
                 intermediary.add(fileHash)
-                if (intermediary.size >= maximunLeaf) {
-                    emit(anchorTree(requester, algorithm, flowName, callBackUrl, intermediary))
+                if (intermediary.size >= maximumLeaf) {
+                    emit(anchorTree(requester, channelName, algorithm, flowName, callBackUrl, intermediary))
                     intermediary.clear()
                 }
             }
             // emission des derniers hash
             if (intermediary.isNotEmpty()) {
-                emit(anchorTree(requester, algorithm, flowName, callBackUrl, intermediary))
+                emit(anchorTree(requester, channelName, algorithm, flowName, callBackUrl, intermediary))
             }
         }
     }
 
     private suspend fun anchorTree(
         requester: Account,
+        channelName: String?,
         algorithm: Algorithm,
         flowName: String,
         callBackUrl: String?,
@@ -105,7 +107,9 @@ class SignServiceImpl(
                 flowName = flowName,
                 callBackUrl = callBackUrl,
                 state = JobStateType.INSERTED,
-                stateDate = OffsetDateTime.now()
+                stateDate = OffsetDateTime.now(),
+                docsNumber = fileHashs.size,
+                channelName = channelName
             )
         ).awaitSingle()
 

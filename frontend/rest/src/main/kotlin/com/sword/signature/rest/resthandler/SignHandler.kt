@@ -54,7 +54,7 @@ class SignHandler(
         val algorithm = algorithmService.getAlgorithmByName(algorithmParameter)
 
         val jobs =
-            signService.batchSign(user.account, algorithm, flowName, callBackUrl, requests.map { it.toBusiness() })
+            signService.batchSign(user.account,user.channelName ,algorithm, flowName, callBackUrl, requests.map { it.toBusiness() })
         return jobs.map { it.toWebSignResponse() }
     }
 }

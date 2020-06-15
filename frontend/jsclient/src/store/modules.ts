@@ -11,6 +11,7 @@ const accounts = new AccountsModule({
 const jobs = new JobsModule({
     store,
     name: "jobs",
+    accountsModule: accounts,
 })
 
 const tokens = new TokensModule({

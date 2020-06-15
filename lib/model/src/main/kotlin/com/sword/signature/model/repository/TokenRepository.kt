@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository
 @Repository
 interface TokenRepository : ReactiveMongoRepository<TokenEntity, String>,
     ReactiveQuerydslPredicateExecutor<TokenEntity> {
-    suspend fun findAllByAccountId(accountId: String): Flow<TokenEntity>
+    fun findAllByAccountId(accountId: String): Flow<TokenEntity>
 }

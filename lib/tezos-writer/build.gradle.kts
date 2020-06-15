@@ -1,6 +1,7 @@
 val flapdoodleVersion: String by project.extra
 val mockKVersion: String by project.extra
 val ej4tezosVersion: String by project.extra
+val bouncyCastleVersion: String by project.extra
 
 plugins {
     id("kotlin")
@@ -30,7 +31,7 @@ dependencies {
     implementation("org.ej4tezos:java-se.utils.bytes:$ej4tezosVersion")
     implementation("org.ej4tezos:java-se.default-impl:$ej4tezosVersion")
     implementation("org.ej4tezos:java-se.crypto-default-impl:$ej4tezosVersion")
-    implementation("org.bouncycastle:bcprov-jdk15on:1.64")
+    implementation("org.bouncycastle:bcprov-jdk15on:$bouncyCastleVersion")
     implementation("com.google:bitcoinj:0.11.3")
     implementation("org.json:json:20180813")
     implementation("org.apache.httpcomponents:httpclient:4.5.7")

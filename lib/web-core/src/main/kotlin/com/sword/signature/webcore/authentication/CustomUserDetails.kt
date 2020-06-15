@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails
 class CustomUserDetails(
     val account: Account,
     roles: List<String>,
+    var channelName: String?=null,
     private val enabled: Boolean = true,
     private val credentialsNonExpired: Boolean = true,
     private val accountNonExpired: Boolean = true,

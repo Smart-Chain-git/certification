@@ -78,32 +78,33 @@
                                   :server-items-length="jobCount"
                                   :loading="loading"
                                   must-sort
-                                  >
+                    >
                         <template v-slot:body="{items}">
                             <tbody>
-                                <tr :key="job.id" v-for="job in items" class="outlined">
-                                    <td class="text-center">
-                                        <v-row>
-                                            <v-col class="col-8 text-center">{{job.flowName}}</v-col>
-                                            <v-col class="col-1 align-right">
-                                                <CopyTooltip :copy="job.id" :label="$t('job.list.id')+' :'" :actionText="$t('job.list.copyId')"/>
-                                            </v-col>
-                                        </v-row>
-                                    </td>
-                                    <td class="text-center">{{job.createdDate | formatDate}}</td>
-                                    <td class="text-center">{{job.stateDate | formatDate}}</td>
-                                    <td class="text-center">{{job.state}}</td>
-                                    <td class="text-center">{{job.docsNumber}}</td>
-                                    <td class="text-center">{{job.channelName}}</td>
-                                    <td class="text-center">
-                                        <v-btn icon @click="gotoDocument(job.id)">
-                                            <v-icon>description</v-icon>
-                                        </v-btn>
-                                        <v-btn icon @click="gotoDetail(job.id)">
-                                            <v-icon>zoom_in</v-icon>
-                                        </v-btn>
-                                    </td>
-                                </tr>
+                            <tr :key="job.id" v-for="job in items" class="outlined">
+                                <td class="text-center">
+                                    <v-row>
+                                        <v-col class="col-8 text-center">{{job.flowName}}</v-col>
+                                        <v-col class="col-1 align-right">
+                                            <CopyTooltip :copy="job.id" :label="$t('job.list.id')+' :'"
+                                                         :actionText="$t('job.list.copyId')"/>
+                                        </v-col>
+                                    </v-row>
+                                </td>
+                                <td class="text-center">{{job.createdDate | formatDate}}</td>
+                                <td class="text-center">{{job.stateDate | formatDate}}</td>
+                                <td class="text-center">{{job.state}}</td>
+                                <td class="text-center">{{job.docsNumber}}</td>
+                                <td class="text-center">{{job.channelName}}</td>
+                                <td class="text-center">
+                                    <v-btn icon @click="gotoDocument(job.id)">
+                                        <v-icon>description</v-icon>
+                                    </v-btn>
+                                    <v-btn icon @click="gotoDetail(job.id)">
+                                        <v-icon>zoom_in</v-icon>
+                                    </v-btn>
+                                </td>
+                            </tr>
                             </tbody>
                         </template>
                     </v-data-table>
@@ -166,7 +167,6 @@
 
 </style>
 <script lang="ts">
-    import {Job, JobCriteria} from "@/api/jobApi"
     import {tableFooter} from "@/plugins/i18n"
     import {FilterOption, PaginationOption} from "@/store/types"
     import {Component, Vue, Watch} from "vue-property-decorator"
@@ -174,27 +174,28 @@
     @Component
     export default class Jobs extends Vue {
 
-        private allChannels: Array<string | undefined> = []
-        private loading: boolean = false
 
-        private jobList: Array<Job> = []
-        private jobCount: number = 0
-
-        private get pagination() {
-            return this.$modules.jobs.getPagination()
+        private get loading() {
+            return this.$modules.jobs.getLoading
         }
 
-        private set pagination(pagination: PaginationOption) {
-            this.$modules.jobs.setPagination(pagination)
+        private get jobList() {
+            return this.$modules.jobs.getJobs
         }
 
-        private get filter() {
-            return this.$modules.jobs.getFilter()
+        private get jobCount() {
+            return this.$modules.jobs.getJobCount
         }
 
-        private set filter(filter: FilterOption) {
-            this.$modules.jobs.setFilter(filter)
+        private pagination: PaginationOption = {...this.$modules.jobs.getPagination()}
+
+        private allChannels: Array<string> = [...new Set(this.$modules.tokens.getTokens().map((t) => t.name))]
+
+
+        private get filter(): FilterOption {
+            return this.$modules.jobs.getFilter
         }
+
 
         private get headers() {
             return [
@@ -231,38 +232,13 @@
             }
         }
 
-        private mounted() {
-            this.$modules.tokens.loadTokens().then(() => {
-                this.allChannels = [...new Set(this.$modules.tokens.getTokens().map((t) => t.name))]
-            })
-        }
-
         @Watch("pagination")
         private search() {
-            this.$modules.jobs.filterUpdate()
 
-            const sorts: Array<string> = []
-            for (let i = 0 ; i < this.pagination.sortBy.length ; ++i) {
-                sorts.push(this.pagination.sortBy[i] + ":" + ((this.pagination.sortDesc[i]) ? "desc" : "asc"))
-            }
+            this.$modules.jobs.setFilter(this.filter)
+            this.$modules.jobs.setPagination(this.pagination)
 
-            const criteria: JobCriteria = {
-                accountId: this.$modules.accounts.meAccount?.id,
-                flowName: this.filter.flowName,
-                id: this.filter.id,
-                dateBegin: this.filter.dates[0],
-                dateEnd: this.filter.dates[1],
-                channel: this.filter.channelName,
-                sort: sorts,
-                page: this.pagination.page - 1,
-                size: this.pagination.itemsPerPage,
-            }
-            this.loading = true
-            this.$modules.jobs.loadJobs(criteria).then(() => {
-                this.jobList = this.$modules.jobs.getJobs()
-                this.jobCount = this.$modules.jobs.getJobCount()
-                this.loading = false
-            })
+            this.$modules.jobs.loadJobs()
         }
 
         private async exportCSV() {

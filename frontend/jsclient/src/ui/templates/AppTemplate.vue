@@ -7,7 +7,7 @@
 
 <template>
     <div>
-        <NavbarTop :showLogo="false" :backgroundColor="white" :textColor="black"/>
+        <NavbarTop :showLogo="false" backgroundColor="white" textColor="black"/>
         <!-- Mobile header-->
         <div v-if="$vuetify.breakpoint.xs || $vuetify.breakpoint.sm">
             <v-app-bar fixed dense>

@@ -1,4 +1,4 @@
-[Index](./README.md) [Smart contract](contract/README.md) [Docker Deployment](./DockerDeployment.md)
+[Index](./README.md) | [Smart contract](contract/README.md) | [Docker Deployment](./DockerDeployment.md)
 
 # Tezos signature servers 
 
@@ -19,8 +19,10 @@
 * API (module **lib/api**): API between the REST/RSocket clients and servers.
 * Business (module **lib/business**): business services and entities.
 * Common (module **lib/common**): utility code shared between libraries.
+* Merkle tree (module **lib/merkle-tree**): merkle tree library.
 * Model (module **lib/model**): definition of mongoDB entities, indices, and repositories.
-* Tezos (module **lib/tezos**): services which interact with tezos blockchain.
+* Tezos reader (module **lib/tezos-reader**): services which retrieves blockchain data from indexer.
+* Tezos writer (module **lib/tezos-writer**): services which writes into the blockchain.
 * Web Core (module **lib/web-core**): authentication and utility services for frontend modules. 
 
 ## Requirements
@@ -69,4 +71,3 @@ Run the servers in production mode
 * Move the configuration files next to the JARs.
 * Edit the configuration files to match the production settings.
 * Run the JARs: `java -jar $JAR_FILE`
-

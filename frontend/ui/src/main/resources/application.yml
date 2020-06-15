@@ -1,6 +1,6 @@
 sign:
   tree:
-   maximunLeaf: 1024
+    maximumLeaf: 1024
 management:
   endpoints:
     web:
