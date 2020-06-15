@@ -5,11 +5,9 @@
             :close-on-content-click="false"
             transition="scale-transition"
             offset-y
-            max-width="290px"
-            min-width="290px"
     >
         <template v-slot:activator="{ on }">
-            <v-flex class="date-picker" sm="10" md="6">
+            <v-flex class="date-picker">
                 <v-text-field
                         autocomplete="off"
                         :value="datesRangeDisplay"
@@ -43,7 +41,7 @@
 
 <style lang="css">
     .date-picker {
-        max-width: 400px;
+        max-width: 240px !important;
     }
 </style>
 
@@ -54,10 +52,8 @@
     export default class EditFormDate extends Vue {
 
         @Prop(Array) private readonly value!: string
-        @Prop(Array) private readonly notAllowedDates: Array<any> | undefined
         @Prop(String) private readonly color!: string
         @Prop(String) private readonly label!: string
-        @Prop(Function) private updateRange!: () => void
 
         private menu = false
 

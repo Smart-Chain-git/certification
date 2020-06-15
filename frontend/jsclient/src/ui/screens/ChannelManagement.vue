@@ -11,20 +11,20 @@
                     <CardTitle icon="add">{{ $t("channelManagement.new")}}</CardTitle>
                     <v-flex xs5>
                         <EditFormRow :title="$t('channelManagement.name')" :editable="true">
-                            <EditFormTitleEdit v-model.trim="name"></EditFormTitleEdit>
+                            <EditFormTitleEdit v-model.trim="name" :label="$t('channelManagement.name')" color="var(--var-color-blue-sword)"></EditFormTitleEdit>
                         </EditFormRow>
                         <EditFormRow :title="$t('channelManagement.expirationDate')" :editable="true">
                             <EditFormDate
                                     v-model="date"
-                                    :label="$t('job.list.dates')"
+                                    :label="$t('channelManagement.date')"
                                     color="var(--var-color-blue-sword)"
                             />
                         </EditFormRow>
-                        <v-flex class="align-right">
+                        <EditFormRow :editable="true">
                             <IconButton color="var(--var-color-blue-sword)" @click="add" :disabled="name === '' || date === ''" leftIcon="block">
                                 {{ $t('channelManagement.add') }}
                             </IconButton>
-                       </v-flex>
+                        </EditFormRow>
                     </v-flex>
                     <CardTitle icon="list">{{ $t("channelManagement.all") }}</CardTitle>
                     <v-data-table
