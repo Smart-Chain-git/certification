@@ -69,14 +69,14 @@
     }
   },
   "channelManagement": {
-    "title":"Channel management",
-    "new": "New token",
-    "all": "All tokens",
-    "name": "Name",
+    "title":"Gestion des canaux",
+    "new": "Nouveau token",
+    "all": "Tous les tokens",
+    "name": "Nom",
     "date": "Date",
-    "expirationDate": "Expiration Date",
-    "add": "Create",
-    "revoke": "Revoke"
+    "expirationDate": "Date d'expiration",
+    "add": "Créer",
+    "revoke": "Révoquer"
   },
   "menu": {
     "dashboard": "Tableau de bord",
