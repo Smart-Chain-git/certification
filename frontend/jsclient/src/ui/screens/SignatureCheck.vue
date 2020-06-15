@@ -31,34 +31,18 @@
                     </v-col>
                     <v-col class="col-10">
                         <h1 :class="'title_'+(checkSucceeded ? 'success' : 'error')"> {{ $t(title) }}</h1>
-                        <div class="pt-5">{{ parse(message) }} </div>
+                        <span v-html="longMessage"></span>
+                      <!--  <div class="pt-5">{{ parse(message) }} </div>-->
                     </v-col>
                 </v-row>
                 <v-row v-if="checkSucceeded">
                     <v-expansion-panels>
                         <v-expansion-panel class="more_info">
                             <v-expansion-panel-header>{{ $t("signatureCheck.more") }}</v-expansion-panel-header>
-                            <v-expansion-panel-content v-if="checkResponse.check_status === 1">
-                                {{ parse("signatureCheck.success.message1.block2.line1") }}<br/><br/>
-                                {{ parse("signatureCheck.success.message1.block2.line2") }}<br/>
-                                {{ parse("signatureCheck.success.message1.block2.line3") }}<br/>
-                                {{ parse("signatureCheck.success.message1.block2.line4") }}<br/>
-                                {{ parse("signatureCheck.success.message1.block2.line5") }}<br/>
-                                {{ parse_link("signatureCheck.success.message1.block2.line6", "cc", "here") }}<br/>
-                                {{ parse_link("signatureCheck.success.message1.block2.line7") }}<br/>
+                            <v-expansion-panel-content>
+                                <span v-html="successMessage">
+                                </span>
                             </v-expansion-panel-content>
-                            <v-expansion-panel v-if="checkResponse.check_status === 2">
-                                {{ parse("signatureCheck.success.message2.block2.line1") }}<br/><br/>
-                                {{ parse("signatureCheck.success.message2.block2.line2") }}<br/>
-                                {{ parse("signatureCheck.success.message2.block2.line3") }}<br/>
-                                {{ parse("signatureCheck.success.message2.block2.line4") }}<br/>
-                                {{ parse("signatureCheck.success.message2.block2.line5") }}<br/>
-                                {{ parse("signatureCheck.success.message2.block2.line6") }}<br/>
-                                {{ parse("signatureCheck.success.message2.block2.line7") }}<br/>
-                                {{ parse("signatureCheck.success.message2.block2.line8") }}<br/>
-                                {{ parse("signatureCheck.success.message2.block2.line9") }}<br/>
-                                {{ parse("signatureCheck.success.message2.block2.line10") }}<br/>
-                            </v-expansion-panel>
                         </v-expansion-panel>
                     </v-expansion-panels>
                 </v-row>
@@ -179,6 +163,38 @@
             return str
         }
 
+        private get successMessage() {
+            switch (this.checkResponse?.check_status) {
+                case 1:
+                    return this.parse("signatureCheck.success.message1.block2.line1") + "<br/><br/>" +
+                        this.parse("signatureCheck.success.message1.block2.line2") + "<br/>" +
+                        this.parse("signatureCheck.success.message1.block2.line3") + "<br/>" +
+                        this.parse("signatureCheck.success.message1.block2.line4") + "<br/>" +
+                        this.parse("signatureCheck.success.message1.block2.line5") + "<br/>" +
+                        this.parse_link("signatureCheck.success.message1.block2.line6", "cc", "here") + "<br/>" +
+                        this.parse_link("signatureCheck.success.message1.block2.line7", "cc", "here")
+                case 2:
+                    return this.parse("signatureCheck.success.message2.block2.line1") + "<br/><br/>" +
+                        this.parse("signatureCheck.success.message2.block2.line2") + "<br/>" +
+                        this.parse("signatureCheck.success.message2.block2.line3") + "<br/>" +
+                        this.parse("signatureCheck.success.message2.block2.line4") + "<br/>" +
+                        this.parse("signatureCheck.success.message2.block2.line5") + "<br/>" +
+                        this.parse("signatureCheck.success.message2.block2.line6") + "<br/>" +
+                        this.parse("signatureCheck.success.message2.block2.line7") + "<br/>" +
+                        this.parse("signatureCheck.success.message2.block2.line8") + "<br/>" +
+                        this.parse("signatureCheck.success.message2.block2.line9") + "<br/>" +
+                        this.parse("signatureCheck.success.message2.block2.line10") + "<br/>"
+            }
+        }
+
+        private get longMessage() {
+            if (this.checkSucceeded) {
+
+            } else {
+               return this.parse("signatureCheck.errors." + this.checkResponse?.error?.toLowerCase())
+            }
+        }
+
         private get checkResponse() {
             return this.$modules.signatures.getCheckResponse()
         }
@@ -237,7 +253,7 @@
 
         private get message() {
             if (!this.checkSucceeded) {
-                return this.checkResponse?.error?.toLowerCase() + ".message"
+                return "signatureCheck.errors." + this.checkResponse?.error?.toLowerCase() + ".message"
             } else {
                 return "signatureCheck.success.message" + this.checkResponse?.check_status + ".block1.message"
             }

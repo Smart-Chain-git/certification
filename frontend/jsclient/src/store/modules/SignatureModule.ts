@@ -16,10 +16,10 @@ export default class SignaturesModule extends VuexModule {
         signatureApi.check(sigCheck).then((response: SignatureCheckResponse) => {
             this.setCheckResponse(response)
         }).catch((_) => {
-            this.setCheckResponse({check: "OK",
+            this.setCheckResponse({check: "KO",
                 check_status: 1,
                 timestamp: 0,
-                error: "",
+                error: "HASH_INCONSISTENT",
                 hash_document: "hashdoc",
                 hash_root: "hash_doc_root",
                 signer: "signer",
