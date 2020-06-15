@@ -10,6 +10,7 @@ export default class JobsModule extends VuexModule {
 
     private isLoading: boolean = false
     private jobList: Array<Job> = []
+    private currentJob: Job | undefined = undefined
     private jobCount: number = 0
     private paginationOption: PaginationOption = {
         page: 1,
@@ -66,13 +67,28 @@ export default class JobsModule extends VuexModule {
     }
 
 
+    public async loadJob(id: string) {
+        await jobApi.getById(id).then((response: Job) => {
+            this.setCurrentJob(response)
+        })
+    }
+
     @Mutation
     public setJobs(jobs: Array<Job>) {
         this.jobList = jobs
     }
 
+    @Mutation
+    public setCurrentJob(job: Job) {
+        this.currentJob = job
+    }
+
     public get getJobs(): Array<Job> {
         return this.jobList
+    }
+
+    public getCurrentJob() {
+        return this.currentJob
     }
 
     @Mutation

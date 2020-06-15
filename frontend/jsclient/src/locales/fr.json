@@ -37,6 +37,21 @@
     }
   },
   "job": {
+    "detail": {
+      "title": "Détails du Job",
+      "back": "Retour",
+      "id": "ID",
+      "name": "Nom",
+      "date": "Date",
+      "statusDate": "Date de statut",
+      "status": "Statut",
+      "docs": "Docs",
+      "channel": "Canal",
+      "block": "Blocks",
+      "transaction": "Transaction",
+      "hash": "Algorithme de hashage",
+      "rootHash": "Racine de hashage"
+    },
     "list": {
       "title": "Jobs",
       "id": "ID",

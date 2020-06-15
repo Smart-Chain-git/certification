@@ -53,6 +53,13 @@ export class JobApi extends Api {
             })
     }
 
+    public getById(id: string): Promise<Job> {
+        return this.get<Job>(API_GET + "/" + id)
+            .then((response: AxiosResponse<Job>) => {
+                return response.data
+            })
+    }
+
     public count(criteria: JobCriteria = {}): Promise<number> {
         return this.get<number>(API_GET_COUNT, criteria)
             .then((response: AxiosResponse<number>) => {

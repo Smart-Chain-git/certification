@@ -75,6 +75,21 @@
       "records": "records",
       "export": "Export .csv",
       "copyId": "Copy"
+    },
+    "detail": {
+      "title": "Job details",
+      "back": "Back",
+      "id": "ID",
+      "name": "Name",
+      "date": "Date",
+      "statusDate": "Status Date",
+      "status": "Status",
+      "docs": "Docs",
+      "channel": "Channel",
+      "block": "Block",
+      "transaction": "Transaction",
+      "hash": "Hash algorithm",
+      "rootHash": "root hash"
     }
   },
   "errors": {

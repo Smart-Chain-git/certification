@@ -17,15 +17,15 @@
 -->
 
 <template>
-    <v-row fluid class="mx-0 mb-4 edit-form-input-row">
+    <v-row fluid class="mx-0 edit-form-input-row">
         <v-flex xl4 md4 xs12 class="f-title pr-5">
             {{ title }}
             <slot name="icon"/>
         </v-flex>
         <v-flex xl8 md8 xs12>
             <v-row row class="ma-0 mt-1">
-                <slot class="font-weight-bold mt-2" v-if="editable"/>
-                <span v-else class="font-weight-bold mt-2">
+                <slot class="font-weight-bold" v-if="editable"/>
+                <span v-else class="font-weight-bold mt-3">
                     {{ value }}
                 </span>
             </v-row>
