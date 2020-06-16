@@ -195,7 +195,7 @@
         }
 
         private get canCancel() {
-            switch(this.access) {
+            switch (this.access) {
                 case "adminEditing":
                     return (
                         this.draft.login !== this.currentAccount?.login ||
@@ -228,7 +228,7 @@
         }
 
         private get canSave() {
-            switch(this.access) {
+            switch (this.access) {
                 case "creating":
                 case "adminEditing":
                     return (
@@ -363,8 +363,8 @@
             const create: AccountCreate = {
                 login: this.draft.login!,
                 email: this.draft.email!,
-                disabled: this.draft.disabled!,
-                isAdmin: this.draft.isAdmin,
+                disabled: (this.draft.disabled) ? this.draft.disabled : false,
+                isAdmin: (this.draft.isAdmin) ? this.draft.isAdmin : false,
                 publicKey: this.draft.publicKey,
                 fullName: this.draft.fullName!,
                 company: this.draft.company,

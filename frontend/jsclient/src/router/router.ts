@@ -60,7 +60,7 @@ const router = new Router({
                     component: EditAccount,
                     props: {
                         access: "selfEditing",
-                    }
+                    },
                 },
                 {
                     path: "create-account",
