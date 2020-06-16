@@ -1,19 +1,11 @@
 import {Api} from "@/api/api"
+import {Account, AuthRequest, AuthResponse} from "@/store/types"
 import {AxiosRequestConfig, AxiosResponse} from "axios"
 import {apiConfig} from "@/api/api.config"
-import {Account} from "@/api/accountApi"
 
 export const API_AUTH = "/auth"
 export const API_ME = "/me"
 
-export interface AuthRequest {
-    user: string
-    password: string
-}
-
-export interface AuthResponse {
-    token: string
-}
 
 export class AuthApi extends Api {
     public constructor(config: AxiosRequestConfig) {

@@ -16,3 +16,25 @@ export function loadTokens(to: Route, from: Route, next: NavigationGuardNext) {
         next()
     })
 }
+
+export function loadAccounts(to: Route, from: Route, next: NavigationGuardNext) {
+    modules.accounts.initToken().then(() => {
+        modules.accounts.loadAccounts().then(() => {
+            next()
+        }).catch(() => {
+            next("/")
+        })
+    }).catch(()=>{
+        next("/")
+    })
+}
+
+export function loadAccount(to: Route, from: Route, next: NavigationGuardNext) {
+    const id = to.params.id
+
+    modules.accounts.loadAccount(id).then(() => {
+        next()
+    }).catch(() => {
+        next("/")
+    })
+}

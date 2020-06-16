@@ -13,6 +13,8 @@ import com.sword.signature.webcore.mapper.toWeb
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.web.bind.annotation.*
@@ -61,6 +63,18 @@ class AccountHandler(
 
     @Operation(security = [SecurityRequirement(name = "bearer-key")])
     @RequestMapping(
+            value = ["/accounts"],
+            produces = ["application/json"],
+            method = [RequestMethod.GET]
+    )
+    suspend fun getAccounts(
+            @AuthenticationPrincipal user: CustomUserDetails
+    ): Flow<Account> {
+        return accountService.getAccounts().map { it.toWeb() }
+    }
+
+    @Operation(security = [SecurityRequirement(name = "bearer-key")])
+    @RequestMapping(
         value = ["/accounts/{accountId}"],
         produces = ["application/json"],
         method = [RequestMethod.GET]
@@ -98,7 +112,8 @@ class AccountHandler(
             company = accountDetails.company,
             country = accountDetails.country,
             publicKey = accountDetails.publicKey,
-            hash = accountDetails.hash
+            hash = accountDetails.hash,
+            disabled = accountDetails.disabled
         )
 
         val account =

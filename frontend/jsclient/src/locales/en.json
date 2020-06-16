@@ -33,7 +33,9 @@
       "save": "Save",
       "admin": "Administrator",
       "noAdmin": "User",
-      "updated": "Informations updated."
+      "updated": "Informations updated.",
+      "country": "Country",
+      "company": "Company"
     }
   },
   "job": {
@@ -94,6 +96,9 @@
       "differents": "Passwords must be identical.",
       "weak": "Password must meet following requirements : 8 characters long, 1 uppercase, 1 lowercase, 1 number, 1 special character."
     },
+    "account": {
+      "duplicate": "This login is already taken."
+    },
     "back": {
       "generic": "Informations could not be saved, please contact your administrator."
     }
@@ -105,9 +110,16 @@
     }
   },
   "calendar": {
-  "label": {
-    "reset": "Effacer",
-    "close": "Fermer"
+    "label": {
+      "reset": "Effacer",
+      "close": "Fermer"
+    }
+  },
+  "disableConfirm": {
+    "title":"Disable account",
+    "subTitle": "Are you sure you want to disable this account ?",
+    "content": "",
+    "confirmButton": "Confirm",
+    "cancelButton": "Cancel"
   }
-}
 }

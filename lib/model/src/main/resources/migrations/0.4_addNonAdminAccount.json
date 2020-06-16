@@ -13,7 +13,8 @@
         "country": "France",
         "publicKey": "edpkurPsQ8eUApnLUJ9ZPDvu98E8VNj4KtJa1aZr16Cr5ow5VHKnz4",
         "hash": "tz1aSkwEot3L2kmUvcoxzjMomb9mvBNuzFK6",
-        "isAdmin": false
+        "isAdmin": false,
+        "disabled": false
       }
     ]
   }

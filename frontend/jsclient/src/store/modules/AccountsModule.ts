@@ -1,7 +1,10 @@
-import {Account, accountApi, AccountPatch} from "@/api/accountApi"
-import {authApi, AuthRequest, AuthResponse} from "@/api/authApi"
+
+import {accountApi} from '@/api/accountApi'
+import {authApi} from '@/api/authApi'
 import {resetStore} from "@/store/actions/globalActions"
 import modules from "@/store/modules"
+
+import {Account, AccountCreate, AccountPatch, AuthRequest, AuthResponse} from '@/store/types'
 import globalAxios from "axios"
 import Cookies from "js-cookie"
 import Vue from "vue"
@@ -17,8 +20,8 @@ export default class AccountsModule extends VuexModule {
     private accounts: { [key: string]: Account } = {}
     private requestInterceptor: number | null = null
     private responseInterceptor: number | null = null
-
-    private loading: boolean = false
+    private currentAccount: Account | undefined = undefined
+    private httpStatus: number = 0
 
     /**
      * The connected user.
@@ -47,10 +50,6 @@ export default class AccountsModule extends VuexModule {
         return account
     }
 
-    public get getLoading(): boolean {
-        return this.loading
-    }
-
     @Mutation
     public setAccounts(accounts: Array<Account>) {
         this.accounts = {}
@@ -68,7 +67,7 @@ export default class AccountsModule extends VuexModule {
                 Vue.delete(this.accounts, account.id)
             }
             Vue.set(this.accounts, account.id, account)
-
+            this.currentAccount = account
             if (account.id === this.me!.id) {
                 this.me = account
             }
@@ -96,23 +95,18 @@ export default class AccountsModule extends VuexModule {
 
     @Action
     public async loadMe() {
-        this.setLoading(true)
         await authApi.me()
             .then((response: Account) => this.setMe(response))
-        this.setLoading(false)
     }
 
     @Action
     public async loadAccount(id: string) {
-        this.setLoading(true)
         await accountApi.getById(id)
             .then((response: Account) => this.setAccount(response))
-        this.setLoading(false)
     }
 
     @Action
     public async loadToken(authRequest: AuthRequest) {
-        this.setLoading(true)
         await authApi.auth(authRequest).then((response: AuthResponse) => {
             const token = response.token
             // Set the token in the store and in the cookies
@@ -121,7 +115,6 @@ export default class AccountsModule extends VuexModule {
             // Setup the token for the axios requests
             this.initToken()
         })
-        this.setLoading(false)
     }
 
 
@@ -184,25 +177,38 @@ export default class AccountsModule extends VuexModule {
 
     @Action
     public async loadAccounts() {
-        this.setLoading(true)
         await accountApi.list().then((response: Array<Account>) => {
             this.setAccounts(response)
         })
-        this.setLoading(false)
     }
 
 
     public async updateAccount(id: string, patch: AccountPatch) {
-        this.setLoading(true)
         await accountApi.patchById(id, patch).then((response: Account) => {
             this.setAccount(response)
         })
-        this.setLoading(false)
+    }
+
+    public getCurrentAccount() {
+        return this.currentAccount
+    }
+
+    @Action
+    public async createAccount(account: AccountCreate) {
+        await accountApi.create(account).then((response: Account) => {
+            Vue.set(this.accounts, response.id, response)
+        }).catch((error) => {
+            this.setHttpStatus(error.response.status)
+        })
     }
 
     @Mutation
-    private setLoading(loading: boolean) {
-        this.loading = loading
+    public setHttpStatus(code: number) {
+        this.httpStatus = code
+    }
+
+    public getHttpStatus() {
+        return this.httpStatus
     }
 
     @Mutation
@@ -214,4 +220,5 @@ export default class AccountsModule extends VuexModule {
     private setResponseInterceptor(value: number | null) {
         this.responseInterceptor = value
     }
+
 }

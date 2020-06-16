@@ -43,8 +43,10 @@ class AccountServiceImpl(
             country = accountDetails.country,
             publicKey = accountDetails.publicKey,
             hash = accountDetails.hash,
-            isAdmin = accountDetails.isAdmin
+            isAdmin = accountDetails.isAdmin,
+            disabled = accountDetails.disabled
         )
+
         try {
             val createdAccount = accountRepository.save(toCreate).awaitSingle().toBusiness()
             LOGGER.debug("New account with id ({}) created.", createdAccount.id)

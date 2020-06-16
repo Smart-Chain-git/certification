@@ -1,8 +1,9 @@
 import fetchDataAndRedirect from "@/router/guards/fetchDataAndRedirect"
 import checkUserIsAdmin from "@/router/guards/checkUserIsAdmin"
 import checkUserHasPubKey from "@/router/guards/checkUserHasPubKey"
+import { loadMeIfLogged, loadAccounts, loadAccount, loadTokens } from "@/router/guards/loadAccounts"
 import loadCurrentJob from "@/router/guards/loadCurrentJob"
-import {loadMeIfLogged, loadTokens} from "@/router/guards/loadAccounts"
+
 import {
     AppTemplate,
     Login,
@@ -13,13 +14,14 @@ import {
     SignatureRequest,
     SignatureCheck,
     Resources,
-    Settings,
     EditAccount,
     ChannelManagement,
+    Accounts,
     JobDetail,
 } from "@/ui/components"
 import Vue from "vue"
 import Router from "vue-router"
+import multiguard from "vue-router-multiguard"
 
 Vue.use(Router)
 
@@ -58,6 +60,22 @@ const router = new Router({
                     component: EditAccount,
                 },
                 {
+                    path: "create-account",
+                    component: EditAccount,
+                    beforeEnter: checkUserIsAdmin,
+                    props: {
+                        creating: true
+                    }
+                },
+                {
+                    path: "accounts/:id",
+                    component: EditAccount,
+                    beforeEnter: multiguard([checkUserIsAdmin, loadAccount]),
+                    props: {
+                        editing: true
+                    }
+                },
+                {
                     path: "channel-management",
                     component: ChannelManagement,
                 },
@@ -91,8 +109,8 @@ const router = new Router({
                 },
                 {
                     path: "settings",
-                    component: Settings,
-                    beforeEnter: checkUserIsAdmin,
+                    component: Accounts,
+                    beforeEnter: multiguard([checkUserIsAdmin, loadAccounts]),
                 },
             ],
         },
