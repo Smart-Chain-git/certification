@@ -21,7 +21,7 @@
                         </EditFormRow>
                         <EditFormRow v-else :title="$t('account.edit.email')" :editable="false" :value="draft.email"/>
 
-                        <EditFormRow v-if="creating || editing" :title="$t('account.edit.profile')" :editable="true">
+                        <EditFormRow v-if="creating || editing" :title="$t('account.edit.admin')" :editable="true">
                             <v-checkbox v-model="draft.isAdmin"/>
                         </EditFormRow>
                         <EditFormRow v-else :title="$t('account.edit.profile')" :editable="false" :value="draft.isAdmin ? $t('account.edit.admin') : $t('account.edit.noAdmin')"/>
@@ -71,7 +71,7 @@
                            </v-flex>
                             <v-flex class="align-right">
                                 <IconButton v-if="creating" color="var(--var-color-blue-sword)" @click="create" :disabled="!canCreate" leftIcon="save">
-                                    {{ $t('account.edit.save') }}
+                                    {{ $t('account.list.add') }}
                                 </IconButton>
                                 <IconButton v-else color="var(--var-color-blue-sword)" @click="save" :disabled="!canSave" leftIcon="save">
                                     {{ $t('account.edit.save') }}
@@ -214,7 +214,9 @@
         }
 
         private get canCreate() {
-            return (this.draft.email !== "" && this.draft.fullName !== "" && this.draft.login !== "" )
+            return (this.draft.email !== undefined && this.draft.email !== "" &&
+                this.draft.fullName !== undefined && this.draft.fullName !== "" &&
+                this.draft.login !== undefined &&  this.draft.login !== "")
         }
 
         private get isPasswordStrong() {

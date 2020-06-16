@@ -77,7 +77,7 @@ export class AccountApi extends Api {
     }
 
     public create(account: AccountCreate): Promise<Account> {
-        return this.post<Account, AccountCreate>(API_GET, account)
+        return this.post<Account, AccountCreate>(API_GET, {}, account)
             .then((response: AxiosResponse<Account>) => {
                 return response.data
             })

@@ -31,7 +31,9 @@
                                     <v-icon v-if="item.isAdmin">check</v-icon>
                                 </td>
                                 <td>
-                                    <v-switch :disabled="me.id === item.id" v-model="item.isActive" @click.stop="disable(item)" color="var(--var-color-blue-sword)" />
+                                    <v-row wrap justify="center">
+                                        <v-switch :disabled="me.id === item.id" v-model="item.isActive" @click.stop="disable(item)" color="var(--var-color-blue-sword)" />
+                                    </v-row>
                                 </td>
                                 <td class="align-end">
                                     <v-btn v-if="item.isActive" icon :to="'/accounts/' + item.id">
@@ -79,12 +81,12 @@
 
         private get headers() {
             return [
-                {text: this.$t('account.list.login'), value: 'login', width: "18%", align: "center"},
-                {text: this.$t('account.list.email'), value: 'email', width: "18%", align: "center"},
-                {text: this.$t('account.list.fullName'), value: 'fullName', width: "18%", align: "center"},
-                {text: this.$t('account.list.isAdmin'), value: 'isAdmin', width: "18%", align: "center"},
-                {text: this.$t('account.list.status'), value: 'isActive', width: "18%", align: "center"},
-                {text: '', value: 'actions', sortable: false, width: "10%"},
+                {text: this.$t('account.list.login'), value: 'login', width: "25%", align: "center"},
+                {text: this.$t('account.list.email'), value: 'email', width: "25%", align: "center"},
+                {text: this.$t('account.list.fullName'), value: 'fullName', width: "25%", align: "center"},
+                {text: this.$t('account.list.isAdmin'), value: 'isAdmin', width: "10%", align: "center"},
+                {text: this.$t('account.list.status'), sortable: false, width: "10%", align: "center"},
+                {text: '', value: 'actions', sortable: false, width: "5%"},
             ]
         }
 
