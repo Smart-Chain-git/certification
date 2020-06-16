@@ -1,4 +1,4 @@
-import {AccountPatch} from "@/store/types"
+import {AccountCreate, AccountPatch} from '@/store/types'
 import {AxiosRequestConfig, AxiosResponse} from "axios"
 
 import {Api} from "@/api/api"
@@ -18,7 +18,8 @@ export interface Account {
     country: string | undefined
     publicKey: string | undefined
     hash: string | undefined
-    isAdmin: boolean
+    isAdmin: boolean,
+    isActive: boolean,
 }
 
 export interface AuthRequest {
@@ -70,6 +71,13 @@ export class AccountApi extends Api {
 
     public patchById(id: string, data: AccountPatch): Promise<Account> {
         return this.patch<Account, AccountPatch>(API_GET + "/" + id, data)
+            .then((response: AxiosResponse<Account>) => {
+                return response.data
+            })
+    }
+
+    public create(account: AccountCreate): Promise<Account> {
+        return this.post<Account, AccountCreate>(API_GET, account)
             .then((response: AxiosResponse<Account>) => {
                 return response.data
             })

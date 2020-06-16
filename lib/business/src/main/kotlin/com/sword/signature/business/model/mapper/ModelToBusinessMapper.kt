@@ -14,7 +14,8 @@ fun AccountEntity.toBusiness() = Account(
     country = country,
     publicKey = publicKey,
     hash = hash,
-    isAdmin = isAdmin
+    isAdmin = isAdmin,
+    isActive = isActive
 )
 
 fun TreeElementEntity.Metadata.toBusiness() = FileMetadata(

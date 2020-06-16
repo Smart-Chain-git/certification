@@ -13,6 +13,11 @@
   },
   "account": {
     "list": {
+      "title": "Gestion des utilisateurs",
+      "fullName": "Nom complet",
+      "email": "Email",
+      "isAdmin": "Administrateur",
+      "add": "Ajouter",
       "login": "Identifiant",
       "lastName": "Nom",
       "firstName": "Prénom",

@@ -1,7 +1,7 @@
 import {Account, accountApi, AuthRequest, AuthResponse} from "@/api/accountApi"
 import {resetStore} from "@/store/actions/globalActions"
 import modules from "@/store/modules"
-import {AccountPatch} from "@/store/types"
+import {AccountCreate, AccountPatch} from '@/store/types'
 import globalAxios from "axios"
 import Cookies from "js-cookie"
 import Vue from "vue"
@@ -188,6 +188,11 @@ export default class AccountsModule extends VuexModule {
         })
     }
 
+    public async createAccount(account: AccountCreate) {
+        await accountApi.create(account).then((response: Account) => {
+
+        })
+    }
 
     @Mutation
     private setRequestInterceptor(value: number | null) {
@@ -198,4 +203,5 @@ export default class AccountsModule extends VuexModule {
     private setResponseInterceptor(value: number | null) {
         this.responseInterceptor = value
     }
+
 }

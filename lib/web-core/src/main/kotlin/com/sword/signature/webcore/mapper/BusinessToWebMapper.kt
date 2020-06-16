@@ -15,7 +15,8 @@ fun com.sword.signature.business.model.Account.toWeb() = Account(
     country = country,
     publicKey = publicKey,
     hash = hash,
-    isAdmin = isAdmin
+    isAdmin = isAdmin,
+    isActive = isActive
 )
 
 

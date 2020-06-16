@@ -10,3 +10,15 @@ export function loadMeIfLogged(to: Route, from: Route, next: NavigationGuardNext
             })
         }).catch(() => next())
 }
+
+export function loadAccounts(to: Route, from: Route, next: NavigationGuardNext) {
+    modules.accounts.initToken().then(() => {
+        modules.accounts.loadAccounts().then(() => {
+            next()
+        }).catch(() => {
+            next("/")
+        })
+    }).catch(()=>{
+        next("/")
+    })
+}
