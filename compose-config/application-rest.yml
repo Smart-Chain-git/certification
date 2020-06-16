@@ -13,6 +13,8 @@ spring:
     mongodb:
       auto-index-creation: false
       uri: mongodb://root:password@mongodb:27017/tezos-signature?authSource=admin
+  resources:
+    static-locations: "classpath:/public-web-resources/"
 logging:
   level:
     root: info
