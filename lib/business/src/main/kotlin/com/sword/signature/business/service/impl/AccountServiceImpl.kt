@@ -78,7 +78,8 @@ class AccountServiceImpl(
             country = accountDetails.country ?: account.country,
             publicKey = accountDetails.publicKey ?: account.publicKey,
             hash = accountDetails.hash ?: account.hash,
-            isAdmin = accountDetails.isAdmin ?: account.isAdmin
+            isAdmin = accountDetails.isAdmin ?: account.isAdmin,
+            disabled = accountDetails.disabled ?: account.disabled
         )
         val updatedAccount = accountRepository.save(toPatch).awaitSingle().toBusiness()
         LOGGER.trace("Account with id ({}) updated.", accountId)

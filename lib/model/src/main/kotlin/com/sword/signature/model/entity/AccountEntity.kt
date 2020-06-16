@@ -18,5 +18,6 @@ data class AccountEntity(
     val country: String?,
     val publicKey: String?,
     val hash: String?,
-    val isAdmin: Boolean = false
+    val isAdmin: Boolean = false,
+    val disabled: Boolean = false
 )

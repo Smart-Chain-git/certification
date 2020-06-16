@@ -15,6 +15,7 @@ export interface Account {
     publicKey: string | undefined
     hash: string | undefined
     isAdmin: boolean
+    disabled: boolean
 }
 
 export interface AccountCreate {
@@ -38,6 +39,7 @@ export interface AccountPatch {
     publicKey: string | undefined
     hash: string | undefined
     isAdmin: boolean | undefined
+    disabled: boolean | undefined
 }
 
 export class AccountApi extends Api {

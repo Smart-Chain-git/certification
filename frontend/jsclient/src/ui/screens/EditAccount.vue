@@ -180,6 +180,7 @@
                 publicKey: undefined,
                 hash: undefined,
                 isAdmin: this.draft.isAdmin,
+                disabled: undefined,
             }
             if (this.isPasswordStrong) {
                 patch.password = this.draft.newPassword

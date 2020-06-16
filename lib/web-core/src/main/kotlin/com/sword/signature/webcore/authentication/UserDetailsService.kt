@@ -5,6 +5,7 @@ import com.sword.signature.business.model.integration.TransactionalMailType
 import com.sword.signature.business.service.AccountService
 import com.sword.signature.business.service.MailService
 import kotlinx.coroutines.reactor.mono
+import org.springframework.security.authentication.DisabledException
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UsernameNotFoundException
@@ -34,6 +35,11 @@ class UserDetailsService(
     }
 
     fun buildUser(account: Account): UserDetails {
+        // Check whether the user is disabled or not.
+        if(account.disabled) {
+            throw DisabledException("Account is disabled")
+        }
+
         val roles = mutableListOf("SETUP")
         if (account.isAdmin) {
             roles.add("ADMIN")

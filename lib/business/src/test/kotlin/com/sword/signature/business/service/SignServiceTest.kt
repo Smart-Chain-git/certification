@@ -51,7 +51,8 @@ class SignServiceTest @Autowired constructor(
         country = null,
         publicKey = null,
         hash = null,
-        isAdmin = true
+        isAdmin = true,
+        disabled = false
     )
     private final val sha256 = Algorithm(id = "SHA-256", name = "SHA-256", digestLength = 32)
 
@@ -212,7 +213,8 @@ class SignServiceTest @Autowired constructor(
             country = null,
             publicKey = null,
             hash = null,
-            isAdmin = false
+            isAdmin = false,
+            disabled = false
         )
 
         private val secondAdmin = Account(
@@ -225,7 +227,8 @@ class SignServiceTest @Autowired constructor(
             country = null,
             publicKey = null,
             hash = null,
-            isAdmin = true
+            isAdmin = true,
+            disabled = false
         )
 
 

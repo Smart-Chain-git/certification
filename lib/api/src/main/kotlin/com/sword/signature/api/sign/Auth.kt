@@ -18,5 +18,6 @@ data class Account(
     val country: String?,
     val publicKey: String?,
     val hash: String?,
-    val isAdmin: Boolean
+    val isAdmin: Boolean,
+    val disabled: Boolean
 )
