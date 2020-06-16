@@ -8,7 +8,6 @@ import org.springframework.messaging.MessageChannel
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.awaitExchange
-import java.lang.Exception
 
 @Component
 class CallBackJob(
@@ -16,38 +15,44 @@ class CallBackJob(
     @Value("\${daemon.callback.maxTry}") private val maxTry: Int,
     private val callbackRetryMessageChannel: MessageChannel
 ) {
+    private val jobIdPlaceholder = "\$jobId"
 
-
+    /**
+     * Callback the signer of the job.
+     * @param callBackJobMessage Job payload containing the callback infos.
+     */
     suspend fun callBack(callBackJobMessage: CallBackJobMessagePayload) {
         LOGGER.debug(
-            "callback try n° {} for job ({}) at '{}'",
+            "Callback try n° {} for job {} at '{}'.",
             callBackJobMessage.numberOfTry,
             callBackJobMessage.jobId,
             callBackJobMessage.url
         )
 
+        val updatedCallBackUrl = callBackJobMessage.url.replace(jobIdPlaceholder, callBackJobMessage.jobId)
+
         var isError = false
         try {
-            val client = webClientBuilder.baseUrl(callBackJobMessage.url).build()
+            val client = webClientBuilder.baseUrl(updatedCallBackUrl).build()
             val result = client.get().awaitExchange()
             val status = result.statusCode()
             if (status.is4xxClientError || status.is5xxServerError) {
                 isError = true
             }
         } catch (e: Exception) {
-            LOGGER.error("error durring callbackJob : {}", e.message)
+            LOGGER.error("Error during callbackJob : {}.", e.message)
             isError = true
         }
         if (isError) {
-            LOGGER.warn("fail to call '{}' for the {} time", callBackJobMessage.url, callBackJobMessage.numberOfTry)
+            LOGGER.warn("Failed to call '{}' for the {} time.", updatedCallBackUrl, callBackJobMessage.numberOfTry)
             if (callBackJobMessage.numberOfTry < maxTry) {
-                LOGGER.warn("will try again later")
+                LOGGER.warn("Will try again later.")
                 callbackRetryMessageChannel.sendPayload(callBackJobMessage.copy(numberOfTry = callBackJobMessage.numberOfTry + 1))
             } else {
-                LOGGER.warn("it was the last try")
+                LOGGER.warn("It was the last try.")
             }
         } else {
-            LOGGER.debug("callback {} success", callBackJobMessage.url)
+            LOGGER.debug("Callback {} success", updatedCallBackUrl)
         }
     }
 

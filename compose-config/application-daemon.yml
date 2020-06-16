@@ -1,6 +1,6 @@
 sign:
   tree:
-   maximunLeaf: 1024
+    maximumLeaf: 1024
 spring:
   data:
     mongodb:
@@ -45,10 +45,9 @@ daemon:
   anchoring:
     delay: 5m
   callback:
-    maxTry : 5
-    delay : 2m
+    maxTry: 5
+    delay: 2m
   validation:
-    minDepth: 30
     delay: 1m
     timeout: 10m
   poller:
@@ -66,6 +65,10 @@ tezos:
     admin:
       publicKey: "edpkvGfYw3LyB1UcCahKQk4rF2tvbMUk8GFiTuMjL75uGXrpvKXhjn"
       secretKey: ENC(Sjy2KdrcmMKKyo294ZaFmpuw2gIEj7jArV/0PM530EOGm4MGXrIP6OWY4It6HTpKks0GinKiA+vWJdAZRpbSyA==)
+  account:
+    publicKey: "edpkvGfYw3LyB1UcCahKQk4rF2tvbMUk8GFiTuMjL75uGXrpvKXhjn"
+    secretKey: "edsk3QoqBuvdamxouPhin7swCvkQNgq4jP5KZPbwWNnwdZpSpJiEbq"
+
   contract:
     address: "KT1ACtpTwAUsLPYaBRhtysFXmhtbT2wDLecw" # To replace by the actual contract address.
   node:

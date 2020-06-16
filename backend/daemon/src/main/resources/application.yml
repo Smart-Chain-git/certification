@@ -1,7 +1,6 @@
 sign:
   tree:
-   maximunLeaf: 3
-
+   maximumLeaf: 3
 spring:
   main:
     web-application-type: none
@@ -74,7 +73,11 @@ tezos:
       publicKey: "edpkurPsQ8eUApnLUJ9ZPDvu98E8VNj4KtJa1aZr16Cr5ow5VHKnz4"
       secretKey: ENC(LvGfsJLxfwNoOIrKgdp9Y4E9EXyJZGe+bBhacjAuxDUIJZBj54O09suxCx6Y/Nzdq4+p8xbs0fdyXyPT+HY1vQ==)
   contract:
+<<<<<<< HEAD
     address: KT1XR5tZHWxMU36eTq3qFn3fvnmDvCTc8NTD
+=======
+    address: KT1PTSLsKxZ3CgiDqGNLWRt9EADxo3U7ckHC
+>>>>>>> master
   node:
     url: "http://127.0.0.1:18731"
   indexer:

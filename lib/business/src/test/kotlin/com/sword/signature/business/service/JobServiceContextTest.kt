@@ -5,8 +5,10 @@ import com.sword.signature.business.exception.EntityNotFoundException
 import com.sword.signature.business.model.Account
 import com.sword.signature.business.model.Job
 import com.sword.signature.business.model.JobPatch
+import com.sword.signature.common.criteria.JobCriteria
 import com.sword.signature.common.enums.JobStateType
 import com.sword.signature.model.migration.MigrationHandler
+import kotlinx.coroutines.flow.map
 
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
@@ -19,15 +21,18 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate
 import java.nio.file.Path
+import java.time.LocalDate
 import java.time.OffsetDateTime
 import java.util.stream.Stream
 
 class JobServiceContextTest @Autowired constructor(
     private val jobService: JobService,
     override val mongoTemplate: ReactiveMongoTemplate,
-    override val migrationHandler : MigrationHandler
+    override val migrationHandler: MigrationHandler
 ) : AbstractServiceContextTest() {
 
 
@@ -72,6 +77,8 @@ class JobServiceContextTest @Autowired constructor(
     )
     private val multipleFileJobId = "5e8c36c49df469062bc658c1"
     private val singleFileJobId = "5e8c36c49df469062bc658c8"
+    private val singleUserJob1Id = "5e8c36c49df469062bc658c9"
+    private val singleUserJob2Id = "5e8c36c49df469062bc658d0"
 
     private val multipleFileJob = Job(
         id = multipleFileJobId,
@@ -81,18 +88,21 @@ class JobServiceContextTest @Autowired constructor(
         userId = "5e74a073a386f170f3850b4b",
         flowName = "ARS_20180626_02236_130006",
         stateDate = OffsetDateTime.parse("2020-04-07T08:16:04.028Z"),
-        state = JobStateType.INSERTED
+        state = JobStateType.INSERTED,
+        docsNumber = 3
     )
 
     private val singleFileJob = Job(
         id = singleFileJobId,
-        createdDate = OffsetDateTime.parse("2020-04-07T08:16:04.114Z"),
+        createdDate = OffsetDateTime.parse("2020-04-08T08:16:04.114Z"),
         numberOfTry = 0,
         algorithm = "SHA-256",
         userId = "5e74a073a386f170f3850b4b",
         flowName = "ARS_20180626_02236_130006",
         stateDate = OffsetDateTime.parse("2020-04-07T08:16:04.113Z"),
-        state = JobStateType.INSERTED
+        state = JobStateType.INSERTED,
+        channelName = "chaine editique",
+        docsNumber = 1
     )
 
 
@@ -103,14 +113,25 @@ class JobServiceContextTest @Autowired constructor(
     }
 
     @Nested
-    inner class FindAllByUser {
+    inner class FindAll {
 
         @Test
         fun `simple user can't list other's jobs `() {
 
             Assertions.assertThatThrownBy {
                 runBlocking {
-                    jobService.findAllByUser(simpleAccount, adminAccount).toList()
+                    jobService.findAll(simpleAccount, JobCriteria(accountId = adminAccount.id)).toList()
+                }
+            }.isInstanceOf(IllegalAccessException::class.java)
+
+        }
+
+        @Test
+        fun `simple user can't list all's jobs `() {
+
+            Assertions.assertThatThrownBy {
+                runBlocking {
+                    jobService.findAll(simpleAccount).toList()
                 }
             }.isInstanceOf(IllegalAccessException::class.java)
 
@@ -120,13 +141,12 @@ class JobServiceContextTest @Autowired constructor(
         fun `admin get his own jobs list`() {
             runBlocking {
 
-                val jobs = jobService.findAllByUser(adminAccount, adminAccount).toList()
+                val actual =
+                    jobService.findAll(adminAccount, JobCriteria(accountId = adminAccount.id)).map { it.id }.toList()
 
-                val expected = listOf(
-                    multipleFileJob
-                )
+                val expected = listOf(multipleFileJobId, singleFileJobId)
 
-                assertThat(jobs).hasSize(2).containsAnyElementsOf(expected)
+                assertThat(actual).containsExactlyInAnyOrderElementsOf(expected)
             }
         }
 
@@ -135,15 +155,152 @@ class JobServiceContextTest @Autowired constructor(
             runBlocking {
 
 
-                val jobs = jobService.findAllByUser(secondAdmin, adminAccount).toList()
+                val actual =
+                    jobService.findAll(secondAdmin, JobCriteria(accountId = adminAccount.id)).map { it.id }.toList()
 
-                val expected = listOf(
-                    multipleFileJob
-                )
+                val expected = listOf(multipleFileJobId, singleFileJobId)
 
-                assertThat(jobs).hasSize(2).containsAnyElementsOf(expected)
+                assertThat(actual).containsExactlyInAnyOrderElementsOf(expected)
             }
         }
+
+        @Test
+        fun `admin get all jobs list`() {
+            runBlocking {
+
+                val actual = jobService.findAll(adminAccount).map { it.id }.toList()
+
+                val expected = listOf(multipleFileJobId, singleFileJobId, singleUserJob1Id, singleUserJob2Id)
+
+                assertThat(actual).containsExactlyInAnyOrderElementsOf(expected)
+            }
+        }
+
+        @Test
+        fun `filter by id`() {
+            runBlocking {
+
+                val actual =
+                    jobService.findAll(adminAccount, JobCriteria(id = "5e8c36c49df469062bc658d0")).map { it.id }.toList()
+
+                val expected = listOf( singleUserJob2Id)
+
+                assertThat(actual).containsExactlyInAnyOrderElementsOf(expected)
+            }
+        }
+
+        @Test
+        fun `filter by flowName`() {
+            runBlocking {
+
+                val actual =
+                    jobService.findAll(adminAccount, JobCriteria(flowName = "rs_20180626_02236_13000")).map { it.id }
+                        .toList()
+
+                val expected = listOf(multipleFileJobId, singleFileJobId)
+
+                assertThat(actual).containsExactlyInAnyOrderElementsOf(expected)
+            }
+        }
+
+
+        @Test
+        fun `filter by start date`() {
+            runBlocking {
+
+                val actual =
+                    jobService.findAll(adminAccount, JobCriteria(dateStart = LocalDate.of(2020,4,8))).map { it.id }
+                        .toList()
+
+                val expected = listOf( singleFileJobId,singleUserJob1Id,singleUserJob2Id)
+
+                assertThat(actual).containsExactlyInAnyOrderElementsOf(expected)
+            }
+        }
+
+        @Test
+        fun `filter by end date`() {
+            runBlocking {
+
+                val actual =
+                    jobService.findAll(adminAccount, JobCriteria(dateEnd = LocalDate.of(2020,4,8))).map { it.id }
+                        .toList()
+
+                val expected = listOf(multipleFileJobId, singleFileJobId)
+
+                assertThat(actual).containsExactlyInAnyOrderElementsOf(expected)
+            }
+        }
+        @Test
+        fun `filter by channel name`() {
+            runBlocking {
+
+                val actual =
+                    jobService.findAll(adminAccount, JobCriteria(channelName = "ine edit")).map { it.id }
+                        .toList()
+
+                val expected = listOf( singleFileJobId,singleUserJob1Id)
+
+                assertThat(actual).containsExactlyInAnyOrderElementsOf(expected)
+            }
+        }
+
+        @Test
+        fun `sort by channel name`() {
+            runBlocking {
+                val pageable = PageRequest.of(0, 30, Sort.Direction.ASC, "channelName")
+
+                val actual =
+                    jobService.findAll(requester=adminAccount, pageable=pageable).map { it.id }
+                        .toList()
+
+                val expected = listOf(multipleFileJobId,singleUserJob2Id, singleFileJobId,singleUserJob1Id)
+
+                assertThat(actual).containsExactlyElementsOf(expected)
+            }
+        }
+
+        @Test
+        fun `sort by flowName`() {
+            runBlocking {
+                val pageable = PageRequest.of(0, 30, Sort.Direction.DESC, "flowName")
+                val actual =
+                    jobService.findAll(requester=adminAccount, pageable=pageable).map { it.id }
+                        .toList()
+
+                val expected = listOf(singleUserJob2Id,singleUserJob1Id,multipleFileJobId, singleFileJobId)
+                assertThat(actual).containsExactlyElementsOf(expected)
+            }
+        }
+
+        @Test
+        fun `first page of two`() {
+            runBlocking {
+                val pageable = PageRequest.of(0, 2, Sort.Direction.DESC, "flowName")
+                val actual =
+                    jobService.findAll(requester=adminAccount, pageable=pageable).map { it.id }
+                        .toList()
+
+                val expected = listOf(singleUserJob2Id,singleUserJob1Id)
+                assertThat(actual).containsExactlyElementsOf(expected)
+            }
+        }
+
+        @Test
+        fun `second page of two`() {
+            runBlocking {
+                val pageable = PageRequest.of(1, 2, Sort.Direction.DESC, "flowName")
+                val actual =
+                    jobService.findAll(requester=adminAccount, pageable=pageable).map { it.id }
+                        .toList()
+
+                val expected = listOf(multipleFileJobId, singleFileJobId)
+                assertThat(actual).containsExactlyElementsOf(expected)
+            }
+        }
+
+
+
     }
 
     @Nested
@@ -180,10 +337,10 @@ class JobServiceContextTest @Autowired constructor(
             requesterAccount: Account,
             jobId: String,
             expected: Job,
-            expectedFileNames : List<String>
+            expectedFileNames: List<String>
         ) {
             runBlocking {
-                val job = jobService.findById(requesterAccount, jobId,true)
+                val job = jobService.findById(requesterAccount, jobId, true)
                 assertThat(job).isNotNull
                 job as Job
                 assertThat(job).`as`("mauvais job").isEqualToIgnoringGivenFields(expected, "rootHash", "files")
@@ -198,7 +355,7 @@ class JobServiceContextTest @Autowired constructor(
             requesterAccount: Account,
             jobId: String,
             expected: Job,
-            expectedFileNames : List<String>
+            expectedFileNames: List<String>
         ) {
             runBlocking {
                 val job = jobService.findById(requesterAccount, jobId)
@@ -270,9 +427,10 @@ class JobServiceContextTest @Autowired constructor(
         ) {
             runBlocking {
                 val before = OffsetDateTime.now()
-                val job=jobService.patch(requester, jobId, patch)
+                val job = jobService.patch(requester, jobId, patch)
 
-                assertThat(job).`as`(comment).isEqualToIgnoringGivenFields(expected, "injectedDate", "validatedDate", "stateDate")
+                assertThat(job).`as`(comment)
+                    .isEqualToIgnoringGivenFields(expected, "injectedDate", "validatedDate", "stateDate")
                 if (patch.state == JobStateType.INJECTED) {
                     assertThat(job.injectedDate).`as`("verification date injection").isAfter(before)
                 }

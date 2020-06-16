@@ -8,6 +8,7 @@ interface SignService {
 
     fun batchSign(
         requester: Account,
+        channelName : String?,
         algorithm: Algorithm,
         flowName: String,
         callBackUrl: String? = null,
