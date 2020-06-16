@@ -22,7 +22,7 @@ class GlobalErrorHandler(
     override fun handle(exchange: ServerWebExchange, ex: Throwable): Mono<Void> {
         val bufferFactory = exchange.response.bufferFactory()
         val httpStatus: HttpStatus = when (ex) {
-            is AuthenticationException -> HttpStatus.FORBIDDEN
+            is AuthenticationException, is org.springframework.security.core.AuthenticationException -> HttpStatus.FORBIDDEN
             is UserServiceException -> HttpStatus.BAD_REQUEST
             is ServiceException -> HttpStatus.INTERNAL_SERVER_ERROR
             else -> HttpStatus.INTERNAL_SERVER_ERROR

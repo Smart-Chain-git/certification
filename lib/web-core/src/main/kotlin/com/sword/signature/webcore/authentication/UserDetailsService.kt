@@ -1,9 +1,7 @@
 package com.sword.signature.webcore.authentication
 
 import com.sword.signature.business.model.Account
-import com.sword.signature.business.model.integration.TransactionalMailType
 import com.sword.signature.business.service.AccountService
-import com.sword.signature.business.service.MailService
 import kotlinx.coroutines.reactor.mono
 import org.springframework.security.authentication.DisabledException
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService
@@ -14,8 +12,7 @@ import reactor.core.publisher.Mono
 
 @Service
 class UserDetailsService(
-    private val accountService: AccountService,
-    private val mailService: MailService
+    private val accountService: AccountService
 ) : ReactiveUserDetailsService {
 
     suspend fun findById(userId: String): UserDetails {
@@ -29,14 +26,13 @@ class UserDetailsService(
         return mono {
             val account = accountService.getAccountByLoginOrEmail(username)
                 ?: throw UsernameNotFoundException("Account with username '$username' not found.")
-            mailService.sendEmail(TransactionalMailType.HELLO_ACCOUNT ,account)
             buildUser(account)
         }
     }
 
     fun buildUser(account: Account): UserDetails {
         // Check whether the user is disabled or not.
-        if(account.disabled) {
+        if (account.disabled) {
             throw DisabledException("Account is disabled")
         }
 
@@ -50,4 +46,3 @@ class UserDetailsService(
         )
     }
 }
-
