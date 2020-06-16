@@ -1,7 +1,7 @@
 import fetchDataAndRedirect from "@/router/guards/fetchDataAndRedirect"
 import checkUserIsAdmin from "@/router/guards/checkUserIsAdmin"
 import checkUserHasPubKey from "@/router/guards/checkUserHasPubKey"
-import { loadMeIfLogged, loadAccounts } from "@/router/guards/loadAccounts"
+import { loadMeIfLogged, loadAccounts, loadAccount } from "@/router/guards/loadAccounts"
 import {
     AppTemplate,
     Login,
@@ -66,9 +66,9 @@ const router = new Router({
                     }
                 },
                 {
-                    path: "accounts/{id}",
+                    path: "accounts/:id",
                     component: EditAccount,
-                    beforeEnter: checkUserIsAdmin,
+                    beforeEnter: multiguard([checkUserIsAdmin, loadAccount]),
                     props: {
                         editing: true
                     }

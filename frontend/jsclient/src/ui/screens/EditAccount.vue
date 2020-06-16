@@ -2,34 +2,36 @@
     <v-container fluid>
         <v-row class="mx-3 mt-3" justify="space-between">
             <v-col class="pl-4" tag="h1">
-                <template>{{$t('account.edit.title') }}</template>
+                <h1 v-if="editing">{{ $t("account.edit.title.editing") }}</h1>
+                <h1 v-else-if="creating"> {{ $t("account.edit.title.creating") }}</h1>
+                <h1 v-else>{{ $t("account.edit.title.profile") }}</h1>
             </v-col>
         </v-row>
         <v-row>
             <v-flex lg6 md7 sm8 xs11>
                 <Card>
                     <v-card-text class="pa-0" lg3>
-                        <EditFormRow v-if="creating" :title="$t('account.edit.login')+' *'" :editable="true">
+                        <EditFormRow v-if="creating || editing" :title="$t('account.edit.login')+' *'" :editable="true">
                             <EditFormTitleEdit v-model.trim="draft.login"/>
                         </EditFormRow>
                         <EditFormRow v-else :title="$t('account.edit.login')" :editable="false" :value="draft.id"/>
 
-                        <EditFormRow v-if="creating" :title="$t('account.edit.email')+' *'" :editable="true" :value="draft.email">
+                        <EditFormRow v-if="creating || editing" :title="$t('account.edit.email')+' *'" :editable="true" :value="draft.email">
                             <EditFormTitleEdit v-model.trim="draft.email"/>
                         </EditFormRow>
                         <EditFormRow v-else :title="$t('account.edit.email')" :editable="false" :value="draft.email"/>
 
-                        <EditFormRow v-if="creating" :title="$t('account.edit.profile')" :editable="true">
+                        <EditFormRow v-if="creating || editing" :title="$t('account.edit.profile')" :editable="true">
                             <v-checkbox v-model="draft.isAdmin"/>
                         </EditFormRow>
                         <EditFormRow v-else :title="$t('account.edit.profile')" :editable="false" :value="draft.isAdmin ? $t('account.edit.admin') : $t('account.edit.noAdmin')"/>
 
-                        <EditFormRow v-if="creating" :title="$t('account.edit.TEZOSPubKey')" :editable="true">
+                        <EditFormRow v-if="creating || editing" :title="$t('account.edit.TEZOSPubKey')" :editable="true">
                             <EditFormTitleEdit v-model.trim="draft.publicKey"/>
                         </EditFormRow>
                         <EditFormRow v-else :title="$t('account.edit.TEZOSPubKey')" :editable="false" :value="draft.publicKey"/>
 
-                        <EditFormRow v-if="creating" :title="$t('account.edit.TEZOSAccount')" :editable="true">
+                        <EditFormRow v-if="creating || editing" :title="$t('account.edit.TEZOSAccount')" :editable="true">
                             <EditFormTitleEdit v-model.trim="draft.publicKey"/>
                         </EditFormRow>
                         <EditFormRow v-else :title="$t('account.edit.TEZOSAccount')" :editable="false" :value="draft.hash"/>
@@ -133,6 +135,7 @@
     export default class EditAccount extends Vue {
         @Prop({default: ""}) private readonly id!: string
         @Prop(Boolean) private readonly creating!: boolean
+        @Prop(Boolean) private readonly editing!: boolean
 
         private message: Message = {message: "", type: "none"}
 
@@ -152,7 +155,23 @@
         }
 
         private mounted() {
-            if (!this.creating) {
+            console.log(this.editing)
+            if (this.editing) {
+                this.draft = {
+                    id: this.$modules.accounts.getCurrentAccount()!.id,
+                    login: this.$modules.accounts.getCurrentAccount()?.login,
+                    fullName: this.$modules.accounts.getCurrentAccount()?.fullName,
+                    newPassword: "",
+                    newPasswordConfirmation: "",
+                    email: this.$modules.accounts.getCurrentAccount()?.email,
+                    company: this.$modules.accounts.getCurrentAccount()?.company,
+                    country: this.$modules.accounts.getCurrentAccount()?.country,
+                    publicKey: this.$modules.accounts.getCurrentAccount()?.publicKey,
+                    hash: this.$modules.accounts.getCurrentAccount()!.hash,
+                    isAdmin: this.$modules.accounts.getCurrentAccount()?.isAdmin,
+                    isActive: this.$modules.accounts.getCurrentAccount()?.isActive
+                }
+            } else if (!this.creating) {
                 this.draft = {
                     id: this.$modules.accounts.meAccount!.id,
                     login: this.$modules.accounts.meAccount!.login,
@@ -223,6 +242,8 @@
                 isAdmin : this.draft.isAdmin,
                 isActive: this.draft.isActive,
                 password : null,
+                company: this.draft.company,
+                pubKey: this.draft.publicKey
             }
             if (this.isPasswordStrong) {
                 patch.password = this.draft.newPassword
@@ -248,7 +269,10 @@
 
             this.$modules.accounts.createAccount(create).then(() => {
                 this.$router.push("/settings")
+            }).catch((error) => {
+
             })
         }
+
     }
 </script>

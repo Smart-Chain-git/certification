@@ -25,7 +25,11 @@
       "status": "Statut"
     },
     "edit": {
-      "title": "Mon compte",
+      "title": {
+        "editing": "Edition de compte",
+        "creating": "Création de compte",
+        "profile": "Mon compte"
+      },
       "login": "Identifiant",
       "email": "Email",
       "profile": "Profil",

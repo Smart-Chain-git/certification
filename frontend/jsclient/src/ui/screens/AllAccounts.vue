@@ -28,7 +28,7 @@
                                 <td :class="(item.isActive) ? 'active' : 'inactive'">{{ item.email }}</td>
                                 <td :class="(item.isActive) ? 'active' : 'inactive'">{{ item.fullName }}</td>
                                 <td :class="(item.isActive) ? 'active' : 'inactive'">
-                                    <v-checkbox :disabled="item.id === me.id" v-model="item.isAdmin" @click.stop="setAdmin(item)" ></v-checkbox>
+                                    <v-icon v-if="item.isAdmin">check</v-icon>
                                 </td>
                                 <td>
                                     <v-switch :disabled="me.id === item.id" v-model="item.isActive" @click.stop="disable(item)" color="primary" />
@@ -108,29 +108,15 @@
             })
         }
 
-        private setAdmin(account: Account) {
-            this.updateAccountAdmin(account)
-        }
-
         private async updateAccountActive(account: Account) {
             const patchRequest: AccountPatch = {
+                pubKey: account.publicKey,
+                company: account.company,
                 email: account.email,
                 password: null,
                 fullName: account.fullName,
                 isAdmin: account.isAdmin,
                 isActive: !account.isActive
-            }
-
-            await this.$modules.accounts.updateAccount(account.id, patchRequest)
-        }
-
-        private async updateAccountAdmin(account: Account) {
-            const patchRequest: AccountPatch = {
-                email: account.email,
-                password: null,
-                fullName: account.fullName,
-                isAdmin: !account.isAdmin,
-                isActive: account.isActive
             }
 
             await this.$modules.accounts.updateAccount(account.id, patchRequest)

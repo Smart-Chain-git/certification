@@ -17,7 +17,7 @@ export default class AccountsModule extends VuexModule {
     private accounts: { [key: string]: Account } = {}
     private requestInterceptor: number | null = null
     private responseInterceptor: number | null = null
-
+    private currentAccount: Account | undefined = undefined
 
     /**
      * The connected user.
@@ -63,7 +63,7 @@ export default class AccountsModule extends VuexModule {
                 Vue.delete(this.accounts, account.id)
             }
             Vue.set(this.accounts, account.id, account)
-
+            this.currentAccount = account
             if (account.id === this.me!.id) {
                 this.me = account
             }
@@ -188,10 +188,12 @@ export default class AccountsModule extends VuexModule {
         })
     }
 
-    public async createAccount(account: AccountCreate) {
-        await accountApi.create(account).then((response: Account) => {
+    public getCurrentAccount() {
+        return this.currentAccount
+    }
 
-        })
+    public async createAccount(account: AccountCreate) {
+        return accountApi.create(account)
     }
 
     @Mutation
