@@ -9,5 +9,6 @@ data class AccountPatch(
     val country: String? = null,
     val publicKey: String? = null,
     val hash: String? = null,
-    val isAdmin: Boolean? = null
+    val isAdmin: Boolean? = null,
+    val isActive: Boolean? = null
 )

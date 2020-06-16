@@ -32,7 +32,7 @@
                                 </td>
                                 <td>
                                     <v-row wrap justify="center">
-                                        <v-switch :disabled="me.id === item.id" v-model="item.isActive" @click.stop="disable(item)" color="var(--var-color-blue-sword)" />
+                                        <v-switch :disabled="me.id === item.id" v-model="item.isActive" @click.stop="confirmDisable(item)" color="var(--var-color-blue-sword)" />
                                     </v-row>
                                 </td>
                                 <td class="align-end">
@@ -49,6 +49,18 @@
                 </Card>
             </v-flex>
         </v-row>
+        <Dialog title="disableConfirm.title"
+                subTitle="disableConfirm.subTitle"
+                content="disableConfirm.content"
+                cancelButtonText="disableConfirm.cancelButton"
+                cancelButtonIcon="exit_to_app"
+                confirmButtonText="disableConfirm.confirmButton"
+                confirmButtonIcon="thumb_up"
+                :cancelAction="cancelDisable"
+                :confirmAction="disable"
+                :maxWidth="650"
+                :display="displayDisableMessage"
+        />
 
     </v-container>
 </template>
@@ -78,6 +90,8 @@
 
         private sortBy = ['login']
         private sortDesc = [false, true]
+        private displayDisableMessage = false
+        private selectedAccount: Account | undefined = undefined
 
         private get headers() {
             return [
@@ -104,13 +118,29 @@
             return this.$modules.accounts.meAccount
         }
 
-        private async disable(account: Account) {
-            await this.updateAccountActive(account).then(() => {
-                account.isActive = !account.isActive
-            })
+        private disable() {
+            this.selectedAccount!.isActive = false
+            this.updateAccount(this.selectedAccount!)
+            this.cancelDisable()
         }
 
-        private async updateAccountActive(account: Account) {
+        private confirmDisable(account: Account) {
+            if (account.isActive) {
+                this.displayDisableMessage = true
+                this.selectedAccount = account
+            } else {
+                account.isActive = true
+                this.updateAccount(account)
+            }
+        }
+
+        private cancelDisable() {
+            this.displayDisableMessage = false
+            this.selectedAccount = undefined
+        }
+
+
+        private async updateAccount(account: Account) {
             const patchRequest: AccountPatch = {
                 pubKey: account.publicKey,
                 company: account.company,
@@ -118,7 +148,7 @@
                 password: null,
                 fullName: account.fullName,
                 isAdmin: account.isAdmin,
-                isActive: !account.isActive
+                isActive: account.isActive
             }
 
             await this.$modules.accounts.updateAccount(account.id, patchRequest)

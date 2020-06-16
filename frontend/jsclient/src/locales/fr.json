@@ -116,5 +116,12 @@
       "reset": "Effacer",
       "close": "Fermer"
     }
+  },
+  "disableConfirm": {
+    "title":"Modifier",
+    "subTitle": "d",
+    "content": "d",
+    "confirmButton": "Confirmer",
+    "cancelButton": "Annuler"
   }
 }

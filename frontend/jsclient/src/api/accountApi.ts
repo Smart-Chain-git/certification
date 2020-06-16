@@ -70,7 +70,7 @@ export class AccountApi extends Api {
     }
 
     public patchById(id: string, data: AccountPatch): Promise<Account> {
-        return this.patch<Account, AccountPatch>(API_GET + "/" + id, data)
+        return this.patch<Account, AccountPatch>(API_GET + "/" + id, {}, data)
             .then((response: AxiosResponse<Account>) => {
                 return response.data
             })

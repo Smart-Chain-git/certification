@@ -93,7 +93,8 @@ class AccountHandler(
             company = accountDetails.company,
             country = accountDetails.country,
             publicKey = accountDetails.publicKey,
-            hash = accountDetails.hash
+            hash = accountDetails.hash,
+            isActive = accountDetails.isActive
         )
 
         val account =

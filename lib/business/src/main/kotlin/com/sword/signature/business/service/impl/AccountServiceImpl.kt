@@ -5,6 +5,7 @@ import com.sword.signature.business.exception.ServiceException
 import com.sword.signature.business.model.Account
 import com.sword.signature.business.model.AccountCreate
 import com.sword.signature.business.model.AccountPatch
+import com.sword.signature.business.model.integration.TransactionalMailType
 import com.sword.signature.business.model.mapper.toBusiness
 import com.sword.signature.business.service.AccountService
 import com.sword.signature.model.entity.AccountEntity
@@ -15,6 +16,7 @@ import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.reactive.awaitFirstOrNull
 import kotlinx.coroutines.reactive.awaitSingle
 import org.slf4j.LoggerFactory
+import org.springframework.messaging.support.MessageBuilder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -34,10 +36,12 @@ class AccountServiceImpl(
             country = accountDetails.country,
             publicKey = accountDetails.publicKey,
             hash = accountDetails.hash,
-            isAdmin = accountDetails.isAdmin
+            isAdmin = accountDetails.isAdmin,
+            isActive = accountDetails.isActive
         )
 
         val createdAccount = accountRepository.save(toCreate).awaitSingle().toBusiness()
+
         LOGGER.trace("New account with id ({}) created.", createdAccount.id)
         return createdAccount
     }
@@ -78,7 +82,8 @@ class AccountServiceImpl(
             country = accountDetails.country ?: account.country,
             publicKey = accountDetails.publicKey ?: account.publicKey,
             hash = accountDetails.hash ?: account.hash,
-            isAdmin = accountDetails.isAdmin ?: account.isAdmin
+            isAdmin = accountDetails.isAdmin ?: account.isAdmin,
+            isActive = accountDetails.isActive ?: account.isActive
         )
         val updatedAccount = accountRepository.save(toPatch).awaitSingle().toBusiness()
         LOGGER.trace("Account with id ({}) updated.", accountId)
