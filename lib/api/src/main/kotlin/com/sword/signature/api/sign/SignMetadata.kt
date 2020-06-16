@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import java.time.LocalDate
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-data class Token(
-        val id: String,
-        val name: String,
-        val revoked: Boolean,
-        val expirationDate: LocalDate?
+
+data class SignMetadata(
+    val fileName: String,
+    val fileSize: String? = null,
+    val customFields: Map<String, String>? = null
 )

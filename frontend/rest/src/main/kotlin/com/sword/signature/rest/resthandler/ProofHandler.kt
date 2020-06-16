@@ -1,6 +1,6 @@
 package com.sword.signature.rest.resthandler
 
-import com.sword.signature.api.sign.Proof
+import com.sword.signature.api.proof.Proof
 import com.sword.signature.business.exception.EntityNotFoundException
 import com.sword.signature.business.service.SignService
 import com.sword.signature.webcore.authentication.CustomUserDetails
