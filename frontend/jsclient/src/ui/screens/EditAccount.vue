@@ -21,6 +21,7 @@
                         </EditFormRow>
                         <EditFormRow v-else :title="$t('account.edit.email')" :editable="false" :value="draft.email"/>
 
+<<<<<<< HEAD
                         <EditFormRow v-if="creating || editing" :title="$t('account.edit.admin')" :editable="true">
                             <v-checkbox v-model="draft.isAdmin"/>
                         </EditFormRow>
@@ -30,6 +31,13 @@
                             <EditFormTitleEdit v-model.trim="draft.publicKey"/>
                         </EditFormRow>
                         <EditFormRow v-else :title="$t('account.edit.TEZOSPubKey')" :editable="false" :value="draft.publicKey"/>
+=======
+                        <EditFormRow :title="$t('account.edit.profile')" :editable="false"
+                                     :value="draft.isAdmin ? $t('account.edit.admin') : $t('account.edit.noAdmin')"/>
+
+                        <EditFormRow :title="$t('account.edit.TEZOSPubKey')" :editable="false"
+                                     :value="draft.publicKey"/>
+>>>>>>> 9d7ae0eb8a85500c75c5f54bc21c0981080510b4
 
                         <EditFormRow v-if="creating || editing" :title="$t('account.edit.TEZOSAccount')" :editable="true">
                             <EditFormTitleEdit v-model.trim="draft.publicKey"/>
@@ -40,6 +48,7 @@
                             <EditFormTitleEdit v-model.trim="draft.fullName"/>
                         </EditFormRow>
 
+<<<<<<< HEAD
                         <div v-if="!creating">
                             <EditFormRow :title="$t('account.edit.newPassword')"
                                          :editable="true">
@@ -62,13 +71,36 @@
                                 />
                             </EditFormRow>
                         </div>
+=======
+                        <EditFormRow :title="$t('account.edit.newPassword')"
+                                     :editable="true">
+                            <EditFormTitleEdit
+                                    cssClass="edit-password"
+                                    v-model.trim="draft.newPassword"
+                                    type="password"
+                                    placeholder="******"
+                            />
+                        </EditFormRow>
+                        <EditFormRow
+                                :title="$t('account.edit.newPasswordConfirmation')"
+                                :editable="true"
+                        >
+                            <EditFormTitleEdit
+                                    cssClass="edit-password"
+                                    v-model.trim="draft.newPasswordConfirmation"
+                                    type="password"
+                                    placeholder="******"
+                            />
+                        </EditFormRow>
+>>>>>>> 9d7ae0eb8a85500c75c5f54bc21c0981080510b4
 
                         <v-card-actions class="navigation pt-8 pb-4">
                             <v-flex>
-                                <div v-if="message.type !== 'none'" :class="message.type === 'success' ? 'success-frame' : 'error-frame'">
+                                <div v-if="message.type !== 'none'"
+                                     :class="message.type === 'success' ? 'success-frame' : 'error-frame'">
                                     {{ message.message }}
                                 </div>
-                           </v-flex>
+                            </v-flex>
                             <v-flex class="align-right">
                                 <IconButton v-if="creating" color="var(--var-color-blue-sword)" @click="create" :disabled="!canCreate" leftIcon="save">
                                     {{ $t('account.list.add') }}
@@ -107,15 +139,14 @@
 </style>
 
 <script lang="ts">
-
     import {AccountCreate, AccountPatch} from '@/store/types'
     import {Component, Prop, Vue, Watch} from "vue-property-decorator"
 
     interface DraftAccount {
         id: string | undefined
         login: string | undefined
-        newPassword: string
-        newPasswordConfirmation: string
+        newPassword: string | undefined
+        newPasswordConfirmation: string | undefined
         fullName: string | undefined
         email: string | undefined
         company: string | undefined
@@ -243,7 +274,7 @@
                 fullName : this.draft.fullName,
                 isAdmin : this.draft.isAdmin,
                 isActive: this.draft.isActive,
-                password : null,
+                password : undefined,
                 company: this.draft.company,
                 pubKey: this.draft.publicKey
             }

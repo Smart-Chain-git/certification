@@ -65,9 +65,6 @@ tezos:
     admin:
       publicKey: "TO_REPLACE_WITH_YOUR_PUBLIC_KEY"
       secretKey: "TO_REPLACE_WITH_YOUR_SECRET_KEY"
-  account:
-    publicKey: "TO_REPLACE_WITH_YOUR_PUBLIC_KEY"
-    secretKey: "TO_REPLACE_WITH_YOUR_SECRET_KEY"
   contract:
     address: "KT1Uz3ZPgVqKYTt8jJpbeRaZkq8b8PqFkRyg" # Carthagenet contract address
   node:

@@ -1,6 +1,7 @@
+
 export interface AccountPatch {
     email: string | undefined
-    password: string | null
+    password: string | undefined
     fullName: string | undefined
     isAdmin: boolean | undefined
     isActive: boolean | undefined
@@ -18,6 +19,7 @@ export interface AccountCreate {
     pubKey: string | undefined
     company: string | undefined
 }
+
 
 export interface PaginationOption {
     page: number,

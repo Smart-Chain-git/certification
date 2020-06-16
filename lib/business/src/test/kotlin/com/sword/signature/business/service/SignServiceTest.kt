@@ -1,7 +1,10 @@
 package com.sword.signature.business.service
 
 import com.sword.signature.business.exception.UserServiceException
-import com.sword.signature.business.model.*
+import com.sword.signature.business.model.Account
+import com.sword.signature.business.model.Algorithm
+import com.sword.signature.business.model.FileMetadata
+import com.sword.signature.business.model.Proof
 import com.sword.signature.common.enums.TreeElementPosition
 import com.sword.signature.common.enums.TreeElementType
 import com.sword.signature.merkletree.utils.hexStringHash
@@ -30,7 +33,6 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.stream.Stream
 
-
 class SignServiceTest @Autowired constructor(
     override val mongoTemplate: ReactiveMongoTemplate,
     override val migrationHandler: MigrationHandler,
@@ -38,7 +40,6 @@ class SignServiceTest @Autowired constructor(
     private val jobRepository: JobRepository,
     private val nodeRepository: TreeElementRepository
 ) : AbstractServiceContextTest() {
-
 
     val accountAdmin = Account(
         id = "5e74a073a386f170f3850b4b",
@@ -343,6 +344,4 @@ class SignServiceTest @Autowired constructor(
         }
 
     }
-
-
 }

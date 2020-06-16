@@ -66,14 +66,14 @@ class SignServiceImpl(
         algorithm: Algorithm,
         flowName: String,
         callBackUrl: String?,
-        fileHashs: Flow<Pair<String, FileMetadata>>
+        fileHashes: Flow<Pair<String, FileMetadata>>
     ): Flow<Job> {
 
         return flow {
 
             // intermediary doit etre declaré dans le scope du flow!
             val intermediary = mutableListOf<Pair<String, FileMetadata>>()
-            fileHashs.collect { fileHash ->
+            fileHashes.collect { fileHash ->
                 if (!algorithm.checkHashDigest(fileHash.first)) {
                     throw UserServiceException("bad ${algorithm.name} hash for file ${fileHash.second}")
                 }

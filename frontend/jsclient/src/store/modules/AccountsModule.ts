@@ -1,7 +1,10 @@
-import {Account, accountApi, AuthRequest, AuthResponse} from "@/api/accountApi"
+
+import {accountApi} from '@/api/accountApi'
+import {authApi} from '@/api/authApi'
 import {resetStore} from "@/store/actions/globalActions"
 import modules from "@/store/modules"
-import {AccountCreate, AccountPatch} from '@/store/types'
+
+import {Account, AccountCreate, AccountPatch, AuthRequest, AuthResponse} from '@/store/types'
 import globalAxios from "axios"
 import Cookies from "js-cookie"
 import Vue from "vue"
@@ -91,7 +94,7 @@ export default class AccountsModule extends VuexModule {
 
     @Action
     public async loadMe() {
-        return await accountApi.me()
+        return await authApi.me()
             .then((response: Account) => this.setMe(response))
 
     }
@@ -106,7 +109,7 @@ export default class AccountsModule extends VuexModule {
     @Action
     public async loadToken(authRequest: AuthRequest) {
 
-        await accountApi.auth(authRequest).then((response: AuthResponse) => {
+        await authApi.auth(authRequest).then((response: AuthResponse) => {
             const token = response.token
             // Set the token in the store and in the cookies
             this.setToken(token)
