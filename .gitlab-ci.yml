@@ -55,7 +55,6 @@ test unit:
     expire_in: 5 hrs
     when: always
     paths:
-      - "*/build"
       - "*/*/build"
 
 #
@@ -72,7 +71,6 @@ build:
     expire_in: 5 hrs
     when: always
     paths:
-      - "*/build"
       - "*/*/build"
 
 #
@@ -125,6 +123,8 @@ publishDockerUi:
     - docker build -t $REGISTRY_URL/sword/signature-web:$CI_COMMIT_REF_NAME frontend/ui
     # Push the image to the registry.
     - docker push $REGISTRY_URL/sword/signature-web:$CI_COMMIT_REF_NAME
+    # Remove image from runner local registry.
+    - docker rmi $REGISTRY_URL/sword/signature-web:$CI_COMMIT_REF_NAME
 
 publishDockerRSocket:
   stage: publish
@@ -141,6 +141,8 @@ publishDockerRSocket:
     - docker build -t $REGISTRY_URL/sword/signature-rsocket:$CI_COMMIT_REF_NAME frontend/rsocket
     # Push the image to the registry.
     - docker push $REGISTRY_URL/sword/signature-rsocket:$CI_COMMIT_REF_NAME
+    # Remove image from runner local registry.
+    - docker rmi $REGISTRY_URL/sword/signature-rsocket:$CI_COMMIT_REF_NAME
 
 publishDockerRest:
   stage: publish
@@ -157,6 +159,8 @@ publishDockerRest:
     - docker build -t $REGISTRY_URL/sword/signature-rest:$CI_COMMIT_REF_NAME frontend/rest
     # Push the image to the registry.
     - docker push $REGISTRY_URL/sword/signature-rest:$CI_COMMIT_REF_NAME
+    # Remove image from runner local registry.
+    - docker rmi $REGISTRY_URL/sword/signature-rest:$CI_COMMIT_REF_NAME
 
 publishDockerDaemon:
   stage: publish
@@ -173,3 +177,5 @@ publishDockerDaemon:
     - docker build -t $REGISTRY_URL/sword/signature-daemon:$CI_COMMIT_REF_NAME backend/daemon
     # Push the image to the registry.
     - docker push $REGISTRY_URL/sword/signature-daemon:$CI_COMMIT_REF_NAME
+    # Remove image from runner local registry.
+    - docker rmi $REGISTRY_URL/sword/signature-daemon:$CI_COMMIT_REF_NAME

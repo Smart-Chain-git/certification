@@ -1,4 +1,4 @@
-package com.sword.signature.api.sign
+package com.sword.signature.api.proof
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
@@ -22,17 +22,17 @@ data class Proof(
     @JsonProperty("transaction_hash") val transactionHash: String? = null,
     @JsonProperty("block_hash") val blockHash: String? = null,
     @JsonProperty("block_depth") val blockDepth: Long? = null
-)
+) {
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    data class HashNode(
+        val hash: String?,
+        val position: String
+    )
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
-data class HashNode(
-    val hash: String?,
-    val position: String
-)
-
-@JsonInclude(JsonInclude.Include.NON_NULL)
-data class UrlNode(
-    val url: String,
-    val type: String,
-    val comment: String? = null
-)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    data class UrlNode(
+        val url: String,
+        val type: String,
+        val comment: String? = null
+    )
+}

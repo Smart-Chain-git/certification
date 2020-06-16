@@ -10,5 +10,5 @@ data class AccountPatch(
     val publicKey: String? = null,
     val hash: String? = null,
     val isAdmin: Boolean? = null,
-    val isActive: Boolean? = null
+    val disabled: Boolean? = null
 )

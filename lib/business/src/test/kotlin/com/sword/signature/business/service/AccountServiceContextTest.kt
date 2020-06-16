@@ -136,6 +136,7 @@ class AccountServiceContextTest @Autowired constructor(
         private val newPublicKey = "newPublicKey"
         private val newHash = "newHash"
         private val newIsAdmin = true
+        private val newDisabled = true
 
         @Test
         fun patchAccountTest() {
@@ -155,7 +156,7 @@ class AccountServiceContextTest @Autowired constructor(
             val toPatch = AccountPatch(
                 login = newLogin, email = newEmail, password = newPassword, fullName = newFullName,
                 company = newCompany, country = newCountry, publicKey = newPublicKey, hash = newHash,
-                isAdmin = newIsAdmin
+                isAdmin = newIsAdmin, disabled = newDisabled
             )
 
             val patchedAccount = runBlocking { accountService.patchAccount(accountId1, toPatch) }
@@ -169,7 +170,9 @@ class AccountServiceContextTest @Autowired constructor(
                 { assertEquals(newCountry, patchedAccount.country) },
                 { assertEquals(newPublicKey, patchedAccount.publicKey) },
                 { assertEquals(newHash, patchedAccount.hash) },
-                { assertEquals(newIsAdmin, patchedAccount.isAdmin) }
+                { assertEquals(newIsAdmin, patchedAccount.isAdmin) },
+                { assertEquals(newDisabled, patchedAccount.disabled) }
+
             )
         }
 

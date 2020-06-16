@@ -7,6 +7,46 @@ import {apiConfig} from "@/api/api.config"
 
 export const API_GET = "/accounts"
 
+<<<<<<< HEAD
+=======
+export interface Account {
+    id: string
+    login: string
+    email: string
+    fullName: string | undefined
+    company: string | undefined
+    country: string | undefined
+    publicKey: string | undefined
+    hash: string | undefined
+    isAdmin: boolean
+    disabled: boolean
+}
+
+export interface AccountCreate {
+    login: string
+    email: string
+    password: string
+    fullName: string | undefined
+    company: string | undefined
+    country: string | undefined
+    publicKey: string | undefined
+    hash: string | undefined
+    isAdmin: boolean
+}
+
+export interface AccountPatch {
+    email: string | undefined
+    password: string | undefined
+    fullName: string | undefined
+    company: string | undefined
+    country: string | undefined
+    publicKey: string | undefined
+    hash: string | undefined
+    isAdmin: boolean | undefined
+    disabled: boolean | undefined
+}
+
+>>>>>>> a1f29327a758f3211ce106ac96db3efe3373865a
 export class AccountApi extends Api {
     public constructor(config: AxiosRequestConfig) {
         super(config)

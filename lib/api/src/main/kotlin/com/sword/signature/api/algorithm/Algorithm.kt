@@ -1,7 +1,6 @@
-package com.sword.signature.api.sign
+package com.sword.signature.api.algorithm
 
 import com.fasterxml.jackson.annotation.JsonInclude
-
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class Algorithm(

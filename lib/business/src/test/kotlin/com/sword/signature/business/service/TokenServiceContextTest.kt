@@ -37,7 +37,8 @@ class TokenServiceContextTest @Autowired constructor(
         country = null,
         publicKey = null,
         hash = null,
-        isAdmin = false
+        isAdmin = false,
+        disabled = false
     )
 
     private val adminAccount = Account(
@@ -50,7 +51,8 @@ class TokenServiceContextTest @Autowired constructor(
         country = null,
         publicKey = null,
         hash = null,
-        isAdmin = true
+        isAdmin = true,
+        disabled = false
     )
 
     private val token1Id = "5e8b4c28e2018ef99f6a98fe"

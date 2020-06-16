@@ -34,17 +34,8 @@ class CheckServiceImpl(
 
     private val adminAccount =
         Account(
-            id = "",
-            login = "",
-            email = "",
-            password = "",
-            fullName = "checkService",
-            isAdmin = true,
-            publicKey = null,
-            hash = "",
-            isActive = true,
-            company = "",
-            country = ""
+            id = "", login = "", email = "", password = "", fullName = "checkService",
+            company = "", country = "", publicKey = "", hash = "", isAdmin = true, disabled = false
         )
 
     override suspend fun checkDocument(documentHash: String, providedProof: Proof?): CheckResponse {

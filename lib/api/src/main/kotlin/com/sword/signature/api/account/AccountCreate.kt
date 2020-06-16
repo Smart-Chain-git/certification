@@ -1,9 +1,6 @@
-package com.sword.signature.business.model
+package com.sword.signature.api.account
 
-import java.io.Serializable
-
-data class Account(
-    val id: String,
+data class AccountCreate(
     val login: String,
     val email: String,
     val password: String,
@@ -12,6 +9,5 @@ data class Account(
     val country: String?,
     val publicKey: String?,
     val hash: String?,
-    val isAdmin: Boolean,
-    val disabled: Boolean
-) : Serializable
+    val isAdmin: Boolean = false
+)

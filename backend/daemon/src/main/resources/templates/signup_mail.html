@@ -1,13 +1,18 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title th:remove="all">Email sample</title>
+    <title th:remove="all">Welcome mail</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
 <body>
 <p th:text="'Hello '+${name}+'!'">
     Hello, STATIC!
 </p>
+<br>
+<p>Thank you for your registration!</p>
+<p>Your password for your first login is <b>[[${rawPassword}]]</b>.</p>
+<p>We highly recommand you to change it as soon as possible.</p>
+<br>
 <p>
     Regards, <br/>
     <em>Tezos Signature Team</em>

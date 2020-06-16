@@ -20,8 +20,13 @@ export default class AccountsModule extends VuexModule {
     private accounts: { [key: string]: Account } = {}
     private requestInterceptor: number | null = null
     private responseInterceptor: number | null = null
+<<<<<<< HEAD
     private currentAccount: Account | undefined = undefined
     private httpStatus: number = 0
+=======
+
+    private loading: boolean = false
+>>>>>>> a1f29327a758f3211ce106ac96db3efe3373865a
 
     /**
      * The connected user.
@@ -48,6 +53,10 @@ export default class AccountsModule extends VuexModule {
             throw new Error(`The store doesn"t contain account with id=${id}.`)
         }
         return account
+    }
+
+    public get getLoading(): boolean {
+        return this.loading
     }
 
     @Mutation
@@ -95,21 +104,23 @@ export default class AccountsModule extends VuexModule {
 
     @Action
     public async loadMe() {
-        return await authApi.me()
+        this.setLoading(true)
+        await authApi.me()
             .then((response: Account) => this.setMe(response))
-
+        this.setLoading(false)
     }
 
     @Action
     public async loadAccount(id: string) {
-        return await accountApi.getById(id)
+        this.setLoading(true)
+        await accountApi.getById(id)
             .then((response: Account) => this.setAccount(response))
-
+        this.setLoading(false)
     }
 
     @Action
     public async loadToken(authRequest: AuthRequest) {
-
+        this.setLoading(true)
         await authApi.auth(authRequest).then((response: AuthResponse) => {
             const token = response.token
             // Set the token in the store and in the cookies
@@ -118,6 +129,7 @@ export default class AccountsModule extends VuexModule {
             // Setup the token for the axios requests
             this.initToken()
         })
+        this.setLoading(false)
     }
 
 
@@ -180,18 +192,23 @@ export default class AccountsModule extends VuexModule {
 
     @Action
     public async loadAccounts() {
+        this.setLoading(true)
         await accountApi.list().then((response: Array<Account>) => {
             this.setAccounts(response)
         })
+        this.setLoading(false)
     }
 
 
     public async updateAccount(id: string, patch: AccountPatch) {
+        this.setLoading(true)
         await accountApi.patchById(id, patch).then((response: Account) => {
             this.setAccount(response)
         })
+        this.setLoading(false)
     }
 
+<<<<<<< HEAD
     public getCurrentAccount() {
         return this.currentAccount
     }
@@ -208,6 +225,11 @@ export default class AccountsModule extends VuexModule {
     @Mutation
     private setHttpStatus(code: number) {
         this.httpStatus = code
+=======
+    @Mutation
+    private setLoading(loading: boolean) {
+        this.loading = loading
+>>>>>>> a1f29327a758f3211ce106ac96db3efe3373865a
     }
 
     @Mutation

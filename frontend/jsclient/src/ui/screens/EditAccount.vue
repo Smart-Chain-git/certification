@@ -134,7 +134,7 @@
         publicKey: string | undefined
         hash: string | undefined
         isAdmin: boolean | undefined
-        isActive: boolean | undefined
+        disabled: boolean | undefined
     }
 
     interface Message {
@@ -162,7 +162,7 @@
             publicKey: undefined,
             hash: undefined,
             isAdmin: undefined,
-            isActive: undefined,
+            disabled: undefined,
         }
 
         private mounted() {
@@ -179,7 +179,7 @@
                     publicKey: this.currentAccount?.publicKey,
                     hash: this.currentAccount!.hash,
                     isAdmin: this.currentAccount?.isAdmin,
-                    isActive: this.currentAccount?.isActive,
+                    disabled: this.currentAccount?.disabled,
                 }
             } else if (!this.creating) {
                 this.draft = {
@@ -194,7 +194,7 @@
                     publicKey: this.$modules.accounts.meAccount?.publicKey,
                     hash: this.$modules.accounts.meAccount?.hash,
                     isAdmin: this.$modules.accounts.meAccount?.isAdmin,
-                    isActive: this.$modules.accounts.meAccount?.isActive,
+                    disabled: this.$modules.accounts.meAccount?.disabled,
                 }
             }
         }
@@ -270,14 +270,14 @@
         private save() {
             const patch: AccountPatch = {
                 email: this.draft.email,
-                fullName : this.draft.fullName,
-                isAdmin : this.draft.isAdmin,
-                isActive: this.draft.isActive,
-                password : undefined,
-                company: this.draft.company,
-                country: this.draft.country,
-                publicKey: this.draft.publicKey,
-                hash: this.draft.hash
+                password: undefined,
+                fullName: this.draft.fullName,
+                company: undefined,
+                country: undefined,
+                publicKey: undefined,
+                hash: undefined,
+                isAdmin: this.draft.isAdmin,
+                disabled: undefined,
             }
             if (this.isPasswordStrong) {
                 patch.password = this.draft.newPassword

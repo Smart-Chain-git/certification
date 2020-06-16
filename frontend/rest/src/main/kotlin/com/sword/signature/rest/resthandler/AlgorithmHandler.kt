@@ -1,6 +1,6 @@
 package com.sword.signature.rest.resthandler
 
-import com.sword.signature.api.sign.Algorithm
+import com.sword.signature.api.algorithm.Algorithm
 import com.sword.signature.business.service.AlgorithmService
 import com.sword.signature.webcore.authentication.CustomUserDetails
 import com.sword.signature.webcore.mapper.toWeb
