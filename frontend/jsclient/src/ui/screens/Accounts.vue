@@ -24,10 +24,10 @@
                     >
                         <template v-slot:body="{items}">
                             <tr v-for="item in items" :key="item.id" class="outlined">
-                                <td :class="(item.isActive) ? 'active' : 'inactive'">{{ item.login }}</td>
-                                <td :class="(item.isActive) ? 'active' : 'inactive'">{{ item.email }}</td>
-                                <td :class="(item.isActive) ? 'active' : 'inactive'">{{ item.fullName }}</td>
-                                <td :class="(item.isActive) ? 'active' : 'inactive'">
+                                <td :class="(item.disabled) ? 'inactive' : 'active'">{{ item.login }}</td>
+                                <td :class="(item.disabled) ? 'inactive' : 'active'">{{ item.email }}</td>
+                                <td :class="(item.disabled) ? 'inactive' : 'active'">{{ item.fullName }}</td>
+                                <td :class="(item.disabled) ? 'inactive' : 'active'">
                                     <v-icon v-if="item.isAdmin">check</v-icon>
                                 </td>
                                 <td>
@@ -36,7 +36,7 @@
                                     </v-row>
                                 </td>
                                 <td class="align-end">
-                                    <v-btn v-if="!item.disabled" icon :to="'/accounts/' + item.id">
+                                    <v-btn v-if="!item.disabled" icon :to="(item.id !== me.id) ? ('/accounts/' + item.id) : '/profile'">
                                         <v-icon>edit</v-icon>
                                     </v-btn>
                                     <v-btn v-else icon disabled>
@@ -91,7 +91,7 @@
             rowsPerPage: 10,
         }
 
-        private sortBy = ['login']
+        private sortBy = ["login"]
         private sortDesc = [false, true]
         private displayDisableMessage = false
         private selectedAccount: Account | undefined = undefined
@@ -113,7 +113,7 @@
 
         private get accounts(): Array<Account> {
             return this.$modules.accounts.allAccounts.map((account) => ({
-                ...account
+                ...account,
             }))
         }
 
@@ -153,7 +153,7 @@
                 isAdmin: account.isAdmin,
                 disabled: account.disabled,
                 country: account.country,
-                hash: account.hash
+                hash: account.hash,
             }
 
             await this.$modules.accounts.updateAccount(account.id, patchRequest)

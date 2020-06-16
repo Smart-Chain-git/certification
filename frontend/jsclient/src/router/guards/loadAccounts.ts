@@ -24,7 +24,7 @@ export function loadAccounts(to: Route, from: Route, next: NavigationGuardNext) 
         }).catch(() => {
             next("/")
         })
-    }).catch(()=>{
+    }).catch(() => {
         next("/")
     })
 }

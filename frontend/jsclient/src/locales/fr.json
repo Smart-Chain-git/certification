@@ -21,8 +21,8 @@
       "login": "Identifiant",
       "lastName": "Nom",
       "firstName": "Prénom",
-      "role": "Rôle",
-      "status": "Statut"
+      "status": "Statut",
+      "cancel": "Annuler"
     },
     "edit": {
       "title": {
@@ -44,7 +44,8 @@
       "noAdmin": "Utilisateur",
       "updated": "Les informations ont été mises à jour.",
       "country": "Pays",
-      "company": "Entreprise"
+      "company": "Entreprise",
+      "mandatory": "* Ces informations sont obligatoires."
     }
   },
   "job": {

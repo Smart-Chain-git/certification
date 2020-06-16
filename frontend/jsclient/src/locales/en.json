@@ -13,11 +13,16 @@
   },
   "account": {
     "list": {
+      "title": "Manage users",
+      "fullName": "Full name",
+      "email": "Email",
+      "isAdmin": "Administrator",
+      "add": "Add",
       "login": "Login",
-      "lastName": "Name",
-      "firstName": "First name",
-      "role": "Role",
-      "status": "Status"
+      "lastName": "Last Name",
+      "firstName": "First Name",
+      "status": "Status",
+      "cancel": "Cancel"
     },
     "edit": {
       "title": "My account",
@@ -35,7 +40,8 @@
       "noAdmin": "User",
       "updated": "Informations updated.",
       "country": "Country",
-      "company": "Company"
+      "company": "Company",
+      "mandatory": "* Those information are mandatory."
     }
   },
   "job": {
@@ -53,23 +59,7 @@
       "transaction": "Transaction",
       "hash": "Hash algorithm",
       "rootHash": "root hash"
-    }
-  },
-  "menu": {
-    "dashboard": "Dashboard",
-    "jobs": "Job List",
-    "documents": "Document List",
-    "signatureRequest": "Signature request",
-    "signatureCheck": "Signature check",
-    "resources": "Resources",
-    "settings": "Settings",
-    "hello": "Hello",
-    "profile": "My account",
-    "channelManagement": "Channel management",
-    "login": "Sign in",
-    "logout": "Sign out"
-  },
-  "job": {
+    },
     "list": {
       "title": "Jobs",
       "id": "ID",
@@ -85,6 +75,20 @@
       "export": "Export .csv",
       "copyId": "Copy"
     }
+  },
+  "menu": {
+    "dashboard": "Dashboard",
+    "jobs": "Job List",
+    "documents": "Document List",
+    "signatureRequest": "Signature request",
+    "signatureCheck": "Signature check",
+    "resources": "Resources",
+    "settings": "Settings",
+    "hello": "Hello",
+    "profile": "My account",
+    "channelManagement": "Channel management",
+    "login": "Sign in",
+    "logout": "Sign out"
   },
   "errors": {
     "login": {
@@ -116,7 +120,7 @@
     }
   },
   "disableConfirm": {
-    "title":"Disable account",
+    "title": "Disable account",
     "subTitle": "Are you sure you want to disable this account ?",
     "content": "",
     "confirmButton": "Confirm",

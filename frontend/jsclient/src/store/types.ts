@@ -45,7 +45,6 @@ export interface AccountCreate {
     country: string | undefined
 }
 
-
 export interface PaginationOption {
     page: number,
     itemsPerPage: number,

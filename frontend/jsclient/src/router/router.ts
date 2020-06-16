@@ -1,23 +1,23 @@
-import fetchDataAndRedirect from "@/router/guards/fetchDataAndRedirect"
-import checkUserIsAdmin from "@/router/guards/checkUserIsAdmin"
 import checkUserHasPubKey from "@/router/guards/checkUserHasPubKey"
-import { loadMeIfLogged, loadAccounts, loadAccount, loadTokens } from "@/router/guards/loadAccounts"
+import checkUserIsAdmin from "@/router/guards/checkUserIsAdmin"
+import fetchDataAndRedirect from "@/router/guards/fetchDataAndRedirect"
+import {loadAccount, loadAccounts, loadMeIfLogged, loadTokens} from "@/router/guards/loadAccounts"
 import loadCurrentJob from "@/router/guards/loadCurrentJob"
 
 import {
+    Accounts,
     AppTemplate,
+    ChannelManagement,
+    Dashboard,
+    Documents,
+    EditAccount,
+    JobDetail,
+    Jobs,
     Login,
     ReceptionTemplate,
-    Dashboard,
-    Jobs,
-    Documents,
-    SignatureRequest,
-    SignatureCheck,
     Resources,
-    EditAccount,
-    ChannelManagement,
-    Accounts,
-    JobDetail,
+    SignatureCheck,
+    SignatureRequest,
 } from "@/ui/components"
 import Vue from "vue"
 import Router from "vue-router"
@@ -58,22 +58,25 @@ const router = new Router({
                 {
                     path: "profile",
                     component: EditAccount,
+                    props: {
+                        access: "selfEditing",
+                    }
                 },
                 {
                     path: "create-account",
                     component: EditAccount,
                     beforeEnter: checkUserIsAdmin,
                     props: {
-                        creating: true
-                    }
+                        access: "creating",
+                    },
                 },
                 {
                     path: "accounts/:id",
                     component: EditAccount,
                     beforeEnter: multiguard([checkUserIsAdmin, loadAccount]),
                     props: {
-                        editing: true
-                    }
+                        access: "adminEditing",
+                    },
                 },
                 {
                     path: "channel-management",

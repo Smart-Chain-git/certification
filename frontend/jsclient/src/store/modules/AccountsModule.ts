@@ -1,10 +1,10 @@
 
-import {accountApi} from '@/api/accountApi'
-import {authApi} from '@/api/authApi'
+import {accountApi} from "@/api/accountApi"
+import {authApi} from "@/api/authApi"
 import {resetStore} from "@/store/actions/globalActions"
 import modules from "@/store/modules"
 
-import {Account, AccountCreate, AccountPatch, AuthRequest, AuthResponse} from '@/store/types'
+import {Account, AccountCreate, AccountPatch, AuthRequest, AuthResponse} from "@/store/types"
 import globalAxios from "axios"
 import Cookies from "js-cookie"
 import Vue from "vue"
@@ -196,6 +196,7 @@ export default class AccountsModule extends VuexModule {
     @Action
     public async createAccount(account: AccountCreate) {
         await accountApi.create(account).then((response: Account) => {
+            this.setHttpStatus(200)
             Vue.set(this.accounts, response.id, response)
         }).catch((error) => {
             this.setHttpStatus(error.response.status)
