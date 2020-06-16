@@ -11,30 +11,33 @@ export interface SignatureCheckRequest {
 }
 
 export interface Proof {
-    filename: string,
-    rootHash: string,
-    documentHash: string,
+    file_name: string,
+    hash_root: string,
+    hash_document: string,
     algorithm: string,
-    blockHash?: string,
+    block_hash?: string,
     blockDepth?: number,
-    transactionHash?: string
+    transaction_hash?: string
+    signature_date?: Date
+    origin_public_key: string,
+    origin: string
 }
 
 export interface SignatureCheckResponse {
-    signer?: string,
-    check: string,
     check_status: number,
+    signer?: string,
     timestamp: number,
-    error?: string,
     proof: Proof
-    hash_document?: string,
+    error?: string,
+    /*hash_document?: string,
     hash_document_proof?: string,
-    hash_root?: string,
+    hash_root?: string,*/
     current_depth?: number,
     expected_depth?: number,
     check_process?: Array<string>
     date?: Date,
     public_key?: string
+    output: string,
 }
 
 export class SignatureApi extends Api {

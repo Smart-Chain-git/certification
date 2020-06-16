@@ -54,6 +54,7 @@
     "check": "Vérifier vos fichiers",
     "about": "A propos",
     "contact": "Contactez nous",
+    "unknown" : "Unknown organization",
     "title": "Welcome to the Tezos DigiSign verification page.",
     "subtitle": "You can here check the authenticity of documents signed using the Tezos DigiSign protocol and tools.",
     "text1": "We invite you to drag and drop or upload the file you want to check. If this file has been signed by Sword Group or by a Sword Group partners who informed us of their signatures, and if this file has not been modified since its signature, we will confirm you immediately its authenticity.",

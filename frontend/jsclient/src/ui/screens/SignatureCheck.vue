@@ -24,15 +24,14 @@
                     </v-col>
                 </v-row>
             </v-flex>
-            <v-flex v-if="checkResponse">
+            <v-flex v-if="checkResponse !== undefined">
                 <v-row :class="'banner_'+(checkSucceeded ? 'success' : 'error')">
                     <v-col class="col-2">
                         <v-icon size="100" :color="checkSucceeded ? 'green' : 'red'">{{ checkSucceeded ? "check_circle_outline" : "cancel"}}</v-icon>
                     </v-col>
                     <v-col class="col-10">
-                        <h1 :class="'title_'+(checkSucceeded ? 'success' : 'error')"> {{ $t(title) }}</h1>
-                        <span v-html="longMessage"></span>
-                      <!--  <div class="pt-5">{{ parse(message) }} </div>-->
+                         <h1 :class="'title_'+(checkSucceeded ? 'success' : 'error')"> {{ shortMessage }}</h1>
+                        <p>{{ longMessage }}</p>
                     </v-col>
                 </v-row>
                 <v-row v-if="checkSucceeded">
@@ -79,7 +78,7 @@
                 </v-row>
             </v-flex>
             <div class="text-center mt-5">
-                <IconButton leftIcon="double_arrow" @click="check" color="var(--var-color-blue-sword)" :disabled="file == null">{{ $t("signatureCheck.generate") }}</IconButton>
+                <IconButton leftIcon="double_arrow" @click="check" color="var(--var-color-blue-sword)" :disabled="file === null">{{ $t("signatureCheck.generate") }}</IconButton>
             </div>
 
             <v-flex id="bottom">
@@ -135,7 +134,7 @@
     }
 </style>
 <script lang="ts">
-    import {SignatureCheckRequest} from "@/api/signatureApi"
+    import {SignatureCheckRequest, SignatureCheckResponse} from '@/api/signatureApi'
     import {Component, Vue} from "vue-property-decorator"
     import * as CryptoJS from "crypto-js"
 
@@ -152,8 +151,12 @@
             this.$modules.signatures.reset()
         }
 
+        private get checkResponse(): SignatureCheckResponse | undefined {
+            return this.$modules.signatures.getCheckResponse()
+        }
+
         public get checkSucceeded() {
-            return this.$modules.signatures.getCheckResponse()?.check === "OK"
+            return this.checkResponse?.output === "OK"
         }
 
         private static format(str: string, values: Array<string>) {
@@ -165,7 +168,7 @@
 
         private get successMessage() {
             switch (this.checkResponse?.check_status) {
-                case 1:
+                case 0:
                     return this.parse("signatureCheck.success.message1.block2.line1") + "<br/><br/>" +
                         this.parse("signatureCheck.success.message1.block2.line2") + "<br/>" +
                         this.parse("signatureCheck.success.message1.block2.line3") + "<br/>" +
@@ -173,7 +176,7 @@
                         this.parse("signatureCheck.success.message1.block2.line5") + "<br/>" +
                         this.parse_link("signatureCheck.success.message1.block2.line6", "cc", "here") + "<br/>" +
                         this.parse_link("signatureCheck.success.message1.block2.line7", "cc", "here")
-                case 2:
+                case 1:
                     return this.parse("signatureCheck.success.message2.block2.line1") + "<br/><br/>" +
                         this.parse("signatureCheck.success.message2.block2.line2") + "<br/>" +
                         this.parse("signatureCheck.success.message2.block2.line3") + "<br/>" +
@@ -187,16 +190,22 @@
             }
         }
 
-        private get longMessage() {
+        private get shortMessage() {
             if (this.checkSucceeded) {
-
+                let n = this.checkResponse?.check_status! + 1
+                return this.parse("signatureCheck.success.message" + n.toString() + ".block1.title")
             } else {
-               return this.parse("signatureCheck.errors." + this.checkResponse?.error?.toLowerCase())
+                return this.parse("signatureCheck.errors." + this.checkResponse?.error?.toLowerCase() + ".title")
             }
         }
 
-        private get checkResponse() {
-            return this.$modules.signatures.getCheckResponse()
+        private get longMessage() {
+            if (this.checkSucceeded) {
+                let t = this.checkResponse?.check_status! + 1
+                return this.parse("signatureCheck.success.message" + t.toString() + ".block1.message")
+            } else {
+               return this.parse("signatureCheck.errors." + this.checkResponse?.error?.toLowerCase())
+            }
         }
 
         private parse(message: string) {
@@ -205,28 +214,32 @@
 
                 switch (message) {
                     case "signatureCheck.success.message1.block1.message":
+                        return SignatureCheck.format(res, [(this.checkResponse.signer !== undefined) ? this.checkResponse.signer : this.$t("signatureCheck.unknown").toString(), this.checkResponse.timestamp!.toString()])
                     case "signatureCheck.success.message2.block1.message":
-                        return SignatureCheck.format(res, [(this.checkResponse.signer !== undefined) ? this.checkResponse.signer : "ere" , this.checkResponse.date!.toString()])
+                        return SignatureCheck.format(res, [(this.checkResponse.signer !== undefined) ? this.checkResponse.signer : this.$t("signatureCheck.unknown").toString(), this.checkResponse.timestamp!.toString()])
 
                     case "signatureCheck.success.message1.block2.line1":
-                        return SignatureCheck.format(res, [this.checkResponse.proof.filename])
+                        return SignatureCheck.format(res, [this.checkResponse.proof.file_name])
 
                     case "signatureCheck.success.message1.block2.line2":
                     case "signatureCheck.success.message2.block2.line1":
-                        return SignatureCheck.format(res, [this.checkResponse.proof.algorithm, this.checkResponse.proof.documentHash])
+                        return SignatureCheck.format(res, [this.checkResponse.proof.algorithm, this.checkResponse.proof.hash_document])
 
                     case "signatureCheck.success.message1.block2.line3":
                     case "signatureCheck.success.message2.block2.line2":
-                        return SignatureCheck.format(res, [this.checkResponse.proof.rootHash])
+                    case "signatureCheck.success.message2.block2.line5":
+                        return SignatureCheck.format(res, [this.checkResponse.proof.hash_root])
 
-                    case "signatureCheck.success.message1.block2.line4":
-                        //return SignatureCheck.format(res, [this.checkResponse])
+                    case "signatureCheck.success.message1.block2.line4": 
+                    case "signatureCheck.success.message2.block2.line7":
+                        return SignatureCheck.format(res, [this.checkResponse.proof.transaction_hash!, this.checkResponse.proof.block_hash!, this.checkResponse.proof.signature_date!.toString()])
 
                     case "signatureCheck.success.message2.block2.line4":
-                        return SignatureCheck.format(res, [this.checkResponse.proof.documentHash])
+                        return SignatureCheck.format(res, [this.checkResponse.proof.hash_document])
 
                     case "signatureCheck.success.message1.block2.line5":
-                       // return SignatureCheck.format(res, [this.checkResponse.signer, this.checkResponse.timestamp.toString()])
+                    case "signatureCheck.success.message2.block2.line9":
+                       return SignatureCheck.format(res, [this.checkResponse.proof.origin_public_key, this.checkResponse.proof.origin])
                     case "signatureCheck.success.message1.block2.line6":
                         //return SignatureCheck.format(res, [this.checkResponse.signer, this.checkResponse.timestamp.toString()])
                     case "signatureCheck.success.message1.block2.line7":
@@ -241,22 +254,6 @@
         private parse_link(message: string, to: string, text:string) {
             let res = this.parse(message)
             return res?.replace("{link}", "<a href=\"" + to + "\">"+text+"</a>")
-        }
-
-        private get title() {
-            if (!this.checkSucceeded) {
-                return "signatureCheck.errors." + this.checkResponse?.error?.toLowerCase() + ".title"
-            } else {
-                return "signatureCheck.success.message" + this.checkResponse?.check_status + ".block1.title"
-            }
-        }
-
-        private get message() {
-            if (!this.checkSucceeded) {
-                return "signatureCheck.errors." + this.checkResponse?.error?.toLowerCase() + ".message"
-            } else {
-                return "signatureCheck.success.message" + this.checkResponse?.check_status + ".block1.message"
-            }
         }
 
         private check() {
@@ -284,12 +281,14 @@
             const hashFile: string = CryptoJS.SHA256(this.contentFile!).toString()
             let proof: string | undefined = undefined
 
+            console.log(hashFile)
             if (this.contentProof !== undefined) {
                 proof = btoa(this.contentProof).toString()
             }
 
             const sigCheck: SignatureCheckRequest = {
-                documentHash: hashFile,
+                //documentHash: hashFile,
+                documentHash: "142f9eb8376093e5c24c74714bef07c187cd9a4a81e4f758515ce21b06b2e12a",
                 proof: proof,
             }
             this.$modules.signatures.check(sigCheck)

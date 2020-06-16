@@ -1,14 +1,11 @@
 
-import {signatureApi, SignatureCheckRequest, SignatureCheckResponse} from '@/api/signatureApi'
-import {AxiosResponse} from 'axios'
+import {signatureApi, SignatureCheckRequest, SignatureCheckResponse} from "@/api/signatureApi"
 import {Action, Module, Mutation, VuexModule} from "vuex-class-modules"
 
 
 @Module
 export default class SignaturesModule extends VuexModule {
 
-    private errorCheck: string = ""
-    private successCheck: string = ""
     private checkResponse: SignatureCheckResponse | undefined = undefined
 
     @Action
@@ -16,22 +13,7 @@ export default class SignaturesModule extends VuexModule {
         signatureApi.check(sigCheck).then((response: SignatureCheckResponse) => {
             this.setCheckResponse(response)
         }).catch((_) => {
-            this.setCheckResponse({check: "KO",
-                check_status: 1,
-                timestamp: 0,
-                error: "HASH_INCONSISTENT",
-                hash_document: "hashdoc",
-                hash_root: "hash_doc_root",
-                signer: "signer",
-                check_process: [],
-                proof: {
-                    filename:"",
-                    rootHash:"",
-                    documentHash:"",
-                    algorithm:""
-
-                },
-                date: new Date()})
+            //this.setCheckResponse(undefined)
         })
     }
 
@@ -45,7 +27,7 @@ export default class SignaturesModule extends VuexModule {
         this.checkResponse = check
     }
 
-    public getCheckResponse() {
+    public getCheckResponse(): SignatureCheckResponse | undefined {
         return this.checkResponse
     }
 }
