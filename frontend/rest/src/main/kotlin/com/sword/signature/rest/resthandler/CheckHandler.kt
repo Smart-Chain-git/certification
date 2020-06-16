@@ -1,8 +1,8 @@
 package com.sword.signature.rest.resthandler
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.sword.signature.api.sign.CheckOutput
-import com.sword.signature.api.sign.Proof
+import com.sword.signature.api.check.CheckOutput
+import com.sword.signature.api.proof.Proof
 import com.sword.signature.business.exception.CheckException
 import com.sword.signature.business.service.CheckService
 import com.sword.signature.webcore.mapper.toBusiness

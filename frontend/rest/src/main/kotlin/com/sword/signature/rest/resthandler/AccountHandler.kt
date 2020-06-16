@@ -1,6 +1,6 @@
 package com.sword.signature.rest.resthandler
 
-import com.sword.signature.api.sign.Account
+import com.sword.signature.api.account.Account
 import com.sword.signature.business.exception.EntityNotFoundException
 import com.sword.signature.business.model.AccountCreate
 import com.sword.signature.business.model.AccountPatch

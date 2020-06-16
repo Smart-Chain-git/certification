@@ -1,14 +1,8 @@
-package com.sword.signature.api.sign
+package com.sword.signature.api.account
 
-data class AuthRequest(
-    val user: String,
-    val password: String
-)
+import com.fasterxml.jackson.annotation.JsonInclude
 
-data class AuthResponse(
-    val token: String
-)
-
+@JsonInclude(JsonInclude.Include.NON_NULL)
 data class Account(
     val id: String,
     val login: String,
