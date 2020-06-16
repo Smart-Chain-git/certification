@@ -13,9 +13,5 @@ data class Account(
     val publicKey: String?,
     val hash: String?,
     val isAdmin: Boolean,
-<<<<<<< HEAD:lib/api/src/main/kotlin/com/sword/signature/api/sign/Auth.kt
-    val isActive: Boolean
-=======
     val disabled: Boolean
->>>>>>> a1f29327a758f3211ce106ac96db3efe3373865a:lib/api/src/main/kotlin/com/sword/signature/api/account/Account.kt
 )

@@ -32,7 +32,7 @@
                                 </td>
                                 <td>
                                     <v-row wrap justify="center">
-                                        <v-switch class="pt-4" :disabled="me.id === item.id" v-model="item.disabled" @click.stop="confirmDisable(item)" color="var(--var-color-blue-sword)" />
+                                        <v-switch class="pt-4" :disabled="me.id === item.id" v-model="!item.disabled" @click.stop="confirmDisable(item)" color="var(--var-color-blue-sword)" />
                                     </v-row>
                                 </td>
                                 <td class="align-end">

@@ -37,15 +37,17 @@ class AccountHandler(
         @AuthenticationPrincipal user: CustomUserDetails,
         @RequestBody accountDetails: AccountCreate
     ): Account {
-        val rawPassword = accountDetails.password
+        val charPool = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789^$*ù!:;,&é'(-è_çà)='"
+
+        val rawPassword = (1..10).map { i -> kotlin.random.Random.nextInt(0, charPool.length) }
+                        .map(charPool::get)
+                        .joinToString("")
+
         val createdAccount = accountService.createAccount(
             com.sword.signature.business.model.AccountCreate(
                 login = accountDetails.login,
                 email = accountDetails.email,
-                password = accountDetails.password.let {
-                    checkPassword(it)
-                    bCryptPasswordEncoder.encode(it)
-                },
+                password = bCryptPasswordEncoder.encode(rawPassword),
                 fullName = accountDetails.fullName,
                 company = accountDetails.company,
                 country = accountDetails.country,
