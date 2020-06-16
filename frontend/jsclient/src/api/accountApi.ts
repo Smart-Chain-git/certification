@@ -1,7 +1,6 @@
 
 import {Account, AccountCreate, AccountPatch} from "@/store/types"
 import {AxiosRequestConfig, AxiosResponse} from "axios"
-
 import {Api} from "@/api/api"
 import {apiConfig} from "@/api/api.config"
 

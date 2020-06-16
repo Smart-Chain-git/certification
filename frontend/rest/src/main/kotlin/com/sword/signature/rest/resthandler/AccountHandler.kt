@@ -44,7 +44,8 @@ class AccountHandler(
                         .joinToString("")
 
         val createdAccount = accountService.createAccount(
-            com.sword.signature.business.model.AccountCreate(
+            requester = user.account,
+            accountDetails = com.sword.signature.business.model.AccountCreate(
                 login = accountDetails.login,
                 email = accountDetails.email,
                 password = bCryptPasswordEncoder.encode(rawPassword),
@@ -118,7 +119,7 @@ class AccountHandler(
         )
 
         val account =
-            accountService.patchAccount(accountId, accountPatch)
+            accountService.patchAccount(requester = user.account, accountId = accountId, accountDetails = accountPatch)
         return account.toWeb()
     }
 }
