@@ -10,19 +10,48 @@
 			"userId": "5e74a073a386f170f3850b4b",
 			"flowName": "ARS_20180626_02236_130006",
 			"stateDate": "2020-04-07T08:16:04.028Z",
-			"state": "INSERTED"
+			"state": "INSERTED",
+			"docsNumber": 3
 		},
 		{
 			"_id": {
 				"$oid": "5e8c36c49df469062bc658c8"
 			},
-			"createdDate": "2020-04-07T08:16:04.114Z",
+			"createdDate": "2020-04-08T08:16:04.114Z",
 			"numbreOfTry": 0,
 			"algorithm": "SHA-256",
 			"userId": "5e74a073a386f170f3850b4b",
 			"flowName": "ARS_20180626_02236_130006",
 			"stateDate": "2020-04-07T08:16:04.113Z",
-			"state": "INSERTED"
+			"state": "INSERTED",
+			"channelName" : "chaine editique",
+			"docsNumber": 1
+		},
+		{
+			"_id": {
+				"$oid": "5e8c36c49df469062bc658c9"
+			},
+			"createdDate": "2020-05-07T08:16:04.114Z",
+			"numbreOfTry": 0,
+			"algorithm": "SHA-256",
+			"userId": "ljghdslkgjsdglhjdslghjdsklgjdgskldjglgdsjgdlskgjdslknjcvhuire",
+			"flowName": "single user job1",
+			"stateDate": "2020-04-07T08:16:04.113Z",
+			"state": "INSERTED",
+			"channelName" : "chaine editique"
+		},
+		{
+			"_id": {
+				"$oid": "5e8c36c49df469062bc658d0"
+			},
+			"createdDate": "2020-05-07T08:17:04.114Z",
+			"numbreOfTry": 0,
+			"algorithm": "SHA-256",
+			"userId": "ljghdslkgjsdglhjdslghjdsklgjdgskldjglgdsjgdlskgjdslknjcvhuire",
+			"flowName": "single user job2",
+			"stateDate": "2020-04-07T08:16:04.113Z",
+			"state": "INSERTED",
+			"channelName" : "Alberta"
 		}
 	],
 	"treeElements": [

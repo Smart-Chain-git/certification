@@ -64,6 +64,16 @@ data class Job(
     val contractAddress: String? = null,
 
     /**
+     * incoming chanel of the job
+     */
+    val channelName: String? = null,
+
+    /**
+     * number of documents withing this jobs
+     */
+    val docsNumber: Int,
+
+    /**
      * Address of the transaction signer.
      */
     val signerAddress: String? = null

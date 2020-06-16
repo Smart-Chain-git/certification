@@ -24,6 +24,7 @@
         /* remove vuetify default style */
         text-transform: none;
         letter-spacing: 0;
+        color: white;
     }
 
 </style>

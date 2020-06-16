@@ -68,6 +68,7 @@ class SignatureHandler(
 
             jobs = signService.batchSign(
                 requester = account,
+                channelName = null,
                 algorithm = algorithm,
                 flowName = "web_" + LocalDateTime.now().toString(),
                 fileHashes = files.asFlow()
