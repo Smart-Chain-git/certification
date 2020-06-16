@@ -1,6 +1,6 @@
-import {FilterOption, PaginationOption} from "@/store/types"
+import {FilterOption, Job, JobCriteria, PaginationOption} from "@/store/types"
 import {VuexModule, Module, Mutation, Action} from "vuex-class-modules"
-import {Job, jobApi, JobCriteria} from "@/api/jobApi"
+import {jobApi} from "@/api/jobApi"
 import AccountsModule from "@/store/modules/AccountsModule"
 import deepcopy from "ts-deepcopy"
 @Module

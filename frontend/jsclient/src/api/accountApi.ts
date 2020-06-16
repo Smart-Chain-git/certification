@@ -1,4 +1,4 @@
-import {AccountPatch} from "@/store/types"
+import {Account, AccountPatch, AuthRequest, AuthResponse} from "@/store/types"
 import {AxiosRequestConfig, AxiosResponse} from "axios"
 
 import {Api} from "@/api/api"
@@ -8,24 +8,6 @@ export const API_AUTH = "/auth"
 export const API_ME = "/me"
 export const API_GET = "/accounts"
 
-
-export interface Account {
-    id: string
-    login: string
-    email: string
-    fullName: string | undefined
-    isAdmin: boolean,
-    pubKey: string | null
-}
-
-export interface AuthRequest {
-    user: string
-    password: string
-}
-
-export interface AuthResponse {
-    token: string
-}
 
 export class AccountApi extends Api {
     public constructor(config: AxiosRequestConfig) {

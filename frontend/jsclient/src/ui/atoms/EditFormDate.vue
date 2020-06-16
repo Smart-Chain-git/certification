@@ -31,6 +31,7 @@
                 no-title
                 :color="color"
                 event-color="red lighten-1"
+                :min="min"
         >
             <v-spacer></v-spacer>
             <v-btn text :color="color" @click="resetDate">{{ $t("calendar.label.reset") }}</v-btn>
@@ -54,6 +55,7 @@
         @Prop(Array) private readonly value!: string
         @Prop(String) private readonly color!: string
         @Prop(String) private readonly label!: string
+        @Prop(String) private readonly min!: string
 
         private menu = false
 

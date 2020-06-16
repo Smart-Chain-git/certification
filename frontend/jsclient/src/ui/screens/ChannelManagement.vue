@@ -18,10 +18,11 @@
                                     v-model="date"
                                     :label="$t('channelManagement.date')"
                                     color="var(--var-color-blue-sword)"
+                                    :min="now"
                             />
                         </EditFormRow>
                         <EditFormRow :editable="true">
-                            <IconButton color="var(--var-color-blue-sword)" @click="add" :disabled="name === '' || date === ''" leftIcon="block">
+                            <IconButton color="var(--var-color-blue-sword)" @click="add" :disabled="name === '' || date === ''" leftIcon="add_circle_outline">
                                 {{ $t('channelManagement.add') }}
                             </IconButton>
                         </EditFormRow>
@@ -32,6 +33,7 @@
                             class="table-header"
                             :headers="headers"
                             :footer-props="footer"
+                            :custom-sort="customSort"
                     >
                         <template v-slot:body="{items}">
                             <tbody>
@@ -40,7 +42,7 @@
                                 <td class="text-center">{{ now | formatDate}}</td>
                                 <td class="text-center">{{token.expirationDate | formatDate}}</td>
                                 <td class="text-center">
-                                    <IconButton color="var(--var-color-blue-sword)" @click="revoke(token.id)" :disabled="token.revoked" leftIcon="block">
+                                    <IconButton color="var(--var-color-blue-sword)" @click="revoke(token.id)" :disabled="!canRevoke(token)" leftIcon="block">
                                         {{ $t("channelManagement.revoke") }}
                                     </IconButton>
                                 </td>
@@ -61,19 +63,57 @@
 </style>
 
 <script lang="ts">
-    import {Token, TokenCreateRequest, TokenPatch} from "@/api/tokenApi"
+
     import {tableFooter} from "@/plugins/i18n"
+    import {Token, TokenCreateRequest} from "@/store/types"
     import {EditFormRow, Card, CardTitle, EditFormTitleEdit} from "@/ui/components"
-    import {Component, Vue} from "vue-property-decorator"
+    import {Component, Vue, Watch} from "vue-property-decorator"
+    import moment from "moment"
 
     @Component
     export default class ChannelManagement extends Vue {
+        private static compareItem(a: Token, b: Token, index: string, isDesc: boolean): number {
+            const order = (!isDesc ? 1 : -1)
+            switch (index) {
+                case "name":
+                    return order * a.name.localeCompare(b.name)
+
+                case "expirationDate":
+                    const a2 = a["expirationDate"] ? Number(new Date(a.expirationDate)) : Number(new Date(0))
+                    const b2 = b["expirationDate"] ? Number(new Date(b.expirationDate)) : Number(new Date(0))
+                    return order * (b2 - a2)
+
+                case "revoked":
+                    if (a.revoked === b.revoked) {
+                        return 0
+                    }
+                    return (a.revoked > b.revoked) ? 1 : -1
+                default:
+                    return 0
+            }
+        }
+
         private name: string = ""
         private date: string = ""
-        private now: Date = new Date()
+        private now: string = moment().format("YYYY-MM-DD")
 
         private get tokens() {
             return this.$modules.tokens.getTokens()
+        }
+
+        private customSort(items: Array<Token>, sortBy: Array<string>, sortDesc: Array<boolean>) {
+            sortBy = ["revoked", ...sortBy]
+            sortDesc = [false, ...sortDesc]
+
+            return items.sort((a, b) => {
+                for (let cpt = 0; cpt < sortBy.length; cpt++) {
+                    const intermediate = ChannelManagement.compareItem(a, b, sortBy[cpt], sortDesc[cpt])
+                    if (intermediate !== 0) {
+                        return intermediate
+                    }
+                }
+                return 0
+            })
         }
 
         private get headers() {
@@ -90,10 +130,7 @@
         }
 
         private revoke(tokenId: string) {
-            const update: TokenPatch = {
-                revoked: true,
-            }
-            this.$modules.tokens.updateToken(tokenId, update)
+            this.$modules.tokens.revokeToken(tokenId)
         }
 
         private add() {
@@ -103,6 +140,16 @@
             }
 
             this.$modules.tokens.createToken(token)
+        }
+
+        private canRevoke(token: Token) {
+            if (token.revoked) {
+                return false
+            }
+            if (!token["expirationDate"]) {
+                return true
+            }
+            return (new Date(token.expirationDate) > new Date(this.now))
         }
 
     }

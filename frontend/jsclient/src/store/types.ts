@@ -1,3 +1,22 @@
+
+export interface Account {
+    id: string
+    login: string
+    email: string
+    fullName: string | undefined
+    isAdmin: boolean,
+    pubKey: string | null
+}
+
+export interface AuthRequest {
+    user: string
+    password: string
+}
+
+export interface AuthResponse {
+    token: string
+}
+
 export interface AccountPatch {
     email: string | undefined
     password: string | null
@@ -17,4 +36,47 @@ export interface FilterOption {
     id: string | undefined,
     dates: Array<string | undefined>,
     channelName: string | undefined
+}
+
+export interface Token {
+    id: string
+    name: string
+    revoked: boolean
+    expirationDate?: Date
+}
+
+export interface TokenCreateRequest {
+    expirationDate?: Date,
+    name: string
+}
+
+export interface Job {
+    id: string
+    createdDate: Date
+    injectedDate?: Date
+    validatedDate?: Date
+    numberOfTry: number
+    blockHash?: string,
+    blockDepth?: number
+    algorithm: string,
+    flowName: string,
+    stateDate: Date,
+    state: string,
+    contractAddress?: string,
+    transactionHash?: string,
+    channelName?: string,
+    docsNumber: number
+}
+
+export interface JobCriteria {
+    id?: string
+    accountId?: string
+    flowName?: string
+    dateBegin?: string
+    dateEnd?: string
+    channel?: string
+    sort?: Array<string>
+    desc?: Array<boolean>
+    page?: number
+    size?: number
 }
