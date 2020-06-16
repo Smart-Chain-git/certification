@@ -112,7 +112,7 @@ class AccountHandler(
             country = accountDetails.country,
             publicKey = accountDetails.publicKey,
             hash = accountDetails.hash,
-            isActive = accountDetails.isActive
+            disabled = accountDetails.disabled
         )
 
         val account =

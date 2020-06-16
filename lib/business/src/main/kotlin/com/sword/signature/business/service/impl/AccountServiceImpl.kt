@@ -5,7 +5,6 @@ import com.sword.signature.business.exception.ServiceException
 import com.sword.signature.business.model.Account
 import com.sword.signature.business.model.AccountCreate
 import com.sword.signature.business.model.AccountPatch
-import com.sword.signature.business.model.integration.TransactionalMailType
 import com.sword.signature.business.model.mapper.toBusiness
 import com.sword.signature.business.service.AccountService
 import com.sword.signature.model.entity.AccountEntity
@@ -37,7 +36,7 @@ class AccountServiceImpl(
             publicKey = accountDetails.publicKey,
             hash = accountDetails.hash,
             isAdmin = accountDetails.isAdmin,
-            isActive = accountDetails.isActive
+            disabled = accountDetails.disabled
         )
 
         val createdAccount = accountRepository.save(toCreate).awaitSingle().toBusiness()

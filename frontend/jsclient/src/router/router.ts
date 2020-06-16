@@ -16,7 +16,7 @@ import {
     Resources,
     EditAccount,
     ChannelManagement,
-    AllAccounts,
+    Accounts,
     JobDetail,
 } from "@/ui/components"
 import Vue from "vue"
@@ -109,7 +109,7 @@ const router = new Router({
                 },
                 {
                     path: "settings",
-                    component: AllAccounts,
+                    component: Accounts,
                     beforeEnter: multiguard([checkUserIsAdmin, loadAccounts]),
                 },
             ],

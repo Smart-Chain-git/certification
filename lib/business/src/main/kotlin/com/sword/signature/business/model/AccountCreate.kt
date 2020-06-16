@@ -10,5 +10,5 @@ data class AccountCreate(
     val publicKey: String?,
     val hash: String?,
     val isAdmin: Boolean = false,
-    val isActive: Boolean = true
+    val disabled: Boolean = false
 )
