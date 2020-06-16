@@ -55,7 +55,6 @@ test unit:
     expire_in: 5 hrs
     when: always
     paths:
-      - "*/build"
       - "*/*/build"
 
 #
@@ -72,7 +71,6 @@ build:
     expire_in: 5 hrs
     when: always
     paths:
-      - "*/build"
       - "*/*/build"
 
 #
