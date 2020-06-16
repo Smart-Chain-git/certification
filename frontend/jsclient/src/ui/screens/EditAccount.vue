@@ -12,44 +12,46 @@
                 <Card>
                     <v-card-text class="pa-0" lg3>
                         <EditFormRow v-if="creating || editing" :title="$t('account.edit.login')+' *'" :editable="true">
-                            <EditFormTitleEdit v-model.trim="draft.login"/>
+                            <EditFormTitleEdit :placeholder="$t('account.edit.login')" color="var(--var-color-blue-sword)" v-model.trim="draft.login"/>
                         </EditFormRow>
-                        <EditFormRow v-else :title="$t('account.edit.login')" :editable="false" :value="draft.id"/>
+                        <EditFormRow v-else :title="$t('account.edit.login')" :editable="false" :value="draft.login"/>
 
-                        <EditFormRow v-if="creating || editing" :title="$t('account.edit.email')+' *'" :editable="true" :value="draft.email">
-                            <EditFormTitleEdit v-model.trim="draft.email"/>
+                        <EditFormRow v-if="creating || editing" :title="$t('account.edit.email')+' *'" :editable="true">
+                            <EditFormTitleEdit :placeholder="$t('account.edit.email')" color="var(--var-color-blue-sword)" v-model.trim="draft.email"/>
                         </EditFormRow>
                         <EditFormRow v-else :title="$t('account.edit.email')" :editable="false" :value="draft.email"/>
 
-<<<<<<< HEAD
+                        <EditFormRow v-if="creating || editing" :title="$t('account.edit.company')" :editable="true">
+                            <EditFormTitleEdit :placeholder="$t('account.edit.company')" color="var(--var-color-blue-sword)" v-model.trim="draft.company"/>
+                        </EditFormRow>
+                        <EditFormRow v-else :title="$t('account.edit.company')" :editable="false" :value="draft.company"/>
+
+                        <EditFormRow v-if="creating || editing" :title="$t('account.edit.country')" :editable="true">
+                            <EditFormTitleEdit :placeholder="$t('account.edit.country')" color="var(--var-color-blue-sword)" v-model.trim="draft.country"/>
+                        </EditFormRow>
+                        <EditFormRow v-else :title="$t('account.edit.country')" :editable="false" :value="draft.country"/>
+
                         <EditFormRow v-if="creating || editing" :title="$t('account.edit.admin')" :editable="true">
                             <v-checkbox v-model="draft.isAdmin"/>
                         </EditFormRow>
                         <EditFormRow v-else :title="$t('account.edit.profile')" :editable="false" :value="draft.isAdmin ? $t('account.edit.admin') : $t('account.edit.noAdmin')"/>
 
                         <EditFormRow v-if="creating || editing" :title="$t('account.edit.TEZOSPubKey')" :editable="true">
-                            <EditFormTitleEdit v-model.trim="draft.publicKey"/>
+                            <EditFormTitleEdit :placeholder="$t('account.edit.TEZOSPubKey')" color="var(--var-color-blue-sword)" v-model.trim="draft.publicKey"/>
                         </EditFormRow>
                         <EditFormRow v-else :title="$t('account.edit.TEZOSPubKey')" :editable="false" :value="draft.publicKey"/>
-=======
-                        <EditFormRow :title="$t('account.edit.profile')" :editable="false"
-                                     :value="draft.isAdmin ? $t('account.edit.admin') : $t('account.edit.noAdmin')"/>
 
-                        <EditFormRow :title="$t('account.edit.TEZOSPubKey')" :editable="false"
-                                     :value="draft.publicKey"/>
->>>>>>> 9d7ae0eb8a85500c75c5f54bc21c0981080510b4
 
                         <EditFormRow v-if="creating || editing" :title="$t('account.edit.TEZOSAccount')" :editable="true">
-                            <EditFormTitleEdit v-model.trim="draft.publicKey"/>
+                            <EditFormTitleEdit :placeholder="$t('account.edit.TEZOSAccount')" color="var(--var-color-blue-sword)" v-model.trim="draft.hash"/>
                         </EditFormRow>
                         <EditFormRow v-else :title="$t('account.edit.TEZOSAccount')" :editable="false" :value="draft.hash"/>
 
-                        <EditFormRow :title="$t('account.edit.fullName')+' *'" :editable="true">
-                            <EditFormTitleEdit v-model.trim="draft.fullName"/>
+                        <EditFormRow :title="$t('account.edit.fullName') +' *'" :editable="true">
+                            <EditFormTitleEdit :placeholder="$t('account.edit.fullName')" v-model.trim="draft.fullName" color="var(--var-color-blue-sword)"/>
                         </EditFormRow>
 
-<<<<<<< HEAD
-                        <div v-if="!creating">
+                        <div v-if="!creating && !editing">
                             <EditFormRow :title="$t('account.edit.newPassword')"
                                          :editable="true">
                                 <EditFormTitleEdit
@@ -71,28 +73,6 @@
                                 />
                             </EditFormRow>
                         </div>
-=======
-                        <EditFormRow :title="$t('account.edit.newPassword')"
-                                     :editable="true">
-                            <EditFormTitleEdit
-                                    cssClass="edit-password"
-                                    v-model.trim="draft.newPassword"
-                                    type="password"
-                                    placeholder="******"
-                            />
-                        </EditFormRow>
-                        <EditFormRow
-                                :title="$t('account.edit.newPasswordConfirmation')"
-                                :editable="true"
-                        >
-                            <EditFormTitleEdit
-                                    cssClass="edit-password"
-                                    v-model.trim="draft.newPasswordConfirmation"
-                                    type="password"
-                                    placeholder="******"
-                            />
-                        </EditFormRow>
->>>>>>> 9d7ae0eb8a85500c75c5f54bc21c0981080510b4
 
                         <v-card-actions class="navigation pt-8 pb-4">
                             <v-flex>
@@ -102,11 +82,11 @@
                                 </div>
                             </v-flex>
                             <v-flex class="align-right">
-                                <IconButton v-if="creating" color="var(--var-color-blue-sword)" @click="create" :disabled="!canCreate" leftIcon="save">
-                                    {{ $t('account.list.add') }}
+                                <IconButton v-if="creating" color="var(--var-color-blue-sword)" @click="create" :disabled="!canCreate" leftIcon="add_circle_outline">
+                                    {{ $t("account.list.add") }}
                                 </IconButton>
                                 <IconButton v-else color="var(--var-color-blue-sword)" @click="save" :disabled="!canSave" leftIcon="save">
-                                    {{ $t('account.edit.save') }}
+                                    {{ $t("account.edit.save") }}
                                 </IconButton>
                             </v-flex>
                         </v-card-actions>
@@ -139,7 +119,7 @@
 </style>
 
 <script lang="ts">
-    import {AccountCreate, AccountPatch} from '@/store/types'
+    import {AccountCreate, AccountPatch} from "@/store/types"
     import {Component, Prop, Vue, Watch} from "vue-property-decorator"
 
     interface DraftAccount {
@@ -182,25 +162,24 @@
             publicKey: undefined,
             hash: undefined,
             isAdmin: undefined,
-            isActive: undefined
+            isActive: undefined,
         }
 
         private mounted() {
-            console.log(this.editing)
             if (this.editing) {
                 this.draft = {
-                    id: this.$modules.accounts.getCurrentAccount()!.id,
-                    login: this.$modules.accounts.getCurrentAccount()?.login,
-                    fullName: this.$modules.accounts.getCurrentAccount()?.fullName,
+                    id: this.currentAccount!.id,
+                    login: this.currentAccount?.login,
+                    fullName: this.currentAccount?.fullName,
                     newPassword: "",
                     newPasswordConfirmation: "",
-                    email: this.$modules.accounts.getCurrentAccount()?.email,
-                    company: this.$modules.accounts.getCurrentAccount()?.company,
-                    country: this.$modules.accounts.getCurrentAccount()?.country,
-                    publicKey: this.$modules.accounts.getCurrentAccount()?.publicKey,
-                    hash: this.$modules.accounts.getCurrentAccount()!.hash,
-                    isAdmin: this.$modules.accounts.getCurrentAccount()?.isAdmin,
-                    isActive: this.$modules.accounts.getCurrentAccount()?.isActive
+                    email: this.currentAccount?.email,
+                    company: this.currentAccount?.company,
+                    country: this.currentAccount?.country,
+                    publicKey: this.currentAccount?.publicKey,
+                    hash: this.currentAccount!.hash,
+                    isAdmin: this.currentAccount?.isAdmin,
+                    isActive: this.currentAccount?.isActive,
                 }
             } else if (!this.creating) {
                 this.draft = {
@@ -215,7 +194,7 @@
                     publicKey: this.$modules.accounts.meAccount?.publicKey,
                     hash: this.$modules.accounts.meAccount?.hash,
                     isAdmin: this.$modules.accounts.meAccount?.isAdmin,
-                    isActive: this.$modules.accounts.meAccount?.isActive
+                    isActive: this.$modules.accounts.meAccount?.isActive,
                 }
             }
         }
@@ -236,11 +215,31 @@
             }
         }
 
+        private get currentAccount() {
+            return this.$modules.accounts.getCurrentAccount()
+        }
+
         private get canSave() {
-            if (this.draft.newPassword !== "" || this.draft.newPasswordConfirmation !== "") {
-                return this.isPasswordStrong && this.draft.newPassword === this.draft.newPasswordConfirmation
+            if (!this.editing) {
+                if (this.draft.newPassword !== "" || this.draft.newPasswordConfirmation !== "") {
+                    return this.isPasswordStrong && this.draft.newPassword === this.draft.newPasswordConfirmation
+                } else {
+                    return this.draft.fullName !== this.$modules.accounts.meAccount?.fullName
+                }
             } else {
-                return this.draft.fullName !== this.$modules.accounts.meAccount?.fullName
+                return (
+                    this.draft.isAdmin !== this.currentAccount?.isAdmin ||
+                    this.draft.publicKey !== this.currentAccount?.publicKey ||
+                    this.draft.hash !== this.currentAccount?.hash ||
+                    this.draft.email !== this.currentAccount?.email ||
+                    this.draft.country !== this.currentAccount?.country ||
+                    this.draft.company !== this.currentAccount?.company ||
+                    this.draft.fullName !== this.currentAccount?.fullName
+                ) && (
+                    this.draft.email !== "" && this.draft.email !== undefined &&
+                    this.draft.login !== "" && this.draft.login !== undefined &&
+                    this.draft.fullName !== "" && this.draft.fullName !== undefined
+                )
             }
         }
 
@@ -276,7 +275,9 @@
                 isActive: this.draft.isActive,
                 password : undefined,
                 company: this.draft.company,
-                pubKey: this.draft.publicKey
+                country: this.draft.country,
+                publicKey: this.draft.publicKey,
+                hash: this.draft.hash
             }
             if (this.isPasswordStrong) {
                 patch.password = this.draft.newPassword
@@ -295,9 +296,11 @@
                 email: this.draft.email!,
                 isActive: this.draft.isActive!,
                 isAdmin: this.draft.isAdmin,
-                pubKey: this.draft.publicKey,
+                publicKey: this.draft.publicKey,
                 fullName: this.draft.fullName!,
-                company: this.draft.company
+                company: this.draft.company,
+                country: this.draft.country,
+                hash: this.draft.hash
             }
 
             this.$modules.accounts.createAccount(create).then(() => {

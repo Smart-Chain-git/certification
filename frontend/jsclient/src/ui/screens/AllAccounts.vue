@@ -23,7 +23,7 @@
                             :footer-props="footer"
                     >
                         <template v-slot:body="{items}">
-                            <tr v-for="item in items" :key="item.id">
+                            <tr v-for="item in items" :key="item.id" class="outlined">
                                 <td :class="(item.isActive) ? 'active' : 'inactive'">{{ item.login }}</td>
                                 <td :class="(item.isActive) ? 'active' : 'inactive'">{{ item.email }}</td>
                                 <td :class="(item.isActive) ? 'active' : 'inactive'">{{ item.fullName }}</td>
@@ -32,7 +32,7 @@
                                 </td>
                                 <td>
                                     <v-row wrap justify="center">
-                                        <v-switch :disabled="me.id === item.id" v-model="item.isActive" @click.stop="confirmDisable(item)" color="var(--var-color-blue-sword)" />
+                                        <v-switch class="pt-4" :disabled="me.id === item.id" v-model="item.isActive" @click.stop="confirmDisable(item)" color="var(--var-color-blue-sword)" />
                                     </v-row>
                                 </td>
                                 <td class="align-end">
@@ -74,13 +74,16 @@
         text-align: center;
         color: grey;
     }
+
+    .outlined > td {
+        border-bottom: 1px solid #cccccc;
+    }
 </style>
 
 <script lang="ts">
-    import {AccountPatch} from '@/store/types'
+    import {Account, AccountPatch} from "@/store/types"
     import {Component, Vue} from "vue-property-decorator"
     import { tableFooter } from "@/plugins/i18n"
-    import {Account} from "@/api/accountApi"
 
     @Component({})
     export default class AllAccounts extends Vue {
@@ -95,12 +98,12 @@
 
         private get headers() {
             return [
-                {text: this.$t('account.list.login'), value: 'login', width: "25%", align: "center"},
-                {text: this.$t('account.list.email'), value: 'email', width: "25%", align: "center"},
-                {text: this.$t('account.list.fullName'), value: 'fullName', width: "25%", align: "center"},
-                {text: this.$t('account.list.isAdmin'), value: 'isAdmin', width: "10%", align: "center"},
-                {text: this.$t('account.list.status'), sortable: false, width: "10%", align: "center"},
-                {text: '', value: 'actions', sortable: false, width: "5%"},
+                {text: this.$t("account.list.login"), value: "login", width: "20%", align: "center"},
+                {text: this.$t("account.list.email"), value: "email", width: "25%", align: "center"},
+                {text: this.$t("account.list.fullName"), value: "fullName", width: "25%", align: "center"},
+                {text: this.$t("account.list.isAdmin"), value: "isAdmin", width: "15%", align: "center"},
+                {text: this.$t("account.list.status"), sortable: false, width: "10%", align: "center"},
+                {text: "", value: "actions", sortable: false, width: "5%"},
             ]
         }
 
@@ -142,13 +145,15 @@
 
         private async updateAccount(account: Account) {
             const patchRequest: AccountPatch = {
-                pubKey: account.publicKey,
+                publicKey: account.publicKey,
                 company: account.company,
                 email: account.email,
-                password: null,
+                password: undefined,
                 fullName: account.fullName,
                 isAdmin: account.isAdmin,
-                isActive: account.isActive
+                isActive: account.isActive,
+                country: account.country,
+                hash: account.hash
             }
 
             await this.$modules.accounts.updateAccount(account.id, patchRequest)

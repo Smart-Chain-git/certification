@@ -21,6 +21,7 @@ export default class AccountsModule extends VuexModule {
     private requestInterceptor: number | null = null
     private responseInterceptor: number | null = null
     private currentAccount: Account | undefined = undefined
+    private httpStatus: number = 0
 
     /**
      * The connected user.
@@ -195,8 +196,18 @@ export default class AccountsModule extends VuexModule {
         return this.currentAccount
     }
 
+    @Action
     public async createAccount(account: AccountCreate) {
-        return accountApi.create(account)
+        await accountApi.create(account).then((response: Account) => {
+            Vue.set(this.accounts, response.id, response)
+        }).catch((error) => {
+            this.setHttpStatus(error.response.status)
+        })
+    }
+
+    @Mutation
+    private setHttpStatus(code: number) {
+        this.httpStatus = code
     }
 
     @Mutation

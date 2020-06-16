@@ -33,7 +33,9 @@
       "save": "Save",
       "admin": "Administrator",
       "noAdmin": "User",
-      "updated": "Informations updated."
+      "updated": "Informations updated.",
+      "country": "Country",
+      "company": "Company"
     }
   },
   "job": {
@@ -105,9 +107,16 @@
     }
   },
   "calendar": {
-  "label": {
-    "reset": "Effacer",
-    "close": "Fermer"
+    "label": {
+      "reset": "Effacer",
+      "close": "Fermer"
+    }
+  },
+  "disableConfirm": {
+    "title":"Disable account",
+    "subTitle": "Are you sure you want to disable this account ?",
+    "content": "",
+    "confirmButton": "Confirm",
+    "cancelButton": "Cancel"
   }
-}
 }

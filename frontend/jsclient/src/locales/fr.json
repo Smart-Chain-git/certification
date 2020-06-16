@@ -42,7 +42,9 @@
       "save": "Sauvegarder",
       "admin": "Administrateur",
       "noAdmin": "Utilisateur",
-      "updated": "Les informations ont été mises à jour."
+      "updated": "Les informations ont été mises à jour.",
+      "country": "Pays",
+      "company": "Entreprise"
     }
   },
   "job": {
@@ -118,9 +120,9 @@
     }
   },
   "disableConfirm": {
-    "title":"Modifier",
-    "subTitle": "d",
-    "content": "d",
+    "title":"Désactiver l'utilisateur",
+    "subTitle": "Êtes-vous sûr(e) de vouloir désactiver cet utilisateur ?",
+    "content": "",
     "confirmButton": "Confirmer",
     "cancelButton": "Annuler"
   }
