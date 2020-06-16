@@ -91,7 +91,7 @@
 <script lang="ts">
     import {fetchData, resetStore} from "@/store/actions/globalActions"
     import {Component, Vue} from "vue-property-decorator"
-    import {AuthRequest} from "@/api/accountApi"
+    import {AuthRequest} from "@/api/authApi"
 
     @Component
     export default class Login extends Vue {

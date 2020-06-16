@@ -13,9 +13,11 @@
 
                         <EditFormRow :title="$t('account.edit.email')" :editable="false" :value="draft.email"/>
 
-                        <EditFormRow :title="$t('account.edit.profile')" :editable="false" :value="draft.isAdmin ? $t('account.edit.admin') : $t('account.edit.noAdmin')"/>
+                        <EditFormRow :title="$t('account.edit.profile')" :editable="false"
+                                     :value="draft.isAdmin ? $t('account.edit.admin') : $t('account.edit.noAdmin')"/>
 
-                        <EditFormRow :title="$t('account.edit.TEZOSPubKey')" :editable="false" :value="draft.publicKey"/>
+                        <EditFormRow :title="$t('account.edit.TEZOSPubKey')" :editable="false"
+                                     :value="draft.publicKey"/>
 
                         <EditFormRow :title="$t('account.edit.TEZOSAccount')" :editable="false" :value="draft.hash"/>
 
@@ -33,8 +35,8 @@
                             />
                         </EditFormRow>
                         <EditFormRow
-                                     :title="$t('account.edit.newPasswordConfirmation')"
-                                     :editable="true"
+                                :title="$t('account.edit.newPasswordConfirmation')"
+                                :editable="true"
                         >
                             <EditFormTitleEdit
                                     cssClass="edit-password"
@@ -46,10 +48,11 @@
 
                         <v-card-actions class="navigation pt-8 pb-4">
                             <v-flex>
-                                <div v-if="message.type !== 'none'" :class="message.type === 'success' ? 'success-frame' : 'error-frame'">
+                                <div v-if="message.type !== 'none'"
+                                     :class="message.type === 'success' ? 'success-frame' : 'error-frame'">
                                     {{ message.message }}
                                 </div>
-                           </v-flex>
+                            </v-flex>
                             <v-flex class="align-right">
                                 <IconButton color="primary" @click="save" :disabled="!canSave" leftIcon="save">
                                     {{ $t('account.edit.save') }}
@@ -85,9 +88,8 @@
 </style>
 
 <script lang="ts">
-
-    import {AccountPatch} from "@/store/types"
     import {Component, Prop, Vue, Watch} from "vue-property-decorator"
+    import {AccountPatch} from "@/api/accountApi"
 
     interface DraftAccount {
         id: string
@@ -171,9 +173,13 @@
         private save() {
             const patch: AccountPatch = {
                 email: this.draft.email,
-                fullName : this.draft.fullName,
-                isAdmin : this.draft.isAdmin,
-                password : null,
+                password: undefined,
+                fullName: this.draft.fullName,
+                company: undefined,
+                country: undefined,
+                publicKey: undefined,
+                hash: undefined,
+                isAdmin: this.draft.isAdmin,
             }
             if (this.isPasswordStrong) {
                 patch.password = this.draft.newPassword
