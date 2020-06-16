@@ -12,7 +12,7 @@ interface AccountService {
      * @param accountDetails Details about the account to create.
      * @return The created account.
      */
-    suspend fun createAccount(accountDetails: AccountCreate): Account
+    suspend fun createAccount(requester: Account, accountDetails: AccountCreate): Account
 
     /**
      * Retrieve an account by its id.
@@ -40,11 +40,11 @@ interface AccountService {
      * @param accountDetails Details to update.
      * @return The updated account.
      */
-    suspend fun patchAccount(accountId: String, accountDetails: AccountPatch): Account
+    suspend fun patchAccount(requester: Account, accountId: String, accountDetails: AccountPatch): Account
 
     /**
      * Delete an account.
      * @param accountId Id of the account to delete.
      */
-    suspend fun deleteAccount(accountId: String)
+    suspend fun deleteAccount(requester: Account, accountId: String)
 }

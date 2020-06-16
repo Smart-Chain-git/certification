@@ -1,5 +1,6 @@
 package com.sword.signature.business.service
 
+import com.sword.signature.business.exception.DuplicateException
 import com.sword.signature.business.exception.EntityNotFoundException
 import com.sword.signature.business.model.Account
 import com.sword.signature.business.model.AccountCreate
@@ -22,6 +23,34 @@ class AccountServiceContextTest @Autowired constructor(
     override val mongoTemplate: ReactiveMongoTemplate,
     override val migrationHandler: MigrationHandler
 ) : AbstractServiceContextTest() {
+
+    private val nonAdminAccount = Account(
+        id = "nonAdmin",
+        login = "nonAdminLogin",
+        password = "nonAdminPassword",
+        fullName = "nonAdmin",
+        email = "nonAdmin@signature.com",
+        company = null,
+        country = null,
+        publicKey = null,
+        hash = null,
+        isAdmin = false,
+        disabled = false
+    )
+
+    private val adminAccount = Account(
+        id = "admin",
+        login = "adminLogin",
+        password = "adminPassword",
+        fullName = "admin",
+        email = "admin@signature.com",
+        company = null,
+        country = null,
+        publicKey = null,
+        hash = null,
+        isAdmin = true,
+        disabled = false
+    )
 
     private var accountsInitialCount: Long = 0L
 
@@ -63,7 +92,7 @@ class AccountServiceContextTest @Autowired constructor(
                 company = newCompany, country = newCountry, publicKey = newPublicKey, hash = newHash
             )
             runBlocking {
-                val createdAccount = accountService.createAccount(toCreate)
+                val createdAccount = accountService.createAccount(adminAccount, toCreate)
 
                 assertAll("createdAccount",
                     { assertEquals(newLogin, createdAccount.login) },
@@ -90,7 +119,7 @@ class AccountServiceContextTest @Autowired constructor(
                 company = newCompany, country = newCountry, publicKey = newPublicKey, hash = newHash
             )
 
-            assertThrows<DuplicateKeyException> { runBlocking { accountService.createAccount(toCreate) } }
+            assertThrows<DuplicateException> { runBlocking { accountService.createAccount(adminAccount, toCreate) } }
         }
 
         @Test
@@ -101,7 +130,7 @@ class AccountServiceContextTest @Autowired constructor(
                 company = newCompany, country = newCountry, publicKey = newPublicKey, hash = newHash
             )
 
-            assertThrows<DuplicateKeyException> { runBlocking { accountService.createAccount(toCreate) } }
+            assertThrows<DuplicateException> { runBlocking { accountService.createAccount(adminAccount, toCreate) } }
         }
     }
 
@@ -142,7 +171,7 @@ class AccountServiceContextTest @Autowired constructor(
         fun patchAccountTest() {
             val toPatch = AccountPatch(password = newPassword)
 
-            val patchedAccount = runBlocking { accountService.patchAccount(accountId1, toPatch) }
+            val patchedAccount = runBlocking { accountService.patchAccount(adminAccount,accountId1, toPatch) }
 
             assertAll("patchedAccount",
                 { assertEquals(accountLogin1, patchedAccount.login) },
@@ -159,7 +188,7 @@ class AccountServiceContextTest @Autowired constructor(
                 isAdmin = newIsAdmin, disabled = newDisabled
             )
 
-            val patchedAccount = runBlocking { accountService.patchAccount(accountId1, toPatch) }
+            val patchedAccount = runBlocking { accountService.patchAccount(adminAccount, accountId1, toPatch) }
 
             assertAll("patchedAccount",
                 { assertEquals(newLogin, patchedAccount.login) },
@@ -183,6 +212,7 @@ class AccountServiceContextTest @Autowired constructor(
             assertThrows<EntityNotFoundException> {
                 runBlocking {
                     accountService.patchAccount(
+                        adminAccount,
                         accountNonexistentId,
                         toPatch
                     )
@@ -197,7 +227,7 @@ class AccountServiceContextTest @Autowired constructor(
         @Test
         fun deleteAccountTest() {
             runBlocking {
-                accountService.deleteAccount(accountId1)
+                accountService.deleteAccount(adminAccount, accountId1)
 
                 assertEquals(
                     accountsInitialCount - 1,
@@ -208,7 +238,7 @@ class AccountServiceContextTest @Autowired constructor(
 
         @Test
         fun deleteNonexistentAccountTest() {
-            assertThrows<EntityNotFoundException> { runBlocking { accountService.deleteAccount(accountNonexistentId) } }
+            assertThrows<EntityNotFoundException> { runBlocking { accountService.deleteAccount(adminAccount, accountNonexistentId) } }
         }
     }
 }

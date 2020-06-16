@@ -1,9 +1,7 @@
 package com.sword.signature.rest.resthandler
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.sword.signature.business.exception.AuthenticationException
-import com.sword.signature.business.exception.ServiceException
-import com.sword.signature.business.exception.UserServiceException
+import com.sword.signature.business.exception.*
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler
 import org.springframework.core.annotation.Order
 import org.springframework.http.HttpStatus
@@ -22,7 +20,8 @@ class GlobalErrorHandler(
     override fun handle(exchange: ServerWebExchange, ex: Throwable): Mono<Void> {
         val bufferFactory = exchange.response.bufferFactory()
         val httpStatus: HttpStatus = when (ex) {
-            is AuthenticationException, is org.springframework.security.core.AuthenticationException -> HttpStatus.FORBIDDEN
+            is AuthenticationException, is MissingRightException, is org.springframework.security.core.AuthenticationException -> HttpStatus.FORBIDDEN
+            is DuplicateException -> HttpStatus.CONFLICT
             is UserServiceException -> HttpStatus.BAD_REQUEST
             is ServiceException -> HttpStatus.INTERNAL_SERVER_ERROR
             else -> HttpStatus.INTERNAL_SERVER_ERROR
