@@ -10,7 +10,7 @@
                 <Card>
                     <v-row wrap class="mb-3 mx-0">
                         <v-spacer />
-                        <IconButton leftIcon="add_circle_outline" to="/create-account">
+                        <IconButton leftIcon="add_circle_outline" to="/create-account" color="var(--var-color-blue-sword)">
                             {{ $t('account.list.add') }}
                         </IconButton>
                     </v-row>
@@ -31,7 +31,7 @@
                                     <v-icon v-if="item.isAdmin">check</v-icon>
                                 </td>
                                 <td>
-                                    <v-switch :disabled="me.id === item.id" v-model="item.isActive" @click.stop="disable(item)" color="primary" />
+                                    <v-switch :disabled="me.id === item.id" v-model="item.isActive" @click.stop="disable(item)" color="var(--var-color-blue-sword)" />
                                 </td>
                                 <td class="align-end">
                                     <v-btn v-if="item.isActive" icon :to="'/accounts/' + item.id">
@@ -83,7 +83,7 @@
                 {text: this.$t('account.list.email'), value: 'email', width: "18%", align: "center"},
                 {text: this.$t('account.list.fullName'), value: 'fullName', width: "18%", align: "center"},
                 {text: this.$t('account.list.isAdmin'), value: 'isAdmin', width: "18%", align: "center"},
-                {text: this.$t('account.list.status'), value: 'status', width: "18%", align: "center"},
+                {text: this.$t('account.list.status'), value: 'isActive', width: "18%", align: "center"},
                 {text: '', value: 'actions', sortable: false, width: "10%"},
             ]
         }

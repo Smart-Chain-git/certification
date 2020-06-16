@@ -50,7 +50,8 @@ class SignServiceTest @Autowired constructor(
         country = null,
         publicKey = null,
         hash = null,
-        isAdmin = true
+        isAdmin = true,
+        isActive = true
     )
     private final val sha256 = Algorithm(id = "SHA-256", name = "SHA-256", digestLength = 32)
 
@@ -113,7 +114,7 @@ class SignServiceTest @Autowired constructor(
                 val actualJobResponse =
                     signService.batchSign(
                         requester = account, channelName = "testChannel", algorithm = sha256,
-                        flowName = "monflow", fileHashes = hashs.asFlow()
+                        flowName = "monflow", fileHashes = hashes.asFlow()
                     ).toList()
 
                 assertThat(actualJobResponse).hasSize(expectedJobsResponse)
@@ -211,7 +212,8 @@ class SignServiceTest @Autowired constructor(
             country = null,
             publicKey = null,
             hash = null,
-            isAdmin = false
+            isAdmin = false,
+            isActive = true
         )
 
         private val secondAdmin = Account(
@@ -224,7 +226,8 @@ class SignServiceTest @Autowired constructor(
             country = null,
             publicKey = null,
             hash = null,
-            isAdmin = true
+            isAdmin = true,
+            isActive = true
         )
 
 

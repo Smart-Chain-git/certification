@@ -70,10 +70,10 @@
                                 </div>
                            </v-flex>
                             <v-flex class="align-right">
-                                <IconButton v-if="creating" color="primary" @click="create" :disabled="!canCreate" leftIcon="save">
+                                <IconButton v-if="creating" color="var(--var-color-blue-sword)" @click="create" :disabled="!canCreate" leftIcon="save">
                                     {{ $t('account.edit.save') }}
                                 </IconButton>
-                                <IconButton v-else color="primary" @click="save" :disabled="!canSave" leftIcon="save">
+                                <IconButton v-else color="var(--var-color-blue-sword)" @click="save" :disabled="!canSave" leftIcon="save">
                                     {{ $t('account.edit.save') }}
                                 </IconButton>
                             </v-flex>

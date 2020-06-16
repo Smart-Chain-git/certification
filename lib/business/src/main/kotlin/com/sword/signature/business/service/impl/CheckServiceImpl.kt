@@ -42,7 +42,9 @@ class CheckServiceImpl(
             isAdmin = true,
             publicKey = null,
             hash = "",
-            isActive = true
+            isActive = true,
+            company = "",
+            country = ""
         )
 
     override suspend fun checkDocument(documentHash: String, providedProof: Proof?): CheckResponse {

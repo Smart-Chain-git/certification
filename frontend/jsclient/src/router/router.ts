@@ -21,7 +21,7 @@ import {
 } from "@/ui/components"
 import Vue from "vue"
 import Router from "vue-router"
-
+import multiguard from "vue-router-multiguard"
 
 Vue.use(Router)
 

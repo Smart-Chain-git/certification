@@ -108,7 +108,7 @@ class SignServiceImpl(
                 callBackUrl = callBackUrl,
                 state = JobStateType.INSERTED,
                 stateDate = OffsetDateTime.now(),
-                docsNumber = fileHashs.size,
+                docsNumber = fileHashes.size,
                 channelName = channelName
             )
         ).awaitSingle()
