@@ -292,9 +292,8 @@
         private create() {
             const create: AccountCreate = {
                 login: this.draft.login!,
-                password: "test",
                 email: this.draft.email!,
-                isActive: this.draft.isActive!,
+                disabled: this.draft.disabled!,
                 isAdmin: this.draft.isAdmin,
                 publicKey: this.draft.publicKey,
                 fullName: this.draft.fullName!,
@@ -304,9 +303,11 @@
             }
 
             this.$modules.accounts.createAccount(create).then(() => {
-                this.$router.push("/settings")
-            }).catch((error) => {
-
+                if (this.$modules.accounts.getHttpStatus() == 409) {
+                    this.fail("errors.account.duplicate")
+                } else {
+                    this.$router.push("/settings")
+                }
             })
         }
 

@@ -34,7 +34,6 @@ export interface AccountPatch {
 }
 
 export interface AccountCreate {
-    password: string,
     email: string,
     login: string,
     fullName: string,

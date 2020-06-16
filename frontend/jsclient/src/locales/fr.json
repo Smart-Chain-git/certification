@@ -103,6 +103,9 @@
       "differents": "Les mots de passe doivent être identiques.",
       "weak": "Le mot de passe doit contenir au moins 8 caractères, 1 majuscule, 1 minuscule, 1 nombre et 1 caractère spécial."
     },
+    "account": {
+      "duplicate": "Cet identifiant est déjà pris."
+    },
     "back": {
       "generic": "Les informations n'ont pas pu être mises à jour, veuillez contacter votre administrateur."
     }
