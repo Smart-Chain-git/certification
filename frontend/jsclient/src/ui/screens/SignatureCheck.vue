@@ -39,8 +39,34 @@
                         <v-expansion-panel class="more_info">
                             <v-expansion-panel-header>{{ $t("signatureCheck.more") }}</v-expansion-panel-header>
                             <v-expansion-panel-content>
-                                <span v-html="successMessage">
-                                </span>
+                                <div v-if="checkResponse.check_status === 0">
+                                    {{ this.parse("signatureCheck.success.message1.block2.line1") }}<br/><br/>
+                                    {{ this.parse("signatureCheck.success.message1.block2.line2") }}<br/>
+                                    {{ this.parse("signatureCheck.success.message1.block2.line3") }}<br/>
+                                    {{ this.parse("signatureCheck.success.message1.block2.line4") }}<br/>
+                                    {{ this.parse("signatureCheck.success.message1.block2.line5") }}<br/><br/>
+                                    <span v-html="parseLink('signatureCheck.success.message1.block2.line6', 'here',{
+                                        'download' : checkResponse.proof.file_name + '.json',
+                                        'href' : 'data:text/json:charset=utf-8,' + encodeURIComponent(JSON.stringify(checkResponse.proof))
+                                    })"/><br/><br/>
+                                    <span v-html="parseLink('signatureCheck.success.message1.block2.line7', 'here', {'href' : '/settings'})"></span>
+                                </div>
+                                <div v-if="checkResponse.check_status === 1">
+                                    {{this.parse("signatureCheck.success.message2.block2.line1")}}<br/><br/>
+                                    {{this.parse("signatureCheck.success.message2.block2.line2")}}<br/>
+                                    {{this.parse("signatureCheck.success.message2.block2.line3")}}<br/>
+                                    {{this.parse("signatureCheck.success.message2.block2.line4")}}<br/>
+
+                                    <span v-for="(hash, idx) in checkResponse.proof.hash_list">
+                                        {{this.parse("signatureCheck.success.message2.block2.line5", idx)}}<br/>
+                                    </span>
+
+                                    {{this.parse("signatureCheck.success.message2.block2.line6")}}<br/>
+                                    {{this.parse("signatureCheck.success.message2.block2.line7")}}<br/>
+                                    {{this.parse("signatureCheck.success.message2.block2.line8")}}<br/>
+                                    {{this.parse("signatureCheck.success.message2.block2.line9")}}<br/>
+                                    {{this.parse("signatureCheck.success.message2.block2.line10")}}<br/>
+                                </div>
                             </v-expansion-panel-content>
                         </v-expansion-panel>
                     </v-expansion-panels>
@@ -134,7 +160,7 @@
     }
 </style>
 <script lang="ts">
-    import {SignatureCheckRequest, SignatureCheckResponse} from '@/api/signatureApi'
+    import {SignatureCheckRequest, SignatureCheckResponse} from "@/store/types"
     import {Component, Vue} from "vue-property-decorator"
     import * as CryptoJS from "crypto-js"
 
@@ -166,30 +192,6 @@
             return str
         }
 
-        private get successMessage() {
-            switch (this.checkResponse?.check_status) {
-                case 0:
-                    return this.parse("signatureCheck.success.message1.block2.line1") + "<br/><br/>" +
-                        this.parse("signatureCheck.success.message1.block2.line2") + "<br/>" +
-                        this.parse("signatureCheck.success.message1.block2.line3") + "<br/>" +
-                        this.parse("signatureCheck.success.message1.block2.line4") + "<br/>" +
-                        this.parse("signatureCheck.success.message1.block2.line5") + "<br/>" +
-                        this.parse_link("signatureCheck.success.message1.block2.line6", "cc", "here") + "<br/>" +
-                        this.parse_link("signatureCheck.success.message1.block2.line7", "cc", "here")
-                case 1:
-                    return this.parse("signatureCheck.success.message2.block2.line1") + "<br/><br/>" +
-                        this.parse("signatureCheck.success.message2.block2.line2") + "<br/>" +
-                        this.parse("signatureCheck.success.message2.block2.line3") + "<br/>" +
-                        this.parse("signatureCheck.success.message2.block2.line4") + "<br/>" +
-                        this.parse("signatureCheck.success.message2.block2.line5") + "<br/>" +
-                        this.parse("signatureCheck.success.message2.block2.line6") + "<br/>" +
-                        this.parse("signatureCheck.success.message2.block2.line7") + "<br/>" +
-                        this.parse("signatureCheck.success.message2.block2.line8") + "<br/>" +
-                        this.parse("signatureCheck.success.message2.block2.line9") + "<br/>" +
-                        this.parse("signatureCheck.success.message2.block2.line10") + "<br/>"
-            }
-        }
-
         private get shortMessage() {
             if (this.checkSucceeded) {
                 let n = this.checkResponse?.check_status! + 1
@@ -208,7 +210,7 @@
             }
         }
 
-        private parse(message: string) {
+        private parse(message: string, idx: number = 0) {
             if (this.checkResponse) {
                 let res: string = this.$t(message).toString()
 
@@ -227,33 +229,39 @@
 
                     case "signatureCheck.success.message1.block2.line3":
                     case "signatureCheck.success.message2.block2.line2":
-                    case "signatureCheck.success.message2.block2.line5":
+                    case "signatureCheck.success.message2.block2.line6":
                         return SignatureCheck.format(res, [this.checkResponse.proof.hash_root])
 
-                    case "signatureCheck.success.message1.block2.line4": 
-                    case "signatureCheck.success.message2.block2.line7":
-                        return SignatureCheck.format(res, [this.checkResponse.proof.transaction_hash!, this.checkResponse.proof.block_hash!, this.checkResponse.proof.signature_date!.toString()])
+                    case "signatureCheck.success.message1.block2.line4":
+                    case "signatureCheck.success.message2.block2.line8":
+                        return SignatureCheck.format(res, [this.checkResponse.proof.transaction_hash!, this.checkResponse.proof.block_hash!, this.checkResponse.timestamp!.toString()])
 
                     case "signatureCheck.success.message2.block2.line4":
                         return SignatureCheck.format(res, [this.checkResponse.proof.hash_document])
 
                     case "signatureCheck.success.message1.block2.line5":
                     case "signatureCheck.success.message2.block2.line9":
-                       return SignatureCheck.format(res, [this.checkResponse.proof.origin_public_key, this.checkResponse.proof.origin])
-                    case "signatureCheck.success.message1.block2.line6":
-                        //return SignatureCheck.format(res, [this.checkResponse.signer, this.checkResponse.timestamp.toString()])
-                    case "signatureCheck.success.message1.block2.line7":
-                        //return SignatureCheck.format(res, [this.checkResponse.signer, this.checkResponse.timestamp.toString()])
+                       return SignatureCheck.format(res, [this.checkResponse.proof.origin_public_key, (this.checkResponse.signer !== undefined) ? this.checkResponse.signer : this.$t("signatureCheck.unknown").toString()])
 
+                    case "signatureCheck.success.message1.block2.line7":
+                        return SignatureCheck.format(res, [this.checkResponse.proof.contract_address])
+
+                    case "signatureCheck.success.message2.block2.line5":
+                        let hash = this.checkResponse.proof.hash_list[idx]
+                        return SignatureCheck.format(res, [hash.position!, (hash.hash) ? hash.hash : "", this.checkResponse.check_process[idx]])
                     default:
                         return res
                 }
             }
         }
 
-        private parse_link(message: string, to: string, text:string) {
+        private parseLink(message: string, placeholder: string, stats: {[key: string]: string}) {
+            let format = ""
             let res = this.parse(message)
-            return res?.replace("{link}", "<a href=\"" + to + "\">"+text+"</a>")
+            for (let i in stats) {
+                format = format + i + "=\"" + stats[i] + "\" "
+            }
+            return res?.replace("{#}", "<a "+format+">" + placeholder + "</a>")
         }
 
         private check() {
