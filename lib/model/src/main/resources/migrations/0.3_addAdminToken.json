@@ -6,7 +6,7 @@
           "$oid": "5e860aff41b521a6ed732092"
         },
         "name": "Unlimited token",
-        "jwtToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjcmVhdGlvblRpbWUiOiIyMDIwLTAxLTAzVDEzOjMwWiIsImlzcyI6IlRlem9zQFNpZ25hdHVyZSIsInBlcnNpc3RlZCI6dHJ1ZSwiaWQiOiJ1YmVySWQifQ.oGoJ67eDj_te6LQ7ON1JE9xBuvxO29104U3n4i0X_eY",
+        "jwtToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjcmVhdGlvblRpbWUiOiIyMDIwLTA0LTA2VDAwOjQxOjI4LjkxMjA4OCIsImlzcyI6IlRlem9zQFNpZ25hdHVyZSIsImlkIjoiNWU3NGEwNzNhMzg2ZjE3MGYzODUwYjRiIn0.0I9nxqktj6-c2mwMR0C5Jxa0idIyQFQn4qBGD1gVVAQ",
         "accountId": "5e74a073a386f170f3850b4b",
         "revoked": false
       }
