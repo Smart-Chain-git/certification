@@ -1,8 +1,11 @@
-import {FilterOption, Job, JobCriteria, PaginationOption} from "@/store/types"
-import {VuexModule, Module, Mutation, Action} from "vuex-class-modules"
+
+import {FilterOption, PaginationOption} from "@/store/types"
+import {Job, JobCriteria} from "@/api/types"
+import {Action, Module, Mutation, VuexModule} from "vuex-class-modules"
 import {jobApi} from "@/api/jobApi"
 import AccountsModule from "@/store/modules/AccountsModule"
 import deepcopy from "ts-deepcopy"
+
 @Module
 export default class JobsModule extends VuexModule {
 
@@ -59,6 +62,19 @@ export default class JobsModule extends VuexModule {
             this.setJobCount(response)
         })
         this.setLoading(false)
+    }
+
+    @Action
+    public async loadLastJobs(count: number) {
+        const criteria: JobCriteria = {
+            accountId: this.accountsModule.meAccount?.id,
+            page: 0,
+            sort: ["creationDate:desc"],
+            size: count,
+        }
+        await jobApi.list(criteria).then((response: Array<Job>) => {
+            this.setJobs(response)
+        })
     }
 
 

@@ -1,25 +1,27 @@
-import fetchDataAndRedirect from "@/router/guards/fetchDataAndRedirect"
-import checkUserIsAdmin from "@/router/guards/checkUserIsAdmin"
 import checkUserHasPubKey from "@/router/guards/checkUserHasPubKey"
-import loadCurrentJob from "@/router/guards/loadCurrentJob"
-import {loadMeIfLogged, loadTokens} from "@/router/guards/loadAccounts"
+import checkUserIsAdmin from "@/router/guards/checkUserIsAdmin"
+import fetchDataAndRedirect from "@/router/guards/fetchDataAndRedirect"
+import {loadAccount, loadAccounts, loadMeIfLogged, loadTokens} from "@/router/guards/loadAccounts"
+import {loadCurrentJob, loadJobs} from "@/router/guards/loadJobs"
+
 import {
+    Accounts,
     AppTemplate,
+    ChannelManagement,
+    Dashboard,
+    Documents,
+    EditAccount,
+    JobDetail,
+    Jobs,
     Login,
     ReceptionTemplate,
-    Dashboard,
-    Jobs,
-    Documents,
-    SignatureRequest,
-    SignatureCheck,
     Resources,
-    Settings,
-    EditAccount,
-    ChannelManagement,
-    JobDetail,
+    SignatureCheck,
+    SignatureRequest,
 } from "@/ui/components"
 import Vue from "vue"
 import Router from "vue-router"
+import multiguard from "vue-router-multiguard"
 
 Vue.use(Router)
 
@@ -56,6 +58,25 @@ const router = new Router({
                 {
                     path: "profile",
                     component: EditAccount,
+                    props: {
+                        access: "selfEditing",
+                    },
+                },
+                {
+                    path: "create-account",
+                    component: EditAccount,
+                    beforeEnter: checkUserIsAdmin,
+                    props: {
+                        access: "creating",
+                    },
+                },
+                {
+                    path: "accounts/:id",
+                    component: EditAccount,
+                    beforeEnter: multiguard([checkUserIsAdmin, loadAccount]),
+                    props: {
+                        access: "adminEditing",
+                    },
                 },
                 {
                     path: "channel-management",
@@ -65,6 +86,7 @@ const router = new Router({
                 {
                     path: "dashboard",
                     component: Dashboard,
+                    beforeEnter: loadJobs(8),
                 },
                 {
                     path: "jobs",
@@ -92,8 +114,8 @@ const router = new Router({
                 },
                 {
                     path: "settings",
-                    component: Settings,
-                    beforeEnter: checkUserIsAdmin,
+                    component: Accounts,
+                    beforeEnter: multiguard([checkUserIsAdmin, loadAccounts]),
                 },
             ],
         },

@@ -11,13 +11,28 @@
     "connection": "Login",
     "gcu": "Terms of Use"
   },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome to the Tezos Digisign application !",
+    "content": "Thanks to this application, you will be able to create your jobs and add your documents to be signed. You will also be able to check the authenticity of your documents.",
+    "lastJobs": "Last jobs",
+    "documentsSigned": "documents signed",
+    "jobsCreated": "jobs created",
+    "jobsProcessed": "jobs processed",
+    "monthStatistics" : "{0} statistics"
+  },
   "account": {
     "list": {
+      "title": "Manage users",
+      "fullName": "Full name",
+      "email": "Email",
+      "isAdmin": "Administrator",
+      "add": "Add",
       "login": "Login",
-      "lastName": "Name",
-      "firstName": "First name",
-      "role": "Role",
-      "status": "Status"
+      "lastName": "Last Name",
+      "firstName": "First Name",
+      "status": "Status",
+      "cancel": "Cancel"
     },
     "edit": {
       "title": "My account",
@@ -33,7 +48,10 @@
       "save": "Save",
       "admin": "Administrator",
       "noAdmin": "User",
-      "updated": "Informations updated."
+      "updated": "Informations updated.",
+      "country": "Country",
+      "company": "Company",
+      "mandatory": "* Those information are mandatory."
     }
   },
   "channelManagement": {
@@ -61,21 +79,6 @@
     "logout": "Sign out"
   },
   "job": {
-    "list": {
-      "title": "Jobs",
-      "id": "ID",
-      "name": "Name",
-      "creationDate": "Creation date",
-      "statusDate": "Status date",
-      "status": "Status",
-      "docs": "Docs",
-      "channel": "Channel",
-      "dates": "Date range",
-      "search": "Search",
-      "records": "records",
-      "export": "Export .csv",
-      "copyId": "Copy"
-    },
     "detail": {
       "title": "Job details",
       "back": "Back",
@@ -90,6 +93,21 @@
       "transaction": "Transaction",
       "hash": "Hash algorithm",
       "rootHash": "root hash"
+    },
+    "list": {
+      "title": "Jobs",
+      "id": "ID",
+      "name": "Name",
+      "creationDate": "Creation date",
+      "statusDate": "Status date",
+      "status": "Status",
+      "docs": "Docs",
+      "channel": "Channel",
+      "dates": "Date range",
+      "search": "Search",
+      "records": "records",
+      "export": "Export .csv",
+      "copyId": "Copy"
     }
   },
   "errors": {
@@ -102,6 +120,9 @@
       "differents": "Passwords must be identical.",
       "weak": "Password must meet following requirements : 8 characters long, 1 uppercase, 1 lowercase, 1 number, 1 special character."
     },
+    "account": {
+      "duplicate": "This login is already taken."
+    },
     "back": {
       "generic": "Informations could not be saved, please contact your administrator."
     }
@@ -113,9 +134,16 @@
     }
   },
   "calendar": {
-  "label": {
-    "reset": "Effacer",
-    "close": "Fermer"
+    "label": {
+      "reset": "Effacer",
+      "close": "Fermer"
+    }
+  },
+  "disableConfirm": {
+    "title": "Disable account",
+    "subTitle": "Are you sure you want to disable this account ?",
+    "content": "",
+    "confirmButton": "Confirm",
+    "cancelButton": "Cancel"
   }
-}
 }

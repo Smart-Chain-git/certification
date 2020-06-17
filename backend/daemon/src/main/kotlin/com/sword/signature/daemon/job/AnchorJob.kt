@@ -1,11 +1,14 @@
 package com.sword.signature.daemon.job
 
+import com.sword.signature.business.exception.EntityNotFoundException
 import com.sword.signature.business.model.Account
 import com.sword.signature.business.model.JobPatch
 import com.sword.signature.business.model.integration.AnchorJobMessagePayload
 import com.sword.signature.business.model.integration.ValidationJobMessagePayload
+import com.sword.signature.business.service.AccountService
 import com.sword.signature.business.service.JobService
 import com.sword.signature.common.enums.JobStateType
+import com.sword.signature.daemon.configuration.TezosConfig
 import com.sword.signature.daemon.logger
 import com.sword.signature.daemon.sendPayload
 import com.sword.signature.tezos.writer.service.TezosWriterService
@@ -17,27 +20,34 @@ import org.springframework.stereotype.Component
 class AnchorJob(
     private val jobService: JobService,
     private val tezosWriterService: TezosWriterService,
+    private val accountService: AccountService,
     private val anchoringRetryMessageChannel: MessageChannel,
     private val validationMessageChannel: MessageChannel,
-    @Value("\${tezos.account.publicKey}") private val publicKey: String,
-    @Value("\${tezos.account.secretKey}") private val secretKey: String,
-    @Value("\${tezos.contract.address}") private val contractAddress: String
+    @Value("\${tezos.contract.address}") private val contractAddress: String,
+    private val tezosConfig: TezosConfig
 ) {
-
-    private val adminAccount = Account(email = "", login = "", password = "", isAdmin = true, fullName = "", id = "", pubKey = null)
-
     suspend fun anchor(payload: AnchorJobMessagePayload) {
+        val requesterId = payload.requesterId
         val jobId = payload.jobId
-        val job = jobService.findById(adminAccount, jobId, true)
-        val rootHash = job?.rootHash ?: throw IllegalStateException("An existing job must have a root hash")
-        LOGGER.debug("Ready to anchor job ({}) rootHash ({}) into the blockchain.", jobId, rootHash)
+
         try {
+            val requester: Account =
+                accountService.getAccount(requesterId) ?: throw EntityNotFoundException("account", requesterId)
+            val job = jobService.findById(requester, jobId, true)
+            val rootHash = job?.rootHash ?: throw IllegalStateException("An existing job must have a root hash")
+
+            LOGGER.debug("Ready to anchor job ({}) rootHash ({}) into the blockchain.", jobId, rootHash)
+
+            val requesterKeys = getTezosKeys(requester.login)
             val signerIdentity =
-                tezosWriterService.retrieveIdentity(publicKeyBase58 = publicKey, secretKeyBase58 = secretKey)
+                tezosWriterService.retrieveIdentity(
+                    publicKeyBase58 = requesterKeys.first,
+                    secretKeyBase58 = requesterKeys.second
+                )
             val transactionHash = tezosWriterService.anchorHash(rootHash = rootHash, signerIdentity = signerIdentity)
 
             val injectedJob = jobService.patch(
-                requester = adminAccount,
+                requester = requester,
                 jobId = jobId,
                 patch = JobPatch(
                     transactionHash = transactionHash,
@@ -49,6 +59,7 @@ class AnchorJob(
             )
             validationMessageChannel.sendPayload(
                 ValidationJobMessagePayload(
+                    requesterId = requesterId,
                     jobId = jobId,
                     transactionHash = transactionHash,
                     injectionTime = injectedJob.injectedDate!!
@@ -60,7 +71,17 @@ class AnchorJob(
             anchoringRetryMessageChannel.sendPayload(payload)
             throw e
         }
+    }
 
+    private fun getTezosKeys(accountLogin: String): Pair<String, String> {
+        LOGGER.debug("Retrieving keys for {}.", accountLogin)
+        val accountKeys: Map<String, String> = tezosConfig.keys[accountLogin]
+            ?: throw IllegalStateException("Keys for $accountLogin are not provided by configuration file.")
+        val publicKey: String =
+            accountKeys["publicKey"] ?: throw IllegalStateException("Public key not provided for $accountLogin.")
+        val secretKey: String =
+            accountKeys["secretKey"] ?: throw IllegalStateException("Public key not provided for $accountLogin.")
+        return Pair(publicKey, secretKey)
     }
 
     companion object {

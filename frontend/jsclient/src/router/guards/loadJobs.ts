@@ -1,7 +1,7 @@
 import modules from "@/store/modules"
 import {NavigationGuardNext, Route} from "vue-router"
 
-export default (from: Route, to: Route, next: NavigationGuardNext) => {
+export function loadCurrentJob(from: Route, to: Route, next: NavigationGuardNext) {
     const id = from.params.id
 
     if (id !== undefined) {
@@ -12,5 +12,13 @@ export default (from: Route, to: Route, next: NavigationGuardNext) => {
         })
     } else {
         next("/")
+    }
+}
+
+export function loadJobs(count: number) {
+    return (from: Route, to: Route, next: NavigationGuardNext) => {
+        modules.jobs.loadLastJobs(count).then(() => {
+            next()
+        }).catch(() => next("/"))
     }
 }

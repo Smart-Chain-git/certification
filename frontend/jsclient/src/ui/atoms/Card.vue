@@ -4,7 +4,7 @@
 -->
 
 <template>
-    <v-card class="pa-6 ma-6" :width="width" :max-width="maxWidth">
+    <v-card class="pa-6 ma-6" :width="width" :max-width="maxWidth" :height="height">
         <slot/>
     </v-card>
 </template>
@@ -14,6 +14,7 @@
     @Component
     export default class Card extends Vue {
         @Prop({default: "100%"}) private readonly width!: string
+        @Prop({default: "auto"}) private readonly height!: string
         @Prop({default: "100%"}) private readonly maxWidth!: string
     }
 </script>

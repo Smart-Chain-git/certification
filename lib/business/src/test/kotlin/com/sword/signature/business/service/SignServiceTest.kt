@@ -1,7 +1,10 @@
 package com.sword.signature.business.service
 
 import com.sword.signature.business.exception.UserServiceException
-import com.sword.signature.business.model.*
+import com.sword.signature.business.model.Account
+import com.sword.signature.business.model.Algorithm
+import com.sword.signature.business.model.FileMetadata
+import com.sword.signature.business.model.Proof
 import com.sword.signature.common.enums.TreeElementPosition
 import com.sword.signature.common.enums.TreeElementType
 import com.sword.signature.merkletree.utils.hexStringHash
@@ -30,7 +33,6 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.stream.Stream
 
-
 class SignServiceTest @Autowired constructor(
     override val mongoTemplate: ReactiveMongoTemplate,
     override val migrationHandler: MigrationHandler,
@@ -39,15 +41,18 @@ class SignServiceTest @Autowired constructor(
     private val nodeRepository: TreeElementRepository
 ) : AbstractServiceContextTest() {
 
-
     val accountAdmin = Account(
         id = "5e74a073a386f170f3850b4b",
         login = "admin",
         email = "admin@signature.com",
         password = "\$2a\$10\$TEQbC2lNT.dWnYVLOi8L4e5VUST7zyCV6demNJCQzNG6up3dr25Se",
         fullName = "Administrator",
+        company = null,
+        country = null,
+        publicKey = null,
+        hash = null,
         isAdmin = true,
-        pubKey = null
+        disabled = false
     )
     private final val sha256 = Algorithm(id = "SHA-256", name = "SHA-256", digestLength = 32)
 
@@ -86,7 +91,7 @@ class SignServiceTest @Autowired constructor(
                         channelName = "testChannel",
                         algorithm = sha256,
                         flowName = "monflow",
-                        fileHashs = monFlow
+                        fileHashes = monFlow
                     ).collect()
                 }
             }.isInstanceOf(UserServiceException::class.java)
@@ -101,7 +106,7 @@ class SignServiceTest @Autowired constructor(
             comments: String,
             account: Account,
             algorithm: String,
-            hashs: List<Pair<String, FileMetadata>>,
+            hashes: List<Pair<String, FileMetadata>>,
             expectedJobsResponse: Int,
             expectedTreeElements: Int
         ) {
@@ -110,7 +115,7 @@ class SignServiceTest @Autowired constructor(
                 val actualJobResponse =
                     signService.batchSign(
                         requester = account, channelName = "testChannel", algorithm = sha256,
-                        flowName = "monflow", fileHashs = hashs.asFlow()
+                        flowName = "monflow", fileHashes = hashes.asFlow()
                     ).toList()
 
                 assertThat(actualJobResponse).hasSize(expectedJobsResponse)
@@ -136,7 +141,7 @@ class SignServiceTest @Autowired constructor(
                     assertThat(nodes.filter { it.parentId == null }).describedAs("il devrait y avoir $expectedJobsResponse racine")
                         .hasSize(expectedJobsResponse)
                     assertThat(nodes.filter { it.type == TreeElementType.LEAF }).describedAs("mauvais nombre de feuille cree")
-                        .hasSize(hashs.size)
+                        .hasSize(hashes.size)
                 }.assertAll()
 
             }
@@ -204,8 +209,12 @@ class SignServiceTest @Autowired constructor(
             password = "password",
             fullName = "simple user",
             email = "simplie@toto.net",
+            company = null,
+            country = null,
+            publicKey = null,
+            hash = null,
             isAdmin = false,
-            pubKey = null
+            disabled = false
         )
 
         private val secondAdmin = Account(
@@ -214,8 +223,12 @@ class SignServiceTest @Autowired constructor(
             password = "password",
             fullName = "simple user",
             email = "simplie@toto.net",
+            company = null,
+            country = null,
+            publicKey = null,
+            hash = null,
             isAdmin = true,
-            pubKey = null
+            disabled = false
         )
 
 
@@ -331,6 +344,4 @@ class SignServiceTest @Autowired constructor(
         }
 
     }
-
-
 }

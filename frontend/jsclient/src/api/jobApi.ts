@@ -1,4 +1,4 @@
-import {Job, JobCriteria} from "@/store/types"
+import {Job, JobCriteria} from "@/api/types"
 import {AxiosRequestConfig, AxiosResponse} from "axios"
 
 import {Api} from "@/api/api"

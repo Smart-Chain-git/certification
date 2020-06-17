@@ -1,3 +1,4 @@
+import {Token, TokenCreateRequest} from "@/api/types"
 import {AxiosRequestConfig, AxiosResponse} from "axios"
 
 import {Api} from "@/api/api"
@@ -5,18 +6,6 @@ import {apiConfig} from "@/api/api.config"
 
 export const API_GET = "/tokens"
 
-export interface Token {
-    id: string
-    name: string
-    revoked: boolean
-    creationDate: Date
-    expirationDate?: Date
-}
-
-export interface TokenCreateRequest {
-    expirationDate?: Date,
-    name: string
-}
 
 export class TokenApi extends Api {
     public constructor(config: AxiosRequestConfig) {

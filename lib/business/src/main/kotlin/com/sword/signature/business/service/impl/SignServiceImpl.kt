@@ -66,14 +66,14 @@ class SignServiceImpl(
         algorithm: Algorithm,
         flowName: String,
         callBackUrl: String?,
-        fileHashs: Flow<Pair<String, FileMetadata>>
+        fileHashes: Flow<Pair<String, FileMetadata>>
     ): Flow<Job> {
 
         return flow {
 
             // intermediary doit etre declaré dans le scope du flow!
             val intermediary = mutableListOf<Pair<String, FileMetadata>>()
-            fileHashs.collect { fileHash ->
+            fileHashes.collect { fileHash ->
                 if (!algorithm.checkHashDigest(fileHash.first)) {
                     throw UserServiceException("bad ${algorithm.name} hash for file ${fileHash.second}")
                 }
@@ -96,7 +96,7 @@ class SignServiceImpl(
         algorithm: Algorithm,
         flowName: String,
         callBackUrl: String?,
-        fileHashs: List<Pair<String, FileMetadata>>
+        fileHashes: List<Pair<String, FileMetadata>>
     ): Job {
 
         // Job creation.
@@ -108,13 +108,13 @@ class SignServiceImpl(
                 callBackUrl = callBackUrl,
                 state = JobStateType.INSERTED,
                 stateDate = OffsetDateTime.now(),
-                docsNumber = fileHashs.size,
+                docsNumber = fileHashes.size,
                 channelName = channelName
             )
         ).awaitSingle()
 
         // Merkle tree creation.
-        val merkleTree = TreeBuilder<String>(algorithm.name).elements(fileHashs).build()
+        val merkleTree = TreeBuilder<String>(algorithm.name).elements(fileHashes).build()
         // Compute all merkle tree nodes value.
         SimpleAlgorithmTreeBrowser(algorithm.name).visitTree(merkleTree)
 
@@ -128,6 +128,7 @@ class SignServiceImpl(
         anchoringMessageChannel.send(
             MessageBuilder.withPayload(
                 AnchorJobMessagePayload(
+                    requesterId = requester.id,
                     jobId = jobEntity.id!!
                 )
             ).build()

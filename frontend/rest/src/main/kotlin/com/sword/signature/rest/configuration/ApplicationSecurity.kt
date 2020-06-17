@@ -70,7 +70,7 @@ class ApplicationSecurity {
     fun corsFilter(): CorsWebFilter {
         val config = CorsConfiguration().apply {
             allowCredentials = true
-            addAllowedOrigin("http://localhost:8082")
+            addAllowedOrigin("*")
             addAllowedHeader("*")
             addAllowedMethod("*")
         }
