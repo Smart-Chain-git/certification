@@ -25,7 +25,7 @@
                 </v-row>
             </v-flex>
             <v-flex v-if="checkResponse !== undefined">
-                <v-row :class="'banner_'+(checkSucceeded ? 'success' : 'error')">
+                <v-row class="banner">
                     <v-col class="col-2">
                         <v-icon size="100" :color="checkSucceeded ? 'green' : 'red'">{{ checkSucceeded ? "check_circle_outline" : "cancel"}}</v-icon>
                     </v-col>
@@ -36,7 +36,7 @@
                 </v-row>
                 <v-row v-if="checkSucceeded">
                     <v-expansion-panels>
-                        <v-expansion-panel class="more_info">
+                        <v-expansion-panel class="more_info banner">
                             <v-expansion-panel-header>{{ $t("signatureCheck.more") }}</v-expansion-panel-header>
                             <v-expansion-panel-content>
                                 <div v-if="checkResponse.check_status === 0">
@@ -134,12 +134,8 @@
         font-size: 8px;
     }
 
-    .banner_success {
-        background-color: lightgreen;
-    }
-
-    .banner_error {
-        background-color: lightsalmon;
+    .banner {
+        background-color: #feedc7;
     }
 
     .small {
