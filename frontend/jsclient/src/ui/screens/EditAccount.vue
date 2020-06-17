@@ -191,6 +191,9 @@
         }
 
         private get currentAccount() {
+            if (this.access === "selfEditing") {
+                return this.$modules.accounts.meAccount
+            }
             return this.$modules.accounts.getCurrentAccount()
         }
 
@@ -199,13 +202,13 @@
                 case "adminEditing":
                     return (
                         this.draft.login !== this.currentAccount?.login ||
-                                this.draft.email !== this.currentAccount?.email ||
-                                this.draft.publicKey !== this.currentAccount?.publicKey ||
-                                this.draft.isAdmin !== this.currentAccount?.isAdmin ||
-                                this.draft.hash !== this.currentAccount?.hash ||
-                                this.draft.fullName !== this.currentAccount?.fullName ||
-                                this.draft.company !== this.currentAccount?.company ||
-                                this.draft.country !== this.currentAccount?.country
+                        this.draft.email !== this.currentAccount?.email ||
+                        this.draft.publicKey !== this.currentAccount?.publicKey ||
+                        this.draft.isAdmin !== this.currentAccount?.isAdmin ||
+                        this.draft.hash !== this.currentAccount?.hash ||
+                        this.draft.fullName !== this.currentAccount?.fullName ||
+                        this.draft.company !== this.currentAccount?.company ||
+                        this.draft.country !== this.currentAccount?.country
                     )
                 case "creating":
                     return (
@@ -279,16 +282,17 @@
 
         private save() {
             const patch: AccountPatch = {
-                email: this.draft.email,
+                email: (this.draft.email !== this.currentAccount?.email) ? this.draft.email : undefined,
                 password: undefined,
-                fullName: this.draft.fullName,
-                company: undefined,
-                country: undefined,
-                publicKey: undefined,
-                hash: undefined,
-                isAdmin: this.draft.isAdmin,
-                disabled: undefined,
+                fullName: (this.draft.fullName !== this.currentAccount?.fullName) ? this.draft.fullName : undefined,
+                company: (this.draft.company !== this.currentAccount?.company) ? this.draft.company : undefined,
+                country: (this.draft.country !== this.currentAccount?.country) ? this.draft.country : undefined,
+                publicKey: (this.draft.publicKey !== this.currentAccount?.publicKey) ? this.draft.publicKey : undefined,
+                hash: (this.draft.hash !== this.currentAccount?.hash) ? this.draft.hash : undefined,
+                isAdmin: (this.draft.isAdmin !== this.currentAccount?.isAdmin) ? this.draft.isAdmin : undefined,
+                disabled: (this.draft.disabled !== this.currentAccount?.disabled) ? this.draft.disabled : undefined,
             }
+
             if (this.isPasswordStrong) {
                 patch.password = this.draft.newPassword
             }
@@ -305,57 +309,36 @@
         }
 
         private fillDraft() {
-            switch(this.access) {
-                case "adminEditing":
-                    this.draft = {
-                        id: this.currentAccount!.id,
-                        login: this.currentAccount?.login,
-                        fullName: this.currentAccount?.fullName,
-                        newPassword: "",
-                        newPasswordConfirmation: "",
-                        email: this.currentAccount?.email,
-                        company: this.currentAccount?.company,
-                        country: this.currentAccount?.country,
-                        publicKey: this.currentAccount?.publicKey,
-                        hash: this.currentAccount!.hash,
-                        isAdmin: this.currentAccount?.isAdmin,
-                        disabled: this.currentAccount?.disabled,
-                    }
-                    break
-                    
-                case "selfEditing":
-                    this.draft = {
-                        id: this.$modules.accounts.meAccount!.id,
-                        login: this.$modules.accounts.meAccount!.login,
-                        fullName: this.$modules.accounts.meAccount?.fullName,
-                        newPassword: "",
-                        newPasswordConfirmation: "",
-                        email: this.$modules.accounts.meAccount?.email,
-                        company: this.$modules.accounts.meAccount?.company,
-                        country: this.$modules.accounts.meAccount?.country,
-                        publicKey: this.$modules.accounts.meAccount?.publicKey,
-                        hash: this.$modules.accounts.meAccount?.hash,
-                        isAdmin: this.$modules.accounts.meAccount?.isAdmin,
-                        disabled: this.$modules.accounts.meAccount?.disabled,
-                    }
-                    break
-                    
-                case "creating":
-                    this.draft = {
-                        id: undefined,
-                        login: undefined,
-                        fullName: undefined,
-                        newPassword: "",
-                        newPasswordConfirmation: "",
-                        email: undefined,
-                        company: undefined,
-                        country: undefined,
-                        publicKey: undefined,
-                        hash: undefined,
-                        isAdmin: undefined,
-                        disabled: undefined,
-                    }
-                    break
+            if (this.access === "creating") {
+                this.draft = {
+                    id: undefined,
+                    login: undefined,
+                    fullName: undefined,
+                    newPassword: "",
+                    newPasswordConfirmation: "",
+                    email: undefined,
+                    company: undefined,
+                    country: undefined,
+                    publicKey: undefined,
+                    hash: undefined,
+                    isAdmin: undefined,
+                    disabled: undefined,
+                }
+            } else {
+                this.draft = {
+                    id: this.currentAccount!.id,
+                    login: this.currentAccount?.login,
+                    fullName: this.currentAccount?.fullName,
+                    newPassword: "",
+                    newPasswordConfirmation: "",
+                    email: this.currentAccount?.email,
+                    company: this.currentAccount?.company,
+                    country: this.currentAccount?.country,
+                    publicKey: this.currentAccount?.publicKey,
+                    hash: this.currentAccount!.hash,
+                    isAdmin: this.currentAccount?.isAdmin,
+                    disabled: this.currentAccount?.disabled,
+                }
             }
         }
 
