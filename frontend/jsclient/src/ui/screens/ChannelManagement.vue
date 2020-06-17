@@ -38,11 +38,11 @@
                         <template v-slot:body="{items}">
                             <tbody>
                             <tr :key="token.id" v-for="token in items" :class="!canRevoke(token) ? 'outline_revoked' : 'outline'">
-                                <td class="text-center">{{ token.name }}</td>
-                                <td class="text-center">{{ now | formatDate}}</td>
+                                <td class="text-center">{{token.name }}</td>
+                                <td class="text-center">{{token.creationDate | formatDate}}</td>
                                 <td class="text-center">{{token.expirationDate | formatDate}}</td>
                                 <td class="text-center">
-                                    <IconButton color="var(--var-color-blue-sword)" @click="revoke(token.id)" :disabled="!canRevoke(token)" leftIcon="block">
+                                    <IconButton color="var(--var-color-blue-sword)" @click="revoke(token.id)" v-if="canRevoke(token)" leftIcon="block">
                                         {{ $t("channelManagement.revoke") }}
                                     </IconButton>
                                 </td>
@@ -65,9 +65,8 @@
 <script lang="ts">
 
     import {tableFooter} from "@/plugins/i18n"
-    import {Token, TokenCreateRequest} from "@/store/types"
-    import {EditFormRow, Card, CardTitle, EditFormTitleEdit} from "@/ui/components"
-    import {Component, Vue, Watch} from "vue-property-decorator"
+    import {Token, TokenCreateRequest} from "@/api/tokenApi"
+    import {Component, Vue} from "vue-property-decorator"
     import moment from "moment"
 
     @Component
@@ -83,6 +82,11 @@
                     const b2 = b["expirationDate"] ? Number(new Date(b.expirationDate)) : Number(new Date(0))
                     return order * (b2 - a2)
 
+                case "creationDate":
+                    const a3 = a["creationDate"] ? Number(new Date(a.creationDate)) : Number(new Date(0))
+                    const b3 = b["creationDate"] ? Number(new Date(b.creationDate)) : Number(new Date(0))
+                    return order * (b3 - a3)
+
                 case "revoked":
                     if (a.revoked === b.revoked) {
                         return 0
@@ -95,7 +99,6 @@
 
         private name: string = ""
         private date: string = ""
-        private now: string = moment().format("YYYY-MM-DD")
 
         private get tokens() {
             return this.$modules.tokens.getTokens()
@@ -119,7 +122,7 @@
         private get headers() {
             return [
                 {text: this.$t("channelManagement.name"), align: "center", value: "name", width: "25%"},
-                {text: this.$t("channelManagement.date"), align: "center", width: "25%"},
+                {text: this.$t("channelManagement.creationDate"), align: "center", value: "creationDate", width: "25%"},
                 {text: this.$t("channelManagement.expirationDate"), align: "center", value: "expirationDate", width: "25%"},
                 {text: "", sortable: false, width: "25%"},
             ]
@@ -149,7 +152,7 @@
             if (!token["expirationDate"]) {
                 return true
             }
-            return (new Date(token.expirationDate) > new Date(this.now))
+            return (new Date(token.expirationDate) > new Date(moment().format("YYYY-MM-DD")))
         }
 
     }

@@ -73,7 +73,7 @@
     "new": "Nouveau token",
     "all": "Tous les tokens",
     "name": "Nom",
-    "date": "Date",
+    "creationDate": "Date",
     "expirationDate": "Date d'expiration",
     "add": "Créer",
     "revoke": "Révoquer"

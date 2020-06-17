@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
+import java.time.LocalDate
 
 @RestController
 @RequestMapping("\${api.base-path:/api}")
@@ -38,6 +39,7 @@ class TokenHandler(
                 com.sword.signature.business.model.TokenCreate(
                         name = tokenDetails.name,
                         jwtToken = jwtTokenService.generatePersistantToken(accountId),
+                        creationDate = LocalDate.now(),
                         expirationDate = tokenDetails.expirationDate,
                         accountId = accountId
                 )

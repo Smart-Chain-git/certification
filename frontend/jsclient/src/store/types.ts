@@ -38,18 +38,6 @@ export interface FilterOption {
     channelName: string | undefined
 }
 
-export interface Token {
-    id: string
-    name: string
-    revoked: boolean
-    expirationDate?: Date
-}
-
-export interface TokenCreateRequest {
-    expirationDate?: Date,
-    name: string
-}
-
 export interface Job {
     id: string
     createdDate: Date

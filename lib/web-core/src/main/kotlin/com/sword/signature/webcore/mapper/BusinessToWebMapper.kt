@@ -86,6 +86,7 @@ fun com.sword.signature.business.model.Token.toWeb() = Token(
     id = id,
     name = name,
     jwtToken = jwtToken,
+        creationDate = creationDate,
     expirationDate = expirationDate,
     accountId = accountId,
     revoked = revoked

@@ -41,7 +41,7 @@
     "new": "New token",
     "all": "All tokens",
     "name": "Name",
-    "date": "Date",
+    "creationDate": "Date",
     "expirationDate": "Expiration Date",
     "add": "Create",
     "revoke": "Revoke"
