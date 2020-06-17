@@ -37,7 +37,7 @@
                     >
                         <template v-slot:body="{items}">
                             <tbody>
-                            <tr :key="token.id" v-for="token in items" :class="(token.revoked) ? 'outline_revoked' : 'outline'">
+                            <tr :key="token.id" v-for="token in items" :class="!canRevoke(token) ? 'outline_revoked' : 'outline'">
                                 <td class="text-center">{{ token.name }}</td>
                                 <td class="text-center">{{ now | formatDate}}</td>
                                 <td class="text-center">{{token.expirationDate | formatDate}}</td>
