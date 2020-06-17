@@ -1,0 +1,17 @@
+{
+  "accounts": {
+    "insert": [
+      {
+        "_id": {
+          "$oid": "aca05302a59411eabb370242"
+        },
+        "login": "frodon",
+        "email": "frodon@signature.com",
+        "password": "$2a$10$TEQbC2lNT.dWnYVLOi8L4e5VUST7zyCV6demNJCQzNG6up3dr25Se",
+        "fullName": "Frodon Sacquet",
+        "isAdmin": false,
+        "pubKey": "123456789"
+      }
+    ]
+  }
+}
