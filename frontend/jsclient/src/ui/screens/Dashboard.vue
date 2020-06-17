@@ -20,9 +20,9 @@
                 <Card height="90%">
                     <h2>{{ month }}</h2>
 
-                    <StatBoard number="102" :detail="$t('dashboard.documentsSigned')"/>
-                    <StatBoard number="12" :detail="$t('dashboard.jobsCreated')"/>
-                    <StatBoard number="6" :detail="$t('dashboard.jobsProcessed')"/>
+                    <StatBoard number=102 :detail="$t('dashboard.documentsSigned')"/>
+                    <StatBoard number=12 :detail="$t('dashboard.jobsCreated')"/>
+                    <StatBoard number=6 :detail="$t('dashboard.jobsProcessed')"/>
                 </Card>
             </v-flex>
             <v-flex xs1/>
