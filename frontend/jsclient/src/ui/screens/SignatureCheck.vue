@@ -40,32 +40,32 @@
                             <v-expansion-panel-header>{{ $t("signatureCheck.more") }}</v-expansion-panel-header>
                             <v-expansion-panel-content>
                                 <div v-if="checkResponse.check_status === 0">
-                                    {{ this.parse("signatureCheck.success.message1.block2.line1") }}<br/><br/>
-                                    {{ this.parse("signatureCheck.success.message1.block2.line2") }}<br/>
-                                    {{ this.parse("signatureCheck.success.message1.block2.line3") }}<br/>
-                                    {{ this.parse("signatureCheck.success.message1.block2.line4") }}<br/>
-                                    {{ this.parse("signatureCheck.success.message1.block2.line5") }}<br/><br/>
+                                    {{ parse("signatureCheck.success.message1.block2.line1") }}<br/><br/>
+                                    {{ parse("signatureCheck.success.message1.block2.line2") }}<br/>
+                                    {{ parse("signatureCheck.success.message1.block2.line3") }}<br/>
+                                    {{ parse("signatureCheck.success.message1.block2.line4") }}<br/>
+                                    {{ parse("signatureCheck.success.message1.block2.line5") }}<br/><br/>
                                     <span v-html="parseLink('signatureCheck.success.message1.block2.line6', 'here',{
                                         'download' : checkResponse.proof.file_name + '.json',
                                         'href' : 'data:text/json:charset=utf-8,' + encodeURIComponent(JSON.stringify(checkResponse.proof))
                                     })"/><br/><br/>
-                                    <span v-html="parseLink('signatureCheck.success.message1.block2.line7', 'here', {'href' : '/settings'})"></span>
+                                    <span v-html="parseLink('signatureCheck.success.message1.block2.line7', 'here', {'href' : '/settings'})"/>
                                 </div>
                                 <div v-if="checkResponse.check_status === 1">
-                                    {{this.parse("signatureCheck.success.message2.block2.line1")}}<br/><br/>
-                                    {{this.parse("signatureCheck.success.message2.block2.line2")}}<br/>
-                                    {{this.parse("signatureCheck.success.message2.block2.line3")}}<br/>
-                                    {{this.parse("signatureCheck.success.message2.block2.line4")}}<br/>
+                                    {{parse("signatureCheck.success.message2.block2.line1")}}<br/><br/>
+                                    {{parse("signatureCheck.success.message2.block2.line2")}}<br/><br/>
+                                    {{parse("signatureCheck.success.message2.block2.line3")}}<br/>
+                                    {{parse("signatureCheck.success.message2.block2.line4")}}<br/>
 
                                     <span v-for="(hash, idx) in checkResponse.proof.hash_list">
-                                        {{this.parse("signatureCheck.success.message2.block2.line5", idx)}}<br/>
+                                        {{parse("signatureCheck.success.message2.block2.line5", idx)}}<br/>
                                     </span>
-
-                                    {{this.parse("signatureCheck.success.message2.block2.line6")}}<br/>
-                                    {{this.parse("signatureCheck.success.message2.block2.line7")}}<br/>
-                                    {{this.parse("signatureCheck.success.message2.block2.line8")}}<br/>
-                                    {{this.parse("signatureCheck.success.message2.block2.line9")}}<br/>
-                                    {{this.parse("signatureCheck.success.message2.block2.line10")}}<br/>
+                                    <br/>
+                                    {{parse("signatureCheck.success.message2.block2.line6")}}<br/><br/>
+                                    {{parse("signatureCheck.success.message2.block2.line7")}}<br/><br/>
+                                    {{parse("signatureCheck.success.message2.block2.line8")}}<br/><br/>
+                                    {{parse("signatureCheck.success.message2.block2.line9")}}<br/><br/>
+                                    <span v-html="parseLink('signatureCheck.success.message2.block2.line10', 'here', {'href' : '/settings'})"/>
                                 </div>
                             </v-expansion-panel-content>
                         </v-expansion-panel>
@@ -160,7 +160,7 @@
     }
 </style>
 <script lang="ts">
-    import {SignatureCheckRequest, SignatureCheckResponse} from "@/store/types"
+    import {SignatureCheckRequest, SignatureCheckResponse} from "@/api/types"
     import {Component, Vue} from "vue-property-decorator"
     import * as CryptoJS from "crypto-js"
 
@@ -244,11 +244,25 @@
                        return SignatureCheck.format(res, [this.checkResponse.proof.origin_public_key, (this.checkResponse.signer !== undefined) ? this.checkResponse.signer : this.$t("signatureCheck.unknown").toString()])
 
                     case "signatureCheck.success.message1.block2.line7":
+                    case "signatureCheck.success.message2.block2.line10":
                         return SignatureCheck.format(res, [this.checkResponse.proof.contract_address])
 
                     case "signatureCheck.success.message2.block2.line5":
                         let hash = this.checkResponse.proof.hash_list[idx]
                         return SignatureCheck.format(res, [hash.position!, (hash.hash) ? hash.hash : "", this.checkResponse.check_process[idx]])
+
+                    case "signatureCheck.errors.hash_inconsistent":
+                        return SignatureCheck.format(res, [this.checkResponse., this.checkResponse.proof.hash_document])
+
+                    case "signatureCheck.errors.unknown_root_hash":
+                        return SignatureCheck.format(res, [this.checkResponse.proof.hash_root])
+
+                    case "signatureCheck.errors.document_known_unknown_root_hash":
+                        return SignatureCheck.format(res, [(this.checkResponse.signer !== undefined) ? this.checkResponse.signer : this.$t("signatureCheck.unknown").toString(), this.checkResponse.proof.public_key, this.checkResponse.timestamp!.toString()])
+
+                    case "signatureCheck.errors.no_transaction":
+                        return SignatureCheck.format(res, [this.checkResponse.proof.hash_root])
+
                     default:
                         return res
                 }
@@ -286,10 +300,13 @@
         }
 
         private encodeSend() {
+            console.log(this.contentFile)
             const hashFile: string = CryptoJS.SHA256(this.contentFile!).toString()
             let proof: string | undefined = undefined
 
             console.log(hashFile)
+            console.log(this.contentProof)
+
             if (this.contentProof !== undefined) {
                 proof = btoa(this.contentProof).toString()
             }

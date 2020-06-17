@@ -1,5 +1,5 @@
 import AccountsModule from "@/store/modules/AccountsModule"
-import SignaturesModule from '@/store/modules/SignatureModule'
+import SignaturesModule from "@/store/modules/SignatureModule"
 import store from "@/store/store"
 
 const accounts = new AccountsModule({

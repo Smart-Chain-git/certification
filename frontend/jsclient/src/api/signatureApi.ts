@@ -1,4 +1,4 @@
-import {SignatureCheckRequest, SignatureCheckResponse} from "@/store/types"
+import {SignatureCheckRequest, SignatureCheckResponse} from "@/api/types"
 import {AxiosRequestConfig, AxiosResponse} from "axios"
 
 import {Api} from "@/api/api"
