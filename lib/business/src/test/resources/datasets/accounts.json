@@ -7,7 +7,11 @@
 			"login": "account1",
 			"email": "account1@signature.com",
 			"password": "password",
-			"fullName": "Account 1"
+			"fullName": "Account 1",
+			"company": "Company",
+			"country": "Country",
+			"publicKey": "publicKey",
+			"hash": "hash"
 		},
 		{
 			"_id": {
@@ -16,7 +20,11 @@
 			"login": "account2",
 			"email": "account1@signature.com\"",
 			"password": "password",
-			"fullName": "Account 2"
+			"fullName": "Account 2",
+			"company": "Company",
+			"country": "Country",
+			"publicKey": "publicKey",
+			"hash": "hash"
 		},
 		{
 			"_id": {
@@ -25,7 +33,11 @@
 			"login": "account3",
 			"email": "account3@signature.com\"",
 			"password": "password",
-			"fullName": "Account 3"
+			"fullName": "Account 3",
+			"company": "Company",
+			"country": "Country",
+			"publicKey": "publicKey",
+			"hash": "hash"
 		}
 	]
 }

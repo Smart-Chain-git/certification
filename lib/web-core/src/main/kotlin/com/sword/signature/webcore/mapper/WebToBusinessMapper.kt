@@ -7,7 +7,7 @@ import com.sword.signature.business.model.FileMetadata
 import com.sword.signature.common.enums.TreeElementPosition
 
 fun SignRequest.toBusiness() = Pair(
-    first = hash,
+    first = hash.toLowerCase(),
     second = metadata.toBusiness()
 )
 

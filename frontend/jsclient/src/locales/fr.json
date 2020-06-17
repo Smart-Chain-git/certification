@@ -23,14 +23,23 @@
   },
   "account": {
     "list": {
+      "title": "Gestion des utilisateurs",
+      "fullName": "Nom complet",
+      "email": "Email",
+      "isAdmin": "Administrateur",
+      "add": "Ajouter",
       "login": "Identifiant",
       "lastName": "Nom",
       "firstName": "Prénom",
-      "role": "Rôle",
-      "status": "Statut"
+      "status": "Statut",
+      "cancel": "Annuler"
     },
     "edit": {
-      "title": "Mon compte",
+      "title": {
+        "editing": "Edition de compte",
+        "creating": "Création de compte",
+        "profile": "Mon compte"
+      },
       "login": "Identifiant",
       "email": "Email",
       "profile": "Profil",
@@ -43,7 +52,10 @@
       "save": "Sauvegarder",
       "admin": "Administrateur",
       "noAdmin": "Utilisateur",
-      "updated": "Les informations ont été mises à jour."
+      "updated": "Les informations ont été mises à jour.",
+      "country": "Pays",
+      "company": "Entreprise",
+      "mandatory": "* Ces informations sont obligatoires."
     }
   },
   "job": {
@@ -102,6 +114,9 @@
       "differents": "Les mots de passe doivent être identiques.",
       "weak": "Le mot de passe doit contenir au moins 8 caractères, 1 majuscule, 1 minuscule, 1 nombre et 1 caractère spécial."
     },
+    "account": {
+      "duplicate": "Cet identifiant est déjà pris."
+    },
     "back": {
       "generic": "Les informations n'ont pas pu être mises à jour, veuillez contacter votre administrateur."
     }
@@ -117,5 +132,12 @@
       "reset": "Effacer",
       "close": "Fermer"
     }
+  },
+  "disableConfirm": {
+    "title":"Désactiver l'utilisateur",
+    "subTitle": "Êtes-vous sûr(e) de vouloir désactiver cet utilisateur ?",
+    "content": "",
+    "confirmButton": "Confirmer",
+    "cancelButton": "Annuler"
   }
 }

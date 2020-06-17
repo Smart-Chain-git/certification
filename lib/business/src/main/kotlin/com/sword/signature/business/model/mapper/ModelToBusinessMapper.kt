@@ -10,8 +10,12 @@ fun AccountEntity.toBusiness() = Account(
     email = email,
     password = password,
     fullName = fullName,
+    company = company,
+    country = country,
+    publicKey = publicKey,
+    hash = hash,
     isAdmin = isAdmin,
-    pubKey = pubKey
+    disabled = disabled
 )
 
 fun TreeElementEntity.Metadata.toBusiness() = FileMetadata(

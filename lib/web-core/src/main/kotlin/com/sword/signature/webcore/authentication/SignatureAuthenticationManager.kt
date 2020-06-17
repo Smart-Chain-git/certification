@@ -3,6 +3,7 @@ package com.sword.signature.webcore.authentication
 import com.sword.signature.business.service.TokenService
 import kotlinx.coroutines.reactive.awaitFirst
 import kotlinx.coroutines.reactor.mono
+import org.springframework.security.authentication.AccountExpiredException
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.ReactiveAuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -44,7 +45,7 @@ class SignatureAuthenticationManager(
                     if (tokenInfo.expirationTime?.isAfter(now) == true) {
                         userDetailsService.findById(tokenInfo.id)
                     } else {
-                        throw BadCredentialsException("Expired token")
+                        throw AccountExpiredException("Expired token")
                     }
 
                 }

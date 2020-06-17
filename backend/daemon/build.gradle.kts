@@ -1,6 +1,7 @@
 val mockKVersion: String by project.extra
 val springmockkVersion: String by project.extra
 val ej4tezosVersion: String by project.extra
+val jasyptVersion: String by project.extra
 
 plugins {
     id("kotlin")
@@ -21,6 +22,9 @@ dependencies {
 
     // Jackson
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+
+    // Jasypt
+    implementation("com.github.ulisesbocchio:jasypt-spring-boot-starter:$jasyptVersion")
 
     // Spring
     implementation("org.mongodb:mongodb-driver-sync")

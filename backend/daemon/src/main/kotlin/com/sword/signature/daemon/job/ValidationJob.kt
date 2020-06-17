@@ -1,10 +1,12 @@
 package com.sword.signature.daemon.job
 
+import com.sword.signature.business.exception.EntityNotFoundException
 import com.sword.signature.business.model.Account
 import com.sword.signature.business.model.JobPatch
 import com.sword.signature.business.model.integration.AnchorJobMessagePayload
 import com.sword.signature.business.model.integration.CallBackJobMessagePayload
 import com.sword.signature.business.model.integration.ValidationJobMessagePayload
+import com.sword.signature.business.service.AccountService
 import com.sword.signature.business.service.JobService
 import com.sword.signature.common.enums.JobStateType
 import com.sword.signature.daemon.sendPayload
@@ -19,6 +21,7 @@ import java.time.OffsetDateTime
 
 @Component
 class ValidationJob(
+    private val accountService: AccountService,
     private val tezosReaderService: TezosReaderService,
     private val jobService: JobService,
     private val validationRetryMessageChannel: MessageChannel,
@@ -27,33 +30,30 @@ class ValidationJob(
     @Value("\${tezos.validation.minDepth}") private val minDepth: Long,
     @Value("\${daemon.validation.timeout}") private val validationTimeout: Duration
 ) {
-    private val adminAccount = Account(email = "", login = "", password = "", isAdmin = true, fullName = "", id = "", pubKey = null)
 
     suspend fun validate(payload: ValidationJobMessagePayload) {
+        val requesterId = payload.requesterId
         val jobId = payload.jobId
         val transactionHash = payload.transactionHash
-        LOGGER.debug("Starting validation for job {} with transaction {}.", jobId, transactionHash)
 
-        val transactionDepth: Long?
         try {
-            transactionDepth = tezosReaderService.getTransactionDepth(transactionHash)
-            LOGGER.debug("Depth of {} found for transaction {}.", transactionDepth, transactionHash)
-        } catch (e: Exception) {
-            LOGGER.error("Check that indexer is running and synchronized.")
-            // Set the validation for retry later.
-            validationRetryMessageChannel.sendPayload(payload)
-            throw e
-        }
+            LOGGER.debug("Starting validation for job {} with transaction {}.", jobId, transactionHash)
 
-        if (transactionDepth != null) {
-            if (transactionDepth >= minDepth) {
-                try {
+            val transactionDepth = tezosReaderService.getTransactionDepth(transactionHash)
+            LOGGER.debug("Depth of {} found for transaction {}.", transactionDepth, transactionHash)
+
+            if (transactionDepth != null) {
+                val requester: Account =
+                    accountService.getAccount(requesterId) ?: throw EntityNotFoundException("account", requesterId)
+
+                if (transactionDepth >= minDepth) {
                     LOGGER.info("Transaction {} for job {} validated.", transactionHash, jobId)
+
                     // Retrieving the transaction
                     val transaction: TzOp = tezosReaderService.getTransaction(transactionHash)
                         ?: throw IllegalStateException("The transaction ($transactionHash) should not be null there since its depth has been found before.")
                     val job = jobService.patch(
-                        requester = adminAccount,
+                        requester = requester,
                         jobId = jobId,
                         patch = JobPatch(
                             state = JobStateType.VALIDATED,
@@ -70,42 +70,45 @@ class ValidationJob(
                             )
                         )
                     }
-                } catch (e: Exception) {
+                } else {
+                    LOGGER.info(
+                        "{}/{} confirmations found for transaction {} (job={}).", transactionDepth, minDepth,
+                        transactionHash, jobId
+                    )
+
+                    // Update transaction depth.
+                    jobService.patch(
+                        requester = requester,
+                        jobId = jobId,
+                        patch = JobPatch(
+                            blockDepth = transactionDepth
+                        )
+                    )
                     // Set the validation for retry later.
                     validationRetryMessageChannel.sendPayload(payload)
-                    throw e
                 }
-
             } else {
-                LOGGER.info(
-                    "{}/{} confirmations found for transaction {} (job={}).", transactionDepth, minDepth,
-                    transactionHash, jobId
-                )
-                // Update transaction depth.
-                jobService.patch(
-                    requester = adminAccount,
-                    jobId = jobId,
-                    patch = JobPatch(
-                        blockDepth = transactionDepth
+                if (OffsetDateTime.now() > payload.injectionTime.plus(validationTimeout)) {
+                    LOGGER.info(
+                        "No confirmation found after {}m for transaction {} (jobId={}). Anchoring will be retried...",
+                        validationTimeout.toMinutes(), transactionHash, jobId
                     )
-                )
-                // Set the validation for retry later.
-                validationRetryMessageChannel.sendPayload(payload)
+                    anchoringMessageChannel.sendPayload(
+                        AnchorJobMessagePayload(
+                            requesterId = requesterId,
+                            jobId = jobId
+                        )
+                    )
+                } else {
+                    LOGGER.info("No confirmation found for transaction {} (job={}) yet.", transactionHash, jobId)
+                    // Set the validation for retry later.
+                    validationRetryMessageChannel.sendPayload(payload)
+                }
             }
-        } else {
-
-            if (OffsetDateTime.now() > payload.injectionTime.plus(validationTimeout)) {
-                LOGGER.info(
-                    "No confirmation found after {}m for transaction {} (jobId={}). Anchoring will be retried...",
-                    validationTimeout.toMinutes(), transactionHash, jobId
-                )
-                anchoringMessageChannel.sendPayload(AnchorJobMessagePayload(jobId = jobId))
-            } else {
-                LOGGER.info("No confirmation found for transaction {} (job={}) yet.", transactionHash, jobId)
-                // Set the validation for retry later.
-                validationRetryMessageChannel.sendPayload(payload)
-            }
-
+        } catch (e: Exception) {
+            // Set the validation for retry later.
+            validationRetryMessageChannel.sendPayload(payload)
+            throw e
         }
     }
 

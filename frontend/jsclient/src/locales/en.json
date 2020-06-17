@@ -23,11 +23,16 @@
   },
   "account": {
     "list": {
+      "title": "Manage users",
+      "fullName": "Full name",
+      "email": "Email",
+      "isAdmin": "Administrator",
+      "add": "Add",
       "login": "Login",
-      "lastName": "Name",
-      "firstName": "First name",
-      "role": "Role",
-      "status": "Status"
+      "lastName": "Last Name",
+      "firstName": "First Name",
+      "status": "Status",
+      "cancel": "Cancel"
     },
     "edit": {
       "title": "My account",
@@ -43,7 +48,10 @@
       "save": "Save",
       "admin": "Administrator",
       "noAdmin": "User",
-      "updated": "Informations updated."
+      "updated": "Informations updated.",
+      "country": "Country",
+      "company": "Company",
+      "mandatory": "* Those information are mandatory."
     }
   },
   "job": {
@@ -61,23 +69,7 @@
       "transaction": "Transaction",
       "hash": "Hash algorithm",
       "rootHash": "root hash"
-    }
-  },
-  "menu": {
-    "dashboard": "Dashboard",
-    "jobs": "Job List",
-    "documents": "Document List",
-    "signatureRequest": "Signature request",
-    "signatureCheck": "Signature check",
-    "resources": "Resources",
-    "settings": "Settings",
-    "hello": "Hello",
-    "profile": "My account",
-    "channelManagement": "Channel management",
-    "login": "Sign in",
-    "logout": "Sign out"
-  },
-  "job": {
+    },
     "list": {
       "title": "Jobs",
       "id": "ID",
@@ -94,6 +86,20 @@
       "copyId": "Copy"
     }
   },
+  "menu": {
+    "dashboard": "Dashboard",
+    "jobs": "Job List",
+    "documents": "Document List",
+    "signatureRequest": "Signature request",
+    "signatureCheck": "Signature check",
+    "resources": "Resources",
+    "settings": "Settings",
+    "hello": "Hello",
+    "profile": "My account",
+    "channelManagement": "Channel management",
+    "login": "Sign in",
+    "logout": "Sign out"
+  },
   "errors": {
     "login": {
       "invalid": "Wrong login and/or password.",
@@ -103,6 +109,9 @@
     "password": {
       "differents": "Passwords must be identical.",
       "weak": "Password must meet following requirements : 8 characters long, 1 uppercase, 1 lowercase, 1 number, 1 special character."
+    },
+    "account": {
+      "duplicate": "This login is already taken."
     },
     "back": {
       "generic": "Informations could not be saved, please contact your administrator."
@@ -119,5 +128,12 @@
       "reset": "Effacer",
       "close": "Fermer"
     }
+  },
+  "disableConfirm": {
+    "title": "Disable account",
+    "subTitle": "Are you sure you want to disable this account ?",
+    "content": "",
+    "confirmButton": "Confirm",
+    "cancelButton": "Cancel"
   }
 }

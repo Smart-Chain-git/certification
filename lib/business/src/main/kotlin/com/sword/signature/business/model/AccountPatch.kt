@@ -5,5 +5,10 @@ data class AccountPatch(
     val email: String? = null,
     val password: String? = null,
     val fullName: String? = null,
-    val isAdmin: Boolean = false
+    val company: String? = null,
+    val country: String? = null,
+    val publicKey: String? = null,
+    val hash: String? = null,
+    val isAdmin: Boolean? = null,
+    val disabled: Boolean? = null
 )

@@ -71,7 +71,7 @@ class SignatureHandler(
                 channelName = null,
                 algorithm = algorithm,
                 flowName = "web_" + LocalDateTime.now().toString(),
-                fileHashs = files.asFlow()
+                fileHashes = files.asFlow()
             ).toList()
             LOGGER.info("Jobs: {}", jobs)
 

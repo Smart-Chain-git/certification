@@ -1,10 +1,6 @@
 package com.sword.signature.api.account
 
-import com.fasterxml.jackson.annotation.JsonInclude
-
-@JsonInclude(JsonInclude.Include.NON_NULL)
-data class Account(
-    val id: String,
+data class AccountCreate(
     val login: String,
     val email: String,
     val fullName: String?,
@@ -12,6 +8,5 @@ data class Account(
     val country: String?,
     val publicKey: String?,
     val hash: String?,
-    val isAdmin: Boolean,
-    val disabled: Boolean
+    val isAdmin: Boolean = false
 )

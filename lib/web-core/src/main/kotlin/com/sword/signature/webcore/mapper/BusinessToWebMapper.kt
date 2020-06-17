@@ -16,10 +16,14 @@ import com.sword.signature.business.model.TreeElement
 fun com.sword.signature.business.model.Account.toWeb() = Account(
     id = id,
     fullName = fullName,
-    isAdmin = isAdmin,
     login = login,
     email = email,
-    pubKey = pubKey
+    company = company,
+    country = country,
+    publicKey = publicKey,
+    hash = hash,
+    isAdmin = isAdmin,
+    disabled = disabled
 )
 
 

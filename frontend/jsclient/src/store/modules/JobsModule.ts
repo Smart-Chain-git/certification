@@ -1,8 +1,9 @@
 import {FilterOption, PaginationOption} from "@/store/types"
-import {VuexModule, Module, Mutation, Action} from "vuex-class-modules"
+import {Action, Module, Mutation, VuexModule} from "vuex-class-modules"
 import {Job, jobApi, JobCriteria} from "@/api/jobApi"
 import AccountsModule from "@/store/modules/AccountsModule"
-import deepcopy from "ts-deepcopy";
+import deepcopy from "ts-deepcopy"
+
 @Module
 export default class JobsModule extends VuexModule {
 
