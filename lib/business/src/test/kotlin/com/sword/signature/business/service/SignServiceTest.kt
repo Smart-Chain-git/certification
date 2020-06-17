@@ -1,7 +1,10 @@
 package com.sword.signature.business.service
 
 import com.sword.signature.business.exception.UserServiceException
-import com.sword.signature.business.model.*
+import com.sword.signature.business.model.Account
+import com.sword.signature.business.model.Algorithm
+import com.sword.signature.business.model.FileMetadata
+import com.sword.signature.business.model.Proof
 import com.sword.signature.common.enums.TreeElementPosition
 import com.sword.signature.common.enums.TreeElementType
 import com.sword.signature.merkletree.utils.hexStringHash
@@ -30,15 +33,13 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.stream.Stream
 
-
 class SignServiceTest @Autowired constructor(
     override val mongoTemplate: ReactiveMongoTemplate,
-    override val migrationHandler : MigrationHandler,
+    override val migrationHandler: MigrationHandler,
     private val signService: SignService,
     private val jobRepository: JobRepository,
     private val nodeRepository: TreeElementRepository
 ) : AbstractServiceContextTest() {
-
 
     val accountAdmin = Account(
         id = "5e74a073a386f170f3850b4b",
@@ -46,8 +47,12 @@ class SignServiceTest @Autowired constructor(
         email = "admin@signature.com",
         password = "\$2a\$10\$TEQbC2lNT.dWnYVLOi8L4e5VUST7zyCV6demNJCQzNG6up3dr25Se",
         fullName = "Administrator",
+        company = null,
+        country = null,
+        publicKey = null,
+        hash = null,
         isAdmin = true,
-        pubKey = null
+        disabled = false
     )
     private final val sha256 = Algorithm(id = "SHA-256", name = "SHA-256", digestLength = 32)
 
@@ -83,9 +88,10 @@ class SignServiceTest @Autowired constructor(
                 runBlocking {
                     signService.batchSign(
                         requester = accountAdmin,
+                        channelName = "testChannel",
                         algorithm = sha256,
                         flowName = "monflow",
-                        fileHashs = monFlow
+                        fileHashes = monFlow
                     ).collect()
                 }
             }.isInstanceOf(UserServiceException::class.java)
@@ -100,7 +106,7 @@ class SignServiceTest @Autowired constructor(
             comments: String,
             account: Account,
             algorithm: String,
-            hashs: List<Pair<String, FileMetadata>>,
+            hashes: List<Pair<String, FileMetadata>>,
             expectedJobsResponse: Int,
             expectedTreeElements: Int
         ) {
@@ -108,8 +114,8 @@ class SignServiceTest @Autowired constructor(
 
                 val actualJobResponse =
                     signService.batchSign(
-                        requester = account, algorithm = sha256,
-                        flowName = "monflow", fileHashs = hashs.asFlow()
+                        requester = account, channelName = "testChannel", algorithm = sha256,
+                        flowName = "monflow", fileHashes = hashes.asFlow()
                     ).toList()
 
                 assertThat(actualJobResponse).hasSize(expectedJobsResponse)
@@ -135,7 +141,7 @@ class SignServiceTest @Autowired constructor(
                     assertThat(nodes.filter { it.parentId == null }).describedAs("il devrait y avoir $expectedJobsResponse racine")
                         .hasSize(expectedJobsResponse)
                     assertThat(nodes.filter { it.type == TreeElementType.LEAF }).describedAs("mauvais nombre de feuille cree")
-                        .hasSize(hashs.size)
+                        .hasSize(hashes.size)
                 }.assertAll()
 
             }
@@ -203,8 +209,12 @@ class SignServiceTest @Autowired constructor(
             password = "password",
             fullName = "simple user",
             email = "simplie@toto.net",
+            company = null,
+            country = null,
+            publicKey = null,
+            hash = null,
             isAdmin = false,
-            pubKey = null
+            disabled = false
         )
 
         private val secondAdmin = Account(
@@ -213,8 +223,12 @@ class SignServiceTest @Autowired constructor(
             password = "password",
             fullName = "simple user",
             email = "simplie@toto.net",
+            company = null,
+            country = null,
+            publicKey = null,
+            hash = null,
             isAdmin = true,
-            pubKey = null
+            disabled = false
         )
 
 
@@ -270,7 +284,10 @@ class SignServiceTest @Autowired constructor(
                         documentHash = "145e9bccd897c6428d0e8b792fa3063646e435f10154df76aed7e0543daedcfc",
                         hashes = listOf(
                             Pair(null, TreeElementPosition.RIGHT),
-                            Pair("7a55f048ec7b92d8521761dae4b337dfe465170422df151a4a75eea88dd053b0", TreeElementPosition.LEFT)
+                            Pair(
+                                "7a55f048ec7b92d8521761dae4b337dfe465170422df151a4a75eea88dd053b0",
+                                TreeElementPosition.LEFT
+                            )
                         )
                     )
                 ),
@@ -282,8 +299,14 @@ class SignServiceTest @Autowired constructor(
                         rootHash = "112602c26bb1329b1808ed4fb3737774d1422832b988fe5bf1c5196bc1ce5cf7",
                         documentHash = "3d6d3491a321616e74c0db101da7b74205b09887079267b82ca76d19dd1d62ba",
                         hashes = listOf(
-                            Pair("830c745f08bd19ecff04565dd7ff05ae92090a5e0624391478c6dafc0422d052", TreeElementPosition.LEFT),
-                            Pair("77062f8de93be903713c90bff1751949957a7c46aad3d584848b10c85ab63a60", TreeElementPosition.RIGHT)
+                            Pair(
+                                "830c745f08bd19ecff04565dd7ff05ae92090a5e0624391478c6dafc0422d052",
+                                TreeElementPosition.LEFT
+                            ),
+                            Pair(
+                                "77062f8de93be903713c90bff1751949957a7c46aad3d584848b10c85ab63a60",
+                                TreeElementPosition.RIGHT
+                            )
                         )
                     )
                 ),
@@ -306,8 +329,14 @@ class SignServiceTest @Autowired constructor(
                         rootHash = "112602c26bb1329b1808ed4fb3737774d1422832b988fe5bf1c5196bc1ce5cf7",
                         documentHash = "830c745f08bd19ecff04565dd7ff05ae92090a5e0624391478c6dafc0422d052",
                         hashes = listOf(
-                            Pair("3d6d3491a321616e74c0db101da7b74205b09887079267b82ca76d19dd1d62ba", TreeElementPosition.RIGHT),
-                            Pair("77062f8de93be903713c90bff1751949957a7c46aad3d584848b10c85ab63a60", TreeElementPosition.RIGHT)
+                            Pair(
+                                "3d6d3491a321616e74c0db101da7b74205b09887079267b82ca76d19dd1d62ba",
+                                TreeElementPosition.RIGHT
+                            ),
+                            Pair(
+                                "77062f8de93be903713c90bff1751949957a7c46aad3d584848b10c85ab63a60",
+                                TreeElementPosition.RIGHT
+                            )
                         )
                     )
                 )
@@ -315,6 +344,4 @@ class SignServiceTest @Autowired constructor(
         }
 
     }
-
-
 }

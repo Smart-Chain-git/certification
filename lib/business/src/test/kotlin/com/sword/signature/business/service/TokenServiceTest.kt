@@ -26,6 +26,9 @@ class TokenServiceTest {
         "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjcmVhdGlvblRpbWUiOiJjcmVhdGlvblRpbWUiLCJpc3MiOiJUZXpvc0BTaWduYXR1cmUiLCJpZCI6ImFjY291bnRJZCJ9.zWQal4cCAEE4M0iJktv9VrklQRiZlL22DmVNo6YEiAY"
     private val expirationDate = LocalDate.of(2020, Month.APRIL, 3)
     private val validDate = LocalDate.of(2020, Month.MARCH, 20)
+
+    private val creationDate = LocalDate.of(1978, Month.FEBRUARY, 25)
+
     private val expiredDate = LocalDate.of(2020, Month.MAY, 1)
 
     private val tokenEntity = TokenEntity(
@@ -33,8 +36,13 @@ class TokenServiceTest {
         expirationDate = expirationDate, accountId = accountId
     )
     private val token = Token(
-        id = tokenId, name = tokenName, jwtToken = jwtToken, expirationDate = expirationDate,
-        accountId = accountId, revoked = false
+        id = tokenId,
+        name = tokenName,
+        jwtToken = jwtToken,
+        creationDate = creationDate,
+        expirationDate = expirationDate,
+        accountId = accountId,
+        revoked = false
     )
 
 

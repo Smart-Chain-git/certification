@@ -14,8 +14,10 @@ data class AccountEntity(
     val email: String,
     val password: String,
     val fullName: String?,
+    val company: String?,
+    val country: String?,
+    val publicKey: String?,
+    val hash: String?,
     val isAdmin: Boolean = false,
-    val pubKey: String? = null
-) {
-
-}
+    val disabled: Boolean = false
+)

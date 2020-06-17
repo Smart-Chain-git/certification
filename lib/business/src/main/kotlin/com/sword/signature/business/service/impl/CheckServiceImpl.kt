@@ -34,19 +34,14 @@ class CheckServiceImpl(
 
     private val adminAccount =
         Account(
-            id = "",
-            login = "",
-            email = "",
-            password = "",
-            fullName = "checkService",
-            isAdmin = true,
-            pubKey = null
+            id = "", login = "", email = "", password = "", fullName = "checkService",
+            company = "", country = "", publicKey = "", hash = "", isAdmin = true, disabled = false
         )
 
-    override suspend fun checkDocument(documentHash: String, proof: Proof?): CheckResponse {
+    override suspend fun checkDocument(documentHash: String, providedProof: Proof?): CheckResponse {
         LOGGER.debug("Checking document for hash: {}", documentHash)
 
-        if (proof == null) { // If only the document hash is provided.
+        if (providedProof == null) { // If only the document hash is provided.
             val treeElement: TreeElementEntity =
                 treeElementRepository.findOne(QTreeElementEntity.treeElementEntity.hash.eq(documentHash))
                     .awaitFirstOrNull()
@@ -55,7 +50,7 @@ class CheckServiceImpl(
                 jobRepository.findById(treeElement.jobId).awaitFirstOrNull() ?: throw CheckException.IncoherentData()
             // Check the tree and retrieve the root hash.
             val branchHashes = checkExistingTree(job.algorithm, treeElement)
-            val rootHash: String = if(branchHashes.isNotEmpty()) branchHashes[branchHashes.size - 1] else documentHash
+            val rootHash: String = if (branchHashes.isNotEmpty()) branchHashes[branchHashes.size - 1] else documentHash
             when (job.state) {
                 JobStateType.INSERTED -> throw CheckException.DocumentKnownUnknownRootHash(
                     signer = "signer",
@@ -132,60 +127,60 @@ class CheckServiceImpl(
         } else {
             // Check the proof file
             try {
-                checkNotNull(proof.transactionHash)
+                checkNotNull(providedProof.transactionHash)
             } catch (e: Exception) {
                 LOGGER.debug("Proof for {} does not contain every required fields.", documentHash)
                 throw CheckException.IncorrectProofFile()
             }
 
-            if (documentHash != proof.documentHash) {
+            if (documentHash != providedProof.documentHash) {
                 LOGGER.error(
                     "Provided hash ({}) is not compliant with proof hash ({}).",
                     documentHash,
-                    proof.documentHash
+                    providedProof.documentHash
                 )
                 throw CheckException.HashInconsistent(
                     documentHash = documentHash,
-                    proofDocumentHash = proof.documentHash
+                    proofDocumentHash = providedProof.documentHash
                 )
             }
 
             // Check the proof compliance
-            val branchHashes = checkProofTree(proof)
+            val branchHashes = checkProofTree(providedProof)
 
             // Retrieve the transaction and depth
-            val transaction: TzOp? = tezosReaderService.getTransaction(proof.transactionHash)
-            val depth: Long? = tezosReaderService.getTransactionDepth(proof.transactionHash)
+            val transaction: TzOp? = tezosReaderService.getTransaction(providedProof.transactionHash)
+            val depth: Long? = tezosReaderService.getTransactionDepth(providedProof.transactionHash)
             if (transaction == null) {
-                LOGGER.error("Provided transaction '{}' not found in the blockchain.", proof.documentHash)
+                LOGGER.error("Provided transaction '{}' not found in the blockchain.", providedProof.documentHash)
                 throw CheckException.NoTransaction()
             }
 
-            if (transaction.bigMapDiff[0].meta.contract != proof.contractAddress) {
+            if (transaction.bigMapDiff[0].meta.contract != providedProof.contractAddress) {
                 LOGGER.error(
                     "Different contract found for transaction '{}': expected '{}', actual '{}'.",
-                    proof.transactionHash,
-                    proof.contractAddress,
+                    providedProof.transactionHash,
+                    providedProof.contractAddress,
                     transaction.bigMapDiff[0].meta.contract
                 )
                 throw CheckException.IncorrectTransaction()
             }
 
-            if (transaction.bigMapDiff[0].key != proof.rootHash) {
+            if (transaction.bigMapDiff[0].key != providedProof.rootHash) {
                 LOGGER.error(
                     "Different rootHash found for transaction '{}': expected '{}', actual '{}'.",
-                    proof.transactionHash,
-                    proof.rootHash,
+                    providedProof.transactionHash,
+                    providedProof.rootHash,
                     transaction.bigMapDiff[0].key
                 )
                 throw CheckException.IncorrectTransaction()
             }
 
-            if (transaction.bigMapDiff[0].value.address != proof.signerAddress) {
+            if (transaction.bigMapDiff[0].value.address != providedProof.signerAddress) {
                 LOGGER.error(
                     "Different signer found for transaction '{}': expected '{}', actual '{}'.",
-                    proof.transactionHash,
-                    proof.signerAddress,
+                    providedProof.transactionHash,
+                    providedProof.signerAddress,
                     transaction.bigMapDiff[0].value.address
                 )
                 throw CheckException.IncorrectTransaction()
@@ -194,7 +189,7 @@ class CheckServiceImpl(
             if (depth == null || depth < minDepth) {
                 LOGGER.error(
                     "Depth is undefined or not deep enough for transaction '{}': expected '{}', actual '{}'",
-                    proof.transactionHash,
+                    providedProof.transactionHash,
                     30,
                     depth
                 )
@@ -209,7 +204,7 @@ class CheckServiceImpl(
                     status = 2,
                     timestamp = transaction.bigMapDiff[0].value.timestamp,
                     trace = branchHashes,
-                    proof = proof
+                    proof = providedProof
                 )
             }
 
@@ -220,7 +215,7 @@ class CheckServiceImpl(
             val job: JobEntity =
                 jobRepository.findById(treeElement.jobId).awaitFirstOrNull() ?: return defaultResponse.get()
             // Check compliance
-            if (proof.transactionHash != job.transactionHash || checkBranch(proof, treeElement)) {
+            if (providedProof.transactionHash != job.transactionHash || checkBranch(providedProof, treeElement)) {
                 return defaultResponse.get()
             }
             // Generate a fresh proof

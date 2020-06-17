@@ -1,14 +1,14 @@
 package com.sword.signature.webcore.mapper
 
-import com.sword.signature.api.sign.HashNode
-import com.sword.signature.api.sign.Proof
+
+import com.sword.signature.api.proof.Proof
 import com.sword.signature.api.sign.SignMetadata
 import com.sword.signature.api.sign.SignRequest
 import com.sword.signature.business.model.FileMetadata
 import com.sword.signature.common.enums.TreeElementPosition
 
 fun SignRequest.toBusiness() = Pair(
-    first = hash,
+    first = hash.toLowerCase(),
     second = metadata.toBusiness()
 )
 
@@ -33,4 +33,7 @@ fun Proof.toBusiness() = com.sword.signature.business.model.Proof(
     creatorAddress = creatorAddress
 )
 
-fun HashNode.toBusiness() = Pair(first = hash, second = TreeElementPosition.valueOf(position))
+fun Proof.HashNode.toBusiness() = Pair(
+    first = hash,
+    second = TreeElementPosition.valueOf(position)
+)

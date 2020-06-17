@@ -1,8 +1,6 @@
 package com.sword.signature.rsocket.configuration
 
-import com.sword.signature.api.sign.ALGORITHM_MIME_TYPE
-import com.sword.signature.api.sign.CALLBACK_URL_MIME_TYPE
-import com.sword.signature.api.sign.FLOW_NAME_MIME_TYPE
+import com.sword.signature.api.sign.SignMimeTypes.*
 import com.sword.signature.webcore.authentication.SignatureAuthenticationManager
 import org.springframework.boot.rsocket.messaging.RSocketStrategiesCustomizer
 import org.springframework.context.annotation.Bean
@@ -35,25 +33,27 @@ class RSocketSecurity {
     @Bean
     fun rSocketStrategiesCustomizer() = RSocketStrategiesCustomizer {
         it.metadataExtractorRegistry { registry: MetadataExtractorRegistry ->
-            registry.metadataToExtract<String>(MimeType.valueOf(ALGORITHM_MIME_TYPE), "algorithm")
-            registry.metadataToExtract<String>(MimeType.valueOf(FLOW_NAME_MIME_TYPE), "flowName")
-            registry.metadataToExtract<String>(MimeType.valueOf(CALLBACK_URL_MIME_TYPE), "callBackUrl")
+            registry.metadataToExtract<String>(MimeType.valueOf(ALGORITHM_MIME_TYPE.value), "algorithm")
+            registry.metadataToExtract<String>(MimeType.valueOf(FLOW_NAME_MIME_TYPE.value), "flowName")
+            registry.metadataToExtract<String>(MimeType.valueOf(CALLBACK_URL_MIME_TYPE.value), "callBackUrl")
         }
     }
 
-
     @Bean
-    fun payloadSocketAcceptorInterceptor(security: RSocketSecurity, reactiveAuthenticationManager: SignatureAuthenticationManager): PayloadSocketAcceptorInterceptor {
+    fun payloadSocketAcceptorInterceptor(
+        security: RSocketSecurity,
+        reactiveAuthenticationManager: SignatureAuthenticationManager
+    ): PayloadSocketAcceptorInterceptor {
         return security
-                .authorizePayload { spec: AuthorizePayloadsSpec ->
-                    spec
-                            .setup().hasRole("SETUP")
-                            .route("newJobs").authenticated()
-                            .anyExchange().permitAll()
-                }
-                .jwt { jwtSpec ->
-                    jwtSpec.authenticationManager(reactiveAuthenticationManager)
-                }
-                .build()
+            .authorizePayload { spec: AuthorizePayloadsSpec ->
+                spec
+                    .setup().hasRole("SETUP")
+                    .route("newJobs").authenticated()
+                    .anyExchange().permitAll()
+            }
+            .jwt { jwtSpec ->
+                jwtSpec.authenticationManager(reactiveAuthenticationManager)
+            }
+            .build()
     }
 }

@@ -1,8 +1,8 @@
 package com.sword.signature.rest.resthandler
 
-import com.sword.signature.api.sign.Account
-import com.sword.signature.api.sign.AuthRequest
-import com.sword.signature.api.sign.AuthResponse
+import com.sword.signature.api.account.Account
+import com.sword.signature.api.auth.AuthRequest
+import com.sword.signature.api.auth.AuthResponse
 import com.sword.signature.business.service.AccountService
 import com.sword.signature.webcore.authentication.CustomUserDetails
 import com.sword.signature.webcore.authentication.JwtTokenService

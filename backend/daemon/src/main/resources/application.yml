@@ -54,15 +54,26 @@ daemon:
     timeout: 10m
   poller:
     fixedRate: 10000
+jasypt:
+  encryptor:
+    password: secret
+    algorithm: PBEWithMD5AndDES
+    iv-generator-classname: org.jasypt.iv.NoIvGenerator
 jwt:
   secret: ffe50f21d8359de7245dc13777812c2a
   issuer: "Tezos@Signature"
 tezos:
-  account:
-    publicKey: "edpkvGfYw3LyB1UcCahKQk4rF2tvbMUk8GFiTuMjL75uGXrpvKXhjn"
-    secretKey: "edsk3QoqBuvdamxouPhin7swCvkQNgq4jP5KZPbwWNnwdZpSpJiEbq"
+  keys:
+    admin:
+      hash: "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb"
+      publicKey: "edpkvGfYw3LyB1UcCahKQk4rF2tvbMUk8GFiTuMjL75uGXrpvKXhjn"
+      secretKey: ENC(Sjy2KdrcmMKKyo294ZaFmpuw2gIEj7jArV/0PM530EOGm4MGXrIP6OWY4It6HTpKks0GinKiA+vWJdAZRpbSyA==)
+    frodon:
+      hash: "tz1aSkwEot3L2kmUvcoxzjMomb9mvBNuzFK6"
+      publicKey: "edpkurPsQ8eUApnLUJ9ZPDvu98E8VNj4KtJa1aZr16Cr5ow5VHKnz4"
+      secretKey: ENC(LvGfsJLxfwNoOIrKgdp9Y4E9EXyJZGe+bBhacjAuxDUIJZBj54O09suxCx6Y/Nzdq4+p8xbs0fdyXyPT+HY1vQ==)
   contract:
-    address: KT1WJCy3cwLrfWhBH95otTSSAFMT8xndnt3K
+    address: KT1XR5tZHWxMU36eTq3qFn3fvnmDvCTc8NTD
   node:
     url: "http://edivtezosnode.ren-dev2.lan::18731"
   indexer:

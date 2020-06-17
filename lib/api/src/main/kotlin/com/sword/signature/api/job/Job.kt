@@ -1,4 +1,4 @@
-package com.sword.signature.api.sign
+package com.sword.signature.api.job
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import java.time.OffsetDateTime
@@ -17,14 +17,7 @@ data class Job(
     var stateDate: OffsetDateTime,
     var state: String,
     val contractAddress: String?,
-    val transactionHash: String?
-)
-
-@JsonInclude(JsonInclude.Include.NON_NULL)
-data class JobFile(
-    val id: String,
-    val hash: String,
-    val jobId: String,
-    val metadata: SignMetadata,
-    val proof: Proof?
+    val transactionHash: String?,
+    val channelName: String?,
+    val docsNumber: Int
 )

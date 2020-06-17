@@ -69,6 +69,16 @@ data class JobEntity(
     val contractAddress: String? = null,
 
     /**
+     * incoming chanel of the job
+     */
+    val channelName: String? = null,
+
+    /**
+     * number of documents withing this jobs
+     */
+    val docsNumber: Int = 1, //TODO remove the default value DIRTY !!
+
+    /**
      * Address of the transaction signer.
      */
     val signerAddress: String? = null

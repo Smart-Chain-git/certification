@@ -29,6 +29,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-integration")
     implementation("org.mongodb:mongodb-driver-sync")
     implementation("org.springframework.integration:spring-integration-mongodb")
+    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
 
     // JWT
     testImplementation("org.springframework.boot:spring-boot-starter-test") {

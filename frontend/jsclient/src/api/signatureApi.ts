@@ -14,7 +14,7 @@ export class SignatureApi extends Api {
     }
 
     public check(sigCheck: SignatureCheckRequest): Promise<SignatureCheckResponse> {
-        return this.post<SignatureCheckResponse, SignatureCheckRequest>(API_CHECK, sigCheck)
+        return this.post<SignatureCheckResponse, SignatureCheckRequest>(API_CHECK, {}, sigCheck)
             .then((response: AxiosResponse<SignatureCheckResponse>) => {
                 return response.data
             })

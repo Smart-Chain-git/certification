@@ -1,6 +1,5 @@
 package com.sword.signature.rest.configuration
 
-
 import com.sword.signature.rest.authentication.SecurityContextRepository
 import io.swagger.v3.oas.models.Components
 import io.swagger.v3.oas.models.OpenAPI
@@ -18,15 +17,17 @@ import org.springframework.security.web.server.SecurityWebFilterChain
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.reactive.CorsWebFilter
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource
+import org.springframework.web.reactive.function.server.RouterFunction
+import org.springframework.web.reactive.function.server.ServerResponse
+import org.springframework.web.reactive.function.server.router
 import org.springframework.web.server.ServerWebExchange
 import reactor.core.publisher.Mono
-
+import java.net.URI
 
 @Configuration
 @EnableWebFluxSecurity
 @ComponentScan(basePackages = ["com.sword.signature"])
 class ApplicationSecurity {
-
 
     @Bean
     fun securityWebFilterChain(
@@ -48,7 +49,7 @@ class ApplicationSecurity {
             // Authorize all other requests (client, SwaggerUI).
             exchanges.anyExchange().permitAll()
         }
-        http.exceptionHandling().authenticationEntryPoint { exchange: ServerWebExchange, e: AuthenticationException ->
+        http.exceptionHandling().authenticationEntryPoint { exchange: ServerWebExchange, _: AuthenticationException ->
             val response = exchange.response
             response.statusCode = HttpStatus.UNAUTHORIZED
             val requestedWith = exchange.request.headers["X-Requested-With"]
@@ -67,17 +68,16 @@ class ApplicationSecurity {
 
     @Bean
     fun corsFilter(): CorsWebFilter {
-
         val config = CorsConfiguration().apply {
             allowCredentials = true
-            addAllowedOrigin("http://localhost:8082")
+            addAllowedOrigin("*")
             addAllowedHeader("*")
             addAllowedMethod("*")
         }
-
         val source = UrlBasedCorsConfigurationSource().apply {
             registerCorsConfiguration("/**", config)
         }
+
         return CorsWebFilter(source)
     }
 
@@ -94,9 +94,21 @@ class ApplicationSecurity {
             )
     }
 
-    companion object{
+    @Bean
+    fun indexRouter(): RouterFunction<ServerResponse> {
+        val redirectToIndex = ServerResponse
+            .temporaryRedirect(URI("/index.html"))
+            .build()
+
+        return router {
+            GET("/") {
+                redirectToIndex
+            }
+        }
+    }
+
+    companion object {
         private const val DEFAULT_REALM = "Realm"
         private const val WWW_AUTHENTICATE_FORMAT = "Basic realm=\"%s\""
     }
-
 }

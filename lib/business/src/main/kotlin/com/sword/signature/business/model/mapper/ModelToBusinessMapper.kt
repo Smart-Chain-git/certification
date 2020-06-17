@@ -10,8 +10,12 @@ fun AccountEntity.toBusiness() = Account(
     email = email,
     password = password,
     fullName = fullName,
+    company = company,
+    country = country,
+    publicKey = publicKey,
+    hash = hash,
     isAdmin = isAdmin,
-    pubKey = pubKey
+    disabled = disabled
 )
 
 fun TreeElementEntity.Metadata.toBusiness() = FileMetadata(
@@ -57,6 +61,8 @@ fun JobEntity.toBusiness(rootHash: String? = null, files: List<TreeElement.LeafT
     files = files,
     callBackUrl = callBackUrl,
     contractAddress = contractAddress,
+    channelName = channelName,
+    docsNumber = docsNumber,
     signerAddress = signerAddress
 )
 
@@ -71,6 +77,7 @@ fun TokenEntity.toBusiness() = Token(
     name = name,
     jwtToken = jwtToken,
     expirationDate = expirationDate,
+    creationDate = creationDate,
     accountId = accountId,
     revoked = revoked
 )

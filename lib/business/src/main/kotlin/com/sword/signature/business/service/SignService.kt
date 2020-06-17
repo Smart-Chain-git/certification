@@ -8,10 +8,11 @@ interface SignService {
 
     fun batchSign(
         requester: Account,
+        channelName : String?,
         algorithm: Algorithm,
         flowName: String,
         callBackUrl: String? = null,
-        fileHashs: Flow<Pair<String, FileMetadata>>
+        fileHashes: Flow<Pair<String, FileMetadata>>
     ): Flow<Job>
 
     suspend fun getFileProof(requester: Account, fileId: String): Proof?
