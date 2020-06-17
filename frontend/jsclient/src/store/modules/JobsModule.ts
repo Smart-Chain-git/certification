@@ -66,6 +66,7 @@ export default class JobsModule extends VuexModule {
         const criteria: JobCriteria = {
             accountId: this.accountsModule.meAccount?.id,
             page: 0,
+            sort: ["creationDate:desc"],
             size: count,
         }
         await jobApi.list(criteria).then((response: Array<Job>) => {
