@@ -19,26 +19,30 @@
                 <v-row>
                     <v-col class="col-4"><h1>{{ $t("signatureCheck.uploadProof") }}</h1><span>{{ $t("signatureCheck.optional")}}</span></v-col>
                     <v-col class="col-5">
-                        <v-file-input prepend-icon="" prepend-inner-icon="publish" filled :placeholder="$t('signatureCheck.drop')" outlined v-model="proof">
+                        <v-file-input prepend-icon="" prepend-inner-icon="publish" filled :placeholder="$t('signatureCheck.drop')" outlined v-model="proof" accept="application/json" >
                         </v-file-input>
                     </v-col>
                 </v-row>
             </v-flex>
             <v-flex v-if="checkResponse !== undefined">
-                <v-row class="banner">
+                <v-row class="banner" justify="center" align="center">
                     <v-col class="col-2">
-                        <v-icon size="100" :color="checkSucceeded ? 'green' : 'red'">{{ checkSucceeded ? "check_circle_outline" : "cancel"}}</v-icon>
+                        <div class="text-center">
+                            <v-icon size="100" :color="checkSucceeded ? 'green' : 'red'">{{ checkSucceeded ? "check_circle_outline" : "cancel"}}</v-icon>
+                        </div>
                     </v-col>
-                    <v-col class="col-10">
-                         <h1 :class="'title_'+(checkSucceeded ? 'success' : 'error')"> {{ shortMessage }}</h1>
-                        <p>{{ longMessage }}</p>
+                    <v-col class="col-10 pt-4">
+                        <h1 :class="'title_'+(checkSucceeded ? 'success' : 'error')"> {{ shortMessage }}</h1>
+                        <p class="pt-4">{{ longMessage }}</p>
                     </v-col>
                 </v-row>
                 <v-row v-if="checkSucceeded">
-                    <v-expansion-panels>
-                        <v-expansion-panel class="more_info banner">
-                            <v-expansion-panel-header>{{ $t("signatureCheck.more") }}</v-expansion-panel-header>
-                            <v-expansion-panel-content>
+                    <v-expansion-panels v-if="checkSucceeded" flat>
+                        <v-expansion-panel class="more_info">
+                            <v-expansion-panel-header class="banner accordion_header">
+                                <span class="align-right pt-2">{{ $t("signatureCheck.more") }}</span>
+                            </v-expansion-panel-header>
+                            <v-expansion-panel-content class="pt-4">
                                 <div v-if="checkResponse.check_status === 0">
                                     {{ parse("signatureCheck.success.message1.block2.line1") }}<br/><br/>
                                     {{ parse("signatureCheck.success.message1.block2.line2") }}<br/>
@@ -142,6 +146,17 @@
         font-size: 10px;
     }
 
+    .accordion_header {
+        vertical-align: middle;
+        font-size: 12px;
+    }
+
+    .v-expansion-panel-header {
+        min-height: 30px !important;
+        padding: 0;
+        margin: 0;
+    }
+
     .title_success{
         color: green;
     }
@@ -152,7 +167,7 @@
 
     .more_info {
         font-size: 12px;
-        background-color: #eeeeee !important;
+        background-color: #fffaef !important;
     }
 </style>
 <script lang="ts">
@@ -166,6 +181,8 @@
         private proof: Blob | null = null
         private contentFile: string | undefined = undefined
         private contentProof: string | undefined = undefined
+        private fileHash: string = ""
+        private proofHash: string = ""
 
         private mounted() {
             this.file = null
@@ -248,7 +265,7 @@
                         return SignatureCheck.format(res, [hash.position!, (hash.hash) ? hash.hash : "", this.checkResponse.check_process[idx]])
 
                     case "signatureCheck.errors.hash_inconsistent":
-                        return SignatureCheck.format(res, [this.checkResponse., this.checkResponse.proof.hash_document])
+                        return SignatureCheck.format(res, [this.fileHash, this.checkResponse.proof.hash_document])
 
                     case "signatureCheck.errors.unknown_root_hash":
                         return SignatureCheck.format(res, [this.checkResponse.proof.hash_root])
@@ -279,7 +296,6 @@
                 const reader = new FileReader()
                 reader.onload = () => {
                     this.contentFile = reader.result?.toString()
-
                     if (this.proof !== null) {
                         const readerProof = new FileReader()
                         readerProof.onload = () => {
@@ -296,19 +312,15 @@
         }
 
         private encodeSend() {
-            console.log(this.contentFile)
-            const hashFile: string = CryptoJS.SHA256(this.contentFile!).toString()
+            this.fileHash = CryptoJS.SHA256(this.contentFile!).toString()
             let proof: string | undefined = undefined
-
-            console.log(hashFile)
-            console.log(this.contentProof)
 
             if (this.contentProof !== undefined) {
                 proof = btoa(this.contentProof).toString()
             }
 
             const sigCheck: SignatureCheckRequest = {
-                //documentHash: hashFile,
+                //documentHash: this.fileHash,
                 documentHash: "142f9eb8376093e5c24c74714bef07c187cd9a4a81e4f758515ce21b06b2e12a",
                 proof: proof,
             }

@@ -8,15 +8,15 @@
             <v-flex class="white">
                 <v-btn text to="/signature-check">
                     <v-icon>check_circle_outline</v-icon>
-                    <span class="ml-5">{{ $t('signatureCheck.check')}}</span>
+                    <span class="ml-5">{{ $t("signatureCheck.check")}}</span>
                 </v-btn>
                 <v-btn text to="/about">
                     <v-icon>account_box</v-icon>
-                    <span class="ml-5">{{ $t('signatureCheck.about')}}</span>
+                    <span class="ml-5">{{ $t("signatureCheck.about")}}</span>
                 </v-btn>
                 <v-btn text to="/contact">
                     <v-icon>local_cafe</v-icon>
-                    <span class="ml-5">{{ $t('signatureCheck.contact')}}</span>
+                    <span class="ml-5">{{ $t("signatureCheck.contact")}}</span>
                 </v-btn>
             </v-flex>
             <v-divider/>
@@ -65,7 +65,7 @@
     }
 </style>
 <script lang="ts">
-    import {Component, Vue} from 'vue-property-decorator'
+    import {Component, Vue} from "vue-property-decorator"
 
     @Component
     export default class SignatureCheckTemplate extends Vue {
