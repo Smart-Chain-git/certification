@@ -18,60 +18,60 @@ import java.time.LocalDate
 @RestController
 @RequestMapping("\${api.base-path:/api}")
 class TokenHandler(
-        private val tokenService: TokenService,
-        private val jwtTokenService: JwtTokenService
+    private val tokenService: TokenService,
+    private val jwtTokenService: JwtTokenService
 ) {
 
     @Operation(security = [SecurityRequirement(name = "bearer-key")])
     @RequestMapping(
-            value = ["/tokens"],
-            produces = ["application/json"],
-            consumes = ["application/json"],
-            method = [RequestMethod.POST]
+        value = ["/tokens"],
+        produces = ["application/json"],
+        consumes = ["application/json"],
+        method = [RequestMethod.POST]
     )
     suspend fun createToken(
-            @AuthenticationPrincipal user: CustomUserDetails,
-            @RequestBody tokenDetails: TokenCreate
+        @AuthenticationPrincipal user: CustomUserDetails,
+        @RequestBody tokenDetails: TokenCreate
     ): Token {
         val accountId = user.account.id
 
         return tokenService.createToken(
-                com.sword.signature.business.model.TokenCreate(
-                        name = tokenDetails.name,
-                        jwtToken = jwtTokenService.generatePersistantToken(accountId),
-                        creationDate = LocalDate.now(),
-                        expirationDate = tokenDetails.expirationDate,
-                        accountId = accountId
-                )
+            com.sword.signature.business.model.TokenCreate(
+                name = tokenDetails.name,
+                jwtToken = jwtTokenService.generatePersistantToken(accountId),
+                creationDate = LocalDate.now(),
+                expirationDate = tokenDetails.expirationDate,
+                accountId = accountId
+            )
         ).toWeb()
     }
 
     @Operation(security = [SecurityRequirement(name = "bearer-key")])
     @RequestMapping(
-            value = ["/tokens"],
-            produces = ["application/json"],
-            method = [RequestMethod.GET]
+        value = ["/tokens"],
+        produces = ["application/json"],
+        method = [RequestMethod.GET]
     )
     suspend fun getTokens(
-            @AuthenticationPrincipal user: CustomUserDetails
+        @AuthenticationPrincipal user: CustomUserDetails
     ): Flow<Token> {
         return tokenService.findAll(requester = user.account).map { it.toWeb() }
     }
 
     @Operation(security = [SecurityRequirement(name = "bearer-key")])
     @RequestMapping(
-            value = ["/tokens/{tokenId}/revoke"],
-            produces = ["application/json"],
-            method = [RequestMethod.POST]
+        value = ["/tokens/{tokenId}/revoke"],
+        produces = ["application/json"],
+        method = [RequestMethod.POST]
     )
     suspend fun revokeToken(
-            @AuthenticationPrincipal user: CustomUserDetails,
-            @PathVariable("tokenId") tokenId: String
+        @AuthenticationPrincipal user: CustomUserDetails,
+        @PathVariable("tokenId") tokenId: String
     ): Token {
         return tokenService.patchToken(
-                requester = user.account,
-                tokenId = tokenId,
-                tokenDetails = TokenPatch(revoked = true)
+            requester = user.account,
+            tokenId = tokenId,
+            tokenDetails = TokenPatch(revoked = true)
         ).toWeb()
     }
 }
