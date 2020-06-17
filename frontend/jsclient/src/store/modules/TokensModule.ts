@@ -1,4 +1,5 @@
-import {tokenApi, Token, TokenCreateRequest} from "@/api/tokenApi"
+import {tokenApi} from "@/api/tokenApi"
+import {Token, TokenCreateRequest} from "@/api/types"
 import Vue from "vue"
 import {Action, Module, Mutation, VuexModule} from "vuex-class-modules"
 

@@ -81,7 +81,7 @@
 </style>
 
 <script lang="ts">
-    import {Account, AccountPatch} from "@/store/types"
+    import {Account, AccountPatch} from "@/api/types"
     import {Component, Vue} from "vue-property-decorator"
     import { tableFooter } from "@/plugins/i18n"
 

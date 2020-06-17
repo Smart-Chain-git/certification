@@ -65,7 +65,7 @@
 <script lang="ts">
 
     import {tableFooter} from "@/plugins/i18n"
-    import {Token, TokenCreateRequest} from "@/api/tokenApi"
+    import {Token, TokenCreateRequest} from "@/api/types"
     import {Component, Vue} from "vue-property-decorator"
     import moment from "moment"
 

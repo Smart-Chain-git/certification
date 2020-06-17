@@ -1,5 +1,5 @@
 import {Api} from "@/api/api"
-import {Account, AuthRequest, AuthResponse} from "@/store/types"
+import {Account, AuthRequest, AuthResponse} from "@/api/types"
 import {AxiosRequestConfig, AxiosResponse} from "axios"
 import {apiConfig} from "@/api/api.config"
 
@@ -14,7 +14,6 @@ export class AuthApi extends Api {
         this.auth = this.auth.bind(this)
         this.me = this.me.bind(this)
     }
-
 
     public auth(credentials: AuthRequest): Promise<AuthResponse> {
         return this.post<AuthResponse, AuthRequest>(API_AUTH, {}, credentials)

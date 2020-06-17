@@ -90,7 +90,7 @@
 
 <script lang="ts">
     import {fetchData, resetStore} from "@/store/actions/globalActions"
-    import {AuthRequest} from "@/store/types"
+    import {AuthRequest} from "@/api/types"
     import {Component, Vue} from "vue-property-decorator"
 
     @Component

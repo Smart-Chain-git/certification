@@ -125,7 +125,7 @@
 </style>
 
 <script lang="ts">
-    import {AccountCreate, AccountPatch} from "@/store/types"
+    import {AccountCreate, AccountPatch} from "@/api/types"
     import {Component, Prop, Vue, Watch} from "vue-property-decorator"
 
     interface DraftAccount {
