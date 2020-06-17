@@ -42,6 +42,7 @@ publishing {
     publications {
         val maven by creating(MavenPublication::class) {
             artifactId = artifactName
+            from(components["kotlin"])
             artifact(tasks["sourcesJar"])
         }
     }
