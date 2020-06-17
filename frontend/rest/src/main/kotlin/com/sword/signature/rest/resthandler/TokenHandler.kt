@@ -39,7 +39,6 @@ class TokenHandler(
             com.sword.signature.business.model.TokenCreate(
                 name = tokenDetails.name,
                 jwtToken = jwtTokenService.generatePersistantToken(accountId),
-                creationDate = LocalDate.now(),
                 expirationDate = tokenDetails.expirationDate,
                 accountId = accountId
             )
