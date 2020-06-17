@@ -11,6 +11,16 @@
     "connection": "Login",
     "gcu": "Terms of Use"
   },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome to the Tezos Digisign application !",
+    "content": "Thanks to this application, you will be able to create your jobs and add your documents to be signed. You will also be able to check the authenticity of your documents.",
+    "lastJobs": "Last jobs",
+    "documentsSigned": "documents signed",
+    "jobsCreated": "jobs created",
+    "jobsProcessed": "jobs processed",
+    "monthStatistics" : "{0} statistics"
+  },
   "account": {
     "list": {
       "login": "Login",
@@ -105,9 +115,9 @@
     }
   },
   "calendar": {
-  "label": {
-    "reset": "Effacer",
-    "close": "Fermer"
+    "label": {
+      "reset": "Effacer",
+      "close": "Fermer"
+    }
   }
-}
 }

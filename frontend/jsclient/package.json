@@ -17,6 +17,7 @@
     "ci": "start-server-and-test serve http://localhost:8081 cypress:run"
   },
   "dependencies": {
+    "@mdi/font": "^5.3.45",
     "@types/js-cookie": "^2.2.6",
     "@types/lodash": "^4.14.153",
     "@types/qs": "^6.9.3",
@@ -25,7 +26,7 @@
     "js-cookie": "^2.2.1",
     "lodash": "^4.17.15",
     "material-design-icons-iconfont": "^5.0.1",
-    "@mdi/font": "^5.3.45",
+    "moment": "^2.26.0",
     "register-service-worker": "^1.7.1",
     "ts-deepcopy": "^0.1.4",
     "vue": "^2.6.11",

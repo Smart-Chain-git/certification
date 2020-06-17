@@ -1,7 +1,7 @@
 import fetchDataAndRedirect from "@/router/guards/fetchDataAndRedirect"
 import checkUserIsAdmin from "@/router/guards/checkUserIsAdmin"
 import checkUserHasPubKey from "@/router/guards/checkUserHasPubKey"
-import loadCurrentJob from "@/router/guards/loadCurrentJob"
+import {loadCurrentJob, loadJobs} from "@/router/guards/loadJobs"
 import {loadMeIfLogged, loadTokens} from "@/router/guards/loadAccounts"
 import {
     AppTemplate,
@@ -64,6 +64,7 @@ const router = new Router({
                 {
                     path: "dashboard",
                     component: Dashboard,
+                    beforeEnter: loadJobs(8),
                 },
                 {
                     path: "jobs",

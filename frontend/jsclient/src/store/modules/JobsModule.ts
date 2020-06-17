@@ -61,6 +61,18 @@ export default class JobsModule extends VuexModule {
         this.setLoading(false)
     }
 
+    @Action
+    public async loadLastJobs(count: number) {
+        const criteria: JobCriteria = {
+            accountId: this.accountsModule.meAccount?.id,
+            page: 0,
+            size: count,
+        }
+        await jobApi.list(criteria).then((response: Array<Job>) => {
+            this.setJobs(response)
+        })
+    }
+
 
     public get getLoading(): boolean {
         return this.isLoading
