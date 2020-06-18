@@ -11,6 +11,8 @@ sealed class CheckOutput(
 ) {
     class Ok(
         @JsonProperty("check_status") val status: Int,
+        @JsonProperty("id") val fileId: String?,
+        val jobId: String?,
         val signer: String?,
         val timestamp: OffsetDateTime,
         @JsonProperty("check_process") val process: List<String>,
