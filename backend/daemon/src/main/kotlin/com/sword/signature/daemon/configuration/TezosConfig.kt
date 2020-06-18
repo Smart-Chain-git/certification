@@ -7,5 +7,4 @@ import org.springframework.stereotype.Component
 @ConfigurationProperties(prefix = "tezos")
 data class TezosConfig(
     val keys: Map<String, Map<String, String>> = mutableMapOf()
-) {
-}
+)
