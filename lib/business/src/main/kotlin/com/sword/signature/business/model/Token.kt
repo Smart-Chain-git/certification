@@ -7,6 +7,7 @@ data class Token(
         val name: String,
         val jwtToken: String,
         val expirationDate: LocalDate? = null,
+        val creationDate: LocalDate,
         val accountId: String,
         val revoked: Boolean
 ) {

@@ -5,7 +5,7 @@ import com.sword.signature.daemon.job.AnchorJob
 import com.sword.signature.daemon.job.CallBackJob
 import com.sword.signature.daemon.job.MailJob
 import com.sword.signature.daemon.job.ValidationJob
-import com.sword.signature.daemon.mail.HelloAccountMail
+import com.sword.signature.business.model.mail.TransactionalMail
 import kotlinx.coroutines.reactor.mono
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
@@ -77,13 +77,9 @@ class DaemonIntegrationConfiguration(
     )
     fun transactionalMailHandler(): MessageHandler {
         return MessageHandler { message: Message<*> ->
-            val payload = message.payload as TransactionalMailPayload
+            val transactionalMail = message.payload as TransactionalMail
 
-            val email = when (payload.type) {
-                TransactionalMailType.HELLO_ACCOUNT -> HelloAccountMail(payload.recipient)
-            }
-
-            mailJob.sendEmail(email)
+            mailJob.sendEmail(transactionalMail)
         }
     }
 

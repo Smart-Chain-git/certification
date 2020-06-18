@@ -1,3 +1,4 @@
+import {Job, JobCriteria} from "@/api/types"
 import {AxiosRequestConfig, AxiosResponse} from "axios"
 
 import {Api} from "@/api/api"
@@ -6,38 +7,6 @@ import {apiConfig} from "@/api/api.config"
 
 export const API_GET = "/jobs"
 export const API_GET_COUNT = "/jobs-count"
-
-
-export interface Job {
-    id: string
-    createdDate: Date
-    injectedDate?: Date
-    validatedDate?: Date
-    numberOfTry: number
-    blockHash?: string,
-    blockDepth?: number
-    algorithm: string,
-    flowName: string,
-    stateDate: Date,
-    state: string,
-    contractAddress?: string,
-    transactionHash?: string,
-    channelName?: string,
-    docsNumber: number
-}
-
-export interface JobCriteria {
-    id?: string
-    accountId?: string
-    flowName?: string
-    dateBegin?: string
-    dateEnd?: string
-    channel?: string
-    sort?: Array<string>
-    desc?: Array<boolean>
-    page?: number
-    size?: number
-}
 
 
 export class JobApi extends Api {

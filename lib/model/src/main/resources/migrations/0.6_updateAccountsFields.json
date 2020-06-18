@@ -1,0 +1,36 @@
+{
+  "accounts": {
+    "update": [
+      {
+        "_id": {
+          "$oid": "5e74a073a386f170f3850b4b"
+        },
+        "login": "admin",
+        "email": "admin@signature.com",
+        "password": "$2a$10$TEQbC2lNT.dWnYVLOi8L4e5VUST7zyCV6demNJCQzNG6up3dr25Se",
+        "fullName": "Administrator",
+        "company": "Digisign",
+        "country": "France",
+        "publicKey": "edpkvGfYw3LyB1UcCahKQk4rF2tvbMUk8GFiTuMjL75uGXrpvKXhjn",
+        "hash": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb",
+        "isAdmin": true,
+        "disabled": false
+      },
+      {
+        "_id": {
+          "$oid": "aca05302a59411eabb370242"
+        },
+        "login": "frodon",
+        "email": "frodon@signature.com",
+        "password": "$2a$10$TEQbC2lNT.dWnYVLOi8L4e5VUST7zyCV6demNJCQzNG6up3dr25Se",
+        "fullName": "Frodon Sacquet",
+        "company": "Digisign",
+        "country": "France",
+        "publicKey": "edpkurPsQ8eUApnLUJ9ZPDvu98E8VNj4KtJa1aZr16Cr5ow5VHKnz4",
+        "hash": "tz1aSkwEot3L2kmUvcoxzjMomb9mvBNuzFK6",
+        "isAdmin": false,
+        "disabled": false
+      }
+    ]
+  }
+}

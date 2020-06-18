@@ -36,8 +36,12 @@ class FileServiceContextTest @Autowired constructor(
         email = "admin@signature.com",
         password = "\$2a\$10\$TEQbC2lNT.dWnYVLOi8L4e5VUST7zyCV6demNJCQzNG6up3dr25Se",
         fullName = "Administrator",
+        company = null,
+        country = null,
+        publicKey = null,
+        hash = null,
         isAdmin = true,
-        pubKey = null
+        disabled = false
     )
 
     private val simpleAccount = Account(
@@ -46,8 +50,12 @@ class FileServiceContextTest @Autowired constructor(
         password = "password",
         fullName = "simple user",
         email = "simplie@toto.net",
+        company = null,
+        country = null,
+        publicKey = null,
+        hash = null,
         isAdmin = false,
-        pubKey = null
+        disabled = false
     )
 
     private val secondAdmin = Account(
@@ -56,8 +64,12 @@ class FileServiceContextTest @Autowired constructor(
         password = "password",
         fullName = "simple user",
         email = "simplie@toto.net",
+        company = null,
+        country = null,
+        publicKey = null,
+        hash = null,
         isAdmin = true,
-        pubKey = null
+        disabled = false
     )
 
     private val job1Id = "5e8c36c49df469062bc658c1"

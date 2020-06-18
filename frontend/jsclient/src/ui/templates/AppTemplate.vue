@@ -281,7 +281,7 @@
         }
 
         private get hasPublicKey() {
-            return this.$modules.accounts.meAccount?.pubKey !== null
+            return this.$modules.accounts.meAccount?.publicKey !== undefined
         }
     }
 </script>

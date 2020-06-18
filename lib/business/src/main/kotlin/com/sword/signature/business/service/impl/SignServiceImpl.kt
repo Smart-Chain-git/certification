@@ -6,21 +6,14 @@ import com.sword.signature.business.model.integration.AnchorJobMessagePayload
 import com.sword.signature.business.model.mapper.toBusiness
 import com.sword.signature.business.service.SignService
 import com.sword.signature.business.visitor.SaveRepositoryTreeVisitor
-import com.sword.signature.common.criteria.TreeElementCriteria
 import com.sword.signature.common.enums.JobStateType
-import com.sword.signature.common.enums.TreeElementPosition
 import com.sword.signature.common.enums.TreeElementType
 import com.sword.signature.merkletree.builder.TreeBuilder
 import com.sword.signature.merkletree.visitor.SimpleAlgorithmTreeBrowser
 import com.sword.signature.model.entity.JobEntity
-import com.sword.signature.model.entity.TreeElementEntity
-import com.sword.signature.model.mapper.toPredicate
 import com.sword.signature.model.repository.JobRepository
 import com.sword.signature.model.repository.TreeElementRepository
-import com.sword.signature.tezos.reader.service.TezosReaderService
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.reactive.awaitFirst
-import kotlinx.coroutines.reactive.awaitFirstOrNull
 import kotlinx.coroutines.reactive.awaitSingle
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -107,6 +100,7 @@ class SignServiceImpl(
         anchoringMessageChannel.send(
             MessageBuilder.withPayload(
                 AnchorJobMessagePayload(
+                    requesterId = requester.id,
                     jobId = jobEntity.id!!
                 )
             ).build()

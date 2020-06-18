@@ -34,6 +34,7 @@ class TokenServiceImpl(
             name = tokenDetails.name,
             jwtToken = tokenDetails.jwtToken,
             expirationDate = tokenDetails.expirationDate,
+            creationDate = LocalDate.now(),
             accountId = tokenDetails.accountId
         )
         val createdToken = tokenRepository.save(toCreate).awaitSingle().toBusiness()

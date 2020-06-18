@@ -45,7 +45,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - "./compose-config/application-ui.yml:/app/application.yml:ro"
+      - "./compose-config/application-ui.light.yml:/app/application.yml:ro"
     depends_on:
       - mongodb
       - daemon
@@ -57,7 +57,7 @@ services:
     ports:
       - "9090:8080"
     volumes:
-      - "./compose-config/application-rest.yml:/app/application.yml:ro"
+      - "./compose-config/application-rest.light.yml:/app/application.yml:ro"
     depends_on:
       - mongodb
       - daemon

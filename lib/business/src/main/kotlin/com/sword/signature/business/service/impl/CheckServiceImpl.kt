@@ -35,13 +35,8 @@ class CheckServiceImpl(
 
     private val adminAccount =
         Account(
-            id = "",
-            login = "",
-            email = "",
-            password = "",
-            fullName = "checkService",
-            isAdmin = true,
-            pubKey = null
+            id = "", login = "", email = "", password = "", fullName = "checkService",
+            company = "", country = "", publicKey = "", hash = "", isAdmin = true, disabled = false
         )
 
     override suspend fun checkDocument(documentHash: String, providedProof: Proof?): CheckResponse {
@@ -56,7 +51,7 @@ class CheckServiceImpl(
                 jobRepository.findById(treeElement.jobId).awaitFirstOrNull() ?: throw CheckException.IncoherentData()
             // Check the tree and retrieve the root hash.
             val branchHashes = checkExistingTree(job.algorithm, treeElement)
-            val rootHash: String = if(branchHashes.isNotEmpty()) branchHashes[branchHashes.size - 1] else documentHash
+            val rootHash: String = if (branchHashes.isNotEmpty()) branchHashes[branchHashes.size - 1] else documentHash
             when (job.state) {
                 JobStateType.INSERTED -> throw CheckException.DocumentKnownUnknownRootHash(
                     signer = "signer",

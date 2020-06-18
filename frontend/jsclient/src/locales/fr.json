@@ -11,16 +11,35 @@
     "connection": "Connexion",
     "gcu": "Conditions générales d'utilisation"
   },
+  "dashboard": {
+    "title": "Tableau de bord",
+    "welcome": "Bienvenue sur application Tezos Digisign !",
+    "content": "Grâce à cette application, vous serez capable de créer vos jobs et d'ajouter vos documents pour qu'ils soient signés. Vous pourrez également vérifier l'authenticité de vos documents.",
+    "lastJobs": "Derniers jobs",
+    "documentsSigned": "documents signés",
+    "jobsCreated": "jobs créés",
+    "jobsProcessed": "jobs éxécutés",
+    "monthStatistics" : "Statistiques de {0}"
+  },
   "account": {
     "list": {
+      "title": "Gestion des utilisateurs",
+      "fullName": "Nom complet",
+      "email": "Email",
+      "isAdmin": "Administrateur",
+      "add": "Ajouter",
       "login": "Identifiant",
       "lastName": "Nom",
       "firstName": "Prénom",
-      "role": "Rôle",
-      "status": "Statut"
+      "status": "Statut",
+      "cancel": "Annuler"
     },
     "edit": {
-      "title": "Mon compte",
+      "title": {
+        "editing": "Edition de compte",
+        "creating": "Création de compte",
+        "profile": "Mon compte"
+      },
       "login": "Identifiant",
       "email": "Email",
       "profile": "Profil",
@@ -33,7 +52,10 @@
       "save": "Sauvegarder",
       "admin": "Administrateur",
       "noAdmin": "Utilisateur",
-      "updated": "Les informations ont été mises à jour."
+      "updated": "Les informations ont été mises à jour.",
+      "country": "Pays",
+      "company": "Entreprise",
+      "mandatory": "* Ces informations sont obligatoires."
     }
   },
   "job": {
@@ -68,6 +90,16 @@
       "copyId": "Copier"
     }
   },
+  "channelManagement": {
+    "title":"Gestion des canaux",
+    "new": "Nouveau token",
+    "all": "Tous les tokens",
+    "name": "Nom",
+    "creationDate": "Date",
+    "expirationDate": "Date d'expiration",
+    "add": "Créer",
+    "revoke": "Révoquer"
+  },
   "menu": {
     "dashboard": "Tableau de bord",
     "jobs": "Liste des jobs",
@@ -92,6 +124,9 @@
       "differents": "Les mots de passe doivent être identiques.",
       "weak": "Le mot de passe doit contenir au moins 8 caractères, 1 majuscule, 1 minuscule, 1 nombre et 1 caractère spécial."
     },
+    "account": {
+      "duplicate": "Cet identifiant est déjà pris."
+    },
     "back": {
       "generic": "Les informations n'ont pas pu être mises à jour, veuillez contacter votre administrateur."
     }
@@ -107,5 +142,12 @@
       "reset": "Effacer",
       "close": "Fermer"
     }
+  },
+  "disableConfirm": {
+    "title":"Désactiver l'utilisateur",
+    "subTitle": "Êtes-vous sûr(e) de vouloir désactiver cet utilisateur ?",
+    "content": "",
+    "confirmButton": "Confirmer",
+    "cancelButton": "Annuler"
   }
 }

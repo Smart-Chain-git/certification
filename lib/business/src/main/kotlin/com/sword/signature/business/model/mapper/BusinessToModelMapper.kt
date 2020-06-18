@@ -13,8 +13,11 @@ fun Account.toModel() = AccountEntity(
     email = email,
     password = password,
     fullName = fullName,
-    isAdmin = isAdmin,
-    pubKey = pubKey
+    company = company,
+    country = country,
+    publicKey = publicKey,
+    hash = hash,
+    isAdmin = isAdmin
 )
 
 fun Algorithm.toModel() = AlgorithmEntity(

@@ -11,6 +11,7 @@
         <v-text-field dense
                       :class="'edit-form-title-input ' + cssClass"
                       hide-details
+                      :color="color"
                       outlined
                       :label="label"
                       v-model="title"
@@ -42,6 +43,7 @@
         @Prop(String) private readonly placeholder!: string
         @Prop({default: "text"}) private readonly type!: string
         @Prop({default: ""}) private readonly cssClass!: string
+        @Prop(String) private readonly color!: string
 
         private get title() {
             return this.value

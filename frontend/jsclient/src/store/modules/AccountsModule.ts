@@ -1,7 +1,10 @@
-import {Account, accountApi, AuthRequest, AuthResponse} from "@/api/accountApi"
+
+import {accountApi} from "@/api/accountApi"
+import {authApi} from "@/api/authApi"
 import {resetStore} from "@/store/actions/globalActions"
 import modules from "@/store/modules"
-import {AccountPatch} from "@/store/types"
+
+import {Account, AccountCreate, AccountPatch, AuthRequest, AuthResponse} from "@/api/types"
 import globalAxios from "axios"
 import Cookies from "js-cookie"
 import Vue from "vue"
@@ -17,7 +20,8 @@ export default class AccountsModule extends VuexModule {
     private accounts: { [key: string]: Account } = {}
     private requestInterceptor: number | null = null
     private responseInterceptor: number | null = null
-
+    private currentAccount: Account | undefined = undefined
+    private httpStatus: number = 0
 
     /**
      * The connected user.
@@ -63,7 +67,7 @@ export default class AccountsModule extends VuexModule {
                 Vue.delete(this.accounts, account.id)
             }
             Vue.set(this.accounts, account.id, account)
-
+            this.currentAccount = account
             if (account.id === this.me!.id) {
                 this.me = account
             }
@@ -91,22 +95,19 @@ export default class AccountsModule extends VuexModule {
 
     @Action
     public async loadMe() {
-        return await accountApi.me()
+        await authApi.me()
             .then((response: Account) => this.setMe(response))
-
     }
 
     @Action
     public async loadAccount(id: string) {
-        return await accountApi.getById(id)
+        await accountApi.getById(id)
             .then((response: Account) => this.setAccount(response))
-
     }
 
     @Action
     public async loadToken(authRequest: AuthRequest) {
-
-        await accountApi.auth(authRequest).then((response: AuthResponse) => {
+        await authApi.auth(authRequest).then((response: AuthResponse) => {
             const token = response.token
             // Set the token in the store and in the cookies
             this.setToken(token)
@@ -188,6 +189,28 @@ export default class AccountsModule extends VuexModule {
         })
     }
 
+    public getCurrentAccount() {
+        return this.currentAccount
+    }
+
+    @Action
+    public async createAccount(account: AccountCreate) {
+        await accountApi.create(account).then((response: Account) => {
+            this.setHttpStatus(200)
+            Vue.set(this.accounts, response.id, response)
+        }).catch((error) => {
+            this.setHttpStatus(error.response.status)
+        })
+    }
+
+    @Mutation
+    public setHttpStatus(code: number) {
+        this.httpStatus = code
+    }
+
+    public getHttpStatus() {
+        return this.httpStatus
+    }
 
     @Mutation
     private setRequestInterceptor(value: number | null) {
@@ -198,4 +221,5 @@ export default class AccountsModule extends VuexModule {
     private setResponseInterceptor(value: number | null) {
         this.responseInterceptor = value
     }
+
 }
