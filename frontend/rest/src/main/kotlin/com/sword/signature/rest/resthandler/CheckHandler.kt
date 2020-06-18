@@ -7,8 +7,11 @@ import com.sword.signature.business.exception.CheckException
 import com.sword.signature.business.service.CheckService
 import com.sword.signature.webcore.mapper.toBusiness
 import com.sword.signature.webcore.mapper.toWeb
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.reactive.awaitFirstOrNull
+import kotlinx.coroutines.runBlocking
 import org.springframework.http.codec.multipart.FilePart
+import org.springframework.security.crypto.codec.Utf8
 import org.springframework.web.bind.annotation.*
 import java.io.InputStream
 import java.io.SequenceInputStream
@@ -17,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RequestPart
 import org.springframework.web.bind.annotation.RestController
+import java.io.ByteArrayInputStream
+import java.io.File
 
 @RestController
 @RequestMapping("\${api.base-path:/api}")
@@ -60,11 +65,9 @@ class CheckHandler(
     suspend fun checkDocumentJson(
         @RequestBody checkRequest: CheckRequest
     ): CheckOutput {
-
         val proof = checkRequest.proof?.let {
-            objectMapper.convertValue(Base64.getDecoder().decode(it), Proof::class.java)
+            objectMapper.readValue(String(Base64.getDecoder().decode(it)), Proof::class.java)
         }
-
         return try {
             checkService.checkDocument(checkRequest.documentHash, proof?.toBusiness()).toWeb()
         } catch (e: CheckException) {

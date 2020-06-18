@@ -52,8 +52,8 @@ const router = new Router({
                 {
                     path: "",
                     component: SignatureCheck,
-                }
-            ]
+                },
+            ],
         },
         {
             path: "/about",
@@ -63,8 +63,8 @@ const router = new Router({
                 {
                     path: "",
                     component: About,
-                }
-            ]
+                },
+            ],
         },
         {
             path: "/contact",
@@ -74,8 +74,8 @@ const router = new Router({
                 {
                     path: "",
                     component: Contact,
-                }
-            ]
+                },
+            ],
         },
         {
             path: "/",

@@ -118,118 +118,116 @@
     "check": "Vérifier vos fichiers",
     "about": "A propos",
     "contact": "Contactez nous",
-    "unknown" : "Unknown organization",
-    "title": "Welcome to the Tezos DigiSign verification page.",
-    "subtitle": "You can here check the authenticity of documents signed using the Tezos DigiSign protocol and tools.",
-    "text1": "We invite you to drag and drop or upload the file you want to check. If this file has been signed by Sword Group or by a Sword Group partners who informed us of their signatures, and if this file has not been modified since its signature, we will confirm you immediately its authenticity.",
-    "text2": "If our platform does not recognize the file, but if you know the file has been certified using Tezos DigiSign, you should have been given a proof document. This document, in the JSON format, will give us all the information we need to check the document authenticity. In such case, we invite you to upload both the file to check and the proof document before you click on the check button.",
-    "upload": "Upload your file",
-    "uploadProof": "Upload your proof file",
-    "optional": "(optional)",
-    "generate": "Check a document",
-    "drop": "Drop file here to upload or browse",
-    "com": "SWORD. All rights reserved.",
-    "GCU": "Terms of Use",
-    "policy": "Privacy Policy",
-    "more": "More",
+    "unknown" : "Organisation inconnue",
+    "title": "Bienvenue sur la page de vérification de Tezos DigiSign.",
+    "subtitle": "Vous pouvez ici vérifier l'authenticité des documents signés à l'aide du protocole et des outils Tezos DigiSign.",
+    "text1":"Nous vous invitons à glisser-déposer ou à télécharger le fichier que vous souhaitez vérifier. Si ce fichier a été signé par Sword Group ou par un partenaire de Sword Group qui nous a informé de leurs signatures, et si ce fichier n'a pas été modifié depuis sa signature, nous vous confirmerons immédiatement son authenticité.",
+    "text2": "Si notre plateforme ne reconnaît pas le fichier, mais si vous savez que le fichier a été certifié en utilisant Tezos DigiSign, vous devriez avoir reçu un document de preuve. Ce document, au format JSON, nous donnera toutes les informations dont nous avons besoin pour vérifier l'authenticité du document. Dans ce cas, nous vous invitons à télécharger à la fois le fichier à vérifier et le document de preuve avant de cliquer sur le bouton de vérification.",
+    "upload": "Téléversez votre fichier",
+    "uploadProof": "Téléversez votre fichier de preuve",
+    "optional": "(optionnel)",
+    "generate": "Vérifier votre document",
+    "regenerate": "Vérifier un nouveau document",
+    "drop": "Déposez ici votre fichier",
+    "com": "SWORD. Tous droits réservés.",
+    "GCU": "Conditions générales d'utilisation",
+    "policy": "Politique de protection de la vie privée",
+    "more": "Plus",
+    "here": "ici",
     "errors": {
       "hash_not_present": {
-        "title": "Document hash not found in TEZOS DigiSign",
-        "message": "We are sorry, we do not recognize this document. Are your sure this document is in the exact same version that the one that has been signed? If not, please upload the original version. If the document is good and if you have been given a proof file, please upload it too."
+        "title": "Hachage de document introuvable dans TEZOS DigiSign",
+        "message": "Nous sommes désolés, nous ne reconnaissons pas ce document. Êtes-vous sûr que ce document est dans la même version que celle qui a été signée? Sinon, veuillez télécharger la version originale. Si le document est bon et si vous avez reçu un fichier d'épreuve, veuillez également le télécharger. "
       },
       "hash_inconsistent": {
-        "title": "Proof file doesn’t match the document",
-        "message": "We are sorry, the proof file you provided does not correspond to the document you want to check (hash of the document {0} vs hash code of the proof file {1}). We invite you to upload the correct proof file. If you do not have another proof file, the document you want to confirm may have been modified since its signature. We invite you in such case to find its original version and try again."
+        "title": "Le fichier d'épreuve ne correspond pas au document",
+        "message": "Nous sommes désolés, le fichier de preuve que vous avez fourni ne correspond pas au document que vous souhaitez vérifier (hachage du document {0} vs code de hachage du fichier de preuve {1}). Nous vous invitons à télécharger le fichier d'épreuve correct. Si vous ne disposez pas d'un autre fichier d'épreuve, le document que vous souhaitez confirmer peut avoir été modifié depuis sa signature. Nous vous invitons dans ce cas à retrouver sa version d'origine et à réessayer. "
       },
       "incorrect_root_hash": {
-        "title": "Proof file doesn’t match the document",
-        "message": "We are sorry, the proof file you provided includes error in the way its Merkel Tree has been calculated. Are you sure this proof file has been generated by a tool respecting the Tezos DigiSign protocol?"
+        "title": "Le fichier d'épreuve ne correspond pas au document",
+        "message": "Nous sommes désolés, le fichier de preuve que vous avez fourni contient une erreur dans le calcul de son arbre Merkel. Êtes-vous sûr que ce fichier de preuve a été généré par un outil respectant le protocole Tezos DigiSign?"
       },
       "unknown_root_hash": {
-        "title": "Document not timestamped in Tezos Blockchain ",
-        "message": "We are sorry, your proof file corresponds to the document you want to check and looks legitimate. However, we cannot find in the blockchain a proof of its signature. The root hash of the mentioned Merkle Tree ({0}) is not present in the blockchain"
+        "title": "Document non horodaté dans Tezos Blockchain",
+        "message": "Nous sommes désolés, votre fichier de preuve correspond au document que vous souhaitez vérifier et semble légitime. Cependant, nous ne pouvons pas trouver dans la blockchain une preuve de sa signature. Le hachage racine de l'arbre Merkle mentionné ({0} ) n'est pas présent dans la blockchain "
       },
       "document_known_unknown_root_hash": {
-        "title": "Document found in Tezos DigiSign but not timestamped in Tezos Blockchain",
-        "message": "We are sorry. According to our internal database, we should be in a position to confirm you the authenticity of your document. Our database informs us this document has been signed by {0} - {1} on {2}. However, we cannot find in the blockchain the proof that the document has been really signed"
+        "title": "Document trouvé dans Tezos DigiSign mais non horodaté dans Tezos Blockchain",
+        "message": "Nous sommes désolés. Selon notre base de données interne, nous devrions être en mesure de vous confirmer l'authenticité de votre document. Notre base de données nous informe que ce document a été signé par {0} - {1} le {2 }. Cependant, nous ne pouvons pas trouver dans la blockchain la preuve que le document a bien été signé "
       },
       "incorrect_proof_file": {
-        "title": "Proof file can’t be parsed",
-        "message": "The proof file you provided is not a valid Tezos DigiSign V0 proof. Are you sure this proof file has been generated by a tool respecting the Tezos DigiSign V0 protocol ? "
+        "title": "Le fichier d'épreuve ne peut pas être analysé",
+        "message": "Le fichier de preuve que vous avez fourni n'est pas une preuve Tezos DigiSign V0 valide. Êtes-vous sûr que ce fichier de preuve a été généré par un outil respectant le protocole Tezos DigiSign V0?"
       },
       "incorrect_transaction": {
-        "title": "Proof file is not consistent",
-        "message": "The proof file you provided is not a valid Tezos DigiSign V0 proof. Are you sure this proof file has been generated by a tool respecting the Tezos DigiSign V0 protocol ? The transaction of the proof file is not a valid one."
+        "title": "Le fichier de preuve n'est pas cohérent",
+        "message": "Le fichier de preuve que vous avez fourni n'est pas une preuve Tezos DigiSign V0 valide. Êtes-vous sûr que ce fichier de preuve a été généré par un outil respectant le protocole Tezos DigiSign V0? La transaction du fichier de preuve n'est pas valide. "
       },
       "transaction_not_deep_enough": {
-        "title": "Proof file is consistent but the signature is being anchored in the blochain.",
-        "message": "The proof file you provided is a valid Tezos DigiSign V0 proof. the signature is being anchored in the blockchain. Please wait a bit the completion of the anchorage"
+        "title": "Le fichier de preuve est cohérent mais la signature est ancrée dans le blochain.",
+        "message": "Le fichier de preuve que vous avez fourni est une preuve Tezos DigiSign V0 valide. la signature est ancrée dans la blockchain. Veuillez patienter un peu la fin de l'ancrage"
       },
       "incoherent_data": {
-        "title": "Internal error",
-        "message": "We are sorry, an internal error occured during the check of the document."
+        "title": "Erreur interne",
+        "message": "Nous sommes désolés, une erreur interne s'est produite lors de la vérification du document."
       },
       "no_transaction": {
-        "title": "Document not timestamped in Tezos Blockchain ",
-        "message": ": We are sorry, your proof file corresponds to the document you want to check and looks legitimate. However, we cannot find in the blockchain a proof of its signature. The root hash of the mentioned Merkle Tree ({0}) is not present in the blockchain"
-      },
-      "generic": {
-        "title": "Document hash not found in TEZOS DigiSign",
-        "message": "We are sorry, we do not recognize this document. Are your sure this document is in the exact same version that the one that has been signed? If not, please upload the original version. If the document is good and if you have been given a proof file, please upload it too."
+        "title": "Document non horodaté dans Tezos Blockchain",
+        "message": ": Nous sommes désolés, votre fichier de preuve correspond au document que vous souhaitez vérifier et semble légitime. Cependant, nous ne pouvons pas trouver dans la blockchain une preuve de sa signature. Le hachage racine de l'arbre Merkle mentionné ({0 }) n'est pas présent dans la blockchain "
       }
     },
     "success": {
       "message1": {
         "block1": {
-          "title": "Your file is certified.",
-          "message": "It has been signed by {0} on the {1}"
+          "title": "Votre fichier est certifié.",
+          "message": "Il a été signé par {0} le {1}"
         },
         "block2": {
-          "line1": "We knew your file as {0}.",
-          "line2": "Using the {0} algorithm, your file generates the below digital print (hash) : {1}",
-          "line3": "The signature process may have included additional documents at the same time. We used a system knows as Merkel Tree to generate a single signature on multiple documents simultaneously. This Merkel Tree is identified by its Root Hash {0}. ",
-          "line4": "Your document, along with the Root Hash, has been signed in the Tezos Blockchain transaction {0}, present in the Tezos block  {1}, the {2}. It is now stored in a smart contract",
-          "line5": "The document has been signed by an entity knows by its unique Tezos Public key {0}. The operator of this verification platform received beforehand confirmation that his public key is owned by {1}. ",
-          "line6": "Click {#} to get a proof file explaining the relationship between your document digital print and the Merkle tree root hash. With this proof file you can prove to anyone that your document has been signed and timestamped. If you do not have it already, please keep it in a safe place along with your original document.",
-          "line7": "Click {#} to get the technical information on where the information is stored in the Tezos DigiSign smart contract (contract address: {0})."
+          "line1": "Nous connaissions votre fichier sous le nom {0}.",
+          "line2": "En utilisant l'algorithme {0}, votre fichier génère l'impression numérique ci-dessous (hachage): {1}",
+          "line3": "Le processus de signature peut avoir inclus des documents supplémentaires en même temps. Nous avons utilisé un système connu sous le nom d'arbre Merkel pour générer une signature unique sur plusieurs documents simultanément. Cet arbre Merkel est identifié par son hachage racine {0}." ,
+          "line4": "Votre document, ainsi que le hachage racine, a été signé dans la transaction Tezos Blockchain {0}, présent dans le bloc Tezos {1}, le {2}. Il est désormais stocké dans un contrat intelligent",
+          "line5": "Le document a été signé par une entité connue par sa clé publique Tezos unique {0}. L'opérateur de cette plateforme de vérification a reçu au préalable la confirmation que sa clé publique appartient à {1}.",
+          "line6": "Cliquez sur {#} pour obtenir un fichier d'épreuve expliquant la relation entre l'impression numérique de votre document et le hachage racine de l'arbre Merkle. Avec ce fichier d'épreuve, vous pouvez prouver à quiconque que votre document a été signé et horodaté. Si vous le faites ne l'avez pas déjà, veuillez le conserver en lieu sûr avec votre document d'origine. ",
+          "line7": "Cliquez sur {#} pour obtenir les informations techniques sur l'endroit où les informations sont stockées dans le contrat intelligent Tezos DigiSign (adresse du contrat: {0})."
         }
       },
       "message2": {
         "block1": {
-          "title": "Your file is certified.",
-          "message": "It has been signed by {0} on the {1}"
+          "title": "Votre fichier est certifié.",
+          "message": "Il a été signé par {0} le {1}"
         },
         "block2": {
-          "line1": "Using the {0} algorithm, your file generates the below digital print (hash) : {1}",
-          "line2": "The signature process may have included additional documents at the same time. A system knows as Merkel Tree has been used to generate a single signature on multiple documents simultaneously. This Merkel Tree is identified by its Root Hash {0}. ",
-          "line3": "The cryptographic proof that your file is part of this Merkle tree has been obtained by respecting the information present in the proof file:",
-          "line4": "- We calculated and confirmed your document hash: {0}",
-          "line5": "- We took the previous result, and added by concatenation on its {0} another hash: {1} and the resultat was {2}",
-          "line6": "This last result is on the top of the Merkle Tree. We call it the Merkle Tree Root Hash: {0}",
-          "line7": "If your document was different in any way from the one that has been signed, the Root Hash would be different",
-          "line8": "We then have been into the blockchain, and we can confirm that your document along with the Root Hash, has been signed in the Tezos Blockchain transaction {0}, present in the Tezos block {1}, the {2}. It is now stored in a smart contract.",
-          "line9": "The document has been signed by an entity knows by its unique Tezos Public key {0}. Based on our internal database, thee operator of this verification platform received beforehand confirmation that his public key is owned by {1}",
-          "line10": "Click {#} to get the technical information on where the information is stored in the Tezos DigiSign smart contract (contract address: {0})."
+          "line1": "En utilisant l'algorithme {0}, votre fichier génère l'impression numérique ci-dessous (hachage): {1}",
+          "line2": "Le processus de signature peut avoir inclus des documents supplémentaires en même temps. Un système sait que Merkel Tree a été utilisé pour générer une seule signature sur plusieurs documents simultanément. Cet Merkel Tree est identifié par son Root Hash {0}. ",
+          "line3": "La preuve cryptographique que votre fichier fait partie de cet arbre Merkle a été obtenue en respectant les informations présentes dans le fichier de preuve:",
+          "line4": "- Nous avons calculé et confirmé le hachage de votre document: {0}",
+          "line5": "- Nous avons pris le résultat précédent et ajouté par concaténation sur son {0} un autre hachage: {1} et le résultat était {2}",
+          "line6": "Ce dernier résultat se trouve en haut de l'arbre Merkle. Nous l'appelons le hachage racine de l'arbre Merkle: {0}",
+          "line7": "Si votre document était différent de celui qui a été signé, le hachage racine serait différent",
+          "line8": "Nous sommes alors entrés dans la blockchain, et nous pouvons confirmer que votre document avec le Root Hash, a été signé dans la transaction Tezos Blockchain {0}, présent dans le bloc Tezos {1}, le {2 }. Il est désormais stocké dans un contrat intelligent. ",
+          "line9": "Le document a été signé par une entité connue par sa clé publique Tezos unique {0}. Sur la base de notre base de données interne, l'opérateur de cette plateforme de vérification a reçu au préalable la confirmation que sa clé publique appartient à {1}" ,
+          "line10": "Cliquez sur {#} pour obtenir les informations techniques sur l'endroit où les informations sont stockées dans le contrat intelligent Tezos DigiSign (adresse du contrat: {0})."
         }
       },
       "info": {
-        "title": "For your understanding, here is a brief description of the different steps of the verification process.",
+        "title": "Pour votre compréhension, voici une brève description des différentes étapes du processus de vérification.",
         "col1": {
-          "title": "With document only:",
-          "step1": "Compute the SHA256 hash of the document",
-          "step2": "Check that document hash is stored in Tezos DigiSign verification database",
-          "step3": "Retrieve the transaction containing the document hash and the Merkle tree root hash associated",
-          "step4": "Check that the Merkle tree root hash is stored in the Tezos DigiSign Smart Contract"
+          "title": "Avec document uniquement:",
+          "step1": "Calculer le hachage SHA256 du document",
+          "step2": "Vérifiez que le hachage du document est stocké dans la base de données de vérification Tezos DigiSign",
+          "step3": "Récupérer la transaction contenant le hachage du document et le hachage racine de l'arbre Merkle associé",
+          "step4": "Vérifiez que le hachage de la racine de l'arbre Merkle est stocké dans le contrat intelligent Tezos DigiSign"
         },
         "col2": {
-          "title": "With document and proof file:",
-          "step1": "Compute the SHA256 hash of the document",
-          "step2": "Check that document hash matches the hash_document value in the proof file",
-          "step3": "Compute the Merkle tree root hash with the hash_list data in the proof file",
-          "step4": "Check that the document Merkle tree root hash matches the hash_root value in the proof file",
-          "step5": "Check that the hash_document value is stored in Tezos DigiSign verification database",
-          "step6": "Check that the hash_root value is stored in Tezos DigiSign verification database",
-          "step7": "Check that the hash_root value is stored in the Tezos DigiSign Smart Contract"
+          "title": "Avec document et fichier de preuve:",
+          "step1": "Calculer le hachage SHA256 du document",
+          "step2": "Vérifiez que le hachage du document correspond à la valeur de hash_document dans le fichier de preuve",
+          "step3": "Calculez le hachage de la racine de l'arbre Merkle avec les données hash_list dans le fichier de preuve",
+          "step4": "Vérifiez que le hachage racine du document Merkle correspond à la valeur hash_root dans le fichier de preuve",
+          "step5": "Vérifiez que la valeur hash_document est stockée dans la base de données de vérification Tezos DigiSign",
+          "step6": "Vérifiez que la valeur hash_root est stockée dans la base de données de vérification Tezos DigiSign",
+          "step7": "Vérifiez que la valeur hash_root est stockée dans le contrat intelligent Tezos DigiSign"
         }
       }
     }

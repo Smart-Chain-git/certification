@@ -1,30 +1,30 @@
 <template>
     <v-container fluid>
-        <v-flex xs11>
+        <v-flex>
         <Card>
             <h2>{{ $t("signatureCheck.title") }}</h2>
             <h2>{{ $t("signatureCheck.subtitle") }}</h2>
-            <span>{{ $t("signatureCheck.text1") }}</span>
-            <br/>
-            <span>{{ $t("signatureCheck.text2") }}</span>
-            <br/>
-            <v-flex class="mt-12">
+            <p class="small-text">
+                {{ $t("signatureCheck.text1") }}<br/>
+                {{ $t("signatureCheck.text2") }}
+            </p>
+            <v-flex class="mt-5">
                 <v-row>
-                    <v-col class="col-4"><h1>{{ $t("signatureCheck.upload") }}</h1></v-col>
+                    <v-col class="col-4 align-right"><h1>{{ $t("signatureCheck.upload") }}</h1></v-col>
                     <v-col class="col-5">
                         <v-file-input prepend-icon="" prepend-inner-icon="publish" filled :placeholder="$t('signatureCheck.drop')" outlined v-model="file">
                         </v-file-input>
                     </v-col>
                 </v-row>
                 <v-row>
-                    <v-col class="col-4"><h1>{{ $t("signatureCheck.uploadProof") }}</h1><span>{{ $t("signatureCheck.optional")}}</span></v-col>
+                    <v-col class="col-4 align-right"><h1>{{ $t("signatureCheck.uploadProof") }}</h1><span>{{ $t("signatureCheck.optional")}}</span></v-col>
                     <v-col class="col-5">
                         <v-file-input prepend-icon="" prepend-inner-icon="publish" filled :placeholder="$t('signatureCheck.drop')" outlined v-model="proof" accept="application/json" >
                         </v-file-input>
                     </v-col>
                 </v-row>
             </v-flex>
-            <v-flex v-if="checkResponse !== undefined">
+            <v-flex v-if="checkResponse">
                 <v-row class="banner" justify="center" align="center">
                     <v-col class="col-2">
                         <div class="text-center">
@@ -32,8 +32,8 @@
                         </div>
                     </v-col>
                     <v-col class="col-10 pt-4">
-                        <h1 :class="'title_'+(checkSucceeded ? 'success' : 'error')"> {{ shortMessage }}</h1>
-                        <p class="pt-4">{{ longMessage }}</p>
+                        <h1 :class="'title_'+(checkSucceeded ? 'success' : 'error')"> {{ mainMessage("title") }}</h1>
+                        <p class="pt-4">{{ mainMessage("message") }}</p>
                     </v-col>
                 </v-row>
                 <v-row v-if="checkSucceeded">
@@ -76,7 +76,7 @@
                     </v-expansion-panels>
                 </v-row>
             </v-flex>
-            <v-flex v-if="checkSucceeded" class="mt-5">
+            <v-flex v-if="checkResponse" class="mb-5">
                 <v-row>
                     <v-col class="col-2"></v-col>
                     <v-col class="col-8 small">{{ $t("signatureCheck.success.info.title")}}</v-col>
@@ -107,8 +107,8 @@
                     <v-col class="col-1"> </v-col>
                 </v-row>
             </v-flex>
-            <div class="text-center mt-5">
-                <IconButton leftIcon="double_arrow" @click="check" color="var(--var-color-blue-sword)" :disabled="file === null">{{ $t("signatureCheck.generate") }}</IconButton>
+            <div class="text-center">
+                <IconButton leftIcon="double_arrow" @click="check" color="var(--var-color-blue-sword)" :disabled="file === null">{{ (!fileHash) ? $t("signatureCheck.generate")  : $t("signatureCheck.regenerate")}}</IconButton>
             </div>
 
             <v-flex id="bottom">
@@ -169,6 +169,13 @@
         font-size: 12px;
         background-color: #fffaef !important;
     }
+
+    .small-text {
+        font-size: 12px;
+        margin-left: 15px;
+        margin-right: 15px;
+        text-align: justify;
+    }
 </style>
 <script lang="ts">
     import {SignatureCheckRequest, SignatureCheckResponse} from "@/api/types"
@@ -177,16 +184,24 @@
 
     @Component
     export default class SignatureCheck extends Vue {
-        private file: Blob | null = null
-        private proof: Blob | null = null
-        private contentFile: string | undefined = undefined
-        private contentProof: string | undefined = undefined
+
+        private static format(str: string, values: Array<string>) {
+            for (let i = 0 ; i < values.length ; ++i) {
+                str = str.replace("{" + i + "}", values[i])
+            }
+            return str
+        }
+
+        private file: File | null = null
+        private proof: File | null = null
         private fileHash: string = ""
-        private proofHash: string = ""
+        private proofHash: string | undefined = undefined
 
         private mounted() {
             this.file = null
             this.proof = null
+            this.fileHash = ""
+            this.proofHash = undefined
             this.$modules.signatures.reset()
         }
 
@@ -198,47 +213,37 @@
             return this.checkResponse?.output === "OK"
         }
 
-        private static format(str: string, values: Array<string>) {
-            for (let i = 0 ; i < values.length ; ++i) {
-                str = str.replace("{" + i + "}", values[i])
-            }
-            return str
-        }
-
-        private get shortMessage() {
+        private mainMessage(part: string) {
             if (this.checkSucceeded) {
-                let n = this.checkResponse?.check_status! + 1
-                return this.parse("signatureCheck.success.message" + n.toString() + ".block1.title")
+                const n = this.checkResponse?.check_status! + 1
+                return this.parse("signatureCheck.success.message" + n.toString() + ".block1." + part)
             } else {
-                return this.parse("signatureCheck.errors." + this.checkResponse?.error?.toLowerCase() + ".title")
-            }
-        }
-
-        private get longMessage() {
-            if (this.checkSucceeded) {
-                let t = this.checkResponse?.check_status! + 1
-                return this.parse("signatureCheck.success.message" + t.toString() + ".block1.message")
-            } else {
-               return this.parse("signatureCheck.errors." + this.checkResponse?.error?.toLowerCase())
+                return this.parse("signatureCheck.errors." + this.checkResponse?.error?.toLowerCase() + "." + part)
             }
         }
 
         private parse(message: string, idx: number = 0) {
             if (this.checkResponse) {
-                let res: string = this.$t(message).toString()
+                const res: string = this.$t(message).toString()
 
                 switch (message) {
                     case "signatureCheck.success.message1.block1.message":
-                        return SignatureCheck.format(res, [(this.checkResponse.signer !== undefined) ? this.checkResponse.signer : this.$t("signatureCheck.unknown").toString(), this.checkResponse.timestamp!.toString()])
+                        return SignatureCheck.format(res, [
+                            this.checkResponse.signer || this.$t("signatureCheck.unknown").toString(),
+                            this.checkResponse.timestamp!.toString()])
+
                     case "signatureCheck.success.message2.block1.message":
-                        return SignatureCheck.format(res, [(this.checkResponse.signer !== undefined) ? this.checkResponse.signer : this.$t("signatureCheck.unknown").toString(), this.checkResponse.timestamp!.toString()])
+                        return SignatureCheck.format(res, [
+                            this.checkResponse.signer || this.$t("signatureCheck.unknown").toString(),
+                            this.checkResponse.timestamp!.toString()])
 
                     case "signatureCheck.success.message1.block2.line1":
                         return SignatureCheck.format(res, [this.checkResponse.proof.file_name])
 
                     case "signatureCheck.success.message1.block2.line2":
                     case "signatureCheck.success.message2.block2.line1":
-                        return SignatureCheck.format(res, [this.checkResponse.proof.algorithm, this.checkResponse.proof.hash_document])
+                        return SignatureCheck.format(res, [this.checkResponse.proof.algorithm,
+                            this.checkResponse.proof.hash_document])
 
                     case "signatureCheck.success.message1.block2.line3":
                     case "signatureCheck.success.message2.block2.line2":
@@ -247,22 +252,25 @@
 
                     case "signatureCheck.success.message1.block2.line4":
                     case "signatureCheck.success.message2.block2.line8":
-                        return SignatureCheck.format(res, [this.checkResponse.proof.transaction_hash!, this.checkResponse.proof.block_hash!, this.checkResponse.timestamp!.toString()])
+                        return SignatureCheck.format(res, [this.checkResponse.proof.transaction_hash!,
+                            this.checkResponse.proof.block_hash!, this.checkResponse.timestamp!.toString()])
 
                     case "signatureCheck.success.message2.block2.line4":
                         return SignatureCheck.format(res, [this.checkResponse.proof.hash_document])
 
                     case "signatureCheck.success.message1.block2.line5":
                     case "signatureCheck.success.message2.block2.line9":
-                       return SignatureCheck.format(res, [this.checkResponse.proof.origin_public_key, (this.checkResponse.signer !== undefined) ? this.checkResponse.signer : this.$t("signatureCheck.unknown").toString()])
+                       return SignatureCheck.format(res, [this.checkResponse.proof.origin_public_key,
+                           this.checkResponse.signer || this.$t("signatureCheck.unknown").toString()])
 
                     case "signatureCheck.success.message1.block2.line7":
                     case "signatureCheck.success.message2.block2.line10":
                         return SignatureCheck.format(res, [this.checkResponse.proof.contract_address])
 
                     case "signatureCheck.success.message2.block2.line5":
-                        let hash = this.checkResponse.proof.hash_list[idx]
-                        return SignatureCheck.format(res, [hash.position!, (hash.hash) ? hash.hash : "", this.checkResponse.check_process[idx]])
+                        const hash = this.checkResponse.proof.hash_list[idx]
+                        return SignatureCheck.format(res, [hash.position!, hash.hash || "",
+                            this.checkResponse.check_process[idx]])
 
                     case "signatureCheck.errors.hash_inconsistent":
                         return SignatureCheck.format(res, [this.fileHash, this.checkResponse.proof.hash_document])
@@ -271,7 +279,9 @@
                         return SignatureCheck.format(res, [this.checkResponse.proof.hash_root])
 
                     case "signatureCheck.errors.document_known_unknown_root_hash":
-                        return SignatureCheck.format(res, [(this.checkResponse.signer !== undefined) ? this.checkResponse.signer : this.$t("signatureCheck.unknown").toString(), this.checkResponse.proof.public_key, this.checkResponse.timestamp!.toString()])
+                        return SignatureCheck.format(res, [
+                            this.checkResponse.signer || this.$t("signatureCheck.unknown").toString(),
+                            this.checkResponse.proof.public_key, this.checkResponse.timestamp!.toString()])
 
                     case "signatureCheck.errors.no_transaction":
                         return SignatureCheck.format(res, [this.checkResponse.proof.hash_root])
@@ -284,48 +294,40 @@
 
         private parseLink(message: string, placeholder: string, stats: {[key: string]: string}) {
             let format = ""
-            let res = this.parse(message)
-            for (let i in stats) {
+            const res = this.parse(message)
+            for (const i of Object.keys(stats)) {
                 format = format + i + "=\"" + stats[i] + "\" "
             }
-            return res?.replace("{#}", "<a "+format+">" + placeholder + "</a>")
+            return res?.replace("{#}", "<a " + format + ">" + placeholder + "</a>")
         }
 
         private check() {
             if (this.file !== null) {
                 const reader = new FileReader()
-                reader.onload = () => {
-                    this.contentFile = reader.result?.toString()
+                reader.onloadend = (e) => {
+                    const wordArray = CryptoJS.lib.WordArray.create(e.target!.result)
+                    this.fileHash = CryptoJS.SHA256(wordArray).toString()
                     if (this.proof !== null) {
                         const readerProof = new FileReader()
-                        readerProof.onload = () => {
-                            this.contentProof = readerProof.result?.toString()
-                            this.encodeSend()
+                        readerProof.onloadend = (e2) => {
+                            this.proofHash = e2.target!.result!.toString().substr("data:application/json;base64,".length)
+                            this.send()
                         }
-                        readerProof.readAsText(this.proof)
+                        readerProof.readAsDataURL(this.proof!)
                     } else {
-                        this.encodeSend()
+                        this.send()
                     }
                 }
-                reader.readAsText(this.file)
+                reader.readAsArrayBuffer(this.file!)
             }
         }
 
-        private encodeSend() {
-            this.fileHash = CryptoJS.SHA256(this.contentFile!).toString()
-            let proof: string | undefined = undefined
-
-            if (this.contentProof !== undefined) {
-                proof = btoa(this.contentProof).toString()
-            }
-
+        private send() {
             const sigCheck: SignatureCheckRequest = {
-                //documentHash: this.fileHash,
-                documentHash: "142f9eb8376093e5c24c74714bef07c187cd9a4a81e4f758515ce21b06b2e12a",
-                proof: proof,
+                documentHash: this.fileHash,
+                proof: this.proofHash,
             }
             this.$modules.signatures.check(sigCheck)
         }
     }
 </script>
-
