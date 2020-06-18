@@ -6,7 +6,7 @@ export interface SignatureCheckRequest {
 
 export interface Hash {
     hash?: string,
-    position: string
+    position: string,
 }
 
 export interface Proof {
@@ -22,7 +22,7 @@ export interface Proof {
     signature_date?: Date
     origin_public_key: string,
     public_key: string,
-    origin: string
+    origin: string,
 }
 
 export interface SignatureCheckResponse {
@@ -40,12 +40,12 @@ export interface SignatureCheckResponse {
 }
 
 export interface AuthRequest {
-    user: string
-    password: string
+    user: string,
+    password: string,
 }
 
 export interface AuthResponse {
-    token: string
+    token: string,
 }
 
 export interface Account {
@@ -87,12 +87,12 @@ export interface AccountPatch {
 
 export interface Job {
     id: string
-    createdDate: Date
-    injectedDate?: Date
-    validatedDate?: Date
-    numberOfTry: number
+    createdDate: Date,
+    injectedDate?: Date,
+    validatedDate?: Date,
+    numberOfTry: number,
     blockHash?: string,
-    blockDepth?: number
+    blockDepth?: number,
     algorithm: string,
     flowName: string,
     stateDate: Date,
@@ -100,31 +100,54 @@ export interface Job {
     contractAddress?: string,
     transactionHash?: string,
     channelName?: string,
-    docsNumber: number
+    docsNumber: number,
 }
 
 export interface JobCriteria {
-    id?: string
-    accountId?: string
-    flowName?: string
-    dateBegin?: string
-    dateEnd?: string
-    channel?: string
-    sort?: Array<string>
-    desc?: Array<boolean>
-    page?: number
-    size?: number
+    id?: string,
+    accountId?: string,
+    flowName?: string,
+    dateBegin?: string,
+    dateEnd?: string,
+    channel?: string,
+    sort?: Array<string>,
+    desc?: Array<boolean>,
+    page?: number,
+    size?: number,
 }
 
 export interface Token {
-    id: string
-    name: string
-    revoked: boolean
-    creationDate: Date
-    expirationDate?: Date
+    id: string,
+    name: string,
+    revoked: boolean,
+    creationDate: Date,
+    expirationDate?: Date,
 }
 
 export interface TokenCreateRequest {
     expirationDate?: Date,
-    name: string
+    name: string,
+}
+
+export interface SignatureRequestParam {
+    algorithm: string,
+    flowName: string,
+    callBack?: string,
+    WebSigner?: string,
+}
+
+export interface SignMetaData {
+    fileName: string,
+    fileSize: number,
+    customFields?: {[key: string]: string},
+}
+
+export interface SignatureRequest {
+    metadata: SignMetaData,
+    hash: string,
+}
+
+export interface SignatureResponse {
+    jobId: string,
+    files: Array<SignMetaData>,
 }

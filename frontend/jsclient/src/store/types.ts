@@ -13,3 +13,12 @@ export interface FilterOption {
     channelName: string | undefined,
 }
 
+export interface FileSign {
+    name: string,
+    size: number,
+    hash: string
+    keys: Array<string>,
+    values: Array<string>,
+    newKey?: string,
+    newValue?: string,
+}

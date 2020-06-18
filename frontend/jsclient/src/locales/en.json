@@ -232,6 +232,21 @@
       "copyId": "Copy"
     }
   },
+  "signatureHandler": {
+    "title": "Signature request",
+    "fileName": "File name",
+    "size":"Size",
+    "hash": "Hash",
+    "keyValue": "Keys & Values",
+    "sign": "Sign",
+    "cancel": "Cancel",
+    "upload": "Upload",
+    "uploadFiles": "Upload your files",
+    "algorithm": "Hash algorithm",
+    "name": "Name",
+    "data": "Data",
+    "start": "Start your job"
+  },
   "errors": {
     "login": {
       "invalid": "Wrong login and/or password.",

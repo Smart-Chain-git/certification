@@ -20,7 +20,7 @@ import {
     ReceptionTemplate,
     Resources,
     SignatureCheck,
-    SignatureRequest,
+    SignatureHandler,
 } from "@/ui/components"
 import Vue from "vue"
 import Router from "vue-router"
@@ -136,7 +136,7 @@ const router = new Router({
                 },
                 {
                     path: "signature-request",
-                    component: SignatureRequest,
+                    component: SignatureHandler,
                     beforeEnter: checkUserHasPubKey,
                 },
                 {

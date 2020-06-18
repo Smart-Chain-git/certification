@@ -232,6 +232,21 @@
       }
     }
   },
+  "signatureHandler": {
+    "title": "Requête de signature",
+    "fileName": "Nom",
+    "size":"Taille",
+    "hash": "Hash",
+    "keyValue": "Clés & Valeurs",
+    "sign" : "Signer",
+    "cancel": "Annuler",
+    "upload": "Téléverser",
+    "uploadFiles": "Téléversez vos fichiers",
+    "algorithm": "Algorithme de hashage",
+    "name": "Nom",
+    "data": "Données",
+    "start": "Démarrez votre job"
+  },
   "errors": {
     "login": {
       "invalid": "Erreur sur votre login et/ou mot de passe.",
