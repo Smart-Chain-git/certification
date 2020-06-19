@@ -70,10 +70,10 @@ tezos:
       publicKey: "edpkurPsQ8eUApnLUJ9ZPDvu98E8VNj4KtJa1aZr16Cr5ow5VHKnz4"
       secretKey: ENC(LvGfsJLxfwNoOIrKgdp9Y4E9EXyJZGe+bBhacjAuxDUIJZBj54O09suxCx6Y/Nzdq4+p8xbs0fdyXyPT+HY1vQ==)
   contract:
-    address: "KT1WJCy3cwLrfWhBH95otTSSAFMT8xndnt3K"
+    address: "KT1MDJeDXHDeq1SojdCoiQKx7ZktrV12Zpk7"
   node:
-    url: "edivtezosnode.ren-dev2.lan:18731"
+    url: "http://node:18731"
   indexer:
-    url: "edivtezosnode.ren-dev2.lan:8001"
+    url: "http://tzindex:8000"
   validation:
     minDepth: 30

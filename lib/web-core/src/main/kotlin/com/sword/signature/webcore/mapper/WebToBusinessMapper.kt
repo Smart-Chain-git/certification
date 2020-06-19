@@ -1,6 +1,5 @@
 package com.sword.signature.webcore.mapper
 
-
 import com.sword.signature.api.proof.Proof
 import com.sword.signature.api.sign.SignMetadata
 import com.sword.signature.api.sign.SignRequest
