@@ -83,7 +83,7 @@ fun com.sword.signature.business.model.Proof.toWeb() = Proof(
 
 fun com.sword.signature.business.model.URLNode.toWeb() = Proof.UrlNode(
     url = url,
-    type = type,
+    type = type.value,
     comment = comment
 )
 

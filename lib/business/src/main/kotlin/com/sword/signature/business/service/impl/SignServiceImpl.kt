@@ -204,7 +204,7 @@ class SignServiceImpl(
         if (apiStorageUrl != null && job.contractAddress != null) {
             getContractBigMapId(job.contractAddress!!).let {
                 urlNodes.add(
-                    URLNode.ApiStorageURLNode(
+                    URLNode.fromApiStorageUrl(
                         url = apiStorageUrl,
                         bigMapId = it.toString(),
                         rootHash = element.hash
@@ -215,7 +215,7 @@ class SignServiceImpl(
         // API Transaction Url
         if (apiTransactionUrl != null && job.transactionHash != null) {
             urlNodes.add(
-                URLNode.ApiTransactionURLNode(
+                URLNode.fromApiTransactionUrl(
                     url = apiTransactionUrl,
                     transactionHash = job.transactionHash!!
                 )
@@ -223,7 +223,7 @@ class SignServiceImpl(
         }
         // Web Provider Url
         webProviderUrl?.let {
-            urlNodes.add(URLNode.WebProviderURLNode(url = it))
+            urlNodes.add(URLNode.fromWebProviderUrl(url = it))
         }
 
         return Proof(

@@ -4,6 +4,8 @@ import com.sword.signature.api.proof.Proof
 import com.sword.signature.api.sign.SignMetadata
 import com.sword.signature.api.sign.SignRequest
 import com.sword.signature.business.model.FileMetadata
+import com.sword.signature.business.model.URLNode
+import com.sword.signature.business.model.URLNodeType
 import com.sword.signature.common.enums.TreeElementPosition
 
 fun SignRequest.toBusiness() = Pair(
@@ -27,9 +29,17 @@ fun Proof.toBusiness() = com.sword.signature.business.model.Proof(
     customFields = customFields,
     contractAddress = contractAddress,
     transactionHash = transactionHash,
+    blockChain = blockChain,
     blockHash = blockHash,
     signerAddress = signerAddress,
-    creatorAddress = creatorAddress
+    creatorAddress = creatorAddress,
+    urls = urls.map { it.toBusiness() }
+)
+
+fun Proof.UrlNode.toBusiness() = URLNode(
+    url = url,
+    type = URLNodeType.valueOf(type),
+    comment = comment
 )
 
 fun Proof.HashNode.toBusiness() = Pair(

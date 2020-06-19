@@ -196,7 +196,7 @@ class SignServiceTest @Autowired constructor(
         val file4Id = "5e8ed52fb1606a18565cbb92"
 
         private val blockchain = "TEZOS_TEST"
-        private val webProviderURLNode = URLNode.WebProviderURLNode(url ="WEB_PROVIDER_TEST")
+        private val webProviderURLNode = URLNode.fromWebProviderUrl(url ="WEB_PROVIDER_TEST")
 
         @BeforeEach
         fun refreshDatabase() {
