@@ -11,6 +11,7 @@ import com.sword.signature.common.enums.JobStateType
 import com.sword.signature.daemon.configuration.TezosConfig
 import com.sword.signature.daemon.logger
 import com.sword.signature.daemon.sendPayload
+import com.sword.signature.tezos.reader.service.TezosReaderService
 import com.sword.signature.tezos.writer.service.TezosWriterService
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.messaging.MessageChannel
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Component
 class AnchorJob(
     private val jobService: JobService,
     private val tezosWriterService: TezosWriterService,
+    private val tezosReaderService: TezosReaderService,
     private val accountService: AccountService,
     private val anchoringRetryMessageChannel: MessageChannel,
     private val validationMessageChannel: MessageChannel,
@@ -36,7 +38,23 @@ class AnchorJob(
             val job = jobService.findById(requester, jobId, true)
             val rootHash = job?.rootHash ?: throw IllegalStateException("An existing job must have a root hash")
 
-            LOGGER.debug("Ready to anchor job ({}) rootHash ({}) into the blockchain.", jobId, rootHash)
+            LOGGER.debug("Check existing root hash {} on the blockchain.", rootHash)
+            if (tezosReaderService.hashAlreadyExist(contractAddress, rootHash)) {
+                jobService.patch(
+                    requester = requester,
+                    jobId = jobId,
+                    patch = JobPatch(
+                        state = JobStateType.REJECTED
+                    )
+                )
+                LOGGER.info(
+                    "Job '{}' got rejected due to its rootHash '{}' being already on the blockchain",
+                    jobId,
+                    rootHash
+                )
+            }
+
+            LOGGER.debug("Ready to anchor job '{}' rootHash '{}' into the blockchain.", jobId, rootHash)
 
             val requesterKeys = getTezosKeys(requester.login)
             val signerIdentity =

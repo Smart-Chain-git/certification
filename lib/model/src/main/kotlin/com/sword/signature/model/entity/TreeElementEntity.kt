@@ -8,19 +8,13 @@ import org.springframework.data.mongodb.core.mapping.Document
 
 @Document(collection = "treeElements")
 data class TreeElementEntity(
-    @Id
-    val id: String? = null,
-
-    @Indexed(unique = true)
-    val hash: String,
-
+    @Id val id: String? = null,
+    @Indexed val hash: String,
     val metadata: Metadata? = null,
-    @Indexed
-    val parentId: String? = null,
+    @Indexed val parentId: String? = null,
     val position: TreeElementPosition? = null,
     val jobId: String,
     val type: TreeElementType
-
 ) {
     data class Metadata(
         val fileName: String,

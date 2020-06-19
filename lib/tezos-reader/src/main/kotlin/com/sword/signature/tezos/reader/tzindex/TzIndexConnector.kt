@@ -1,6 +1,7 @@
 package com.sword.signature.tezos.reader.tzindex
 
 import com.sword.signature.tezos.reader.TzException
+import com.sword.signature.tezos.reader.tzindex.model.TzBigMapEntry
 import com.sword.signature.tezos.reader.tzindex.model.TzBlock
 import com.sword.signature.tezos.reader.tzindex.model.TzContract
 import com.sword.signature.tezos.reader.tzindex.model.TzOp
@@ -53,5 +54,20 @@ class TzIndexConnector(
         }
 
         return response.bodyToMono(TzContract::class.java).awaitSingle()
+    }
+
+    suspend fun getBigMapEntry(bigMapId: String, key: String): TzBigMapEntry? {
+        val response = webClient.get().uri("/explorer/bigmap/{bigMapId}/{key}", bigMapId, key).awaitExchange()
+        val status = response.statusCode()
+
+        if (status.is4xxClientError) {
+            return null
+        }
+
+        if (status.is5xxServerError) {
+            throw TzException.IndexerAccessException()
+        }
+
+        return response.bodyToMono(TzBigMapEntry::class.java).awaitSingle()
     }
 }
