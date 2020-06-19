@@ -5,6 +5,8 @@ import com.sword.signature.api.proof.Proof
 import com.sword.signature.business.exception.EntityNotFoundException
 import com.sword.signature.business.model.FileFilter
 import com.sword.signature.business.service.FileService
+import com.sword.signature.common.criteria.FileCriteria
+import com.sword.signature.common.criteria.JobCriteria
 import com.sword.signature.rest.data.pagedSorted
 import com.sword.signature.webcore.authentication.CustomUserDetails
 import com.sword.signature.webcore.mapper.toWeb
@@ -14,6 +16,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.reactive.awaitFirstOrNull
+import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
@@ -26,7 +29,7 @@ class FileHandler(
 
     @Operation(security = [SecurityRequirement(name = "bearer-key")])
     @RequestMapping(
-        value = ["/file/{fileId}/proof"],
+        value = ["/files/{fileId}/proof"],
         produces = ["application/json"],
         method = [RequestMethod.GET]
     )
@@ -73,4 +76,38 @@ class FileHandler(
 
         return files.map { it.toWeb() }
     }
+
+    @Operation(security = [SecurityRequirement(name = "bearer-key")])
+    @RequestMapping(
+        value = ["/files-count"],
+        produces = ["application/json"],
+        method = [RequestMethod.GET]
+    )
+    suspend fun fileCount(
+        @AuthenticationPrincipal user: CustomUserDetails,
+        @RequestParam(value = "id", required = false) id: String?,
+        @RequestParam(value = "name", required = false) name: String?,
+        @RequestParam(value = "hash", required = false) hash: String?,
+        @RequestParam(value = "jobId", required = false) jobId: String?,
+        @RequestParam(value = "accountId", required = false) accountId: String?,
+        @RequestParam(value = "dateStart", required = false) dateStart: LocalDate?,
+        @RequestParam(value = "dateEnd", required = false) dateEnd: LocalDate?,
+        @RequestParam(value = "sort", required = false) sort: List<String>?,
+        @RequestParam(value = "page", required = false) page: Int?,
+        @RequestParam(value = "size", required = false) size: Int?
+    ): Long {
+
+        val filter = FileFilter(
+            id = id,
+            name = name,
+            hash = hash,
+            jobId = jobId,
+            accountId = accountId,
+            dateStart = dateStart,
+            dateEnd = dateEnd
+        )
+
+        return fileService.countAll(user.account, filter)
+    }
+
 }

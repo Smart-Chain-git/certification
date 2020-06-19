@@ -17,10 +17,8 @@ import com.sword.signature.model.repository.TreeElementRepository
 import com.sword.signature.tezos.reader.service.TezosReaderService
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.reactive.asFlow
-import kotlinx.coroutines.reactive.awaitFirst
-import kotlinx.coroutines.reactive.awaitFirstOrNull
-import kotlinx.coroutines.reactive.awaitSingle
+import kotlinx.coroutines.reactive.*
+import kotlinx.coroutines.runBlocking
 import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
@@ -131,6 +129,37 @@ class FileServiceImpl(
         }
 
         return files.map { it.toBusiness() as TreeElement.LeafTreeElement }
+    }
+
+    override suspend fun countAll(requester: Account, criteria: FileFilter?): Long {
+        if (!requester.isAdmin && requester.id != criteria?.accountId) {
+            throw IllegalAccessException("user ${requester.login} does not have role/permission to list jobs for accountId=[${criteria?.accountId}]")
+        }
+
+        val files = if (criteria != null) {
+            val jobCriteria: JobCriteria? =
+                if (criteria.accountId != null || criteria.dateStart != null || criteria.dateEnd != null)
+                    JobCriteria(
+                        accountId = criteria.accountId,
+                        dateStart = criteria.dateStart,
+                        dateEnd = criteria.dateEnd
+                    ) else null
+
+            val allowedJobsIds: List<String>? =
+                jobCriteria?.let { jobRepository.findAll(jobCriteria.toPredicate()).asFlow().map { it.id!! }.toList() }
+
+            val documentCriteria = FileCriteria(
+                id = criteria.id,
+                name = criteria.name,
+                hash = criteria.hash,
+                jobId = criteria.jobId,
+                jobIds = allowedJobsIds
+            )
+            treeElementRepository.count(documentCriteria.toPredicate())
+        } else {
+            treeElementRepository.count(FileCriteria().toPredicate())
+        }
+        return files.awaitLast()
     }
 
     private suspend fun getContractCreator(contractAddress: String): String? {

@@ -1,4 +1,5 @@
 import AccountsModule from "@/store/modules/AccountsModule"
+import FilesModule from "@/store/modules/FilesModule"
 import JobsModule from "@/store/modules/JobsModule"
 import TokensModule from "@/store/modules/TokensModule"
 import store from "@/store/store"
@@ -19,10 +20,18 @@ const tokens = new TokensModule({
     name: "tokens",
 })
 
+const files = new FilesModule({
+    store,
+    name: "files",
+    accountsModule: accounts,
+})
+
+
 const modules = {
     accounts,
     jobs,
     tokens,
+    files,
 }
 
 export type Modules = typeof modules

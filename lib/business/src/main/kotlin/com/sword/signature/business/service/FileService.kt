@@ -4,6 +4,7 @@ import com.sword.signature.business.model.Account
 import com.sword.signature.business.model.FileFilter
 import com.sword.signature.business.model.Proof
 import com.sword.signature.business.model.TreeElement
+import com.sword.signature.common.criteria.JobCriteria
 import org.springframework.data.domain.Pageable
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
@@ -30,4 +31,12 @@ interface FileService {
      * @return Proof of the file.
      */
     suspend fun getFileProof(requester: Account, fileId: String): Mono<Proof>
+
+    /**
+     * Computes the total count of files responding to the passed criteria
+     * @param request The account requesting the count.
+     * @param criteria The criteria.
+     * @return Count of files.
+     */
+    suspend fun countAll(requester: Account, criteria: FileFilter? = null): Long
 }

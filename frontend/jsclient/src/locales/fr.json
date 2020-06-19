@@ -114,6 +114,16 @@
     "login": "Connexion",
     "logout": "Déconnexion"
   },
+  "documents": {
+    "title": "Liste des documents",
+    "jobId": "Job concerné",
+    "hash": "Hash du document",
+    "dates": "Dates",
+    "proof": "Preuve",
+    "search": "Rechercher",
+    "id": "Nom du document",
+    "records": "résultats"
+  },
   "errors": {
     "login": {
       "invalid": "Erreur sur votre login et/ou mot de passe.",
