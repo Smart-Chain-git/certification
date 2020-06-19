@@ -35,14 +35,16 @@ class MigrationHandler(
             val clazz = entity.type
             if (clazz.isAnnotationPresent(org.springframework.data.mongodb.core.mapping.Document::class.java)) {
                 val indexOps = mongoTemplate.indexOps(clazz)
+                // Remove all existing indexes
+                indexOps.dropAllIndexes().awaitFirstOrNull()
                 resolver.resolveIndexFor(clazz)
-                    .forEach { indexDefinition -> indexOps.ensureIndex(indexDefinition).awaitSingle() }
+                    .forEach { indexDefinition ->
+                        indexOps.ensureIndex(indexDefinition).awaitSingle()
+                    }
             }
         }
 
     }
-
-
 
 
     /**
@@ -51,7 +53,7 @@ class MigrationHandler(
     @Transactional
     suspend fun applyMigrations() {
         val appliedMigrations: List<MigrationEntity> = migrationRepository.findAll().collectList().awaitLast()!!
-                .sortedWith(MigrationEntity.versionComparator())
+            .sortedWith(MigrationEntity.versionComparator())
         val migrations: List<Migration> = readMigrations()
         appliedMigrations.forEachIndexed { index, appliedMigration ->
             if (index + 1 > migrations.size) {
@@ -73,11 +75,13 @@ class MigrationHandler(
         for (index in appliedMigrations.size until migrations.size) {
             val migration = migrations[index]
             applyMigration(migration.content)
-            migrationRepository.insert(MigrationEntity(
+            migrationRepository.insert(
+                MigrationEntity(
                     name = migration.name,
                     version = migration.version,
                     hash = hashMigration(migration.content)
-            )).awaitFirstOrNull()
+                )
+            ).awaitFirstOrNull()
             LOGGER.info("New migration '{}' applied.", migration.name)
         }
         LOGGER.info("{} new migration(s) successfully applied.", migrations.size - appliedMigrations.size)
@@ -91,11 +95,13 @@ class MigrationHandler(
         val migrations = mutableListOf<Migration>()
         for (resource in resources) {
             val migrationContent = InputStreamReader(resource.inputStream).readText()
-            migrations.add(Migration(
+            migrations.add(
+                Migration(
                     name = resource.filename!!,
                     version = extractVersion(resource.filename!!),
                     content = migrationContent
-            ))
+                )
+            )
         }
         // Sort the migrations list by version and return it as an array
         return migrations.sortedWith(Migration.versionComparator())
@@ -112,18 +118,21 @@ class MigrationHandler(
             // Insert operations
             @Suppress("UNCHECKED_CAST") val documentsToInsert = collection["insert"] as List<Document>?
             documentsToInsert?.let {
-                mongoTemplate.getCollection(collectionName).awaitFirstOrNull()?.insertMany(it)?.awaitLast() }
+                mongoTemplate.getCollection(collectionName).awaitFirstOrNull()?.insertMany(it)?.awaitLast()
+            }
             // Update operations
             @Suppress("UNCHECKED_CAST") val documentsToUpdate = collection["update"] as List<Document>?
             documentsToUpdate?.let {
                 it.forEach { document ->
-                    mongoTemplate.getCollection(collectionName).awaitFirstOrNull()?.replaceOne(Filters.eq("_id", document["_id"]), document)?.awaitLast()
+                    mongoTemplate.getCollection(collectionName).awaitFirstOrNull()
+                        ?.replaceOne(Filters.eq("_id", document["_id"]), document)?.awaitLast()
                 }
             }
             // Delete
             @Suppress("UNCHECKED_CAST") val documentToDelete = collection["delete"] as List<Document>?
             documentToDelete?.let { documents ->
-                mongoTemplate.getCollection(collectionName).awaitFirstOrNull()?.deleteMany(Filters.`in`("_id", documents.map { it["_id"] }))?.awaitLast()
+                mongoTemplate.getCollection(collectionName).awaitFirstOrNull()
+                    ?.deleteMany(Filters.`in`("_id", documents.map { it["_id"] }))?.awaitLast()
             }
         }
 
