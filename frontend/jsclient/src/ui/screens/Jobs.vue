@@ -253,9 +253,6 @@
             this.$modules.files.setFilter({
                 accountId: this.$modules.accounts.meAccount!.id,
                 dates: [],
-                hash: undefined,
-                id: undefined,
-                name: undefined,
                 jobId: jobId,
             })
             this.$router.push("/documents/")

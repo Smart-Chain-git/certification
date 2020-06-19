@@ -31,12 +31,4 @@ interface FileService {
      * @return Proof of the file.
      */
     suspend fun getFileProof(requester: Account, fileId: String): Mono<Proof>
-
-    /**
-     * Computes the total count of files responding to the passed criteria
-     * @param request The account requesting the count.
-     * @param criteria The criteria.
-     * @return Count of files.
-     */
-    suspend fun countAll(requester: Account, criteria: FileFilter? = null): Long
 }

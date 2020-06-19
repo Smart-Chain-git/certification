@@ -1,9 +1,9 @@
 <template>
     <v-container fluid>
         <v-row class="mx-3 mt-3" justify="space-between">
-            <v-flex>
-                <h1>{{ $t('account.list.title') }}</h1>
-            </v-flex>
+            <v-col class="pl-4" tag="h1">
+                <h1>{{$t('account.list.title')}}</h1>
+            </v-col>
         </v-row>
         <v-row>
             <v-flex xs11>

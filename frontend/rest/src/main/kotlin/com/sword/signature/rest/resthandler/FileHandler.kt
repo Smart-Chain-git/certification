@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.reactive.awaitFirstOrNull
+import kotlinx.coroutines.reactive.awaitLast
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
@@ -56,8 +57,10 @@ class FileHandler(
         @RequestParam(value = "hash", required = false) hash: String?,
         @RequestParam(value = "jobId", required = false) jobId: String?,
         @RequestParam(value = "accountId", required = false) accountId: String?,
-        @RequestParam(value = "dateStart", required = false) dateStart: LocalDate?,
-        @RequestParam(value = "dateEnd", required = false) dateEnd: LocalDate?,
+        @RequestParam(value = "dateStart", required = false)
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)dateStart: LocalDate?,
+        @RequestParam(value = "dateEnd", required = false)
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)dateEnd: LocalDate?,
         @RequestParam(value = "sort", required = false) sort: List<String>?,
         @RequestParam(value = "page", required = false) page: Int?,
         @RequestParam(value = "size", required = false) size: Int?
@@ -90,8 +93,10 @@ class FileHandler(
         @RequestParam(value = "hash", required = false) hash: String?,
         @RequestParam(value = "jobId", required = false) jobId: String?,
         @RequestParam(value = "accountId", required = false) accountId: String?,
-        @RequestParam(value = "dateStart", required = false) dateStart: LocalDate?,
-        @RequestParam(value = "dateEnd", required = false) dateEnd: LocalDate?,
+        @RequestParam(value = "dateStart", required = false)
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) dateStart: LocalDate?,
+        @RequestParam(value = "dateEnd", required = false)
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) dateEnd: LocalDate?,
         @RequestParam(value = "sort", required = false) sort: List<String>?,
         @RequestParam(value = "page", required = false) page: Int?,
         @RequestParam(value = "size", required = false) size: Int?
@@ -107,7 +112,7 @@ class FileHandler(
             dateEnd = dateEnd
         )
 
-        return fileService.countAll(user.account, filter)
+        return fileService.getFiles(user.account, filter).count().awaitLast()
     }
 
 }

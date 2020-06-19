@@ -12,6 +12,7 @@
                         autocomplete="off"
                         :value="datesRangeDisplay"
                         :label="label"
+                        :placeholder="placeholder"
                         v-on="on"
                         outlined
                         readonly
@@ -56,6 +57,7 @@
         @Prop(String) private readonly color!: string
         @Prop(String) private readonly label!: string
         @Prop(String) private readonly min!: string
+        @Prop(String) private readonly placeholder!: string
 
         private menu = false
 

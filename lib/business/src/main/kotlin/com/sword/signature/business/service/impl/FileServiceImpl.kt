@@ -131,37 +131,6 @@ class FileServiceImpl(
         return files.map { it.toBusiness() as TreeElement.LeafTreeElement }
     }
 
-    override suspend fun countAll(requester: Account, criteria: FileFilter?): Long {
-        if (!requester.isAdmin && requester.id != criteria?.accountId) {
-            throw IllegalAccessException("user ${requester.login} does not have role/permission to list jobs for accountId=[${criteria?.accountId}]")
-        }
-
-        val files = if (criteria != null) {
-            val jobCriteria: JobCriteria? =
-                if (criteria.accountId != null || criteria.dateStart != null || criteria.dateEnd != null)
-                    JobCriteria(
-                        accountId = criteria.accountId,
-                        dateStart = criteria.dateStart,
-                        dateEnd = criteria.dateEnd
-                    ) else null
-
-            val allowedJobsIds: List<String>? =
-                jobCriteria?.let { jobRepository.findAll(jobCriteria.toPredicate()).asFlow().map { it.id!! }.toList() }
-
-            val documentCriteria = FileCriteria(
-                id = criteria.id,
-                name = criteria.name,
-                hash = criteria.hash,
-                jobId = criteria.jobId,
-                jobIds = allowedJobsIds
-            )
-            treeElementRepository.count(documentCriteria.toPredicate())
-        } else {
-            treeElementRepository.count(FileCriteria().toPredicate())
-        }
-        return files.awaitLast()
-    }
-
     private suspend fun getContractCreator(contractAddress: String): String? {
         if (contractCreators.containsKey(contractAddress)) {
             return contractCreators[contractAddress]

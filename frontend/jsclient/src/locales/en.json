@@ -78,6 +78,17 @@
     "login": "Sign in",
     "logout": "Sign out"
   },
+  "documents": {
+    "title": "Documents List",
+    "jobId": "Related Job",
+    "hash": "Document hash",
+    "name": "Document name",
+    "dates": "Dates",
+    "proof": "Proof",
+    "search": "Search",
+    "back": "Back",
+    "records": "records"
+  },
   "job": {
     "detail": {
       "title": "Job details",

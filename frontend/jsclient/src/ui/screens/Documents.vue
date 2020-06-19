@@ -33,7 +33,7 @@
                                 <EditFormDateRange
                                         v-model="filter.dates"
                                         :updateRange="updateRange"
-                                        :label="$t('document.dates')"
+                                        :label="$t('documents.dates')"
                                         color="var(--var-color-blue-sword)"
                                 />
                             </v-col>
@@ -63,7 +63,7 @@
                                 <td class="text-center">{{doc.hash}}</td>
                                 <td class="text-center"><a @click="gotoDetail(doc.jobId)">{{doc.jobId}}</a></td>
                                 <td class="text-center">
-                                    <IconButton leftIcon="check" @click="getProof(doc.id)">{{ $t("documents.proof") }}</IconButton>
+                                    <IconButton leftIcon="check" @click="getProof(doc.id)" color="var(--var-color-blue-sword)">{{ $t("documents.proof") }}</IconButton>
                                 </td>
                             </tr>
                             </tbody>
@@ -103,7 +103,7 @@
 
         private get headers() {
             return [
-                {text: this.$t("documents.id"), align: "center", value: "id", width: "25%"},
+                {text: this.$t("documents.name"), align: "center", value: "id", width: "25%"},
                 {text: this.$t("documents.hash"), align: "center", value: "hash", width: "25%"},
                 {text: this.$t("documents.jobId"), align: "center", value: "jobId", width: "25%"},
                 {text: "", sortable: false, width: "25%"},
@@ -135,10 +135,8 @@
 
         @Watch("pagination")
         private search() {
-
             this.$modules.files.setFilter(this.filter)
             this.$modules.files.setPagination(this.pagination)
-
             this.$modules.files.loadFiles()
         }
 
@@ -154,7 +152,8 @@
             this.$modules.files.loadProof(fileId).then(() => {
                 const a = document.createElement("a")
                 a.setAttribute("download", this.$modules.files.getProof()!.file_name + ".json")
-                a.setAttribute("href", "data:text/json:charset=utf-8," + encodeURIComponent(JSON.stringify(this.$modules.files.getProof())))
+                a.setAttribute("href", "data:text/json:charset=utf-8," +
+                    encodeURIComponent(JSON.stringify(this.$modules.files.getProof())))
                 a.click()
             })
         }
