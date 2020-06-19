@@ -52,6 +52,7 @@ class AnchorJob(
                     jobId,
                     rootHash
                 )
+                return
             }
 
             LOGGER.debug("Ready to anchor job '{}' rootHash '{}' into the blockchain.", jobId, rootHash)

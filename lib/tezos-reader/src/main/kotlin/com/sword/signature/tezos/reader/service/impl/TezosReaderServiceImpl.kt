@@ -32,10 +32,9 @@ class TezosReaderServiceImpl(
 
     override suspend fun hashAlreadyExist(contractAddress: String, hash: String): Boolean {
         val contract = tzIndexConnector.getContract(contractAddress)
-        contract?.let {
-            val bigMapId = "0" // FIXME
-            val entry = tzIndexConnector.getBigMapEntry(bigMapId, hash)
-            entry?.let {
+        if (contract != null && contract.bigMapIds.isNotEmpty()) {
+            val bigMapId = contract.bigMapIds[0]
+            tzIndexConnector.getBigMapEntry(bigMapId.toString(), hash)?.let {
                 return true
             }
         }
