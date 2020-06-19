@@ -4,7 +4,6 @@ import com.sword.signature.business.model.Account
 import com.sword.signature.business.model.FileFilter
 import com.sword.signature.business.model.Proof
 import com.sword.signature.business.model.TreeElement
-import com.sword.signature.common.criteria.JobCriteria
 import org.springframework.data.domain.Pageable
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono

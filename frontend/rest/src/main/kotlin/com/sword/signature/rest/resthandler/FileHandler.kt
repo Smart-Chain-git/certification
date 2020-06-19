@@ -5,8 +5,6 @@ import com.sword.signature.api.proof.Proof
 import com.sword.signature.business.exception.EntityNotFoundException
 import com.sword.signature.business.model.FileFilter
 import com.sword.signature.business.service.FileService
-import com.sword.signature.common.criteria.FileCriteria
-import com.sword.signature.common.criteria.JobCriteria
 import com.sword.signature.rest.data.pagedSorted
 import com.sword.signature.webcore.authentication.CustomUserDetails
 import com.sword.signature.webcore.mapper.toWeb
@@ -58,9 +56,9 @@ class FileHandler(
         @RequestParam(value = "jobId", required = false) jobId: String?,
         @RequestParam(value = "accountId", required = false) accountId: String?,
         @RequestParam(value = "dateStart", required = false)
-        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)dateStart: LocalDate?,
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) dateStart: LocalDate?,
         @RequestParam(value = "dateEnd", required = false)
-        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)dateEnd: LocalDate?,
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) dateEnd: LocalDate?,
         @RequestParam(value = "sort", required = false) sort: List<String>?,
         @RequestParam(value = "page", required = false) page: Int?,
         @RequestParam(value = "size", required = false) size: Int?
