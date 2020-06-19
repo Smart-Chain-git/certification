@@ -4,5 +4,5 @@ import com.sword.signature.business.model.mail.TransactionalMail
 
 interface MailService {
 
-    fun sendEmail(transactionMail: TransactionalMail)
+    fun sendEmail(transactionalMail: TransactionalMail)
 }
