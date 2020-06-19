@@ -1,9 +1,11 @@
 package com.sword.signature.ui.webhandler
 
+import com.sword.signature.business.service.FileService
 import com.sword.signature.business.service.JobService
 import com.sword.signature.business.service.SignService
 import com.sword.signature.common.criteria.JobCriteria
 import com.sword.signature.webcore.mapper.toWeb
+import kotlinx.coroutines.reactive.awaitFirstOrNull
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
 import org.springframework.web.reactive.function.server.*
@@ -11,7 +13,8 @@ import org.springframework.web.reactive.function.server.*
 @Controller
 class JobHandler(
     private val signService: SignService,
-    private val jobService: JobService
+    private val jobService: JobService,
+    private val fileService: FileService
 ) {
 
     suspend fun jobs(request: ServerRequest): ServerResponse {
@@ -42,7 +45,7 @@ class JobHandler(
         val account = request.getAccount() ?: throw IllegalAccessException("not connected")
         val fileId = request.pathVariable("fileId")
         LOGGER.debug("preuve pour {} fichier {}", account.login, fileId)
-        val proof = signService.getFileProof(requester = account, fileId = fileId)
+        val proof = fileService.getFileProof(requester = account, fileId = fileId).awaitFirstOrNull()
         return if (proof == null) {
             ServerResponse.notFound().buildAndAwait()
         } else {

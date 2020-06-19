@@ -5,7 +5,7 @@ import com.sword.signature.business.model.Account
 import com.sword.signature.business.model.CheckResponse
 import com.sword.signature.business.model.Proof
 import com.sword.signature.business.service.CheckService
-import com.sword.signature.business.service.SignService
+import com.sword.signature.business.service.FileService
 import com.sword.signature.common.enums.JobStateType
 import com.sword.signature.common.enums.TreeElementPosition
 import com.sword.signature.merkletree.utils.hexStringHash
@@ -31,7 +31,7 @@ class CheckServiceImpl(
     val jobRepository: JobRepository,
     val accountRepository: AccountRepository,
     val tezosReaderService: TezosReaderService,
-    val signService: SignService,
+    val fileService: FileService,
     @Value("\${tezos.validation.minDepth}") private val minDepth: Long
 ) : CheckService {
 
@@ -114,8 +114,9 @@ class CheckServiceImpl(
                         )
                         throw CheckException.IncoherentData()
                     }
+
                     // Compute the file proof.
-                    val computedProof = signService.getFileProof(adminAccount, treeElement.id!!)
+                    val computedProof = fileService.getFileProof(adminAccount, treeElement.id!!).awaitFirstOrNull()
                         ?: throw CheckException.IncoherentData()
                     // Retrieve the signer.
                     val signer: AccountEntity? = accountRepository.findById(job.userId).awaitFirstOrNull()
@@ -229,7 +230,8 @@ class CheckServiceImpl(
             }
             // Generate a fresh proof
             val freshProof: Proof =
-                signService.getFileProof(adminAccount, treeElement.id!!) ?: return defaultResponse.get()
+                fileService.getFileProof(adminAccount, treeElement.id!!).awaitFirstOrNull()
+                    ?: return defaultResponse.get()
             // Retrieve the signer.
             val signer: AccountEntity? = accountRepository.findById(job.userId).awaitFirstOrNull()
 
