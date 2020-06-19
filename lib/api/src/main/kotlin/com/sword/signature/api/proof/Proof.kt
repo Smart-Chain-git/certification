@@ -20,6 +20,7 @@ data class Proof(
     @JsonProperty("custom_fields") val customFields: Map<String, Any>?,
     @JsonProperty("contract_address") val contractAddress: String? = null,
     @JsonProperty("transaction_hash") val transactionHash: String? = null,
+    @JsonProperty("blockchain") val blockChain: String? = null,
     @JsonProperty("block_hash") val blockHash: String? = null,
     @JsonProperty("block_depth") val blockDepth: Long? = null
 ) {

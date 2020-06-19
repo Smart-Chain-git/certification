@@ -33,3 +33,10 @@ tezos:
     url: "http://tzindex:8000"
   validation:
     minDepth: 30
+  chain: "TEZOS_CARTHAGENET_SANDBOX"
+  urls:
+    api:
+      storage: "http://127.0.0.1:8000/explorer/bigmap/$bigmapId/$rootHash"
+      transaction: "http://127.0.0.1:8000/explorer/op/$transactionHash"
+    web:
+      provider: "http://127.0.0.1:9090"

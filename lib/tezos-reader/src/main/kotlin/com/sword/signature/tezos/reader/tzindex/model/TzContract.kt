@@ -8,5 +8,7 @@ data class TzContract(
     @JsonProperty("manager")
     val manager: String,
     @JsonProperty("height")
-    val height: Long
+    val height: Long,
+    @JsonProperty("bigmap_ids")
+    val bigMapIds : List<Long>
 )

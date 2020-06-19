@@ -76,7 +76,15 @@ fun com.sword.signature.business.model.Proof.toWeb() = Proof(
     customFields = customFields,
     contractAddress = contractAddress,
     transactionHash = transactionHash,
-    blockHash = blockHash
+    blockChain = blockChain,
+    blockHash = blockHash,
+    urls = urls.map { it.toWeb() }
+)
+
+fun com.sword.signature.business.model.URLNode.toWeb() = Proof.UrlNode(
+    url = url,
+    type = type,
+    comment = comment
 )
 
 fun com.sword.signature.business.model.Algorithm.toWeb() =
@@ -90,7 +98,7 @@ fun com.sword.signature.business.model.Token.toWeb() = Token(
     id = id,
     name = name,
     jwtToken = jwtToken,
-        creationDate = creationDate,
+    creationDate = creationDate,
     expirationDate = expirationDate,
     accountId = accountId,
     revoked = revoked

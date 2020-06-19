@@ -66,7 +66,8 @@ class CheckServiceContextTest @Autowired constructor(
     private val contract = TzContract(
         address = "KT1Tq22yXWayLbmBKwZUhVXMoYqxtzp9XvTk",
         manager = "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb",
-        height = 3
+        height = 3,
+        bigMapIds = listOf(0)
     )
 
     @Nested

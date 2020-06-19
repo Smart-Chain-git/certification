@@ -13,7 +13,9 @@ data class Proof(
     val customFields: Map<String, Any>? = null,
     val contractAddress: String? = null,
     val transactionHash: String? = null,
+    val blockChain: String? = null,
     val blockHash: String? = null,
     val signerAddress: String? = null,
-    val creatorAddress: String? = null
+    val creatorAddress: String? = null,
+    val urls: List<URLNode> = emptyList()
 )

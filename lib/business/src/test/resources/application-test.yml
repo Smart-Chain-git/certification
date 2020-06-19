@@ -36,3 +36,10 @@ tezos:
     url: "http://my-indexer-url.com"
   validation:
     minDepth: 30
+  chain: "TEZOS_TEST"
+  urls:
+    api:
+      storage: "http://127.0.0.1:8000/explorer/bigmap/$bigmapId/$rootHash"
+      transaction: "http://127.0.0.1:8000/explorer/op/$transactionHash"
+    web:
+      provider: "WEB_PROVIDER_TEST"

@@ -1,10 +1,7 @@
 package com.sword.signature.business.service
 
 import com.sword.signature.business.exception.UserServiceException
-import com.sword.signature.business.model.Account
-import com.sword.signature.business.model.Algorithm
-import com.sword.signature.business.model.FileMetadata
-import com.sword.signature.business.model.Proof
+import com.sword.signature.business.model.*
 import com.sword.signature.common.enums.TreeElementPosition
 import com.sword.signature.common.enums.TreeElementType
 import com.sword.signature.merkletree.utils.hexStringHash
@@ -198,6 +195,9 @@ class SignServiceTest @Autowired constructor(
         val file3Id = "5e8ed52fb1606a18565cbb97"
         val file4Id = "5e8ed52fb1606a18565cbb92"
 
+        private val blockchain = "TEZOS_TEST"
+        private val webProviderURLNode = URLNode.WebProviderURLNode(url ="WEB_PROVIDER_TEST")
+
         @BeforeEach
         fun refreshDatabase() {
             importJsonDatasets(Path.of("src/test/resources/datasets/jobs.json"))
@@ -288,7 +288,9 @@ class SignServiceTest @Autowired constructor(
                                 "7a55f048ec7b92d8521761dae4b337dfe465170422df151a4a75eea88dd053b0",
                                 TreeElementPosition.LEFT
                             )
-                        )
+                        ),
+                        blockChain = blockchain,
+                        urls = listOf(webProviderURLNode)
                     )
                 ),
                 Arguments.of(
@@ -307,7 +309,9 @@ class SignServiceTest @Autowired constructor(
                                 "77062f8de93be903713c90bff1751949957a7c46aad3d584848b10c85ab63a60",
                                 TreeElementPosition.RIGHT
                             )
-                        )
+                        ),
+                        blockChain = blockchain,
+                        urls = listOf(webProviderURLNode)
                     )
                 ),
                 Arguments.of(
@@ -317,7 +321,9 @@ class SignServiceTest @Autowired constructor(
                         algorithm = "SHA-256",
                         rootHash = "7d70baefd8e6284346d5021dde2288a5aaf4ce03220ac7653ca3f697be4cf399",
                         documentHash = "7d70baefd8e6284346d5021dde2288a5aaf4ce03220ac7653ca3f697be4cf399",
-                        hashes = emptyList()
+                        hashes = emptyList(),
+                        blockChain = blockchain,
+                        urls = listOf(webProviderURLNode)
                     )
                 )
                 ,
@@ -337,7 +343,9 @@ class SignServiceTest @Autowired constructor(
                                 "77062f8de93be903713c90bff1751949957a7c46aad3d584848b10c85ab63a60",
                                 TreeElementPosition.RIGHT
                             )
-                        )
+                        ),
+                        blockChain = blockchain,
+                        urls = listOf(webProviderURLNode)
                     )
                 )
             ).stream()

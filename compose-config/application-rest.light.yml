@@ -33,3 +33,10 @@ tezos:
     url: "https://api.carthagenet.tzstats.com"
   validation:
     minDepth: 30
+  chain: "TEZOS_CARTHAGENET"
+  urls:
+    api:
+      storage: "https://api.carthagenet.tzstats.com/explorer/bigmap/$bigmapId/$rootHash"
+      transaction: "https://api.carthagenet.tzstats.com/explorer/op/$transactionHash"
+    web:
+      provider: "http://localhost:9090"

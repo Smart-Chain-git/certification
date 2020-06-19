@@ -18,6 +18,7 @@ import com.sword.signature.model.mapper.toPredicate
 import com.sword.signature.model.repository.JobRepository
 import com.sword.signature.model.repository.TreeElementRepository
 import com.sword.signature.tezos.reader.service.TezosReaderService
+import com.sword.signature.tezos.reader.tzindex.model.TzContract
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.reactive.awaitFirst
 import kotlinx.coroutines.reactive.awaitFirstOrNull
@@ -36,21 +37,44 @@ class SignServiceImpl(
     private val jobRepository: JobRepository,
     private val treeElementRepository: TreeElementRepository,
     private val anchoringMessageChannel: MessageChannel,
-    private val tezosReaderService: TezosReaderService
+    private val tezosReaderService: TezosReaderService,
+    @Value("\${tezos.chain:#{null}}") private val tezosChain: String?,
+    @Value("\${tezos.urls.api.storage:#{null}}") private val apiStorageUrl: String?,
+    @Value("\${tezos.urls.api.transaction:#{null}}") private val apiTransactionUrl: String?,
+    @Value("\${tezos.urls.web.provider:#{null}}") private val webProviderUrl: String?
 ) : SignService {
 
     // Local index of contract creators
-    private val contractCreators = mutableMapOf<String, String>()
+    private val contracts = mutableMapOf<String, TzContract>()
 
     private suspend fun getContractCreator(contractAddress: String): String? {
-        if (contractCreators.containsKey(contractAddress)) {
-            return contractCreators[contractAddress]
+        if (contracts.containsKey(contractAddress)) {
+            return contracts[contractAddress]!!.manager
         } else {
             try {
-                val creator = tezosReaderService.getContract(contractAddress)
-                creator?.let {
-                    contractCreators[contractAddress] = it.manager
+                val contract = tezosReaderService.getContract(contractAddress)
+                contract?.let {
+                    contracts[contractAddress] = it
                     return it.manager
+                }
+            } catch (e: Exception) {
+                LOGGER.error("Indexer can't be used to retrieve contract creator.")
+            }
+            return null
+        }
+    }
+
+    private suspend fun getContractBigMapId(contractAddress: String): Long? {
+        if (contracts.containsKey(contractAddress) && contracts[contractAddress]!!.bigMapIds.isNotEmpty()) {
+            return contracts[contractAddress]!!.bigMapIds[0]
+        } else {
+            try {
+                val contract = tezosReaderService.getContract(contractAddress)
+                contract?.let {
+                    contracts[contractAddress] = it
+                    if (it.bigMapIds.isNotEmpty()) {
+                        return it.bigMapIds[0]
+                    }
                 }
             } catch (e: Exception) {
                 LOGGER.error("Indexer can't be used to retrieve contract creator.")
@@ -174,6 +198,34 @@ class SignServiceImpl(
             nextParent = element.parentId?.let { treeElementRepository.findById(it).awaitFirst() }
         }
 
+        // Add url nodes
+        val urlNodes = mutableListOf<URLNode>()
+        // API Storage Url
+        if (apiStorageUrl != null && job.contractAddress != null) {
+            getContractBigMapId(job.contractAddress!!).let {
+                urlNodes.add(
+                    URLNode.ApiStorageURLNode(
+                        url = apiStorageUrl,
+                        bigMapId = it.toString(),
+                        rootHash = element.hash
+                    )
+                )
+            }
+        }
+        // API Transaction Url
+        if (apiTransactionUrl != null && job.transactionHash != null) {
+            urlNodes.add(
+                URLNode.ApiTransactionURLNode(
+                    url = apiTransactionUrl,
+                    transactionHash = job.transactionHash!!
+                )
+            )
+        }
+        // Web Provider Url
+        webProviderUrl?.let {
+            urlNodes.add(URLNode.WebProviderURLNode(url = it))
+        }
+
         return Proof(
             signatureDate = job.injectedDate,
             filename = leafElement.metadata?.fileName,
@@ -184,9 +236,11 @@ class SignServiceImpl(
             customFields = leafElement.metadata?.customFields,
             contractAddress = job.contractAddress,
             transactionHash = job.transactionHash,
+            blockChain = tezosChain,
             blockHash = job.blockHash,
             signerAddress = job.signerAddress,
-            creatorAddress = job.contractAddress?.let { getContractCreator(it) }
+            creatorAddress = job.contractAddress?.let { getContractCreator(it) },
+            urls = urlNodes
         )
     }
 
