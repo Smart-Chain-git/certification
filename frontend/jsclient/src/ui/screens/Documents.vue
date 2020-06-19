@@ -83,6 +83,22 @@
     @Component
     export default class Documents extends Vue {
 
+        private filter: FileFilterOption = {
+            accountId: undefined,
+            name: undefined,
+            jobId: undefined,
+            id: undefined,
+            hash: undefined,
+            dates: [],
+        }
+
+        private pagination: PaginationOption = {
+            itemsPerPage: 10,
+            page: 1,
+            sortBy: [],
+            sortDesc: [],
+        }
+
         private get loading() {
             return this.$modules.jobs.getLoading
         }
@@ -93,12 +109,6 @@
 
         private get documentCount() {
             return this.$modules.files.getFileCount
-        }
-
-        private pagination: PaginationOption = {...this.$modules.files.getPagination()}
-
-        private get filter(): FileFilterOption {
-            return this.$modules.files.getFilter
         }
 
         private get headers() {
@@ -156,6 +166,10 @@
                     encodeURIComponent(JSON.stringify(this.$modules.files.getProof())))
                 a.click()
             })
+        }
+
+        private mounted() {
+            this.filter = this.$modules.files.getFilter()
         }
     }
 </script>

@@ -27,12 +27,18 @@ export default class FilesModule extends VuexModule {
         jobId: undefined,
         id: undefined,
         hash: undefined,
-        dates: []
+        dates: [],
     }
 
     constructor(options: any) {
         super(options)
         this.accountsModule = options.accountsModule
+    }
+
+    public async loadProof(fileId: string) {
+        await fileApi.proof(fileId).then((response: Proof) => {
+            this.setProof(response)
+        })
     }
 
     @Action
@@ -56,7 +62,6 @@ export default class FilesModule extends VuexModule {
             page: this.paginationOption.page - 1,
             size: this.paginationOption.itemsPerPage,
         }
-
 
         await fileApi.list(criteria).then((response: Array<JobFile>) => {
             this.setFiles(response)
@@ -91,7 +96,7 @@ export default class FilesModule extends VuexModule {
 
     @Mutation
     public setPagination(pg: PaginationOption) {
-        this.paginationOption = pg
+        this.paginationOption = deepcopy<PaginationOption>(pg)
     }
 
     public getPagination() {
@@ -100,25 +105,25 @@ export default class FilesModule extends VuexModule {
 
     @Mutation
     public setFilter(f: FileFilterOption) {
-        this.filter = f
+        this.filter = deepcopy<FileFilterOption>(f)
     }
 
-    get getFilter() {
+    public getFilter() {
         return deepcopy<FileFilterOption>(this.filter)
     }
 
     @Mutation
-    private setLoading(isLoading: boolean) {
-        this.isLoading = isLoading
-    }
-
-    @Mutation
-    private setProof(proof: Proof) {
+    public setProof(proof: Proof) {
         this.proof = proof
     }
 
     public getProof() {
         return this.proof
+    }
+
+    @Mutation
+    private setLoading(isLoading: boolean) {
+        this.isLoading = isLoading
     }
 
     @Mutation
@@ -138,11 +143,5 @@ export default class FilesModule extends VuexModule {
         if (this.filter.dates[1] === "") {
             this.filter.dates[1] = undefined
         }
-    }
-
-    public async loadProof(fileId: string) {
-        await fileApi.proof(fileId).then((response: Proof) => {
-            this.setProof(response)
-        })
     }
 }

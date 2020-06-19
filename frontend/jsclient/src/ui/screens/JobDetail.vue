@@ -48,11 +48,11 @@
             this.$router.push("/jobs")
         }
 
-        private gotoDocuments(jobId: string) {
+        private gotoDocuments(job: string) {
             this.$modules.files.setFilter({
                 accountId: this.$modules.accounts.meAccount!.id,
                 dates: [],
-                jobId: jobId
+                jobId: job,
             })
             this.$router.push("/documents")
         }

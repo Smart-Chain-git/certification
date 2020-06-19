@@ -97,9 +97,9 @@
         <div v-else>
             <v-navigation-drawer dark app permanent>
                 <v-toolbar dark dense>
-                    <v-toolbar-menu class="toolbar-menu ml-4">
+                    <v-toolbar-title class="toolbar-menu ml-4">
                         <img src="@/ui/assets/logo_sword_white.png" height="40"/>
-                    </v-toolbar-menu>
+                    </v-toolbar-title>
                 </v-toolbar>
                 <v-list dense>
                     <v-list-item ref="side-menu-dashboard" to="/dashboard">
