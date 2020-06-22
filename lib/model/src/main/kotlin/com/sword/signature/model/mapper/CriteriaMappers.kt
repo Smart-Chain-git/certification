@@ -2,12 +2,43 @@ package com.sword.signature.model.mapper
 
 import com.querydsl.core.BooleanBuilder
 import com.querydsl.core.types.Predicate
+import com.sword.signature.common.criteria.FileCriteria
 import com.sword.signature.common.criteria.JobCriteria
 import com.sword.signature.common.criteria.TreeElementCriteria
+import com.sword.signature.common.enums.TreeElementType
 import com.sword.signature.model.entity.QJobEntity
 import com.sword.signature.model.entity.QTreeElementEntity
 import java.time.ZoneOffset
 
+fun FileCriteria.toPredicate(): Predicate {
+    val predicates = ArrayList<Predicate>()
+
+    val qTreeElementEntity = QTreeElementEntity("treeElementEntity")
+
+    predicates.add(qTreeElementEntity.type.eq(TreeElementType.LEAF))
+
+    if (id?.isNotBlank() == true) {
+        predicates.add(qTreeElementEntity.id.eq(id))
+    }
+
+    if (name?.isNotBlank() == true) {
+        predicates.add(qTreeElementEntity.metadata.fileName.containsIgnoreCase(name))
+    }
+
+    if (hash?.isNotBlank() == true) {
+        predicates.add(qTreeElementEntity.hash.equalsIgnoreCase(hash))
+    }
+
+    if (jobId?.isNotBlank() == true) {
+        predicates.add(qTreeElementEntity.jobId.eq(jobId))
+    }
+
+    if (jobIds != null) {
+        predicates.add(qTreeElementEntity.jobId.`in`(jobIds))
+    }
+
+    return andTogetherPredicates(predicates)
+}
 
 fun JobCriteria.toPredicate(): Predicate {
     val predicates = ArrayList<Predicate>()

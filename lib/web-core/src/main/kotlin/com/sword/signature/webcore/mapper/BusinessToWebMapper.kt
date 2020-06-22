@@ -52,7 +52,8 @@ fun com.sword.signature.business.model.Job.toWeb() = Job(
     contractAddress = contractAddress,
     transactionHash = transactionHash,
     channelName = channelName,
-    docsNumber = docsNumber
+    docsNumber = docsNumber,
+    customFields = customFields
 )
 
 fun TreeElement.LeafTreeElement.toWeb(proof: com.sword.signature.business.model.Proof? = null) =

@@ -57,8 +57,8 @@ daemon:
 jasypt:
   encryptor:
     password: secret
-    algorithm: PBEWithMD5AndDES
-    iv-generator-classname: org.jasypt.iv.NoIvGenerator
+    algorithm: PBEWITHHMACSHA512ANDAES_256
+    iv-generator-classname: org.jasypt.iv.RandomIvGenerator
 jwt:
   secret: ffe50f21d8359de7245dc13777812c2a
   issuer: "Tezos@Signature"
@@ -67,11 +67,11 @@ tezos:
     admin:
       hash: "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb"
       publicKey: "edpkvGfYw3LyB1UcCahKQk4rF2tvbMUk8GFiTuMjL75uGXrpvKXhjn"
-      secretKey: ENC(Sjy2KdrcmMKKyo294ZaFmpuw2gIEj7jArV/0PM530EOGm4MGXrIP6OWY4It6HTpKks0GinKiA+vWJdAZRpbSyA==)
+      secretKey: ENC(JSL6Nm4NlDjrQmmIP9HXZ4MmL8QsNxXPPdCJPNxlLwiWHKaFluKHoM3mJgUL35s2pmZvPqB3JXdxAQcvh4POz/AjNY/U9Cso2NufOqU64WN9VD6ugJeifXbmuA8Xbrpp)
     frodon:
       hash: "tz1aSkwEot3L2kmUvcoxzjMomb9mvBNuzFK6"
       publicKey: "edpkurPsQ8eUApnLUJ9ZPDvu98E8VNj4KtJa1aZr16Cr5ow5VHKnz4"
-      secretKey: ENC(LvGfsJLxfwNoOIrKgdp9Y4E9EXyJZGe+bBhacjAuxDUIJZBj54O09suxCx6Y/Nzdq4+p8xbs0fdyXyPT+HY1vQ==)
+      secretKey: ENC(EFoPAjYioeFXm5ZcilJ6JpSlq9okGkfV0ol+TKZv6VtZjOQck6epYc/r4+iDJKWUIXcD6pXQsN1NFEnskZJH8Ul0Jy4y+e3Zhuv62zcs3k1slfmU6UnnIAKaY/eTUS00)
   contract:
     address: KT1XR5tZHWxMU36eTq3qFn3fvnmDvCTc8NTD
   node:

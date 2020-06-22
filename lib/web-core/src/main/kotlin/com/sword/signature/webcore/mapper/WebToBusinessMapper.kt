@@ -3,11 +3,11 @@ package com.sword.signature.webcore.mapper
 
 import com.sword.signature.api.proof.Proof
 import com.sword.signature.api.sign.SignMetadata
-import com.sword.signature.api.sign.SignRequest
+import com.sword.signature.api.sign.SingleSignRequest
 import com.sword.signature.business.model.FileMetadata
 import com.sword.signature.common.enums.TreeElementPosition
 
-fun SignRequest.toBusiness() = Pair(
+fun SingleSignRequest.toBusiness() = Pair(
     first = hash.toLowerCase(),
     second = metadata.toBusiness()
 )

@@ -4,6 +4,7 @@ package com.sword.signature.rest.resthandler
 import com.sword.signature.api.job.Job
 import com.sword.signature.api.job.JobFile
 import com.sword.signature.business.exception.EntityNotFoundException
+import com.sword.signature.business.service.FileService
 import com.sword.signature.business.service.JobService
 import com.sword.signature.business.service.SignService
 import com.sword.signature.common.criteria.JobCriteria
@@ -16,6 +17,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.reactive.awaitFirstOrNull
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
@@ -26,7 +28,8 @@ import java.time.LocalDate
 @RequestMapping("\${api.base-path:/api}")
 class JobHandler(
     val signService: SignService,
-    val jobService: JobService
+    val jobService: JobService,
+    val fileService: FileService
 ) {
 
     @Operation(security = [SecurityRequirement(name = "bearer-key")])
@@ -129,7 +132,7 @@ class JobHandler(
             ?: throw EntityNotFoundException("job", jobId)
         return flow {
             job.files?.forEach { leaf ->
-                val proof = signService.getFileProof(requester = user.account, fileId = leaf.id)
+                val proof = fileService.getFileProof(requester = user.account, fileId = leaf.id).awaitFirstOrNull()
                     ?: throw EntityNotFoundException("file", leaf.id)
 
                 emit(leaf.toWeb(proof))

@@ -4,8 +4,6 @@ import com.sword.signature.business.exception.UserServiceException
 import com.sword.signature.business.model.Account
 import com.sword.signature.business.model.Algorithm
 import com.sword.signature.business.model.FileMetadata
-import com.sword.signature.business.model.Proof
-import com.sword.signature.common.enums.TreeElementPosition
 import com.sword.signature.common.enums.TreeElementType
 import com.sword.signature.merkletree.utils.hexStringHash
 import com.sword.signature.model.migration.MigrationHandler
@@ -29,7 +27,6 @@ import org.junit.jupiter.params.provider.MethodSource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate
 import java.nio.file.Files
-import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.stream.Stream
 
@@ -188,160 +185,5 @@ class SignServiceTest @Autowired constructor(
 
             return parametre.stream()
         }
-    }
-
-    @Nested
-    inner class `Get file proof` {
-
-        val file1Id = "5e8ed52fb1606a18565cbb95"
-        val file2Id = "5e8ed52fb1606a18565cbb93"
-        val file3Id = "5e8ed52fb1606a18565cbb97"
-        val file4Id = "5e8ed52fb1606a18565cbb92"
-
-        @BeforeEach
-        fun refreshDatabase() {
-            importJsonDatasets(Path.of("src/test/resources/datasets/jobs.json"))
-        }
-
-        private val simpleAccount = Account(
-            id = "ljghdslkgjsdglhjdslghjdsklgjdgskldjglgdsjgdlskgjdslknjcvhuire",
-            login = "simple",
-            password = "password",
-            fullName = "simple user",
-            email = "simplie@toto.net",
-            company = null,
-            country = null,
-            publicKey = null,
-            hash = null,
-            isAdmin = false,
-            disabled = false
-        )
-
-        private val secondAdmin = Account(
-            id = "ljghdslkgjsdglhgskldjglgdsjgdlskgjdslknjcvhuire",
-            login = "simple",
-            password = "password",
-            fullName = "simple user",
-            email = "simplie@toto.net",
-            company = null,
-            country = null,
-            publicKey = null,
-            hash = null,
-            isAdmin = true,
-            disabled = false
-        )
-
-
-        @Test
-        fun `not existing fileproof should return null for autorised person`() {
-            runBlocking {
-                val job = signService.getFileProof(secondAdmin, "falseId")
-                assertThat(job).isNull()
-            }
-        }
-
-        @Test
-        fun `not existing fileproof should return null for everybody`() {
-            runBlocking {
-                val job = signService.getFileProof(simpleAccount, "falseId")
-                assertThat(job).isNull()
-            }
-        }
-
-
-        @Test
-        fun `user can't get proof of another`() {
-            assertThatThrownBy {
-                runBlocking {
-                    signService.getFileProof(requester = simpleAccount, fileId = file1Id)
-                }
-            }.isInstanceOf(IllegalAccessException::class.java)
-        }
-
-        @ParameterizedTest
-        @MethodSource("fileIdProvider")
-        fun `get fileProof`(
-            fileId: String,
-            expectedProof: Proof
-        ) {
-            runBlocking {
-                val actual = signService.getFileProof(requester = accountAdmin, fileId = fileId)
-                assertThat(actual).isNotNull.isEqualTo(expectedProof)
-            }
-        }
-
-        private val multipleFileJobId = "5e8c36c49df469062bc658c1"
-        private val singleFileJobId = "5e8c36c49df469062bc658c8"
-
-        fun fileIdProvider(): Stream<Arguments> {
-            return listOf(
-                Arguments.of(
-                    file1Id,
-                    Proof(
-                        filename = "ARS_02236_00001.pdf",
-                        algorithm = "SHA-256",
-                        rootHash = "112602c26bb1329b1808ed4fb3737774d1422832b988fe5bf1c5196bc1ce5cf7",
-                        documentHash = "145e9bccd897c6428d0e8b792fa3063646e435f10154df76aed7e0543daedcfc",
-                        hashes = listOf(
-                            Pair(null, TreeElementPosition.RIGHT),
-                            Pair(
-                                "7a55f048ec7b92d8521761dae4b337dfe465170422df151a4a75eea88dd053b0",
-                                TreeElementPosition.LEFT
-                            )
-                        )
-                    )
-                ),
-                Arguments.of(
-                    file2Id,
-                    Proof(
-                        filename = "ARS_02236_00002.pdf",
-                        algorithm = "SHA-256",
-                        rootHash = "112602c26bb1329b1808ed4fb3737774d1422832b988fe5bf1c5196bc1ce5cf7",
-                        documentHash = "3d6d3491a321616e74c0db101da7b74205b09887079267b82ca76d19dd1d62ba",
-                        hashes = listOf(
-                            Pair(
-                                "830c745f08bd19ecff04565dd7ff05ae92090a5e0624391478c6dafc0422d052",
-                                TreeElementPosition.LEFT
-                            ),
-                            Pair(
-                                "77062f8de93be903713c90bff1751949957a7c46aad3d584848b10c85ab63a60",
-                                TreeElementPosition.RIGHT
-                            )
-                        )
-                    )
-                ),
-                Arguments.of(
-                    file3Id,
-                    Proof(
-                        filename = "ARS_02236_00003.pdf",
-                        algorithm = "SHA-256",
-                        rootHash = "7d70baefd8e6284346d5021dde2288a5aaf4ce03220ac7653ca3f697be4cf399",
-                        documentHash = "7d70baefd8e6284346d5021dde2288a5aaf4ce03220ac7653ca3f697be4cf399",
-                        hashes = emptyList()
-                    )
-                )
-                ,
-                Arguments.of(
-                    file4Id,
-                    Proof(
-                        filename = "ARS_02236_00004.pdf",
-                        algorithm = "SHA-256",
-                        rootHash = "112602c26bb1329b1808ed4fb3737774d1422832b988fe5bf1c5196bc1ce5cf7",
-                        documentHash = "830c745f08bd19ecff04565dd7ff05ae92090a5e0624391478c6dafc0422d052",
-                        hashes = listOf(
-                            Pair(
-                                "3d6d3491a321616e74c0db101da7b74205b09887079267b82ca76d19dd1d62ba",
-                                TreeElementPosition.RIGHT
-                            ),
-                            Pair(
-                                "77062f8de93be903713c90bff1751949957a7c46aad3d584848b10c85ab63a60",
-                                TreeElementPosition.RIGHT
-                            )
-                        )
-                    )
-                )
-            ).stream()
-        }
-
     }
 }
