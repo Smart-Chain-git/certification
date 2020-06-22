@@ -1,8 +1,6 @@
 import {
     SignatureCheckRequest,
-    SignatureCheckResponse,
-    SignatureRequest,
-    SignatureRequestParam,
+    SignatureCheckResponse, SignatureMultiRequest,
     SignatureResponse
 } from "@/api/types"
 import {AxiosRequestConfig, AxiosResponse} from "axios"
@@ -27,11 +25,12 @@ export class SignatureApi extends Api {
             })
     }
 
-    public sign(sign: Array<SignatureRequest>, param: SignatureRequestParam): Promise<SignatureResponse> {
-        return this.post<SignatureResponse, Array<SignatureRequest>>(API_SIGN, param, sign)
-            .then((response: AxiosResponse<SignatureResponse>) => {
+    public signMulti(sign: SignatureMultiRequest) : Promise<Array<SignatureResponse>> {
+        return this.post<Array<SignatureResponse>, SignatureMultiRequest>(API_SIGN, {}, sign)
+            .then((response: AxiosResponse<Array<SignatureResponse>>) => {
                 return response.data
             })
+
     }
 }
 

@@ -129,22 +129,23 @@ export interface TokenCreateRequest {
     name: string,
 }
 
-export interface SignatureRequestParam {
+export interface SignatureMultiRequest {
     algorithm: string,
     flowName: string,
-    callBack?: string,
-    WebSigner?: string,
+    callBackUrl: string,
+    customFields: {[key: string]: string}
+    files: Array<SignatureRequest>
+}
+
+export interface SignatureRequest {
+    metadata: SignMetaData,
+    hash: string,
 }
 
 export interface SignMetaData {
     fileName: string,
     fileSize: number,
     customFields?: {[key: string]: string},
-}
-
-export interface SignatureRequest {
-    metadata: SignMetaData,
-    hash: string,
 }
 
 export interface SignatureResponse {

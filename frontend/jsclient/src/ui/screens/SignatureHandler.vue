@@ -121,7 +121,7 @@
 </style>
 
 <script lang="ts">
-    import {SignatureRequest, SignatureRequestParam} from "@/api/types"
+    import {SignatureMultiRequest, SignatureRequest} from "@/api/types"
     import {tableFooter} from "@/plugins/i18n"
     import {FileSign} from "@/store/types"
     import CryptoJS from "crypto-js"
@@ -154,12 +154,12 @@
                 const reader = new FileReader()
                 reader.onloadend = (e) => {
                     const wordArray = CryptoJS.lib.WordArray.create(e.target!.result)
-                    const hash = CryptoJS.SHA256(wordArray).toString()
+                    const hashCrypt = CryptoJS.SHA256(wordArray).toString()
                     this.filesSign.push(
                      {
                          name: f.name,
                          size: f.size,
-                         hash: hash,
+                         hash: hashCrypt,
                          keys: [],
                          values: [],
                     })
@@ -201,10 +201,11 @@
         }
 
         private sign() {
-            const signatures: Array<SignatureRequest> = []
+
+            const filesUpload: Array<SignatureRequest> = []
 
             this.filesSign.forEach((f) => {
-                signatures.push({
+                filesUpload.push({
                     metadata: {
                         fileName: f.name,
                         fileSize: f.size,
@@ -213,13 +214,21 @@
                     hash: f.hash,
                 })
             })
-            const params: SignatureRequestParam = {
+            const customFieldsUpload: {[key: string]: string} = {}
+
+            this.dataKeys.forEach((k, ind) => {
+                customFieldsUpload[k] = this.dataValues[ind]
+            })
+
+            const signatures: SignatureMultiRequest = {
                 algorithm: this.selectedAlgorithm,
-                callBack: "",
+                callBackUrl: "",
                 flowName: this.flowName,
-                WebSigner: "",
+                files: filesUpload,
+                customFields: customFieldsUpload,
             }
-            this.$modules.signatures.sign(signatures, params)
+
+            this.$modules.signatures.signMulti(signatures)
         }
 
         private get headers() {

@@ -2,9 +2,7 @@
 import {signatureApi} from "@/api/signatureApi"
 import {
     SignatureCheckRequest,
-    SignatureCheckResponse,
-    SignatureRequest,
-    SignatureRequestParam,
+    SignatureCheckResponse, SignatureMultiRequest,
     SignatureResponse,
 } from "@/api/types"
 import {Action, Module, Mutation, VuexModule} from "vuex-class-modules"
@@ -14,7 +12,7 @@ import {Action, Module, Mutation, VuexModule} from "vuex-class-modules"
 export default class SignaturesModule extends VuexModule {
 
     private checkResponse: SignatureCheckResponse | undefined = undefined
-    private signResponse: SignatureResponse | undefined = undefined
+    private signResponse: Array<SignatureResponse> = []
 
     @Action
     public check(sigCheck: SignatureCheckRequest) {
@@ -23,14 +21,14 @@ export default class SignaturesModule extends VuexModule {
         })
     }
 
-    public sign(sign: Array<SignatureRequest>, signP: SignatureRequestParam) {
-        signatureApi.sign(sign, signP).then((response: SignatureResponse) => {
+    public signMulti(sign: SignatureMultiRequest) {
+        signatureApi.signMulti(sign).then((response: Array<SignatureResponse>) => {
             this.setSignResponse(response)
         })
     }
 
     @Mutation
-    public setSignResponse(sign: SignatureResponse) {
+    public setSignResponse(sign: Array<SignatureResponse>) {
         this.signResponse = sign
     }
 
