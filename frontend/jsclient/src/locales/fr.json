@@ -153,7 +153,7 @@
       },
       "document_known_unknown_root_hash": {
         "title": "Document trouvé dans Tezos DigiSign mais non horodaté dans Tezos Blockchain",
-        "message": "Nous sommes désolés. Selon notre base de données interne, nous devrions être en mesure de vous confirmer l'authenticité de votre document. Notre base de données nous informe que ce document a été signé par {0} - {1} le {2 }. Cependant, nous ne pouvons pas trouver dans la blockchain la preuve que le document a bien été signé "
+        "message": "Nous sommes désolés. Selon notre base de données interne, nous devrions être en mesure de vous confirmer l'authenticité de votre document. Notre base de données nous informe que ce document a été signé par {0} - {1} le {2}. Cependant, nous ne pouvons pas trouver dans la blockchain la preuve que le document a bien été signé "
       },
       "incorrect_proof_file": {
         "title": "Le fichier d'épreuve ne peut pas être analysé",

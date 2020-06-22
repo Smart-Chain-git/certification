@@ -281,7 +281,7 @@
                     case "signatureCheck.errors.document_known_unknown_root_hash":
                         return SignatureCheck.format(res, [
                             this.checkResponse.signer || this.$t("signatureCheck.unknown").toString(),
-                            this.checkResponse.proof.public_key, this.checkResponse.timestamp!.toString()])
+                            this.checkResponse.public_key!, this.checkResponse.date!.toString()])
 
                     case "signatureCheck.errors.no_transaction":
                         return SignatureCheck.format(res, [this.checkResponse.proof.hash_root])
