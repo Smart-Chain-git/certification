@@ -43,7 +43,7 @@
                                 <span class="align-right pt-2">{{ $t("signatureCheck.more") }}</span>
                             </v-expansion-panel-header>
                             <v-expansion-panel-content class="pt-4">
-                                <div v-if="checkResponse.check_status === 0">
+                                <div v-if="checkResponse.check_status === 1">
                                     {{ parse("signatureCheck.success.message1.block2.line1") }}<br/><br/>
                                     {{ parse("signatureCheck.success.message1.block2.line2") }}<br/>
                                     {{ parse("signatureCheck.success.message1.block2.line3") }}<br/>
@@ -55,7 +55,7 @@
                                     })"/><br/><br/>
                                     <span v-html="parseLink('signatureCheck.success.message1.block2.line7', 'here', {'href' : '/settings'})"/>
                                 </div>
-                                <div v-if="checkResponse.check_status === 1">
+                                <div v-if="checkResponse.check_status === 2">
                                     {{parse("signatureCheck.success.message2.block2.line1")}}<br/><br/>
                                     {{parse("signatureCheck.success.message2.block2.line2")}}<br/><br/>
                                     {{parse("signatureCheck.success.message2.block2.line3")}}<br/>
@@ -215,8 +215,7 @@
 
         private mainMessage(part: string) {
             if (this.checkSucceeded) {
-                const n = this.checkResponse?.check_status! + 1
-                return this.parse("signatureCheck.success.message" + n.toString() + ".block1." + part)
+                return this.parse("signatureCheck.success.message" + this.checkResponse?.check_status! + ".block1." + part)
             } else {
                 return this.parse("signatureCheck.errors." + this.checkResponse?.error?.toLowerCase() + "." + part)
             }
