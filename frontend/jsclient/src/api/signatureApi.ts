@@ -9,7 +9,7 @@ import {Api} from "@/api/api"
 import {apiConfig} from "@/api/api.config"
 
 export const API_CHECK = "/check"
-export const API_SIGN = "/sign"
+export const API_SIGN = "/sign/multi"
 
 export class SignatureApi extends Api {
     public constructor(config: AxiosRequestConfig) {
