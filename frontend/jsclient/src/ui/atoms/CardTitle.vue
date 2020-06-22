@@ -7,7 +7,7 @@
 -->
 <template>
     <v-card-title class="mb-6 pa-0">
-        <CircleIcon>
+        <CircleIcon :type="type" :number="number">
             {{ icon }}
         </CircleIcon>
         <h2 class="title-text">
@@ -19,17 +19,17 @@
 <style type="text/css" scoped>
     .title-text {
         margin-left: 20px;
+        color: var(--var-color-blue-sword)
     }
 </style>
 
 <script lang="ts">
     import { Component, Vue, Prop } from "vue-property-decorator"
 
-    @Component({
-    })
+    @Component
     export default class CardTitle extends Vue {
-
+        @Prop(String) private readonly type!: string
         @Prop(String) private readonly icon!: string
-
+        @Prop(Number) private readonly number!: number
     }
 </script>

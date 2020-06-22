@@ -245,7 +245,8 @@
     "algorithm": "Algorithme de hashage",
     "name": "Nom",
     "data": "Données",
-    "start": "Démarrez votre job"
+    "start": "Démarrez votre job",
+    "noData": "Aucun fichier déposé."
   },
   "errors": {
     "login": {

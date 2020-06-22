@@ -245,7 +245,8 @@
     "algorithm": "Hash algorithm",
     "name": "Name",
     "data": "Data",
-    "start": "Start your job"
+    "start": "Start your job",
+    "noData": "No file present."
   },
   "errors": {
     "login": {

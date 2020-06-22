@@ -21,8 +21,8 @@ export default class SignaturesModule extends VuexModule {
         })
     }
 
-    public signMulti(sign: SignatureMultiRequest) {
-        signatureApi.signMulti(sign).then((response: Array<SignatureResponse>) => {
+    public async signMulti(sign: SignatureMultiRequest) {
+        await signatureApi.signMulti(sign).then((response: Array<SignatureResponse>) => {
             this.setSignResponse(response)
         })
     }

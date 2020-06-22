@@ -8,10 +8,10 @@
         <v-row>
             <v-flex>
                 <Card width="98%">
-                    <CardTitle>{{ $t("signatureHandler.start")}}</CardTitle>
-                    <v-flex xs4 class="ml-4">
+                    <CardTitle type="number" number=1>{{ $t("signatureHandler.start")}}</CardTitle>
+                    <v-flex xs8 lg4 class="ml-4">
                         <EditFormRow :title="$t('signatureHandler.algorithm')" :editable="true">
-                            <v-combobox hide-details outlined dense :items="algorithms" v-model="selectedAlgorithm"/>
+                            <v-combobox class="combobox" hide-details outlined dense :items="algorithms" v-model="selectedAlgorithm"/>
                         </EditFormRow>
                         <EditFormRow :title="$t('signatureHandler.name')" :editable="true">
                             <EditFormTitleEdit v-model="flowName"/>
@@ -45,12 +45,12 @@
                             </v-row>
                         </EditFormRow>
                     </v-flex>
-                    <CardTitle class="mt-8">{{ $t("signatureHandler.uploadFiles")}}</CardTitle>
-                    <v-flex xs4 class="ml-4">
+                    <CardTitle type="number" number=2 class="mt-8">{{ $t("signatureHandler.uploadFiles")}}</CardTitle>
+                    <v-flex xs8 lg4 class="ml-4">
                         <v-row>
                             <v-col class="col-3">{{ $t("signatureHandler.upload")}}</v-col>
                             <v-col class="col-8">
-                                <v-file-input outlined dense v-model="files" multiple/>
+                                <v-file-input class="file" outlined dense v-model="files" multiple/>
                             </v-col>
                         </v-row>
                     </v-flex>
@@ -61,6 +61,9 @@
                     >
                         <template v-slot:body="{items}">
                             <tbody>
+                            <tr v-if="items.length === 0">
+                                <td colspan="5">{{ $t("signatureHandler.noData") }}</td>
+                            </tr>
                             <tr v-for="(file, index) in items" class="outlined">
                                 <td>
                                     <v-text-field outlined dense v-model="file.name" class="pt-5"/>
@@ -115,8 +118,16 @@
 </template>
 
 <style scoped>
+    .combobox {
+        max-width: 240px;
+    }
+
     .row_metadata {
         max-height: 50px;
+    }
+
+    .file {
+        max-width: 320px;
     }
 </style>
 
@@ -200,8 +211,7 @@
             this.dataValues.splice(key, 1)
         }
 
-        private sign() {
-
+        private async sign() {
             const filesUpload: Array<SignatureRequest> = []
 
             this.filesSign.forEach((f) => {
@@ -228,7 +238,9 @@
                 customFields: customFieldsUpload,
             }
 
-            this.$modules.signatures.signMulti(signatures)
+            this.$modules.signatures.signMulti(signatures).then(() => {
+                this.$router.push("/jobs/")
+            })
         }
 
         private get headers() {
@@ -251,9 +263,11 @@
 
         private cancel() {
             this.selectedAlgorithm = ""
-            this.flowName = ""
-            this.filesSign = []
             this.files = []
+            this.filesSign = []
+            this.flowName = ""
+            this.dataValues = []
+            this.dataKeys = []
         }
 
         private get canSign() {
