@@ -272,18 +272,18 @@
                         return SignatureCheck.format(res, [hash.position!, hash.hash || "",
                             this.checkResponse.check_process[idx]])
 
-                    case "signatureCheck.errors.hash_inconsistent":
+                    case "signatureCheck.errors.hash_inconsistent.message":
                         return SignatureCheck.format(res, [this.fileHash, this.checkResponse.proof.hash_document])
 
-                    case "signatureCheck.errors.unknown_root_hash":
+                    case "signatureCheck.errors.unknown_root_hash.message":
                         return SignatureCheck.format(res, [this.checkResponse.proof.hash_root])
 
-                    case "signatureCheck.errors.document_known_unknown_root_hash":
+                    case "signatureCheck.errors.document_known_unknown_root_hash.message":
                         return SignatureCheck.format(res, [
                             this.checkResponse.signer || this.$t("signatureCheck.unknown").toString(),
                             this.checkResponse.public_key!, this.checkResponse.date!.toString()])
 
-                    case "signatureCheck.errors.no_transaction":
+                    case "signatureCheck.errors.no_transaction.message":
                         return SignatureCheck.format(res, [this.checkResponse.proof.hash_root])
 
                     default:
