@@ -1,7 +1,7 @@
 package com.sword.signature.rsocket.rsocketcontroler
 
-import com.sword.signature.api.sign.SingleSignRequest
 import com.sword.signature.api.sign.SignResponse
+import com.sword.signature.api.sign.SingleSignRequest
 import com.sword.signature.business.service.AccountService
 import com.sword.signature.business.service.AlgorithmService
 import com.sword.signature.business.service.SignService
@@ -42,7 +42,13 @@ class SignController(
 
         val algorithm = runBlocking { algorithmService.getAlgorithmByName(algorithmParameter) }
 
-        return signService.batchSign(user.account,user.channelName, algorithm, flowName, callBackUrl, requests.map { it.toBusiness() })
+        return signService.batchSign(
+            requester = user.account,
+            channelName = user.channelName,
+            algorithm = algorithm,
+            flowName = flowName,
+            callBackUrl = callBackUrl,
+            fileHashes = requests.map { it.toBusiness() })
             .map { it.toWebSignResponse() }
     }
 }
