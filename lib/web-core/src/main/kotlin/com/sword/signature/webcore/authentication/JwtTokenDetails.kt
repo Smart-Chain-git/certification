@@ -10,13 +10,13 @@ sealed class JwtTokenDetails {
 }
 
 data class LoginTokenInfo(override val id : String,
-                          override val creationTime : OffsetDateTime,
+                          override val creationTime : OffsetDateTime?,
                           override val persisted: Boolean,
-                          override val expirationTime : OffsetDateTime,
+                          override val expirationTime : OffsetDateTime?,
                           val login: String) : JwtTokenDetails()
 
 data class ActivationToken(override val id : String,
-                           override val creationTime : OffsetDateTime,
+                           override val creationTime : OffsetDateTime?,
                            override val persisted: Boolean,
-                           override val expirationTime : OffsetDateTime,
+                           override val expirationTime : OffsetDateTime?,
                            val password: String) : JwtTokenDetails()

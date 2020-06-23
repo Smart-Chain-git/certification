@@ -61,9 +61,9 @@ class JwtTokenService(
         val login = decodedJWT.claims[CLAIM_LOGIN]?.asString() ?: ""
 
         return if (password.isBlank()) {
-            LoginTokenInfo(id, creationTime!!, persisted, expirationTime!!, login)
+            LoginTokenInfo(id, creationTime, persisted, expirationTime, login)
         } else {
-            ActivationToken(id, creationTime!!, persisted, expirationTime!!, password)
+            ActivationToken(id, creationTime, persisted, expirationTime, password)
         }
     }
 
