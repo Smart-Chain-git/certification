@@ -99,6 +99,8 @@ fun com.sword.signature.business.model.Token.toWeb() = Token(
 
 fun com.sword.signature.business.model.CheckResponse.toWeb() = CheckOutput.Ok(
     status = status,
+    fileId = fileId,
+    jobId = jobId,
     signer = signer,
     timestamp = timestamp,
     process = trace,

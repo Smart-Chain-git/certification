@@ -43,7 +43,7 @@
                                 <span class="align-right pt-2">{{ $t("signatureCheck.more") }}</span>
                             </v-expansion-panel-header>
                             <v-expansion-panel-content class="pt-4">
-                                <div v-if="checkResponse.check_status === 0">
+                                <div v-if="checkResponse.check_status === 1">
                                     {{ parse("signatureCheck.success.message1.block2.line1") }}<br/><br/>
                                     {{ parse("signatureCheck.success.message1.block2.line2") }}<br/>
                                     {{ parse("signatureCheck.success.message1.block2.line3") }}<br/>
@@ -55,7 +55,7 @@
                                     })"/><br/><br/>
                                     <span v-html="parseLink('signatureCheck.success.message1.block2.line7', 'here', {'href' : '/settings'})"/>
                                 </div>
-                                <div v-if="checkResponse.check_status === 1">
+                                <div v-if="checkResponse.check_status === 2">
                                     {{parse("signatureCheck.success.message2.block2.line1")}}<br/><br/>
                                     {{parse("signatureCheck.success.message2.block2.line2")}}<br/><br/>
                                     {{parse("signatureCheck.success.message2.block2.line3")}}<br/>
@@ -215,8 +215,7 @@
 
         private mainMessage(part: string) {
             if (this.checkSucceeded) {
-                const n = this.checkResponse?.check_status! + 1
-                return this.parse("signatureCheck.success.message" + n.toString() + ".block1." + part)
+                return this.parse("signatureCheck.success.message" + this.checkResponse?.check_status! + ".block1." + part)
             } else {
                 return this.parse("signatureCheck.errors." + this.checkResponse?.error?.toLowerCase() + "." + part)
             }
@@ -272,18 +271,18 @@
                         return SignatureCheck.format(res, [hash.position!, hash.hash || "",
                             this.checkResponse.check_process[idx]])
 
-                    case "signatureCheck.errors.hash_inconsistent":
+                    case "signatureCheck.errors.hash_inconsistent.message":
                         return SignatureCheck.format(res, [this.fileHash, this.checkResponse.proof.hash_document])
 
-                    case "signatureCheck.errors.unknown_root_hash":
+                    case "signatureCheck.errors.unknown_root_hash.message":
                         return SignatureCheck.format(res, [this.checkResponse.proof.hash_root])
 
-                    case "signatureCheck.errors.document_known_unknown_root_hash":
+                    case "signatureCheck.errors.document_known_unknown_root_hash.message":
                         return SignatureCheck.format(res, [
                             this.checkResponse.signer || this.$t("signatureCheck.unknown").toString(),
-                            this.checkResponse.proof.public_key, this.checkResponse.timestamp!.toString()])
+                            this.checkResponse.public_key!, this.checkResponse.date!.toString()])
 
-                    case "signatureCheck.errors.no_transaction":
+                    case "signatureCheck.errors.no_transaction.message":
                         return SignatureCheck.format(res, [this.checkResponse.proof.hash_root])
 
                     default:
