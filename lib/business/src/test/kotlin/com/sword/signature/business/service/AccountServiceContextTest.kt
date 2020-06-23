@@ -35,7 +35,8 @@ class AccountServiceContextTest @Autowired constructor(
         publicKey = null,
         hash = null,
         isAdmin = false,
-        disabled = false
+        disabled = false,
+        firstLogin = false
     )
 
     private val adminAccount = Account(
@@ -49,7 +50,8 @@ class AccountServiceContextTest @Autowired constructor(
         publicKey = null,
         hash = null,
         isAdmin = true,
-        disabled = false
+        disabled = false,
+        firstLogin = false
     )
 
     private var accountsInitialCount: Long = 0L

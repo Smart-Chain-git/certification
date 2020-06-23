@@ -49,7 +49,8 @@ class SignServiceTest @Autowired constructor(
         publicKey = null,
         hash = null,
         isAdmin = true,
-        disabled = false
+        disabled = false,
+        firstLogin = false
     )
     private final val sha256 = Algorithm(id = "SHA-256", name = "SHA-256", digestLength = 32)
 
