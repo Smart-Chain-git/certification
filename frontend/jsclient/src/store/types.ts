@@ -13,6 +13,7 @@ export interface FilterOption {
     channelName: string | undefined,
 }
 
+
 export interface FileSign {
     name: string,
     size: number,
@@ -21,4 +22,13 @@ export interface FileSign {
     values: Array<string>,
     newKey?: string,
     newValue?: string,
+
+export interface FileFilterOption {
+    id?: string,
+    name?: string,
+    hash?: string,
+    jobId?: string,
+    accountId?: string,
+    dates: Array<string | undefined>
+
 }

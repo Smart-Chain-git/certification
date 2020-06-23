@@ -152,3 +152,52 @@ export interface SignatureResponse {
     jobId: string,
     files: Array<SignMetaData>,
 }
+
+export interface SignMetaData {
+    fileName: string,
+    fileSize: number,
+    customFields?: {[key: string]: string},
+}
+
+
+export interface JobFile {
+    id: string,
+    hash: string,
+    jobId: string,
+    metadata: SignMetaData,
+    proof?: Proof
+}
+
+export interface FileCriteria {
+    id?: string,
+    name?: string,
+    hash?: string,
+    jobId?: string,
+    accountId?: string,
+    dateStart?: string,
+    dateEnd?: string,
+    sort?: Array<string>,
+    page?: number,
+    size?: number
+}
+
+export interface Hash {
+    hash?: string,
+    position: string
+}
+
+export interface Proof {
+    file_name: string,
+    hash_root: string,
+    hash_document: string,
+    algorithm: string,
+    block_hash?: string,
+    blockDepth?: number,
+    hash_list: Array<Hash>,
+    transaction_hash?: string
+    contract_address: string
+    signature_date?: Date
+    origin_public_key: string,
+    public_key: string,
+    origin: string
+}

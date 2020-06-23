@@ -75,7 +75,7 @@
       "rootHash": "Racine de hashage"
     },
     "list": {
-      "title": "Jobs",
+      "title": "Liste des jobs",
       "id": "ID",
       "name": "Nom",
       "creationDate": "Date de création",
@@ -114,6 +114,18 @@
     "login": "Connexion",
     "logout": "Déconnexion"
   },
+
+  "documents": {
+    "title": "Liste des documents",
+    "jobId": "Job concerné",
+    "hash": "Hash du document",
+    "name": "Nom du document",
+    "dates": "Dates",
+    "proof": "Preuve",
+    "search": "Rechercher",
+    "back": "Retour",
+    "records": "résultats"
+	},
   "signatureCheck": {
     "check": "Vérifier vos fichiers",
     "about": "A propos",
