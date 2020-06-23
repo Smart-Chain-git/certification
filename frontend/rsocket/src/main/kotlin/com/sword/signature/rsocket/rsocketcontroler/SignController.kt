@@ -1,8 +1,7 @@
 package com.sword.signature.rsocket.rsocketcontroler
 
-import com.sword.signature.api.sign.SignRequest
 import com.sword.signature.api.sign.SignResponse
-import com.sword.signature.business.exception.AccountNotFoundException
+import com.sword.signature.api.sign.SingleSignRequest
 import com.sword.signature.business.service.AccountService
 import com.sword.signature.business.service.AlgorithmService
 import com.sword.signature.business.service.SignService
@@ -15,7 +14,6 @@ import kotlinx.coroutines.runBlocking
 import org.springframework.messaging.handler.annotation.Header
 import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.security.core.annotation.AuthenticationPrincipal
-import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Controller
 
 @Controller
@@ -31,7 +29,7 @@ class SignController(
         @Header(name = "algorithm") algorithmParameter: String?,
         @Header(name = "flowName") flowName: String?,
         @Header(name = "callBackUrl") callBackUrl: String?,
-        requests: Flow<SignRequest>
+        requests: Flow<SingleSignRequest>
     ): Flow<SignResponse> {
 
         if (algorithmParameter == null) {
@@ -44,7 +42,13 @@ class SignController(
 
         val algorithm = runBlocking { algorithmService.getAlgorithmByName(algorithmParameter) }
 
-        return signService.batchSign(user.account,user.channelName, algorithm, flowName, callBackUrl, requests.map { it.toBusiness() })
+        return signService.batchSign(
+            requester = user.account,
+            channelName = user.channelName,
+            algorithm = algorithm,
+            flowName = flowName,
+            callBackUrl = callBackUrl,
+            fileHashes = requests.map { it.toBusiness() })
             .map { it.toWebSignResponse() }
     }
 }

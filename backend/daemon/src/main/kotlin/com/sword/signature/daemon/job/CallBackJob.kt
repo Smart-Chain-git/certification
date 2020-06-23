@@ -4,10 +4,17 @@ import com.sword.signature.business.model.integration.CallBackJobMessagePayload
 import com.sword.signature.daemon.logger
 import com.sword.signature.daemon.sendPayload
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.http.HttpHeaders
+import org.springframework.http.MediaType
 import org.springframework.messaging.MessageChannel
 import org.springframework.stereotype.Component
+import org.springframework.web.reactive.function.client.ClientRequest
+import org.springframework.web.reactive.function.client.ExchangeFilterFunction
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.awaitExchange
+import reactor.core.publisher.Mono
+import java.net.URI
+import java.util.function.Consumer
 
 @Component
 class CallBackJob(
@@ -33,10 +40,13 @@ class CallBackJob(
 
         var isError = false
         try {
-            val client = webClientBuilder.baseUrl(updatedCallBackUrl).build()
-            val result = client.get().awaitExchange()
+            val client = webClientBuilder
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.ALL_VALUE)
+                .build()
+            val result = client.get().uri(updatedCallBackUrl).awaitExchange()
             val status = result.statusCode()
             if (status.is4xxClientError || status.is5xxServerError) {
+                LOGGER.error("GET {} returns a {} status.", updatedCallBackUrl, status.value())
                 isError = true
             }
         } catch (e: Exception) {

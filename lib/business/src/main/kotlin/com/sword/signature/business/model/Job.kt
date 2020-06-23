@@ -76,5 +76,10 @@ data class Job(
     /**
      * Address of the transaction signer.
      */
-    val signerAddress: String? = null
+    val signerAddress: String? = null,
+
+    /**
+     * Metadata about the job filled by the signer.
+     */
+    val customFields: Map<String, String>? = null
 )

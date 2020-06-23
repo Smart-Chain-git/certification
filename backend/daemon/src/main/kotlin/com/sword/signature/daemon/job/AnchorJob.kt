@@ -80,7 +80,7 @@ class AnchorJob(
         val publicKey: String =
             accountKeys["publicKey"] ?: throw IllegalStateException("Public key not provided for $accountLogin.")
         val secretKey: String =
-            accountKeys["secretKey"] ?: throw IllegalStateException("Public key not provided for $accountLogin.")
+            accountKeys["secretKey"] ?: throw IllegalStateException("Secret key not provided for $accountLogin.")
         return Pair(publicKey, secretKey)
     }
 

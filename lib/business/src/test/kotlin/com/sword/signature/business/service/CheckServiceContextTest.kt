@@ -38,6 +38,10 @@ class CheckServiceContextTest @Autowired constructor(
         resetDatabase()
     }
 
+    private val adminFullName = "Administrator"
+    private val fileId = "5ed7b83b3a635b44c7f8e952"
+    private val jobId = "5ed7b83b3a635b44c7f8e946"
+
     private val transaction = TzOp(
         hash = "ooG3vVwQA51f6YiHd41wvomejuzkBWKJEgvGiYQ4zQK4jrXBFCi",
         block = "BMeaiFq5S6EuPVR3ctvNGWT7dufc35SjNkHyiKFbTKiC22DH23f",
@@ -219,7 +223,10 @@ class CheckServiceContextTest @Autowired constructor(
                 runBlocking { checkService.checkDocument("c866779f483855455631c934d8933bf744f56dcc10833e8a73752ed086325a7a") }
 
             SoftAssertions().apply {
-                assertEquals(0, response.status)
+                assertEquals(1, response.status)
+                assertEquals(fileId, response.fileId)
+                assertEquals(jobId, response.jobId)
+                assertEquals(adminFullName ,response.signer)
                 assertEquals(
                     "c866779f483855455631c934d8933bf744f56dcc10833e8a73752ed086325a7a",
                     response.proof.documentHash
@@ -446,7 +453,9 @@ class CheckServiceContextTest @Autowired constructor(
 
             SoftAssertions().apply {
                 assertEquals(1, response.status)
-                assertEquals("tz1aSkwEot3L2kmUvcoxzjMomb9mvBNuzFK6" ,response.signer)
+                assertEquals(fileId, response.fileId)
+                assertEquals(jobId, response.jobId)
+                assertEquals(adminFullName ,response.signer)
                 assertEquals(
                     "c866779f483855455631c934d8933bf744f56dcc10833e8a73752ed086325a7a",
                     response.proof.documentHash
