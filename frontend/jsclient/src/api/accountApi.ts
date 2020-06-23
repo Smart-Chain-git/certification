@@ -1,4 +1,3 @@
-
 import {Account, AccountCreate, AccountPatch} from "@/api/types"
 import {AxiosRequestConfig, AxiosResponse} from "axios"
 import {Api} from "@/api/api"

@@ -24,6 +24,7 @@ interface SignService {
         algorithm: Algorithm,
         flowName: String,
         callBackUrl: String? = null,
+        customFields: Map<String, String>? = null,
         fileHashes: Flow<Pair<String, FileMetadata>>
     ): Flow<Job>
 }

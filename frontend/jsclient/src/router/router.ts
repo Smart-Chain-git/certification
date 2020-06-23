@@ -7,10 +7,13 @@ import {loadCurrentJob, loadJobs} from "@/router/guards/loadJobs"
 import {
     Accounts,
     AppTemplate,
-    ChannelManagement,
     Dashboard,
     Documents,
     EditAccount,
+    ChannelManagement,
+    SignatureCheckTemplate,
+    About,
+    Contact,
     JobDetail,
     Jobs,
     Login,
@@ -43,8 +46,36 @@ const router = new Router({
         },
         {
             path: "/signature-check",
-            component: SignatureCheck,
+            component: SignatureCheckTemplate,
             beforeEnter: loadMeIfLogged,
+            children: [
+                {
+                    path: "",
+                    component: SignatureCheck,
+                },
+            ],
+        },
+        {
+            path: "/about",
+            component: SignatureCheckTemplate,
+            beforeEnter: loadMeIfLogged,
+            children: [
+                {
+                    path: "",
+                    component: About,
+                },
+            ],
+        },
+        {
+            path: "/contact",
+            component: SignatureCheckTemplate,
+            beforeEnter: loadMeIfLogged,
+            children: [
+                {
+                    path: "",
+                    component: Contact,
+                },
+            ],
         },
         {
             path: "/",

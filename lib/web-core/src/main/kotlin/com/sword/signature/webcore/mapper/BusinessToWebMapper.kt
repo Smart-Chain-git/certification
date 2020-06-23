@@ -1,5 +1,6 @@
 package com.sword.signature.webcore.mapper
 
+
 import com.sword.signature.api.account.Account
 import com.sword.signature.api.algorithm.Algorithm
 import com.sword.signature.api.check.CheckOutput
@@ -51,9 +52,9 @@ fun com.sword.signature.business.model.Job.toWeb() = Job(
     contractAddress = contractAddress,
     transactionHash = transactionHash,
     channelName = channelName,
-    docsNumber = docsNumber
+    docsNumber = docsNumber,
+    customFields = customFields
 )
-
 
 fun TreeElement.LeafTreeElement.toWeb(proof: com.sword.signature.business.model.Proof? = null) =
     JobFile(
@@ -90,7 +91,7 @@ fun com.sword.signature.business.model.Token.toWeb() = Token(
     id = id,
     name = name,
     jwtToken = jwtToken,
-        creationDate = creationDate,
+    creationDate = creationDate,
     expirationDate = expirationDate,
     accountId = accountId,
     revoked = revoked
@@ -98,6 +99,8 @@ fun com.sword.signature.business.model.Token.toWeb() = Token(
 
 fun com.sword.signature.business.model.CheckResponse.toWeb() = CheckOutput.Ok(
     status = status,
+    fileId = fileId,
+    jobId = jobId,
     signer = signer,
     timestamp = timestamp,
     process = trace,
