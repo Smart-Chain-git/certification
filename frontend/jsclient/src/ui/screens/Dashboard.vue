@@ -62,7 +62,7 @@
                             </tbody>
                         </template>
                     </v-data-table>
-                    <v-flex class="mt-4 text-center">
+                    <v-flex class="mt-4 pb-4 text-center">
                         <IconButton @click="gotoJobs()" color="var(--var-color-blue-sword)">View more</IconButton>
                     </v-flex>
                 </Card>

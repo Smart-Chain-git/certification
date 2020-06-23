@@ -19,5 +19,6 @@ data class AccountEntity(
     val publicKey: String?,
     val hash: String?,
     val isAdmin: Boolean = false,
-    val disabled: Boolean = false
+    val disabled: Boolean = false,
+    val firstLogin: Boolean = true
 )

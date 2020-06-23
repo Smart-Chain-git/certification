@@ -11,6 +11,20 @@
     "connection": "Login",
     "gcu": "Terms of Use"
   },
+  "firstLogin" : {
+    "title" :"Welcome on board!",
+    "message1": "Please change your password to activate your account",
+    "message2": "",
+    "password": "New password",
+    "passwordConfirmation": "Confirm your new password",
+    "activate": "Activate my account",
+    "passwordError": "Passwords must match and be a least 8 characters long, have at least 1 uppercase, 1 lowercase, 1 number and 1 special character",
+    "alreadyActivated": {
+      "title": "Error",
+      "message1": "The validation hyperlink is no longer valid or has already been used.",
+      "message2": "Please contact your administrator for more information."
+    }
+  },
   "dashboard": {
     "title": "Dashboard",
     "welcome": "Welcome to the Tezos Digisign application !",
@@ -243,6 +257,22 @@
       "export": "Export .csv",
       "copyId": "Copy"
     }
+  },
+  "signatureHandler": {
+    "title": "Signature request",
+    "fileName": "File name",
+    "size":"Size",
+    "hash": "Hash",
+    "keyValue": "Keys & Values",
+    "sign": "Sign",
+    "cancel": "Cancel",
+    "upload": "Upload",
+    "uploadFiles": "Upload your files",
+    "algorithm": "Hash algorithm",
+    "name": "Name",
+    "data": "Data",
+    "start": "Start your job",
+    "noData": "No file present."
   },
   "errors": {
     "login": {

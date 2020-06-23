@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.reactive.awaitFirstOrNull
+import kotlinx.coroutines.reactive.awaitLast
 import kotlinx.coroutines.reactive.awaitSingle
 import org.slf4j.LoggerFactory
 import org.springframework.dao.DuplicateKeyException
@@ -121,6 +122,40 @@ class AccountServiceImpl(
             ?: throw EntityNotFoundException("account", accountId)
         accountRepository.delete(account).awaitFirstOrNull()
         LOGGER.debug("Account with id ({}) deleted.", accountId)
+    }
+
+    @Transactional(rollbackFor = [ServiceException::class])
+    override suspend fun activateAccount(requester: Account, password: String): Account {
+        val accountId = requester.id
+        LOGGER.debug("Activate account with id ({}).", accountId)
+
+        // Check rights to perform operation.
+        if(!requester.isAdmin && requester.id != accountId) {
+            throw MissingRightException(requester)
+        }
+
+        val account: AccountEntity = accountRepository.findById(accountId).awaitFirstOrNull()
+            ?: throw EntityNotFoundException("account", accountId)
+
+        val toPatch = account.copy(
+            login = account.login,
+            email = account.email,
+            password = password,
+            fullName = account.fullName,
+            company = account.company,
+            country = account.country,
+            publicKey = account.publicKey,
+            hash = account.hash,
+            isAdmin = account.isAdmin,
+            disabled = account.disabled,
+            firstLogin = false
+        )
+
+        val updatedAccount = accountRepository.save(toPatch).awaitSingle().toBusiness()
+
+        LOGGER.debug("Account with id ({}) activated.", accountId)
+
+        return updatedAccount
     }
 
     companion object {

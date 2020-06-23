@@ -1,26 +1,28 @@
 import checkUserHasPubKey from "@/router/guards/checkUserHasPubKey"
 import checkUserIsAdmin from "@/router/guards/checkUserIsAdmin"
+import fetchActivationToken from "@/router/guards/fetchActivationToken"
 import fetchDataAndRedirect from "@/router/guards/fetchDataAndRedirect"
 import {loadAccount, loadAccounts, loadMeIfLogged, loadTokens} from "@/router/guards/loadAccounts"
 import {loadCurrentJob, loadJobs} from "@/router/guards/loadJobs"
 
 import {
+    About,
     Accounts,
+    Activation,
     AppTemplate,
+    ChannelManagement,
+    Contact,
     Dashboard,
     Documents,
     EditAccount,
-    ChannelManagement,
-    SignatureCheckTemplate,
-    About,
-    Contact,
     JobDetail,
     Jobs,
     Login,
     ReceptionTemplate,
     Resources,
     SignatureCheck,
-    SignatureRequest,
+    SignatureCheckTemplate,
+    SignatureHandler,
 } from "@/ui/components"
 import Vue from "vue"
 import Router from "vue-router"
@@ -42,6 +44,13 @@ const router = new Router({
             component: ReceptionTemplate,
             children: [
                 {path: "", component: Login},
+            ],
+        },
+        {
+            path: "/activation/:token",
+            component: ReceptionTemplate,
+            children: [
+                {path: "", component: Activation, props: true, beforeEnter: fetchActivationToken},
             ],
         },
         {
@@ -136,7 +145,7 @@ const router = new Router({
                 },
                 {
                     path: "signature-request",
-                    component: SignatureRequest,
+                    component: SignatureHandler,
                     beforeEnter: checkUserHasPubKey,
                 },
                 {

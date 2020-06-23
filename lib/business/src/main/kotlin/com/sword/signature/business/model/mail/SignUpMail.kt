@@ -5,7 +5,7 @@ import org.thymeleaf.context.Context
 
 class SignUpMail(
     recipient: Account,
-    private val rawPassword: String
+    private val link: String
 ) : TransactionalMail(
     recipient = recipient,
     templateName = "signup_mail",
@@ -13,6 +13,6 @@ class SignUpMail(
 ) {
     override fun getContext() = Context().apply {
         setVariable("name", recipient.fullName)
-        setVariable("rawPassword", rawPassword)
+        setVariable("link", link)
     }
 }
