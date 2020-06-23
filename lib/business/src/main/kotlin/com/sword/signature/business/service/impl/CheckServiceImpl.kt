@@ -6,13 +6,14 @@ import com.sword.signature.business.model.CheckResponse
 import com.sword.signature.business.model.Proof
 import com.sword.signature.business.service.CheckService
 import com.sword.signature.business.service.FileService
-import com.sword.signature.business.service.SignService
 import com.sword.signature.common.enums.JobStateType
 import com.sword.signature.common.enums.TreeElementPosition
 import com.sword.signature.merkletree.utils.hexStringHash
+import com.sword.signature.model.entity.AccountEntity
 import com.sword.signature.model.entity.JobEntity
 import com.sword.signature.model.entity.QTreeElementEntity
 import com.sword.signature.model.entity.TreeElementEntity
+import com.sword.signature.model.repository.AccountRepository
 import com.sword.signature.model.repository.JobRepository
 import com.sword.signature.model.repository.TreeElementRepository
 import com.sword.signature.tezos.reader.service.TezosReaderService
@@ -28,6 +29,7 @@ import java.util.function.Supplier
 class CheckServiceImpl(
     val treeElementRepository: TreeElementRepository,
     val jobRepository: JobRepository,
+    val accountRepository: AccountRepository,
     val tezosReaderService: TezosReaderService,
     val fileService: FileService,
     @Value("\${tezos.validation.minDepth}") private val minDepth: Long
@@ -112,11 +114,18 @@ class CheckServiceImpl(
                         )
                         throw CheckException.IncoherentData()
                     }
+
+                    // Compute the file proof.
                     val computedProof = fileService.getFileProof(adminAccount, treeElement.id!!).awaitFirstOrNull()
                         ?: throw CheckException.IncoherentData()
+                    // Retrieve the signer.
+                    val signer: AccountEntity? = accountRepository.findById(job.userId).awaitFirstOrNull()
+
                     return CheckResponse(
-                        status = 0,
-                        signer = job.signerAddress,
+                        status = 1,
+                        fileId = treeElement.id!!,
+                        jobId = job.id!!,
+                        signer = signer?.fullName,
                         timestamp = transaction.bigMapDiff[0].value.timestamp,
                         trace = branchHashes,
                         proof = computedProof
@@ -216,16 +225,21 @@ class CheckServiceImpl(
             val job: JobEntity =
                 jobRepository.findById(treeElement.jobId).awaitFirstOrNull() ?: return defaultResponse.get()
             // Check compliance
-            if (providedProof.transactionHash != job.transactionHash || checkBranch(providedProof, treeElement)) {
+            if (providedProof.transactionHash != job.transactionHash || !checkBranch(providedProof, treeElement)) {
                 return defaultResponse.get()
             }
             // Generate a fresh proof
             val freshProof: Proof =
-                fileService.getFileProof(adminAccount, treeElement.id!!).awaitFirstOrNull() ?: return defaultResponse.get()
+                fileService.getFileProof(adminAccount, treeElement.id!!).awaitFirstOrNull()
+                    ?: return defaultResponse.get()
+            // Retrieve the signer.
+            val signer: AccountEntity? = accountRepository.findById(job.userId).awaitFirstOrNull()
 
             return CheckResponse(
                 status = 1,
-                signer = job.signerAddress,
+                fileId = treeElement.id!!,
+                jobId = job.id!!,
+                signer = signer?.fullName,
                 timestamp = OffsetDateTime.now(),
                 trace = branchHashes,
                 proof = freshProof
@@ -322,16 +336,16 @@ class CheckServiceImpl(
                 return false
             }
             val hash = proof.hashes[index++]
-            val sibling: TreeElementEntity =
+            val sibling: TreeElementEntity? =
                 treeElementRepository.findOne(
                     QTreeElementEntity.treeElementEntity.id.ne(current.id)
                         .and(QTreeElementEntity.treeElementEntity.parentId.eq(current.parentId))
-                ).awaitFirstOrNull() ?: return false
+                ).awaitFirstOrNull()
             // Retrieve parent.
             val parent: TreeElementEntity =
                 treeElementRepository.findById(current.parentId!!).awaitFirstOrNull()
                     ?: return false
-            if (hash.first != sibling.hash || hash.second != sibling.position) {
+            if (hash.first != sibling?.hash || hash.second != (sibling?.position ?: TreeElementPosition.RIGHT)) {
                 return false
             }
             current = parent

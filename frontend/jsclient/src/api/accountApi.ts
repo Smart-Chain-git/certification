@@ -1,5 +1,5 @@
-
 import {Account, AccountCreate, AccountPatch, AccountValidation} from "@/api/types"
+
 import {AxiosRequestConfig, AxiosResponse} from "axios"
 import {Api} from "@/api/api"
 import {apiConfig} from "@/api/api.config"

@@ -1,4 +1,44 @@
 
+export interface SignatureCheckRequest {
+    documentHash: string,
+    proof?: string,
+}
+
+export interface Hash {
+    hash?: string,
+    position: string
+}
+
+export interface Proof {
+    file_name: string,
+    hash_root: string,
+    hash_document: string,
+    algorithm: string,
+    block_hash?: string,
+    blockDepth?: number,
+    hash_list: Array<Hash>,
+    transaction_hash?: string
+    contract_address: string
+    signature_date?: Date
+    origin_public_key: string,
+    public_key: string,
+    origin: string
+}
+
+export interface SignatureCheckResponse {
+    check_status: number,
+    check_process: Array<string>,
+    signer?: string,
+    timestamp: Date,
+    proof: Proof
+    error?: string,
+    current_depth?: number,
+    expected_depth?: number,
+    date?: Date,
+    public_key?: string
+    output: string,
+}
+
 export interface AuthRequest {
     user: string
     password: string
@@ -92,4 +132,52 @@ export interface TokenCreateRequest {
 
 export interface AccountValidation {
     password: string
+}
+export interface SignMetaData {
+    fileName: string,
+    fileSize: number,
+    customFields?: {[key: string]: string},
+}
+
+
+export interface JobFile {
+    id: string,
+    hash: string,
+    jobId: string,
+    metadata: SignMetaData,
+    proof?: Proof
+}
+
+export interface FileCriteria {
+    id?: string,
+    name?: string,
+    hash?: string,
+    jobId?: string,
+    accountId?: string,
+    dateStart?: string,
+    dateEnd?: string,
+    sort?: Array<string>,
+    page?: number,
+    size?: number
+}
+
+export interface Hash {
+    hash?: string,
+    position: string
+}
+
+export interface Proof {
+    file_name: string,
+    hash_root: string,
+    hash_document: string,
+    algorithm: string,
+    block_hash?: string,
+    blockDepth?: number,
+    hash_list: Array<Hash>,
+    transaction_hash?: string
+    contract_address: string
+    signature_date?: Date
+    origin_public_key: string,
+    public_key: string,
+    origin: string
 }

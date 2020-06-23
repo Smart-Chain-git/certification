@@ -18,7 +18,7 @@
                         <EditFormRow :title="$t('job.detail.statusDate')" :editable="false" :value="currentJob.stateDate"/>
                         <EditFormRow :title="$t('job.detail.status')" :editable="false" :value="currentJob.state"/>
                         <EditFormRow :title="$t('job.detail.docs')" :editable="true">
-                            <a class="mt-3" :href="'#/documents/' + currentJob.id">{{ currentJob.docsNumber }}</a>
+                            <a class="mt-3" @click="gotoDocuments(currentJob.id)">{{ currentJob.docsNumber }}</a>
                         </EditFormRow>
                         <EditFormRow :title="$t('job.detail.channel')" :editable="false" :value="currentJob.channelName"/>
                         <EditFormRow :title="$t('job.detail.block')" :editable="false" :value="currentJob.blockHash"/>
@@ -46,6 +46,15 @@
 
         private back() {
             this.$router.push("/jobs")
+        }
+
+        private gotoDocuments(job: string) {
+            this.$modules.files.setFilter({
+                accountId: this.$modules.accounts.meAccount!.id,
+                dates: [],
+                jobId: job,
+            })
+            this.$router.push("/documents")
         }
 
     }

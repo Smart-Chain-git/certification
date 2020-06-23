@@ -12,12 +12,14 @@
                         autocomplete="off"
                         :value="datesRangeDisplay"
                         :label="label"
+                        :placeholder="placeholder"
                         v-on="on"
                         outlined
                         readonly
                         dense
                         :color="color"
                         clearable
+                        @click:clear="resetDate()"
                 />
             </v-flex>
             <v-flex class="mt-n1 pa-0" sm="2" md="6">
@@ -56,6 +58,7 @@
         @Prop(String) private readonly color!: string
         @Prop(String) private readonly label!: string
         @Prop(String) private readonly min!: string
+        @Prop(String) private readonly placeholder!: string
 
         private menu = false
 

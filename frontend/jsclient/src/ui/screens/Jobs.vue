@@ -174,6 +174,19 @@
     @Component
     export default class Jobs extends Vue {
 
+        private filter: FilterOption = {
+            channelName: undefined,
+            dates: [],
+            id: undefined,
+            flowName: undefined,
+        }
+
+        private pagination: PaginationOption = {
+            itemsPerPage: 10,
+            page: 1,
+            sortBy: [],
+            sortDesc: [],
+        }
 
         private get loading() {
             return this.$modules.jobs.getLoading
@@ -187,14 +200,7 @@
             return this.$modules.jobs.getJobCount
         }
 
-        private pagination: PaginationOption = {...this.$modules.jobs.getPagination()}
-
         private allChannels: Array<string> = [...new Set(this.$modules.tokens.getTokens().map((t) => t.name))]
-
-
-        private get filter(): FilterOption {
-            return this.$modules.jobs.getFilter
-        }
 
 
         private get headers() {
@@ -234,10 +240,8 @@
 
         @Watch("pagination")
         private search() {
-
             this.$modules.jobs.setFilter(this.filter)
             this.$modules.jobs.setPagination(this.pagination)
-
             this.$modules.jobs.loadJobs()
         }
 
@@ -249,8 +253,13 @@
             this.$router.push("/jobs/" + jobId)
         }
 
-        private gotoDocument(jobId: string) {
-            this.$router.push("/documents/" + jobId)
+        private gotoDocument(job: string) {
+            this.$modules.files.setFilter({
+                accountId: this.$modules.accounts.meAccount!.id,
+                dates: [],
+                jobId: job,
+            })
+            this.$router.push("/documents/")
         }
     }
 </script>

@@ -11,12 +11,12 @@
                     <CardTitle icon="add">{{ $t("channelManagement.new")}}</CardTitle>
                     <v-flex xs5>
                         <EditFormRow :title="$t('channelManagement.name')" :editable="true">
-                            <EditFormTitleEdit v-model.trim="name" :label="$t('channelManagement.name')" color="var(--var-color-blue-sword)"></EditFormTitleEdit>
+                            <EditFormTitleEdit v-model.trim="name" :placeholder="$t('channelManagement.name')" color="var(--var-color-blue-sword)"></EditFormTitleEdit>
                         </EditFormRow>
                         <EditFormRow :title="$t('channelManagement.expirationDate')" :editable="true">
                             <EditFormDate
                                     v-model="date"
-                                    :label="$t('channelManagement.date')"
+                                    :placeholder="$t('channelManagement.date')"
                                     color="var(--var-color-blue-sword)"
                                     :min="now"
                             />
