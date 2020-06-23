@@ -145,6 +145,7 @@ class AccountHandler(
         if (account!!.password != token.password) {
             throw AuthenticationException.RevokedTokenException(credentials.toString())
         } else {
+            checkPassword(accountDetails.password)
             return accountService.activateAccount(account, bCryptPasswordEncoder.encode(accountDetails.password)).toWeb()
         }
     }
