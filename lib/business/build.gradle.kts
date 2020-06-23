@@ -17,7 +17,6 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
-    implementation("com.auth0:java-jwt:3.10.3")
 
     // Project
     api(project(":lib:common"))

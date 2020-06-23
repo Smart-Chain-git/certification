@@ -223,10 +223,6 @@ export default class AccountsModule extends VuexModule {
     @Action
     public async validateAccount(password: AccountValidation) {
         await accountApi.validate(password)
-            .then((response: Account) => {
-            }).catch(() => {
-
-            })
     }
 
     @Action

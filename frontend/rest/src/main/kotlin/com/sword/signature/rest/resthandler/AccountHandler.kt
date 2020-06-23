@@ -1,19 +1,14 @@
 package com.sword.signature.rest.resthandler
 
-import ch.qos.logback.core.util.Duration
 import com.sword.signature.api.account.Account
 import com.sword.signature.api.account.AccountCreate
 import com.sword.signature.business.exception.AuthenticationException
 import com.sword.signature.business.exception.EntityNotFoundException
 import com.sword.signature.business.model.AccountPatch
 import com.sword.signature.business.model.AccountValidation
-import com.sword.signature.business.model.TokenActivation
 import com.sword.signature.business.model.mail.SignUpMail
 import com.sword.signature.business.service.AccountService
 import com.sword.signature.business.service.MailService
-import com.sword.signature.business.service.TokenService
-import com.sword.signature.rest.authentication.ActivationTokenInfo
-import com.sword.signature.rest.authentication.SecurityContextRepository
 import com.sword.signature.rest.checkPassword
 import com.sword.signature.webcore.authentication.*
 import com.sword.signature.webcore.mapper.toWeb
@@ -22,15 +17,9 @@ import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.reactive.awaitLast
 import kotlinx.coroutines.reactive.awaitSingle
-import kotlinx.coroutines.reactor.mono
-import org.springframework.security.authentication.AuthenticationManager
-import org.springframework.security.core.Authentication
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.core.context.ReactiveSecurityContextHolder
-import org.springframework.security.core.context.SecurityContext
-import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.web.bind.annotation.*
 import java.time.OffsetDateTime
