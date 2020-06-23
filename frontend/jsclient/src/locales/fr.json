@@ -11,6 +11,20 @@
     "connection": "Connexion",
     "gcu": "Conditions générales d'utilisation"
   },
+  "firstLogin" : {
+    "title" :"Bienvenue sur TEZOS DigiSign.",
+    "message1": "Avant votre première connexion, merci de choisir",
+    "message2": "un mot de passe et de confirmer votre choix.",
+    "password": "Créer mon mot de passe",
+    "passwordConfirmation": "Confirmation du mot de passe",
+    "activate": "Activer mon compte",
+    "passwordError": "Les mots de passe doivent correspondre et comporter au moins 8 caractères, dont 1 caractère minuscule, 1 caractère majuscule, 1 chiffre et 1 caractère spécial",
+    "alreadyActivated": {
+      "title": "Erreur",
+      "message1": "L'hyperlien de confirmation n'est plus valide ou a déjà été utilisé.",
+      "message2": "Nous vous invitons à contacter votre administrateur."
+    }
+  },
   "dashboard": {
     "title": "Tableau de bord",
     "welcome": "Bienvenue sur application Tezos Digisign !",

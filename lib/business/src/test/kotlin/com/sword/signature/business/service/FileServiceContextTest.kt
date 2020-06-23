@@ -41,7 +41,8 @@ class FileServiceContextTest @Autowired constructor(
         publicKey = null,
         hash = null,
         isAdmin = true,
-        disabled = false
+        disabled = false,
+        firstLogin = false
     )
 
     private val simpleAccount = Account(
@@ -55,7 +56,8 @@ class FileServiceContextTest @Autowired constructor(
         publicKey = null,
         hash = null,
         isAdmin = false,
-        disabled = false
+        disabled = false,
+        firstLogin = false
     )
 
     private val secondAdmin = Account(
@@ -69,7 +71,8 @@ class FileServiceContextTest @Autowired constructor(
         publicKey = null,
         hash = null,
         isAdmin = true,
-        disabled = false
+        disabled = false,
+        firstLogin = false
     )
 
     private val job1Id = "5e8c36c49df469062bc658c1"

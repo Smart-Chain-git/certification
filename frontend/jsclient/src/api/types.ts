@@ -59,6 +59,7 @@ export interface Account {
     hash: string | undefined,
     isAdmin: boolean,
     disabled: boolean,
+    firstLogin: boolean,
 }
 
 export interface AccountCreate {
@@ -153,6 +154,9 @@ export interface SignatureResponse {
     files: Array<SignMetaData>,
 }
 
+export interface AccountValidation {
+    password: string
+}
 export interface SignMetaData {
     fileName: string,
     fileSize: number,

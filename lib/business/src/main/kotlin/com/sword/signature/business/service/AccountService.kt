@@ -47,4 +47,10 @@ interface AccountService {
      * @param accountId Id of the account to delete.
      */
     suspend fun deleteAccount(requester: Account, accountId: String)
+
+    /**
+     * Activate an account
+     * @param password The new password to set for the account.
+     */
+    suspend fun activateAccount(requester: Account, password: String): Account
 }
