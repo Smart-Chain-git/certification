@@ -37,6 +37,7 @@ class SignServiceImpl(
         algorithm: Algorithm,
         flowName: String,
         callBackUrl: String?,
+        customFields: Map<String, String>?,
         fileHashes: Flow<Pair<String, FileMetadata>>
     ): Flow<Job> {
 
@@ -50,13 +51,33 @@ class SignServiceImpl(
                 }
                 intermediary.add(fileHash)
                 if (intermediary.size >= maximumLeaf) {
-                    emit(anchorTree(requester, channelName, algorithm, flowName, callBackUrl, intermediary))
+                    emit(
+                        anchorTree(
+                            requester = requester,
+                            channelName = channelName,
+                            algorithm = algorithm,
+                            flowName = flowName,
+                            callBackUrl = callBackUrl,
+                            customFields = customFields,
+                            fileHashes = intermediary
+                        )
+                    )
                     intermediary.clear()
                 }
             }
             // emission des derniers hash
             if (intermediary.isNotEmpty()) {
-                emit(anchorTree(requester, channelName, algorithm, flowName, callBackUrl, intermediary))
+                emit(
+                    anchorTree(
+                        requester = requester,
+                        channelName = channelName,
+                        algorithm = algorithm,
+                        flowName = flowName,
+                        callBackUrl = callBackUrl,
+                        customFields = customFields,
+                        fileHashes = intermediary
+                    )
+                )
             }
         }
     }
@@ -67,6 +88,7 @@ class SignServiceImpl(
         algorithm: Algorithm,
         flowName: String,
         callBackUrl: String?,
+        customFields: Map<String, String>?,
         fileHashes: List<Pair<String, FileMetadata>>
     ): Job {
 
@@ -80,7 +102,8 @@ class SignServiceImpl(
                 state = JobStateType.INSERTED,
                 stateDate = OffsetDateTime.now(),
                 docsNumber = fileHashes.size,
-                channelName = channelName
+                channelName = channelName,
+                customFields = customFields
             )
         ).awaitSingle()
 

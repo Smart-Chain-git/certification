@@ -63,7 +63,8 @@ fun JobEntity.toBusiness(rootHash: String? = null, files: List<TreeElement.LeafT
     contractAddress = contractAddress,
     channelName = channelName,
     docsNumber = docsNumber,
-    signerAddress = signerAddress
+    signerAddress = signerAddress,
+    customFields = customFields
 )
 
 fun AlgorithmEntity.toBusiness() = Algorithm(

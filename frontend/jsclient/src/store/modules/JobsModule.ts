@@ -118,7 +118,7 @@ export default class JobsModule extends VuexModule {
 
     @Mutation
     public setPagination(pg: PaginationOption) {
-        this.paginationOption = pg
+        this.paginationOption = deepcopy<PaginationOption>(pg)
     }
 
     public getPagination() {
@@ -127,7 +127,7 @@ export default class JobsModule extends VuexModule {
 
     @Mutation
     public setFilter(f: FilterOption) {
-        this.filter = f
+        this.filter = deepcopy<FilterOption>(f)
     }
 
     get getFilter() {

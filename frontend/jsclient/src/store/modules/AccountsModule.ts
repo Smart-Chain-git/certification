@@ -1,4 +1,3 @@
-
 import {accountApi} from "@/api/accountApi"
 import {authApi} from "@/api/authApi"
 import {resetStore} from "@/store/actions/globalActions"
