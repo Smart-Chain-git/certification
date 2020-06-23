@@ -15,7 +15,8 @@ fun AccountEntity.toBusiness() = Account(
     publicKey = publicKey,
     hash = hash,
     isAdmin = isAdmin,
-    disabled = disabled
+    disabled = disabled,
+    firstLogin = firstLogin
 )
 
 fun TreeElementEntity.Metadata.toBusiness() = FileMetadata(

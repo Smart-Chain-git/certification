@@ -1,11 +1,10 @@
-
 import {accountApi} from "@/api/accountApi"
 import {authApi} from "@/api/authApi"
 import {resetStore} from "@/store/actions/globalActions"
 import modules from "@/store/modules"
 
-import {Account, AccountCreate, AccountPatch, AuthRequest, AuthResponse} from "@/api/types"
-import globalAxios from "axios"
+import {Account, AccountCreate, AccountPatch, AccountValidation, AuthRequest, AuthResponse} from "@/api/types"
+import globalAxios, {AxiosError, AxiosResponse} from "axios"
 import Cookies from "js-cookie"
 import Vue from "vue"
 import {Action, Module, Mutation, VuexModule} from "vuex-class-modules"
@@ -22,6 +21,9 @@ export default class AccountsModule extends VuexModule {
     private responseInterceptor: number | null = null
     private currentAccount: Account | undefined = undefined
     private httpStatus: number = 0
+    private currentTokenAccount: Account | undefined = undefined
+    private currentTokenError: number = 200
+
 
     /**
      * The connected user.
@@ -210,6 +212,61 @@ export default class AccountsModule extends VuexModule {
 
     public getHttpStatus() {
         return this.httpStatus
+    }
+
+    @Action
+    public async loadActivationToken(token: string) {
+        this.setToken(token)
+        this.initToken()
+    }
+
+    @Action
+    public async validateAccount(password: AccountValidation) {
+        await accountApi.validate(password)
+            .then((response: Account) => {
+            }).catch(() => {
+
+            })
+    }
+
+    @Action
+    public async getAccountByActivationToken() {
+        await accountApi.getAccountByActivationToken()
+            .then((response: Account) => {
+                this.setCurrentActivationAccount(response)
+                this.resetCurrentActivationError()
+            }).catch((error: AxiosError) => {
+                this.setCurrentActivationError(error.response!.status)
+                this.resetCurrentActivationAccount()
+            })
+    }
+
+    public get currentActivationAccount(): Account | undefined {
+        return this.currentTokenAccount
+    }
+
+    @Mutation
+    public setCurrentActivationAccount(account: Account) {
+        this.currentTokenAccount = account
+    }
+
+    public get currentActivationError(): number {
+        return this.currentTokenError
+    }
+
+    @Mutation
+    public setCurrentActivationError(error: number) {
+        this.currentTokenError = error
+    }
+
+    @Mutation
+    public resetCurrentActivationAccount() {
+        this.currentTokenAccount = undefined
+    }
+
+    @Mutation
+    public resetCurrentActivationError() {
+        this.currentTokenError = 200
     }
 
     @Mutation

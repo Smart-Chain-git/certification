@@ -13,5 +13,6 @@ data class Account(
     val publicKey: String?,
     val hash: String?,
     val isAdmin: Boolean,
-    val disabled: Boolean
+    val disabled: Boolean,
+    val firstLogin: Boolean
 )

@@ -1,30 +1,48 @@
 package com.sword.signature.rest.resthandler
 
+import ch.qos.logback.core.util.Duration
 import com.sword.signature.api.account.Account
 import com.sword.signature.api.account.AccountCreate
+import com.sword.signature.business.exception.AuthenticationException
 import com.sword.signature.business.exception.EntityNotFoundException
 import com.sword.signature.business.model.AccountPatch
+import com.sword.signature.business.model.AccountValidation
+import com.sword.signature.business.model.TokenActivation
 import com.sword.signature.business.model.mail.SignUpMail
 import com.sword.signature.business.service.AccountService
 import com.sword.signature.business.service.MailService
+import com.sword.signature.business.service.TokenService
+import com.sword.signature.rest.authentication.ActivationTokenInfo
+import com.sword.signature.rest.authentication.SecurityContextRepository
 import com.sword.signature.rest.checkPassword
-import com.sword.signature.webcore.authentication.CustomUserDetails
+import com.sword.signature.webcore.authentication.*
 import com.sword.signature.webcore.mapper.toWeb
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.reactive.awaitLast
+import kotlinx.coroutines.reactive.awaitSingle
+import kotlinx.coroutines.reactor.mono
+import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.core.Authentication
 import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.security.core.context.ReactiveSecurityContextHolder
+import org.springframework.security.core.context.SecurityContext
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.web.bind.annotation.*
+import java.time.OffsetDateTime
+import java.util.*
 
 @RestController
 @RequestMapping("\${api.base-path:/api}")
 class AccountHandler(
     val accountService: AccountService,
     val bCryptPasswordEncoder: BCryptPasswordEncoder,
-    val mailService: MailService
+    val mailService: MailService,
+    val jwtTokenService: JwtTokenService
 ) {
     @Operation(security = [SecurityRequirement(name = "bearer-key")])
     @RequestMapping(
@@ -35,20 +53,15 @@ class AccountHandler(
     )
     suspend fun createAccount(
         @AuthenticationPrincipal user: CustomUserDetails,
+        @RequestHeader("origin") origin: String,
         @RequestBody accountDetails: AccountCreate
     ): Account {
-        val charPool = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789^$*ù!:;,&é'(-è_çà)='"
-
-        val rawPassword = (1..10).map { i -> kotlin.random.Random.nextInt(0, charPool.length) }
-                        .map(charPool::get)
-                        .joinToString("")
-
         val createdAccount = accountService.createAccount(
             requester = user.account,
             accountDetails = com.sword.signature.business.model.AccountCreate(
                 login = accountDetails.login,
                 email = accountDetails.email,
-                password = bCryptPasswordEncoder.encode(rawPassword),
+                password = bCryptPasswordEncoder.encode(UUID.randomUUID().toString() + OffsetDateTime.now().toString() + UUID.randomUUID().toString()),
                 fullName = accountDetails.fullName,
                 company = accountDetails.company,
                 country = accountDetails.country,
@@ -57,8 +70,11 @@ class AccountHandler(
                 isAdmin = accountDetails.isAdmin
             )
         )
+
+        val token = jwtTokenService.generateVolatileToken(createdAccount.id, java.time.Duration.ofDays(1), createdAccount.password)
+
         // Send signup email
-        mailService.sendEmail(SignUpMail(recipient = createdAccount, rawPassword = rawPassword))
+        mailService.sendEmail(SignUpMail(recipient = createdAccount, link = "$origin/#/activation/$token"))
 
         return createdAccount.toWeb()
     }
@@ -122,5 +138,45 @@ class AccountHandler(
             accountService.patchAccount(requester = user.account, accountId = accountId, accountDetails = accountPatch)
         return account.toWeb()
     }
+
+    @Operation(security = [SecurityRequirement(name = "bearer-key")])
+    @RequestMapping(
+        value = ["/validate-account"],
+        produces = ["application/json"],
+        method = [RequestMethod.POST]
+    )
+    suspend fun validate(
+        @AuthenticationPrincipal user: CustomUserDetails,
+        @RequestBody accountDetails: AccountValidation
+    ): Account {
+        val credentials = ReactiveSecurityContextHolder.getContext().map { it.authentication.credentials }.awaitSingle()
+        val token = jwtTokenService.parseToken(credentials.toString()) as ActivationToken
+        val account = accountService.getAccount(token.id)
+
+        if (account!!.password != token.password) {
+            throw AuthenticationException.RevokedTokenException(credentials.toString())
+        } else {
+            return accountService.activateAccount(account, bCryptPasswordEncoder.encode(accountDetails.password)).toWeb()
+        }
+    }
+
+    @Operation(security = [SecurityRequirement(name = "bearer-key")])
+    @RequestMapping(
+        value = ["/validate-account"],
+        produces = ["application/json"],
+        method = [RequestMethod.GET]
+    )
+    suspend fun getAccountByActivationToken(): Account {
+        val credentials = ReactiveSecurityContextHolder.getContext().map { it.authentication.credentials }.awaitSingle()
+        val token = jwtTokenService.parseToken(credentials.toString()) as ActivationToken
+
+        val account = accountService.getAccount(token.id)
+        if (account!!.password != token.password) {
+            throw AuthenticationException.RevokedTokenException(token.toString())
+        } else {
+            return account.toWeb()
+        }
+    }
+
 }
 

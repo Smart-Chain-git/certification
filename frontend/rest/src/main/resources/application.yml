@@ -31,6 +31,9 @@ jwt:
   secret: ffe50f21d8359de7245dc13777812c2a
   issuer: "Tezos@Signature"
   duration: 2h
+  expiration_time:
+    login: 1D
+    activation: 3D
 tezos:
   indexer:
     url: "http://127.0.0.1:8000"

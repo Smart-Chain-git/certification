@@ -23,7 +23,8 @@ fun com.sword.signature.business.model.Account.toWeb() = Account(
     publicKey = publicKey,
     hash = hash,
     isAdmin = isAdmin,
-    disabled = disabled
+    disabled = disabled,
+    firstLogin = firstLogin
 )
 
 

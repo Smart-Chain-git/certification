@@ -19,6 +19,7 @@ export interface Account {
     hash: string | undefined,
     isAdmin: boolean,
     disabled: boolean,
+    firstLogin: boolean,
 }
 
 export interface AccountCreate {
@@ -87,4 +88,8 @@ export interface Token {
 export interface TokenCreateRequest {
     expirationDate?: Date,
     name: string
+}
+
+export interface AccountValidation {
+    password: string
 }
