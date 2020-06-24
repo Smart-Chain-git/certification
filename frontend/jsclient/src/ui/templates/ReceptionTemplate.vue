@@ -10,6 +10,22 @@
 
 <template>
     <v-content>
+        <v-app-bar app fixed dense class="elevation-2" color="var(--var-color-blue-sword)">
+            <div class="flex-grow-1"/>
+            <v-toolbar-items>
+                <v-divider vertical/>
+                <v-menu bottom left>
+                    <template v-slot:activator="{ on }">
+                        <v-btn text @click="goBack" color="white">
+                            <v-icon class="mr-1">arrow_back</v-icon>
+                            <div>
+                                {{ $t('login.back') }}
+                            </div>
+                        </v-btn>
+                    </template>
+                </v-menu>
+            </v-toolbar-items>
+        </v-app-bar>
         <div class="background">
             <img src="@/ui/assets/reception-background.png" alt="reception background">
         </div>
@@ -49,3 +65,16 @@
         position: relative; /* otherwise the content is below the background image. */
     }
 </style>
+
+
+<script lang="ts">
+    import {Component, Vue} from "vue-property-decorator"
+
+    @Component
+    export default class ReceptionTemplate extends Vue {
+
+        private goBack() {
+            this.$router.push("/signature-check")
+        }
+    }
+</script>
