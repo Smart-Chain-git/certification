@@ -33,7 +33,7 @@ jwt:
   duration: 2h
 tezos:
   indexer:
-    url: "edivtezosnode.ren-dev2.lan:8001"
+    url: "http://127.0.0.1:8000"
   validation:
     minDepth: 30
   chain: "TEZOS_CARTHAGENET_SANDBOX"
