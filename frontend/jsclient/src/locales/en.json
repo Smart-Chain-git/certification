@@ -50,7 +50,14 @@
       "cancel": "Cancel"
     },
     "edit": {
-      "title": "My account",
+      "title": {
+        "manage": "Manage users",
+        "profile": "My account"
+      },
+      "subTitle":{
+        "create": "Add an user",
+        "edit": "Edit an user"
+      },
       "login": "Login",
       "email": "Email",
       "profile": "Profile",

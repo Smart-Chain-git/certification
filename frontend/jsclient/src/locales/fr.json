@@ -51,9 +51,12 @@
     },
     "edit": {
       "title": {
-        "editing": "Edition de compte",
-        "creating": "Création de compte",
+        "manage" : "Gestion des utilisateurs",
         "profile": "Mon compte"
+      },
+      "subTitle":{
+        "create": "Créer un utilisateur",
+        "edit": "Editer un utilisateur"
       },
       "login": "Identifiant",
       "email": "Email",

@@ -2,14 +2,15 @@
     <v-container fluid>
         <v-row class="mx-3 mt-3" justify="space-between">
             <v-col class="pl-4" tag="h1">
-                <h1 v-if="access === 'adminEditing'">{{ $t("account.edit.title.editing") }}</h1>
-                <h1 v-else-if="access === 'creating'"> {{ $t("account.edit.title.creating") }}</h1>
+                <h1 v-if="access === 'adminEditing' || access === 'creating'">{{ $t("account.edit.title.manage") }}</h1>
                 <h1 v-else>{{ $t("account.edit.title.profile") }}</h1>
             </v-col>
         </v-row>
         <v-row>
             <v-flex lg6 md7 sm8 xs11>
                 <Card>
+                    <CardTitle v-if="access === 'adminEditing'" icon="person">{{ $t("account.edit.subTitle.edit")}}</CardTitle>
+                    <CardTitle v-if="access === 'creating'" icon="person">{{ $t("account.edit.subTitle.create")}}</CardTitle>
                     <v-card-text class="pa-0" lg3>
                         <EditFormRow v-if="access === 'creating' || access === 'adminEditing'" :title="$t('account.edit.login')+' *'" :editable="true">
                             <EditFormTitleEdit :placeholder="$t('account.edit.login')" color="var(--var-color-blue-sword)" v-model.trim="draft.login"/>
