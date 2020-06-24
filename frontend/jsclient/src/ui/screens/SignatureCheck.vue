@@ -12,15 +12,17 @@
                 <v-row>
                     <v-col class="col-4 align-right"><h1>{{ $t("signatureCheck.upload") }}</h1></v-col>
                     <v-col class="col-5">
-                        <v-file-input prepend-icon="" prepend-inner-icon="publish" filled :placeholder="$t('signatureCheck.drop')" outlined v-model="file">
-                        </v-file-input>
+                        <div @dragover.prevent @drop.prevent="dropFile">
+                            <v-file-input prepend-icon="" prepend-inner-icon="publish" filled :placeholder="$t('signatureCheck.drop')" outlined v-model="file" @click:clear="resetFile"/>
+                        </div>
                     </v-col>
                 </v-row>
                 <v-row>
                     <v-col class="col-4 align-right"><h1>{{ $t("signatureCheck.uploadProof") }}</h1><span>{{ $t("signatureCheck.optional")}}</span></v-col>
                     <v-col class="col-5">
-                        <v-file-input prepend-icon="" prepend-inner-icon="publish" filled :placeholder="$t('signatureCheck.drop')" outlined v-model="proof" accept="application/json" >
-                        </v-file-input>
+                        <div @dragover.prevent @drop.prevent="dropProof">
+                            <v-file-input prepend-icon="" prepend-inner-icon="publish" filled :placeholder="$t('signatureCheck.drop')" outlined v-model="proof" accept="application/json" @click:clear="resetProof"/>
+                        </div>
                     </v-col>
                 </v-row>
             </v-flex>
@@ -108,7 +110,7 @@
                 </v-row>
             </v-flex>
             <div class="text-center">
-                <IconButton leftIcon="double_arrow" @click="check" color="var(--var-color-blue-sword)" :disabled="file === null">{{ (!fileHash) ? $t("signatureCheck.generate")  : $t("signatureCheck.regenerate")}}</IconButton>
+                <IconButton leftIcon="double_arrow" @click="check" color="var(--var-color-blue-sword)" :disabled="!file">{{ (!fileHash) ? $t("signatureCheck.generate")  : $t("signatureCheck.regenerate")}}</IconButton>
             </div>
 
             <v-flex id="bottom">
@@ -203,6 +205,22 @@
             this.fileHash = ""
             this.proofHash = undefined
             this.$modules.signatures.reset()
+        }
+
+        private dropFile(e: any) {
+            this.file = e.dataTransfer.files[0]
+        }
+
+        private resetFile() {
+            this.file = null
+        }
+
+        private dropProof(e: any) {
+            this.proof = e.dataTransfer.files[0]
+        }
+
+        private resetProof() {
+            this.proof = null
         }
 
         private get checkResponse(): SignatureCheckResponse | undefined {

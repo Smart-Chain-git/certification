@@ -50,7 +50,9 @@
                         <v-row>
                             <v-col class="col-3">{{ $t("signatureHandler.upload")}}</v-col>
                             <v-col class="col-8">
-                                <v-file-input class="file" outlined dense v-model="files" multiple/>
+                                <div @dragover.prevent @drop.prevent="drop">
+                                    <v-file-input class="file" outlined dense v-model="files" multiple/>
+                                </div>
                             </v-col>
                         </v-row>
                     </v-flex>
@@ -158,6 +160,10 @@
         private dataValues: Array<string> = []
         private newKey: string = ""
         private newValue: string = ""
+
+        private drop(e: any) {
+            this.files = e.dataTransfer.files
+        }
 
         @Watch("files")
         private update() {
