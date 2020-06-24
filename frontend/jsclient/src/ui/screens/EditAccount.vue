@@ -250,7 +250,8 @@
                     )
                 case "selfEditing":
                     if (this.draft.newPassword !== "" || this.draft.newPasswordConfirmation !== "") {
-                        return this.isPasswordStrong && this.draft.newPassword === this.draft.newPasswordConfirmation
+                        return this.draft.fullName !== "" &&
+                            this.isPasswordStrong && this.draft.newPassword === this.draft.newPasswordConfirmation
                     } else {
                         return this.draft.fullName !== this.$modules.accounts.meAccount?.fullName && this.draft.fullName !== ""
                     }
