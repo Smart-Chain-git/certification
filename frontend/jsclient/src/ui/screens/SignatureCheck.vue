@@ -290,7 +290,7 @@
                             this.checkResponse.check_process[idx]])
 
                     case "signatureCheck.errors.hash_inconsistent.message":
-                        return SignatureCheck.format(res, [this.fileHash, this.checkResponse.proof.hash_document])
+                        return SignatureCheck.format(res, [this.checkResponse.hash_document!, this.checkResponse.hash_document_proof!])
 
                     case "signatureCheck.errors.unknown_root_hash.message":
                         return SignatureCheck.format(res, [this.checkResponse.proof.hash_root])

@@ -164,14 +164,14 @@
     "errors": {
       "hash_not_present": {
         "title": "Hachage de document introuvable dans TEZOS DigiSign",
-        "message": "Nous sommes désolés, nous ne reconnaissons pas ce document. Êtes-vous sûr que ce document est dans la même version que celle qui a été signée? Sinon, veuillez télécharger la version originale. Si le document est bon et si vous avez reçu un fichier d'épreuve, veuillez également le télécharger. "
+        "message": "Nous sommes désolés, nous ne reconnaissons pas ce document. Êtes-vous sûr que ce document est dans la même version que celle qui a été signée? Sinon, veuillez télécharger la version originale. Si le document est bon et si vous avez reçu un fichier de preuve, veuillez également le télécharger. "
       },
       "hash_inconsistent": {
-        "title": "Le fichier d'épreuve ne correspond pas au document",
-        "message": "Nous sommes désolés, le fichier de preuve que vous avez fourni ne correspond pas au document que vous souhaitez vérifier (hachage du document {0} vs code de hachage du fichier de preuve {1}). Nous vous invitons à télécharger le fichier d'épreuve correct. Si vous ne disposez pas d'un autre fichier d'épreuve, le document que vous souhaitez confirmer peut avoir été modifié depuis sa signature. Nous vous invitons dans ce cas à retrouver sa version d'origine et à réessayer. "
+        "title": "Le fichier de preuve ne correspond pas au document",
+        "message": "Nous sommes désolés, le fichier de preuve que vous avez fourni ne correspond pas au document que vous souhaitez vérifier (hachage du document {0} vs code de hachage du fichier de preuve {1}). Nous vous invitons à télécharger le fichier de preuve correct. Si vous ne disposez pas d'un autre fichier de preuve, le document que vous souhaitez confirmer peut avoir été modifié depuis sa signature. Nous vous invitons dans ce cas à retrouver sa version d'origine et à réessayer. "
       },
       "incorrect_root_hash": {
-        "title": "Le fichier d'épreuve ne correspond pas au document",
+        "title": "Le fichier de preuve ne correspond pas au document",
         "message": "Nous sommes désolés, le fichier de preuve que vous avez fourni contient une erreur dans le calcul de son arbre Merkel. Êtes-vous sûr que ce fichier de preuve a été généré par un outil respectant le protocole Tezos DigiSign?"
       },
       "unknown_root_hash": {
@@ -183,7 +183,7 @@
         "message": "Nous sommes désolés. Selon notre base de données interne, nous devrions être en mesure de vous confirmer l'authenticité de votre document. Notre base de données nous informe que ce document a été signé par {0} - {1} le {2}. Cependant, nous ne pouvons pas trouver dans la blockchain la preuve que le document a bien été signé "
       },
       "incorrect_proof_file": {
-        "title": "Le fichier d'épreuve ne peut pas être analysé",
+        "title": "Le fichier de preuve ne peut pas être analysé",
         "message": "Le fichier de preuve que vous avez fourni n'est pas une preuve Tezos DigiSign V0 valide. Êtes-vous sûr que ce fichier de preuve a été généré par un outil respectant le protocole Tezos DigiSign V0?"
       },
       "incorrect_transaction": {
@@ -215,7 +215,7 @@
           "line3": "Le processus de signature peut avoir inclus des documents supplémentaires en même temps. Nous avons utilisé un système connu sous le nom d'arbre Merkel pour générer une signature unique sur plusieurs documents simultanément. Cet arbre Merkel est identifié par son hachage racine {0}." ,
           "line4": "Votre document, ainsi que le hachage racine, a été signé dans la transaction Tezos Blockchain {0}, présent dans le bloc Tezos {1}, le {2}. Il est désormais stocké dans un contrat intelligent",
           "line5": "Le document a été signé par une entité connue par sa clé publique Tezos unique {0}. L'opérateur de cette plateforme de vérification a reçu au préalable la confirmation que sa clé publique appartient à {1}.",
-          "line6": "Cliquez sur {#} pour obtenir un fichier d'épreuve expliquant la relation entre l'impression numérique de votre document et le hachage racine de l'arbre Merkle. Avec ce fichier d'épreuve, vous pouvez prouver à quiconque que votre document a été signé et horodaté. Si vous le faites ne l'avez pas déjà, veuillez le conserver en lieu sûr avec votre document d'origine. ",
+          "line6": "Cliquez sur {#} pour obtenir un fichier de preuve expliquant la relation entre l'impression numérique de votre document et le hachage racine de l'arbre Merkle. Avec ce fichier de preuve, vous pouvez prouver à quiconque que votre document a été signé et horodaté. Si vous le faites ne l'avez pas déjà, veuillez le conserver en lieu sûr avec votre document d'origine. ",
           "line7": "Cliquez sur {#} pour obtenir les informations techniques sur l'endroit où les informations sont stockées dans le contrat intelligent Tezos DigiSign (adresse du contrat: {0})."
         }
       },
