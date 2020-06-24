@@ -17,7 +17,7 @@
                             <EditFormTitleEdit v-model="flowName"/>
                         </EditFormRow>
                         <EditFormRow :title="$t('signatureHandler.data')" :editable="true">
-                            <v-row v-for="(key, index) in dataKeys" class="row_metadata">
+                            <v-row v-for="(key, index) in dataKeys" class="row_metadata" dense>
                                 <v-col class="col-5">
                                     <v-text-field outlined dense disabled :value="key"/>
                                 </v-col>
@@ -30,16 +30,21 @@
                                     </v-btn>
                                 </v-col>
                             </v-row>
-                            <v-row class="row_metadata">
+                            <v-row class="row_metadata" dense>
                                 <v-col class="col-5">
                                     <v-text-field outlined dense v-model="newKey"/>
                                 </v-col>
                                 <v-col class="col-5">
                                     <v-text-field outlined dense v-model="newValue"/>
                                 </v-col>
-                                <v-col class="col-2">
+                                <v-col class="col-1">
                                     <v-btn icon @click="addJobMetadata" :disabled="!canAddJobMetadata">
                                         <v-icon>add</v-icon>
+                                    </v-btn>
+                                </v-col>
+                                <v-col class="col-1">
+                                    <v-btn icon :disabled="newKey === '' && newValue === ''" @click="clearLastJobMetadata">
+                                        <v-icon>delete</v-icon>
                                     </v-btn>
                                 </v-col>
                             </v-row>
@@ -47,12 +52,9 @@
                     </v-flex>
                     <CardTitle type="number" number=2 class="mt-8">{{ $t("signatureHandler.uploadFiles")}}</CardTitle>
                     <v-flex xs8 lg4 class="ml-4">
-                        <v-row>
-                            <v-col class="col-3">{{ $t("signatureHandler.upload")}}</v-col>
-                            <v-col class="col-8">
-                                <v-file-input class="file" outlined dense v-model="files" multiple/>
-                            </v-col>
-                        </v-row>
+                        <EditFormRow :editable="true" :title="$t('signatureHandler.upload')">
+                            <v-file-input prepend-icon="" class="file" prepend-inner-icon="publish" outlined dense v-model="files" multiple/>
+                        </EditFormRow>
                     </v-flex>
                     <v-data-table class="table-header"
                                   :headers="headers"
@@ -70,7 +72,7 @@
                                 </td>
                                 <td class="text-center">{{file.size}} Kio</td>
                                 <td class="text-center">{{file.hash}}</td>
-                                <td class="text-center" style="vertical-align: top">
+                                <td class="text-center vertical_align_top">
                                     <v-row v-for="(key, index) in file.keys" dense align="center" justify="center" class="row_metadata">
                                         <v-col class="col-5">
                                             <v-text-field outlined dense :value="key" disabled/>
@@ -83,6 +85,7 @@
                                                 <v-icon>delete</v-icon>
                                             </v-btn>
                                         </v-col>
+                                        <v-col class="col-1"/>
                                     </v-row>
                                     <v-row dense align="center" justify="center" class="row_metadata">
                                         <v-col class="col-5">
@@ -94,6 +97,11 @@
                                         <v-col class="col-1 text-center">
                                             <v-btn :disabled="!canAddFileMetadata(file)" class="mb-6" icon @click="addFileMetadata(file)">
                                                 <v-icon>add</v-icon>
+                                            </v-btn>
+                                        </v-col>
+                                        <v-col class="col-1 text-center">
+                                            <v-btn :disabled="(file.newKey === undefined || file.newKey === '') && (file.newValue === undefined || file.newValue === '')" class="mb-6" icon @click="clearLastFileMetadata(file)">
+                                                <v-icon>delete</v-icon>
                                             </v-btn>
                                         </v-col>
                                     </v-row>
@@ -128,6 +136,10 @@
 
     .file {
         max-width: 320px;
+    }
+
+    .vertical_align_top {
+        vertical-align: top;
     }
 </style>
 
@@ -182,13 +194,16 @@
         private addFileMetadata(item: FileSign) {
                 item.keys.push(item.newKey!)
                 item.values.push(item.newValue!)
-                item.newKey = ""
-                item.newValue = ""
+                this.clearLastFileMetadata(item)
         }
 
         private addJobMetadata() {
             this.dataKeys.push(this.newKey)
             this.dataValues.push(this.newValue)
+            this.clearLastJobMetadata()
+        }
+
+        private clearLastJobMetadata() {
             this.newKey = ""
             this.newValue = ""
         }
@@ -199,6 +214,11 @@
 
         private get canAddJobMetadata() {
             return this.newKey !== "" && !this.dataKeys.find((s) => s === this.newKey)
+        }
+
+        private clearLastFileMetadata(item: FileSign) {
+            item.newKey = ""
+            item.newValue = ""
         }
 
         private removeFileMetadata(item: FileSign, key: number) {
