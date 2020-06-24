@@ -12,14 +12,14 @@
                 <v-row>
                     <v-col class="col-4 align-right"><h1>{{ $t("signatureCheck.upload") }}</h1></v-col>
                     <v-col class="col-5">
-                        <v-file-input prepend-icon="" prepend-inner-icon="publish" filled :placeholder="$t('signatureCheck.drop')" outlined v-model="file">
+                        <v-file-input prepend-icon="" :disabled="checkResponse" prepend-inner-icon="publish" filled :placeholder="$t('signatureCheck.drop')" outlined v-model="file">
                         </v-file-input>
                     </v-col>
                 </v-row>
                 <v-row>
                     <v-col class="col-4 align-right"><h1>{{ $t("signatureCheck.uploadProof") }}</h1><span>{{ $t("signatureCheck.optional")}}</span></v-col>
                     <v-col class="col-5">
-                        <v-file-input prepend-icon="" prepend-inner-icon="publish" filled :placeholder="$t('signatureCheck.drop')" outlined v-model="proof" accept="application/json" >
+                        <v-file-input prepend-icon="" :disabled="checkResponse" prepend-inner-icon="publish" filled :placeholder="$t('signatureCheck.drop')" outlined v-model="proof" accept="application/json" >
                         </v-file-input>
                     </v-col>
                 </v-row>
@@ -108,7 +108,8 @@
                 </v-row>
             </v-flex>
             <div class="text-center">
-                <IconButton leftIcon="double_arrow" @click="check" color="var(--var-color-blue-sword)" :disabled="file === null">{{ (!fileHash) ? $t("signatureCheck.generate")  : $t("signatureCheck.regenerate")}}</IconButton>
+                <IconButton v-if="!checkResponse" leftIcon="double_arrow" @click="check" color="var(--var-color-blue-sword)" :disabled="file === null">{{ $t("signatureCheck.generate")}}</IconButton>
+                <IconButton v-else leftIcon="double_arrow" @click="reload" color="var(--var-color-blue-sword)" >{{ $t("signatureCheck.regenerate")}}</IconButton>
             </div>
 
             <v-flex id="bottom">
@@ -327,6 +328,10 @@
                 proof: this.proofHash,
             }
             this.$modules.signatures.check(sigCheck)
+        }
+
+        private reload() {
+            this.$router.go(0)
         }
     }
 </script>
