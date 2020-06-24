@@ -89,8 +89,8 @@
       "channel": "Canal",
       "block": "Blocks",
       "transaction": "Transaction",
-      "hash": "Algorithme de hashage",
-      "rootHash": "Racine de hashage"
+      "hash": "Algorithme de hachage",
+      "rootHash": "Racine de hachage"
     },
     "list": {
       "title": "Liste des jobs",
@@ -272,11 +272,12 @@
     "cancel": "Annuler",
     "upload": "Téléverser",
     "uploadFiles": "Téléversez vos fichiers",
-    "algorithm": "Algorithme de hashage",
+    "algorithm": "Algorithme de hachage",
     "name": "Nom",
     "data": "Données",
     "start": "Démarrez votre job",
-    "noData": "Aucun fichier déposé."
+    "noData": "Aucun fichier déposé.",
+    "mandatory": "* Informations obligatoires."
   },
   "errors": {
     "login": {

@@ -10,10 +10,10 @@
                 <Card width="98%">
                     <CardTitle type="number" number=1>{{ $t("signatureHandler.start")}}</CardTitle>
                     <v-flex xs8 lg4 class="ml-4">
-                        <EditFormRow :title="$t('signatureHandler.algorithm')" :editable="true">
+                        <EditFormRow :title="$t('signatureHandler.algorithm') + '*'" :editable="true">
                             <v-combobox class="combobox" hide-details outlined dense :items="algorithms" v-model="selectedAlgorithm"/>
                         </EditFormRow>
-                        <EditFormRow :title="$t('signatureHandler.name')" :editable="true">
+                        <EditFormRow :title="$t('signatureHandler.name') + '*'" :editable="true">
                             <EditFormTitleEdit v-model="flowName"/>
                         </EditFormRow>
                         <EditFormRow :title="$t('signatureHandler.data')" :editable="true">
@@ -44,7 +44,11 @@
                                 </v-col>
                             </v-row>
                         </EditFormRow>
+                        <div class="mandatory">
+                           {{ $t("signatureHandler.mandatory") }}
+                        </div>
                     </v-flex>
+
                     <CardTitle type="number" number=2 class="mt-8">{{ $t("signatureHandler.uploadFiles")}}</CardTitle>
                     <v-flex xs8 lg4 class="ml-4">
                         <v-row>
@@ -130,6 +134,11 @@
 
     .file {
         max-width: 320px;
+    }
+
+    .mandatory {
+        margin-top: 30px;
+        font-size: 12px;
     }
 </style>
 

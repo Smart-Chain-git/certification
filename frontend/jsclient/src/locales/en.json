@@ -280,7 +280,8 @@
     "name": "Name",
     "data": "Data",
     "start": "Start your job",
-    "noData": "No file present."
+    "noData": "No file present.",
+    "mandatory": "* Mandatory fields."
   },
   "errors": {
     "login": {
