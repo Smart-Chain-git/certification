@@ -117,7 +117,8 @@
     "creationDate": "Date",
     "expirationDate": "Date d'expiration",
     "add": "Créer",
-    "revoke": "Révoquer"
+    "revoke": "Révoquer",
+    "date": "Date"
   },
   "menu": {
     "dashboard": "Tableau de bord",

@@ -81,6 +81,7 @@
     "title":"Channel management",
     "new": "New token",
     "all": "All tokens",
+    "date": "Date",
     "name": "Name",
     "creationDate": "Date",
     "expirationDate": "Expiration Date",

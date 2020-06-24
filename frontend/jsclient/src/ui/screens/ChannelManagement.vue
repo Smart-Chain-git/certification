@@ -142,7 +142,10 @@
                 expirationDate: new Date(this.date),
             }
 
-            this.$modules.tokens.createToken(token)
+            this.$modules.tokens.createToken(token).then(() => {
+                this.name = ""
+                this.date = ""
+            })
         }
 
         private canRevoke(token: Token) {
