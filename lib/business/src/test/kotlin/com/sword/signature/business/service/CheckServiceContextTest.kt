@@ -97,6 +97,18 @@ class CheckServiceContextTest @Autowired constructor(
         }
 
         @Test
+        fun checkDocumentTestKORejectedJob() {
+            importJsonDatasets(
+                Path.of("src/test/resources/datasets/check/jobs_rejected.json"),
+                Path.of("src/test/resources/datasets/check/treeElements_ok.json")
+            )
+
+            assertThrows<CheckException.HashNotPresent> {
+                runBlocking { checkService.checkDocument("c866779f483855455631c934d8933bf744f56dcc10833e8a73752ed086325a7a") }
+            }
+        }
+
+        @Test
         fun checkDocumentTestKOInsertedJob() {
             importJsonDatasets(
                 Path.of("src/test/resources/datasets/check/jobs_inserted.json"),
@@ -216,9 +228,9 @@ class CheckServiceContextTest @Autowired constructor(
                 Path.of("src/test/resources/datasets/check/treeElements_ok.json")
             )
 
-            coEvery { tezosReaderService.getTransaction("ooG3vVwQA51f6YiHd41wvomejuzkBWKJEgvGiYQ4zQK4jrXBFCi") } returns transaction
-            coEvery { tezosReaderService.getTransactionDepth("ooG3vVwQA51f6YiHd41wvomejuzkBWKJEgvGiYQ4zQK4jrXBFCi") } returns 100
-            coEvery { tezosReaderService.getContract("KT1Tq22yXWayLbmBKwZUhVXMoYqxtzp9XvTk") } returns contract
+            coEvery { tezosReaderService.getTransaction(transaction.hash) } returns transaction
+            coEvery { tezosReaderService.getTransactionDepth(transaction.hash) } returns 100
+            coEvery { tezosReaderService.getContract(contract.address) } returns contract
 
             val response =
                 runBlocking { checkService.checkDocument("c866779f483855455631c934d8933bf744f56dcc10833e8a73752ed086325a7a") }
@@ -227,13 +239,49 @@ class CheckServiceContextTest @Autowired constructor(
                 assertEquals(1, response.status)
                 assertEquals(fileId, response.fileId)
                 assertEquals(jobId, response.jobId)
-                assertEquals(adminFullName ,response.signer)
+                assertEquals(adminFullName, response.signer)
                 assertEquals(
                     "c866779f483855455631c934d8933bf744f56dcc10833e8a73752ed086325a7a",
                     response.proof.documentHash
                 )
                 assertEquals(
                     "10cba66df788a0848e397c396b993057c64bb29cadc78152246ad28c1a3b02ef",
+                    response.proof.rootHash
+                )
+            }.assertAll()
+        }
+
+        @Test
+        fun checkDocumentTestOKValidatedJobWithDuplicate() {
+            importJsonDatasets(
+                Path.of("src/test/resources/datasets/check/jobs_validated_duplicate.json"),
+                Path.of("src/test/resources/datasets/check/treeElements_ok_duplicate.json")
+            )
+
+            val otherTransaction = transaction.copy(
+                hash = "ooG3vVwQA51f6YiHd41wvomejuzkBWKJEgvGiYQ4zQK4jrXBFCa",
+                block = "BMeaiFq5S6EuPVR3ctvNGWT7dufc35SjNkHyiKFbTKiC22DH23a",
+                bigMapDiff = listOf(transaction.bigMapDiff[0].copy(key = "c866779f483855455631c934d8933bf744f56dcc10833e8a73752ed086325a7a"))
+            )
+
+            coEvery { tezosReaderService.getTransaction(otherTransaction.hash) } returns otherTransaction
+            coEvery { tezosReaderService.getTransactionDepth(otherTransaction.hash) } returns 100
+            coEvery { tezosReaderService.getContract(contract.address) } returns contract
+
+            val response =
+                runBlocking { checkService.checkDocument("c866779f483855455631c934d8933bf744f56dcc10833e8a73752ed086325a7a") }
+
+            SoftAssertions().apply {
+                assertEquals(1, response.status)
+                assertEquals("5ed7b83b3a635b44c7f8e996", response.fileId)
+                assertEquals("5ed7b83b3a635b44c7f8e944", response.jobId)
+                assertEquals(adminFullName, response.signer)
+                assertEquals(
+                    "c866779f483855455631c934d8933bf744f56dcc10833e8a73752ed086325a7a",
+                    response.proof.documentHash
+                )
+                assertEquals(
+                    "c866779f483855455631c934d8933bf744f56dcc10833e8a73752ed086325a7a",
                     response.proof.rootHash
                 )
             }.assertAll()
@@ -440,9 +488,9 @@ class CheckServiceContextTest @Autowired constructor(
                 Path.of("src/test/resources/datasets/check/treeElements_ok.json")
             )
 
-            coEvery { tezosReaderService.getTransaction("ooG3vVwQA51f6YiHd41wvomejuzkBWKJEgvGiYQ4zQK4jrXBFCi") } returns transaction
-            coEvery { tezosReaderService.getTransactionDepth("ooG3vVwQA51f6YiHd41wvomejuzkBWKJEgvGiYQ4zQK4jrXBFCi") } returns 100
-            coEvery { tezosReaderService.getContract("KT1Tq22yXWayLbmBKwZUhVXMoYqxtzp9XvTk") } returns contract
+            coEvery { tezosReaderService.getTransaction(transaction.hash) } returns transaction
+            coEvery { tezosReaderService.getTransactionDepth(transaction.hash) } returns 100
+            coEvery { tezosReaderService.getContract(contract.address) } returns contract
 
 
             val response = runBlocking {
@@ -456,7 +504,42 @@ class CheckServiceContextTest @Autowired constructor(
                 assertEquals(1, response.status)
                 assertEquals(fileId, response.fileId)
                 assertEquals(jobId, response.jobId)
-                assertEquals(adminFullName ,response.signer)
+                assertEquals(adminFullName, response.signer)
+                assertEquals(
+                    "c866779f483855455631c934d8933bf744f56dcc10833e8a73752ed086325a7a",
+                    response.proof.documentHash
+                )
+                assertEquals(
+                    "10cba66df788a0848e397c396b993057c64bb29cadc78152246ad28c1a3b02ef",
+                    response.proof.rootHash
+                )
+            }.assertAll()
+        }
+
+        @Test
+        fun checkDocumentTestOKInDatabaseWithDuplicate() {
+            importJsonDatasets(
+                Path.of("src/test/resources/datasets/check/jobs_validated_duplicate.json"),
+                Path.of("src/test/resources/datasets/check/treeElements_ok_duplicate.json")
+            )
+
+            coEvery { tezosReaderService.getTransaction(transaction.hash) } returns transaction
+            coEvery { tezosReaderService.getTransactionDepth(transaction.hash) } returns 100
+            coEvery { tezosReaderService.getContract(contract.address) } returns contract
+
+
+            val response = runBlocking {
+                checkService.checkDocument(
+                    "c866779f483855455631c934d8933bf744f56dcc10833e8a73752ed086325a7a",
+                    proof
+                )
+            }
+
+            SoftAssertions().apply {
+                assertEquals(1, response.status)
+                assertEquals(fileId, response.fileId)
+                assertEquals(jobId, response.jobId)
+                assertEquals(adminFullName, response.signer)
                 assertEquals(
                     "c866779f483855455631c934d8933bf744f56dcc10833e8a73752ed086325a7a",
                     response.proof.documentHash
@@ -468,6 +551,4 @@ class CheckServiceContextTest @Autowired constructor(
             }.assertAll()
         }
     }
-
-
 }

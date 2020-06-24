@@ -3,14 +3,15 @@ package com.sword.signature.business.service.impl
 import com.sword.signature.business.exception.CheckException
 import com.sword.signature.business.model.Account
 import com.sword.signature.business.model.CheckResponse
+import com.sword.signature.business.model.Job
 import com.sword.signature.business.model.Proof
 import com.sword.signature.business.service.CheckService
 import com.sword.signature.business.service.FileService
+import com.sword.signature.business.service.JobService
 import com.sword.signature.common.enums.JobStateType
 import com.sword.signature.common.enums.TreeElementPosition
 import com.sword.signature.merkletree.utils.hexStringHash
 import com.sword.signature.model.entity.AccountEntity
-import com.sword.signature.model.entity.JobEntity
 import com.sword.signature.model.entity.QTreeElementEntity
 import com.sword.signature.model.entity.TreeElementEntity
 import com.sword.signature.model.repository.AccountRepository
@@ -18,6 +19,8 @@ import com.sword.signature.model.repository.JobRepository
 import com.sword.signature.model.repository.TreeElementRepository
 import com.sword.signature.tezos.reader.service.TezosReaderService
 import com.sword.signature.tezos.reader.tzindex.model.TzOp
+import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.reactive.awaitFirstOrNull
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -32,6 +35,7 @@ class CheckServiceImpl(
     val accountRepository: AccountRepository,
     val tezosReaderService: TezosReaderService,
     val fileService: FileService,
+    val jobService: JobService,
     @Value("\${tezos.validation.minDepth}") private val minDepth: Long
 ) : CheckService {
 
@@ -45,21 +49,28 @@ class CheckServiceImpl(
         LOGGER.debug("Checking document for hash: {}", documentHash)
 
         if (providedProof == null) { // If only the document hash is provided.
-            val treeElement: TreeElementEntity =
-                treeElementRepository.findOne(QTreeElementEntity.treeElementEntity.hash.eq(documentHash))
-                    .awaitFirstOrNull()
-                    ?: throw CheckException.HashNotPresent(documentHash)
-            val job: JobEntity =
-                jobRepository.findById(treeElement.jobId).awaitFirstOrNull() ?: throw CheckException.IncoherentData()
+            val documentsAndJobs = getDocumentsAndJobsFromHash(documentHash)
+            treeElementRepository.findAll(QTreeElementEntity.treeElementEntity.hash.eq(documentHash)).asFlow()
+                .toList()
+            if (documentsAndJobs.isEmpty()) {
+                throw CheckException.HashNotPresent(documentHash)
+            }
+            val treeElement = documentsAndJobs[0].first
+            val job = documentsAndJobs[0].second
             // Check the tree and retrieve the root hash.
             val branchHashes = checkExistingTree(job.algorithm, treeElement)
             val rootHash: String = if (branchHashes.isNotEmpty()) branchHashes[branchHashes.size - 1] else documentHash
             when (job.state) {
-                JobStateType.INSERTED -> throw CheckException.DocumentKnownUnknownRootHash(
-                    signer = "signer",
-                    publicKey = "public_key",
-                    date = job.stateDate
-                )
+                JobStateType.REJECTED -> throw CheckException.HashNotPresent(documentHash = documentHash)
+                JobStateType.INSERTED -> {
+                    // Retrieve the signer.
+                    val signer: AccountEntity? = accountRepository.findById(job.userId).awaitFirstOrNull()
+                    throw CheckException.DocumentKnownUnknownRootHash(
+                        signer = signer?.fullName,
+                        publicKey = job.signerAddress,
+                        date = job.stateDate
+                    )
+                }
                 JobStateType.INJECTED -> throw CheckException.TransactionNotDeepEnough(
                     currentDepth = job.blockDepth!!,
                     expectedDepth = minDepth
@@ -68,17 +79,17 @@ class CheckServiceImpl(
                     if (job.transactionHash == null) {
                         throw CheckException.IncoherentData()
                     }
-                    val transaction: TzOp? = tezosReaderService.getTransaction(job.transactionHash!!)
-                    val depth: Long? = tezosReaderService.getTransactionDepth(job.transactionHash!!)
+                    val transaction: TzOp? = tezosReaderService.getTransaction(job.transactionHash)
+                    val depth: Long? = tezosReaderService.getTransactionDepth(job.transactionHash)
 
                     if (transaction == null) {
-                        LOGGER.error("No transaction found with hash '{}'", job.transactionHash!!)
+                        LOGGER.error("No transaction found with hash '{}'", job.transactionHash)
                         throw CheckException.IncoherentData()
                     }
                     if (transaction.bigMapDiff[0].meta.contract != job.contractAddress) {
                         LOGGER.error(
                             "Different contract found for transaction '{}': expected '{}', actual '{}'.",
-                            job.transactionHash!!,
+                            job.transactionHash,
                             job.contractAddress,
                             transaction.bigMapDiff[0].meta.contract
                         )
@@ -124,7 +135,7 @@ class CheckServiceImpl(
                     return CheckResponse(
                         status = 1,
                         fileId = treeElement.id!!,
-                        jobId = job.id!!,
+                        jobId = job.id,
                         signer = signer?.fullName,
                         timestamp = transaction.bigMapDiff[0].value.timestamp,
                         trace = branchHashes,
@@ -219,11 +230,14 @@ class CheckServiceImpl(
             }
 
             // Check the database
-            val treeElement: TreeElementEntity =
-                treeElementRepository.findOne(QTreeElementEntity.treeElementEntity.hash.eq(documentHash))
-                    .awaitFirstOrNull() ?: return defaultResponse.get()
-            val job: JobEntity =
-                jobRepository.findById(treeElement.jobId).awaitFirstOrNull() ?: return defaultResponse.get()
+            val documentsAndJob =
+                getDocumentsAndJobsFromHash(documentHash).filter { it.second.rootHash == providedProof.rootHash }
+            if (documentsAndJob.isEmpty()) {
+                return defaultResponse.get()
+            }
+            val treeElement = documentsAndJob[0].first
+            val job = documentsAndJob[0].second
+
             // Check compliance
             if (providedProof.transactionHash != job.transactionHash || !checkBranch(providedProof, treeElement)) {
                 return defaultResponse.get()
@@ -238,13 +252,29 @@ class CheckServiceImpl(
             return CheckResponse(
                 status = 1,
                 fileId = treeElement.id!!,
-                jobId = job.id!!,
+                jobId = job.id,
                 signer = signer?.fullName,
                 timestamp = OffsetDateTime.now(),
                 trace = branchHashes,
                 proof = freshProof
             )
         }
+    }
+
+    /**
+     * Retrieve all document/job pairs for the given document hash.
+     * @param documentHash Hash of document to search.
+     * @return List of documents/job pairs.
+     */
+    private suspend fun getDocumentsAndJobsFromHash(documentHash: String): List<Pair<TreeElementEntity, Job>> {
+        val treeElements =
+            treeElementRepository.findAll(QTreeElementEntity.treeElementEntity.hash.eq(documentHash)).asFlow().toList()
+        val documentsAndJobs = mutableListOf<Pair<TreeElementEntity, Job>>()
+        for (treeElement in treeElements) {
+            val job = jobService.findById(requester = adminAccount, jobId = treeElement.jobId)
+            job?.let { documentsAndJobs.add(Pair(treeElement, it)) }
+        }
+        return documentsAndJobs.sortedByDescending { p -> p.second.state }
     }
 
     /**

@@ -20,8 +20,8 @@ sealed class CheckException(
 
     class UnknownRootHash(val rootHash: String) : CheckException(4, "UNKNOWN_ROOT_HASH")
     class DocumentKnownUnknownRootHash(
-        val signer: String,
-        val publicKey: String,
+        val signer: String?,
+        val publicKey: String?,
         val date: OffsetDateTime
     ) : CheckException(5, "DOCUMENT_KNOWN_UNKNOWN_ROOT_HASH")
 
