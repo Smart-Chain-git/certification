@@ -31,6 +31,9 @@
                     <v-icon class="pr-1">double_arrow</v-icon> {{ $t('login.connection') }}
                 </v-btn>
             </v-card-actions>
+            <v-card-actions class="justify-left mt-10">
+                <IconButton leftIcon="arrow_back" @click="goBack" color="var(--var-color-blue-sword)">{{ $t("login.back") }}</IconButton>
+            </v-card-actions>
 
             <v-card-text id="error_container">
                 <p class="error-frame text-center v-size--small" v-if="tErrorMessage">
@@ -121,6 +124,10 @@
                     this.tErrorMessage = "errors.login.default"
                 }
             })
+        }
+
+        private goBack() {
+            this.$router.go(-1)
         }
     }
 </script>
