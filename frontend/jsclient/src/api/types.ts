@@ -105,6 +105,7 @@ export interface Job {
     transactionHash?: string,
     channelName?: string,
     docsNumber: number,
+    rootHash?: string,
 }
 
 export interface JobCriteria {
