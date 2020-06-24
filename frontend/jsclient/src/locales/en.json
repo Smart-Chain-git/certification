@@ -208,7 +208,7 @@
           "line6": "This last result is on the top of the Merkle Tree. We call it the Merkle Tree Root Hash: {0}",
           "line7": "If your document was different in any way from the one that has been signed, the Root Hash would be different",
           "line8": "We then have been into the blockchain, and we can confirm that your document along with the Root Hash, has been signed in the Tezos Blockchain transaction {0}, present in the Tezos block {1}, the {2}. It is now stored in a smart contract.",
-          "line9": "The document has been signed by an entity knows by its unique Tezos Public key {0}. Based on our internal database, thee operator of this verification platform received beforehand confirmation that his public key is owned by {1}",
+          "line9": "The document has been signed by an entity knows by its unique Tezos Public key {0}. Based on our internal database, the operator of this verification platform received beforehand confirmation that his public key is owned by {1}",
           "line10": "Click {#} to get the technical information on where the information is stored in the Tezos DigiSign smart contract (contract address: {0})."
         }
       },
