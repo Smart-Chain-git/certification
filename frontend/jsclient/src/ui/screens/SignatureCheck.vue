@@ -199,11 +199,7 @@
         private proofHash: string | undefined = undefined
 
         private mounted() {
-            this.file = null
-            this.proof = null
-            this.fileHash = ""
-            this.proofHash = undefined
-            this.$modules.signatures.reset()
+            this.reload()
         }
 
         private get checkResponse(): SignatureCheckResponse | undefined {
@@ -331,7 +327,11 @@
         }
 
         private reload() {
-            this.$router.go(0)
+            this.file = null
+            this.proof = null
+            this.fileHash = ""
+            this.proofHash = undefined
+            this.$modules.signatures.reset()
         }
     }
 </script>
