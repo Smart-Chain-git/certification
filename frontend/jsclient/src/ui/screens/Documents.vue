@@ -1,6 +1,6 @@
 <template>
     <v-container fluid>
-        <v-flex xs11>
+        <v-flex>
             <v-row class="mx-3 mt-3" justify="space-between">
                 <v-col class="pl-4" tag="h1">
                     <h1>{{$t("documents.title") }}</h1>
@@ -10,6 +10,7 @@
                 </v-col>
             </v-row>
             <v-row>
+                <v-flex>
                 <Card>
                     <v-flex>
                         <v-row>
@@ -70,6 +71,7 @@
                         </template>
                     </v-data-table>
                 </Card>
+                </v-flex>
             </v-row>
         </v-flex>
     </v-container>
