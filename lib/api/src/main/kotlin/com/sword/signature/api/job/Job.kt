@@ -20,5 +20,6 @@ data class Job(
     val transactionHash: String?,
     val channelName: String?,
     val docsNumber: Int,
-    val customFields: Map<String, String>?
+    val customFields: Map<String, String>?,
+    val rootHash: String?
 )

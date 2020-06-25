@@ -1,12 +1,12 @@
 <template>
     <v-container fluid>
-        <v-row class="mx-3 mt-3" justify="space-between">
+        <v-layout row class="mx-3 mt-3" justify="space-between">
             <v-col class="pl-4" tag="h1">
                 <template>{{$t("dashboard.title") }}</template>
             </v-col>
-        </v-row>
-        <v-row>
-            <v-flex xs11>
+        </v-layout>
+        <v-layout row>
+            <v-flex>
                 <Card>
                     <p>
                         {{ $t("dashboard.welcome") }}<br/><br/>
@@ -14,9 +14,9 @@
                     </p>
                 </Card>
             </v-flex>
-        </v-row>
-        <v-row>
-            <v-flex xs2>
+        </v-layout>
+        <v-layout row wrap>
+            <v-flex xs12 lg3>
                 <Card height="90%">
                     <h2>{{ month }}</h2>
 
@@ -25,8 +25,7 @@
                     <StatBoard :number=6 :detail="$t('dashboard.jobsProcessed')"/>
                 </Card>
             </v-flex>
-            <v-flex xs1/>
-            <v-flex xs8>
+            <v-flex xs12 lg9>
                 <Card height="90%">
                     <h2>{{ $t("dashboard.lastJobs")}}</h2>
 
@@ -62,12 +61,12 @@
                             </tbody>
                         </template>
                     </v-data-table>
-                    <v-flex class="mt-4 pb-4 text-center">
-                        <IconButton @click="gotoJobs()" color="var(--var-color-blue-sword)">View more</IconButton>
+                    <v-flex class="mt-4 mb-8 text-center">
+                        <IconButton @click="gotoJobs()" color="var(--var-color-blue-sword)"> {{ $t("dashboard.more")}}</IconButton>
                     </v-flex>
                 </Card>
             </v-flex>
-        </v-row>
+        </v-layout>
     </v-container>
 </template>
 

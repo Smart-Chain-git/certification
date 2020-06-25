@@ -7,7 +7,7 @@
         </v-row>
         <v-row>
             <v-flex>
-                <Card width="98%">
+                <Card>
                     <v-flex>
                         <v-row>
                             <v-col>
@@ -84,7 +84,7 @@
                             <tr :key="job.id" v-for="job in items" class="outlined">
                                 <td class="text-center">
                                     <v-row>
-                                        <v-col class="col-8 text-center">{{job.flowName}}</v-col>
+                                        <v-col class="col-11 text-center">{{job.flowName}}</v-col>
                                         <v-col class="col-1 align-right">
                                             <CopyTooltip :copy="job.id" :label="$t('job.list.id')+' :'"
                                                          :actionText="$t('job.list.copyId')"/>
@@ -213,13 +213,13 @@
 
         private get headers() {
             return [
-                {text: this.$t("job.list.name"), align: "center", value: "flowName"},
-                {text: this.$t("job.list.creationDate"), align: "center", value: "createdDate"},
-                {text: this.$t("job.list.statusDate"), align: "center", value: "stateDate"},
-                {text: this.$t("job.list.status"), align: "center", value: "state"},
-                {text: this.$t("job.list.docs"), align: "center", value: "docs"},
-                {text: this.$t("job.list.channel"), align: "center", value: "channelName"},
-                {text: "", sortable: false},
+                {text: this.$t("job.list.name"), align: "center", value: "flowName", width: "30%"},
+                {text: this.$t("job.list.creationDate"), align: "center", value: "createdDate", width: "15%"},
+                {text: this.$t("job.list.statusDate"), align: "center", value: "stateDate", width: "15%"},
+                {text: this.$t("job.list.status"), align: "center", value: "state", width: "10%"},
+                {text: this.$t("job.list.docs"), align: "center", value: "docs", width: "10%"},
+                {text: this.$t("job.list.channel"), align: "center", value: "channelName", width: "10%"},
+                {text: "", sortable: false, width: "10%"},
             ]
         }
 

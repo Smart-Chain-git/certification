@@ -34,7 +34,8 @@
     "documentsSigned": "documents signed",
     "jobsCreated": "jobs created",
     "jobsProcessed": "jobs processed",
-    "monthStatistics" : "{0} statistics"
+    "monthStatistics" : "{0} statistics",
+    "more": "View more"
   },
   "account": {
     "list": {

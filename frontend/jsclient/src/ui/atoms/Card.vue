@@ -13,7 +13,7 @@
 
     @Component
     export default class Card extends Vue {
-        @Prop({default: "100%"}) private readonly width!: string
+        @Prop({default: "auto"}) private readonly width!: string
         @Prop({default: "auto"}) private readonly height!: string
         @Prop({default: "100%"}) private readonly maxWidth!: string
     }

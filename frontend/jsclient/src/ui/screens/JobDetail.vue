@@ -22,7 +22,7 @@
                         </EditFormRow>
                         <EditFormRow :title="$t('job.detail.channel')" :editable="false" :value="currentJob.channelName"/>
                         <EditFormRow :title="$t('job.detail.block')" :editable="false" :value="currentJob.blockHash"/>
-                        <EditFormRow :title="$t('job.detail.transaction')" :editable="false" :value="currentJob.txHash"/>
+                        <EditFormRow :title="$t('job.detail.transaction')" :editable="false" :value="currentJob.transactionHash"/>
                         <EditFormRow :title="$t('job.detail.hash')" :editable="false" :value="currentJob.algorithm"/>
                         <EditFormRow :title="$t('job.detail.rootHash')" :editable="false" :value="currentJob.rootHash"/>
                     </v-flex>

@@ -6,7 +6,7 @@
             </v-col>
         </v-row>
         <v-row>
-            <v-flex xs11>
+            <v-flex>
                 <Card>
                     <v-row wrap class="mb-3 mx-0">
                         <v-spacer />
