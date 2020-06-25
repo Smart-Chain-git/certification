@@ -4,6 +4,7 @@ import com.sword.signature.business.model.Account
 import com.sword.signature.business.model.FileFilter
 import com.sword.signature.business.model.Proof
 import com.sword.signature.business.model.TreeElement
+import kotlinx.coroutines.flow.Flow
 import org.springframework.data.domain.Pageable
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
@@ -21,7 +22,7 @@ interface FileService {
         requester: Account,
         filter: FileFilter? = null,
         pageable: Pageable = Pageable.unpaged()
-    ): Flux<TreeElement.LeafTreeElement>
+    ): Flow<TreeElement.LeafTreeElement>
 
     /**
      * Compute the proof for a given file.
@@ -30,4 +31,12 @@ interface FileService {
      * @return Proof of the file.
      */
     suspend fun getFileProof(requester: Account, fileId: String): Mono<Proof>
+
+    /**
+     * Count the number of files matching the filter.
+     * @param requester The account requesting the number of files.
+     * @param filter Filter for file search.
+     * @return Number of files matching the filter.
+     */
+    suspend fun countFiles(requester: Account, filter: FileFilter?=null): Long
 }

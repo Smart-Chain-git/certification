@@ -45,6 +45,7 @@
         }
 
         private back() {
+            this.$modules.jobs.saveFilter(true)
             this.$router.push("/jobs")
         }
 

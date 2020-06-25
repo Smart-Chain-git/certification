@@ -37,6 +37,9 @@ export interface SignatureCheckResponse {
     date?: Date,
     public_key?: string
     output: string,
+    hash_document_proof?: string,
+    hash_document?: string,
+    hash_root?: string,
 }
 
 export interface AuthRequest {

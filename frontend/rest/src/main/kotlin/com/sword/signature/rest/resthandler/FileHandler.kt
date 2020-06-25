@@ -11,10 +11,9 @@ import com.sword.signature.webcore.mapper.toWeb
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.count
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.reactive.awaitFirstOrNull
-import kotlinx.coroutines.reactive.awaitLast
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
@@ -73,7 +72,7 @@ class FileHandler(
             dateEnd = dateEnd
         )
         val paged = pagedSorted(page, size, sort)
-        val files = fileService.getFiles(requester = requester.account, filter = filter, pageable = paged).asFlow()
+        val files = fileService.getFiles(requester = requester.account, filter = filter, pageable = paged)
 
         return files.map { it.toWeb() }
     }
@@ -110,7 +109,7 @@ class FileHandler(
             dateEnd = dateEnd
         )
 
-        return fileService.getFiles(user.account, filter).count().awaitLast()
+        return fileService.countFiles(requester = user.account, filter = filter)
     }
 
 }

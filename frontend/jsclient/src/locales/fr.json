@@ -9,7 +9,8 @@
     "password": "Mot de passe",
     "forgotten-password": "Mot de passe oublié ?",
     "connection": "Connexion",
-    "gcu": "Conditions générales d'utilisation"
+    "gcu": "Conditions générales d'utilisation",
+    "back": "Retour"
   },
   "firstLogin" : {
     "title" :"Bienvenue sur TEZOS DigiSign.",
@@ -50,9 +51,12 @@
     },
     "edit": {
       "title": {
-        "editing": "Edition de compte",
-        "creating": "Création de compte",
+        "manage" : "Gestion des utilisateurs",
         "profile": "Mon compte"
+      },
+      "subTitle":{
+        "create": "Créer un utilisateur",
+        "edit": "Editer un utilisateur"
       },
       "login": "Identifiant",
       "email": "Email",
@@ -85,8 +89,8 @@
       "channel": "Canal",
       "block": "Blocks",
       "transaction": "Transaction",
-      "hash": "Algorithme de hashage",
-      "rootHash": "Racine de hashage"
+      "hash": "Algorithme de hachage",
+      "rootHash": "Racine de hachage"
     },
     "list": {
       "title": "Liste des jobs",
@@ -163,26 +167,26 @@
     "errors": {
       "hash_not_present": {
         "title": "Hachage de document introuvable dans TEZOS DigiSign",
-        "message": "Nous sommes désolés, nous ne reconnaissons pas ce document. Êtes-vous sûr que ce document est dans la même version que celle qui a été signée? Sinon, veuillez télécharger la version originale. Si le document est bon et si vous avez reçu un fichier d'épreuve, veuillez également le télécharger. "
+        "message": "Nous sommes désolés, nous ne reconnaissons pas ce document. Êtes-vous sûr que ce document est dans la même version que celle qui a été signée? Sinon, veuillez télécharger la version originale. Si le document est bon et si vous avez reçu un fichier de preuve, veuillez également le télécharger. "
       },
       "hash_inconsistent": {
-        "title": "Le fichier d'épreuve ne correspond pas au document",
-        "message": "Nous sommes désolés, le fichier de preuve que vous avez fourni ne correspond pas au document que vous souhaitez vérifier (hachage du document {0} vs code de hachage du fichier de preuve {1}). Nous vous invitons à télécharger le fichier d'épreuve correct. Si vous ne disposez pas d'un autre fichier d'épreuve, le document que vous souhaitez confirmer peut avoir été modifié depuis sa signature. Nous vous invitons dans ce cas à retrouver sa version d'origine et à réessayer. "
+        "title": "Le fichier de preuve ne correspond pas au document",
+        "message": "Nous sommes désolés, le fichier de preuve que vous avez fourni ne correspond pas au document que vous souhaitez vérifier (hachage du document {0} vs code de hachage du fichier de preuve {1}). Nous vous invitons à télécharger le fichier de preuve correct. Si vous ne disposez pas d'un autre fichier de preuve, le document que vous souhaitez confirmer peut avoir été modifié depuis sa signature. Nous vous invitons dans ce cas à retrouver sa version d'origine et à réessayer. "
       },
       "incorrect_root_hash": {
-        "title": "Le fichier d'épreuve ne correspond pas au document",
+        "title": "Le fichier de preuve ne correspond pas au document",
         "message": "Nous sommes désolés, le fichier de preuve que vous avez fourni contient une erreur dans le calcul de son arbre Merkel. Êtes-vous sûr que ce fichier de preuve a été généré par un outil respectant le protocole Tezos DigiSign?"
       },
       "unknown_root_hash": {
         "title": "Document non horodaté dans Tezos Blockchain",
-        "message": "Nous sommes désolés, votre fichier de preuve correspond au document que vous souhaitez vérifier et semble légitime. Cependant, nous ne pouvons pas trouver dans la blockchain une preuve de sa signature. Le hachage racine de l'arbre Merkle mentionné ({0} ) n'est pas présent dans la blockchain "
+        "message": "Nous sommes désolés, votre fichier de preuve correspond au document que vous souhaitez vérifier et semble légitime. Cependant, nous ne pouvons pas trouver dans la blockchain une preuve de sa signature. Le hachage racine de l'arbre Merkle mentionné ({0}) n'est pas présent dans la blockchain "
       },
       "document_known_unknown_root_hash": {
         "title": "Document trouvé dans Tezos DigiSign mais non horodaté dans Tezos Blockchain",
         "message": "Nous sommes désolés. Selon notre base de données interne, nous devrions être en mesure de vous confirmer l'authenticité de votre document. Notre base de données nous informe que ce document a été signé par {0} - {1} le {2}. Cependant, nous ne pouvons pas trouver dans la blockchain la preuve que le document a bien été signé "
       },
       "incorrect_proof_file": {
-        "title": "Le fichier d'épreuve ne peut pas être analysé",
+        "title": "Le fichier de preuve ne peut pas être analysé",
         "message": "Le fichier de preuve que vous avez fourni n'est pas une preuve Tezos DigiSign V0 valide. Êtes-vous sûr que ce fichier de preuve a été généré par un outil respectant le protocole Tezos DigiSign V0?"
       },
       "incorrect_transaction": {
@@ -199,7 +203,7 @@
       },
       "no_transaction": {
         "title": "Document non horodaté dans Tezos Blockchain",
-        "message": ": Nous sommes désolés, votre fichier de preuve correspond au document que vous souhaitez vérifier et semble légitime. Cependant, nous ne pouvons pas trouver dans la blockchain une preuve de sa signature. Le hachage racine de l'arbre Merkle mentionné ({0 }) n'est pas présent dans la blockchain "
+        "message": ": Nous sommes désolés, votre fichier de preuve correspond au document que vous souhaitez vérifier et semble légitime. Cependant, nous ne pouvons pas trouver dans la blockchain une preuve de sa signature. Le hachage racine de l'arbre Merkle mentionné ({0}) n'est pas présent dans la blockchain "
       }
     },
     "success": {
@@ -214,7 +218,7 @@
           "line3": "Le processus de signature peut avoir inclus des documents supplémentaires en même temps. Nous avons utilisé un système connu sous le nom d'arbre Merkel pour générer une signature unique sur plusieurs documents simultanément. Cet arbre Merkel est identifié par son hachage racine {0}." ,
           "line4": "Votre document, ainsi que le hachage racine, a été signé dans la transaction Tezos Blockchain {0}, présent dans le bloc Tezos {1}, le {2}. Il est désormais stocké dans un contrat intelligent",
           "line5": "Le document a été signé par une entité connue par sa clé publique Tezos unique {0}. L'opérateur de cette plateforme de vérification a reçu au préalable la confirmation que sa clé publique appartient à {1}.",
-          "line6": "Cliquez sur {#} pour obtenir un fichier d'épreuve expliquant la relation entre l'impression numérique de votre document et le hachage racine de l'arbre Merkle. Avec ce fichier d'épreuve, vous pouvez prouver à quiconque que votre document a été signé et horodaté. Si vous le faites ne l'avez pas déjà, veuillez le conserver en lieu sûr avec votre document d'origine. ",
+          "line6": "Cliquez sur {#} pour obtenir un fichier de preuve expliquant la relation entre l'impression numérique de votre document et le hachage racine de l'arbre Merkle. Avec ce fichier de preuve, vous pouvez prouver à quiconque que votre document a été signé et horodaté. Si vous le faites ne l'avez pas déjà, veuillez le conserver en lieu sûr avec votre document d'origine. ",
           "line7": "Cliquez sur {#} pour obtenir les informations techniques sur l'endroit où les informations sont stockées dans le contrat intelligent Tezos DigiSign (adresse du contrat: {0})."
         }
       },
@@ -268,11 +272,12 @@
     "cancel": "Annuler",
     "upload": "Téléverser",
     "uploadFiles": "Téléversez vos fichiers",
-    "algorithm": "Algorithme de hashage",
+    "algorithm": "Algorithme de hachage",
     "name": "Nom",
     "data": "Données",
     "start": "Démarrez votre job",
-    "noData": "Aucun fichier déposé."
+    "noData": "Aucun fichier déposé.",
+    "mandatory": "* Informations obligatoires."
   },
   "errors": {
     "login": {

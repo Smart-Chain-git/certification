@@ -157,7 +157,8 @@ fun com.sword.signature.business.exception.CheckException.toWeb(): CheckOutput.K
             error = message
         )
         is CheckException.NoTransaction -> CheckOutput.Ko(
-            error = message
+            error = message,
+            rootHash = rootHash
         )
     }
 }

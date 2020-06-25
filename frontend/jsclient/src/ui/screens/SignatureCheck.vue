@@ -1,122 +1,135 @@
 <template>
     <v-container fluid>
         <v-flex>
-        <Card>
-            <h2>{{ $t("signatureCheck.title") }}</h2>
-            <h2>{{ $t("signatureCheck.subtitle") }}</h2>
-            <p class="small-text">
-                {{ $t("signatureCheck.text1") }}<br/>
-                {{ $t("signatureCheck.text2") }}
-            </p>
-            <v-flex class="mt-5">
-                <v-row>
-                    <v-col class="col-4 align-right"><h1>{{ $t("signatureCheck.upload") }}</h1></v-col>
-                    <v-col class="col-5">
-                        <v-file-input prepend-icon="" prepend-inner-icon="publish" filled :placeholder="$t('signatureCheck.drop')" outlined v-model="file">
-                        </v-file-input>
-                    </v-col>
-                </v-row>
-                <v-row>
-                    <v-col class="col-4 align-right"><h1>{{ $t("signatureCheck.uploadProof") }}</h1><span>{{ $t("signatureCheck.optional")}}</span></v-col>
-                    <v-col class="col-5">
-                        <v-file-input prepend-icon="" prepend-inner-icon="publish" filled :placeholder="$t('signatureCheck.drop')" outlined v-model="proof" accept="application/json" >
-                        </v-file-input>
-                    </v-col>
-                </v-row>
-            </v-flex>
-            <v-flex v-if="checkResponse">
-                <v-row class="banner" justify="center" align="center">
-                    <v-col class="col-2">
-                        <div class="text-center">
-                            <v-icon size="100" :color="checkSucceeded ? 'green' : 'red'">{{ checkSucceeded ? "check_circle_outline" : "cancel"}}</v-icon>
-                        </div>
-                    </v-col>
-                    <v-col class="col-10 pt-4">
-                        <h1 :class="'title_'+(checkSucceeded ? 'success' : 'error')"> {{ mainMessage("title") }}</h1>
-                        <p class="pt-4">{{ mainMessage("message") }}</p>
-                    </v-col>
-                </v-row>
-                <v-row v-if="checkSucceeded">
-                    <v-expansion-panels v-if="checkSucceeded" flat>
-                        <v-expansion-panel class="more_info">
-                            <v-expansion-panel-header class="banner accordion_header">
-                                <span class="align-right pt-2">{{ $t("signatureCheck.more") }}</span>
-                            </v-expansion-panel-header>
-                            <v-expansion-panel-content class="pt-4">
-                                <div v-if="checkResponse.check_status === 1">
-                                    {{ parse("signatureCheck.success.message1.block2.line1") }}<br/><br/>
-                                    {{ parse("signatureCheck.success.message1.block2.line2") }}<br/>
-                                    {{ parse("signatureCheck.success.message1.block2.line3") }}<br/>
-                                    {{ parse("signatureCheck.success.message1.block2.line4") }}<br/>
-                                    {{ parse("signatureCheck.success.message1.block2.line5") }}<br/><br/>
-                                    <span v-html="parseLink('signatureCheck.success.message1.block2.line6', 'here',{
+            <Card>
+                <h2>{{ $t("signatureCheck.title") }}</h2>
+                <h2>{{ $t("signatureCheck.subtitle") }}</h2>
+                <p class="small-text">
+                    {{ $t("signatureCheck.text1") }}<br/>
+                    {{ $t("signatureCheck.text2") }}
+                </p>
+                <v-flex class="mt-5">
+                    <v-row>
+                        <v-col class="col-4 align-right"><h1>{{ $t("signatureCheck.upload") }}</h1></v-col>
+                        <v-col class="col-5">
+                            <div @dragover.prevent @drop.prevent="dropFile">
+                                <v-file-input prepend-icon="" prepend-inner-icon="publish" filled
+                                              :placeholder="$t('signatureCheck.drop')" outlined v-model="file"
+                                              @click:clear="resetFile"/>
+                            </div>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col class="col-4 align-right"><h1>{{ $t("signatureCheck.uploadProof") }}</h1><span>{{ $t("signatureCheck.optional")}}</span>
+                        </v-col>
+                        <v-col class="col-5">
+                            <div @dragover.prevent @drop.prevent="dropProof">
+                                <v-file-input prepend-icon="" prepend-inner-icon="publish" filled
+                                              :placeholder="$t('signatureCheck.drop')" outlined v-model="proof"
+                                              accept="application/json" @click:clear="resetProof"/>
+                            </div>
+                        </v-col>
+                    </v-row>
+                </v-flex>
+                <v-flex v-if="checkResponse">
+                    <v-row class="banner" justify="center" align="center">
+                        <v-col class="col-2">
+                            <div class="text-center">
+                                <v-icon size="100" :color="checkSucceeded ? 'green' : 'red'">{{ checkSucceeded ?
+                                    "check_circle_outline" : "cancel"}}
+                                </v-icon>
+                            </div>
+                        </v-col>
+                        <v-col class="col-10 pt-4">
+                            <h1 :class="'title_'+(checkSucceeded ? 'success' : 'error')"> {{ mainMessage("title")
+                                }}</h1>
+                            <p class="pt-4">{{ mainMessage("message") }}</p>
+                        </v-col>
+                    </v-row>
+                    <v-row v-if="checkSucceeded">
+                        <v-expansion-panels v-if="checkSucceeded" flat>
+                            <v-expansion-panel class="more_info">
+                                <v-expansion-panel-header class="banner accordion_header">
+                                    <span class="align-right pt-2">{{ $t("signatureCheck.more") }}</span>
+                                </v-expansion-panel-header>
+                                <v-expansion-panel-content class="pt-4">
+                                    <div v-if="checkResponse.check_status === 1">
+                                        {{ parse("signatureCheck.success.message1.block2.line1") }}<br/><br/>
+                                        {{ parse("signatureCheck.success.message1.block2.line2") }}<br/>
+                                        {{ parse("signatureCheck.success.message1.block2.line3") }}<br/>
+                                        {{ parse("signatureCheck.success.message1.block2.line4") }}<br/>
+                                        {{ parse("signatureCheck.success.message1.block2.line5") }}<br/><br/>
+                                        <span v-html="parseLink('signatureCheck.success.message1.block2.line6', 'here',{
                                         'download' : checkResponse.proof.file_name + '.json',
                                         'href' : 'data:text/json:charset=utf-8,' + encodeURIComponent(JSON.stringify(checkResponse.proof))
                                     })"/><br/><br/>
-                                    <span v-html="parseLink('signatureCheck.success.message1.block2.line7', 'here', {'href' : '/settings'})"/>
-                                </div>
-                                <div v-if="checkResponse.check_status === 2">
-                                    {{parse("signatureCheck.success.message2.block2.line1")}}<br/><br/>
-                                    {{parse("signatureCheck.success.message2.block2.line2")}}<br/><br/>
-                                    {{parse("signatureCheck.success.message2.block2.line3")}}<br/>
-                                    {{parse("signatureCheck.success.message2.block2.line4")}}<br/>
+                                        <span v-html="parseLink('signatureCheck.success.message1.block2.line7', 'here', {'href' : '/settings'})"/>
+                                    </div>
+                                    <div v-if="checkResponse.check_status === 2">
+                                        {{parse("signatureCheck.success.message2.block2.line1")}}<br/><br/>
+                                        {{parse("signatureCheck.success.message2.block2.line2")}}<br/><br/>
+                                        {{parse("signatureCheck.success.message2.block2.line3")}}<br/>
+                                        {{parse("signatureCheck.success.message2.block2.line4")}}<br/>
 
-                                    <span v-for="(hash, idx) in checkResponse.proof.hash_list">
+                                        <span v-for="(hash, idx) in checkResponse.proof.hash_list">
                                         {{parse("signatureCheck.success.message2.block2.line5", idx)}}<br/>
                                     </span>
-                                    <br/>
-                                    {{parse("signatureCheck.success.message2.block2.line6")}}<br/><br/>
-                                    {{parse("signatureCheck.success.message2.block2.line7")}}<br/><br/>
-                                    {{parse("signatureCheck.success.message2.block2.line8")}}<br/><br/>
-                                    {{parse("signatureCheck.success.message2.block2.line9")}}<br/><br/>
-                                    <span v-html="parseLink('signatureCheck.success.message2.block2.line10', 'here', {'href' : '/settings'})"/>
-                                </div>
-                            </v-expansion-panel-content>
-                        </v-expansion-panel>
-                    </v-expansion-panels>
-                </v-row>
-            </v-flex>
-            <v-flex v-if="checkResponse" class="mb-5">
-                <v-row>
-                    <v-col class="col-2"></v-col>
-                    <v-col class="col-8 small">{{ $t("signatureCheck.success.info.title")}}</v-col>
-                </v-row>
-                <v-row>
-                    <v-col class="col-2"></v-col>
-                    <v-col class="col-4 small">
-                        <h3>{{ $t("signatureCheck.success.info.col1.title")}}</h3>
-                        <ol>
-                            <li>{{ $t("signatureCheck.success.info.col1.step1")}}</li>
-                            <li>{{ $t("signatureCheck.success.info.col1.step2")}}</li>
-                            <li>{{ $t("signatureCheck.success.info.col1.step3")}}</li>
-                            <li>{{ $t("signatureCheck.success.info.col1.step4")}}</li>
-                        </ol>
-                    </v-col>
-                    <v-col class="col-5 small">
-                        <h3>{{ $t("signatureCheck.success.info.col2.title")}}</h3>
-                        <ol>
-                            <li>{{ $t("signatureCheck.success.info.col2.step1")}}</li>
-                            <li>{{ $t("signatureCheck.success.info.col2.step2")}}</li>
-                            <li>{{ $t("signatureCheck.success.info.col2.step3")}}</li>
-                            <li>{{ $t("signatureCheck.success.info.col2.step4")}}</li>
-                            <li>{{ $t("signatureCheck.success.info.col2.step5")}}</li>
-                            <li>{{ $t("signatureCheck.success.info.col2.step6")}}</li>
-                            <li>{{ $t("signatureCheck.success.info.col2.step7")}}</li>
-                        </ol>
-                    </v-col>
-                    <v-col class="col-1"> </v-col>
-                </v-row>
-            </v-flex>
-            <div class="text-center">
-                <IconButton leftIcon="double_arrow" @click="check" color="var(--var-color-blue-sword)" :disabled="file === null">{{ (!fileHash) ? $t("signatureCheck.generate")  : $t("signatureCheck.regenerate")}}</IconButton>
-            </div>
+                                        <br/>
+                                        {{parse("signatureCheck.success.message2.block2.line6")}}<br/><br/>
+                                        {{parse("signatureCheck.success.message2.block2.line7")}}<br/><br/>
+                                        {{parse("signatureCheck.success.message2.block2.line8")}}<br/><br/>
+                                        {{parse("signatureCheck.success.message2.block2.line9")}}<br/><br/>
+                                        <span v-html="parseLink('signatureCheck.success.message2.block2.line10', 'here', {'href' : '/settings'})"/>
+                                    </div>
+                                </v-expansion-panel-content>
+                            </v-expansion-panel>
+                        </v-expansion-panels>
+                    </v-row>
+                </v-flex>
+                <v-flex v-if="checkResponse" class="mb-5">
+                    <v-row>
+                        <v-col class="col-2"></v-col>
+                        <v-col class="col-8 small">{{ $t("signatureCheck.success.info.title")}}</v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col class="col-2"></v-col>
+                        <v-col class="col-4 small">
+                            <h3>{{ $t("signatureCheck.success.info.col1.title")}}</h3>
+                            <ol>
+                                <li>{{ $t("signatureCheck.success.info.col1.step1")}}</li>
+                                <li>{{ $t("signatureCheck.success.info.col1.step2")}}</li>
+                                <li>{{ $t("signatureCheck.success.info.col1.step3")}}</li>
+                                <li>{{ $t("signatureCheck.success.info.col1.step4")}}</li>
+                            </ol>
+                        </v-col>
+                        <v-col class="col-5 small">
+                            <h3>{{ $t("signatureCheck.success.info.col2.title")}}</h3>
+                            <ol>
+                                <li>{{ $t("signatureCheck.success.info.col2.step1")}}</li>
+                                <li>{{ $t("signatureCheck.success.info.col2.step2")}}</li>
+                                <li>{{ $t("signatureCheck.success.info.col2.step3")}}</li>
+                                <li>{{ $t("signatureCheck.success.info.col2.step4")}}</li>
+                                <li>{{ $t("signatureCheck.success.info.col2.step5")}}</li>
+                                <li>{{ $t("signatureCheck.success.info.col2.step6")}}</li>
+                                <li>{{ $t("signatureCheck.success.info.col2.step7")}}</li>
+                            </ol>
+                        </v-col>
+                        <v-col class="col-1"></v-col>
+                    </v-row>
+                </v-flex>
+                <div class="text-center">
+                    <IconButton leftIcon="double_arrow" @click="check" color="var(--var-color-blue-sword)"
+                                :disabled="!file">{{ (!fileHash) ? $t("signatureCheck.generate") :
+                        $t("signatureCheck.regenerate")}}
+                    </IconButton>
+                </div>
 
-            <v-flex id="bottom">
-                <span class="ml-10 mr-10">{{ $t("signatureCheck.com") }}</span>
-                <a class="ml-10 mr-10" href="#/GCU">{{ $t("signatureCheck.GCU") }}</a>
-                <a class="ml-10 mr-10" href="#/policy">{{ $t("signatureCheck.policy") }}</a>
-            </v-flex>
-        </Card>
+                <v-flex id="bottom">
+                    <span class="ml-10 mr-10">{{ $t("signatureCheck.com") }}</span>
+                    <a class="ml-10 mr-10" href="#/GCU">{{ $t("signatureCheck.GCU") }}</a>
+                    <a class="ml-10 mr-10" href="#/policy">{{ $t("signatureCheck.policy") }}</a>
+                </v-flex>
+            </Card>
         </v-flex>
     </v-container>
 </template>
@@ -157,7 +170,7 @@
         margin: 0;
     }
 
-    .title_success{
+    .title_success {
         color: green;
     }
 
@@ -186,7 +199,7 @@
     export default class SignatureCheck extends Vue {
 
         private static format(str: string, values: Array<string>) {
-            for (let i = 0 ; i < values.length ; ++i) {
+            for (let i = 0; i < values.length; ++i) {
                 str = str.replace("{" + i + "}", values[i])
             }
             return str
@@ -203,6 +216,22 @@
             this.fileHash = ""
             this.proofHash = undefined
             this.$modules.signatures.reset()
+        }
+
+        private dropFile(e: any) {
+            this.file = e.dataTransfer.files[0]
+        }
+
+        private resetFile() {
+            this.file = null
+        }
+
+        private dropProof(e: any) {
+            this.proof = e.dataTransfer.files[0]
+        }
+
+        private resetProof() {
+            this.proof = null
         }
 
         private get checkResponse(): SignatureCheckResponse | undefined {
@@ -259,8 +288,8 @@
 
                     case "signatureCheck.success.message1.block2.line5":
                     case "signatureCheck.success.message2.block2.line9":
-                       return SignatureCheck.format(res, [this.checkResponse.proof.origin_public_key,
-                           this.checkResponse.signer || this.$t("signatureCheck.unknown").toString()])
+                        return SignatureCheck.format(res, [this.checkResponse.proof.origin_public_key,
+                            this.checkResponse.signer || this.$t("signatureCheck.unknown").toString()])
 
                     case "signatureCheck.success.message1.block2.line7":
                     case "signatureCheck.success.message2.block2.line10":
@@ -272,10 +301,11 @@
                             this.checkResponse.check_process[idx]])
 
                     case "signatureCheck.errors.hash_inconsistent.message":
-                        return SignatureCheck.format(res, [this.fileHash, this.checkResponse.proof.hash_document])
+                        return SignatureCheck.format(res, [this.checkResponse.hash_document!,
+                            this.checkResponse.hash_document_proof!])
 
                     case "signatureCheck.errors.unknown_root_hash.message":
-                        return SignatureCheck.format(res, [this.checkResponse.proof.hash_root])
+                        return SignatureCheck.format(res, [this.checkResponse.hash_root!])
 
                     case "signatureCheck.errors.document_known_unknown_root_hash.message":
                         return SignatureCheck.format(res, [
@@ -283,7 +313,7 @@
                             this.checkResponse.public_key!, this.checkResponse.date!.toString()])
 
                     case "signatureCheck.errors.no_transaction.message":
-                        return SignatureCheck.format(res, [this.checkResponse.proof.hash_root])
+                        return SignatureCheck.format(res, [this.checkResponse.hash_root!])
 
                     default:
                         return res
@@ -291,7 +321,7 @@
             }
         }
 
-        private parseLink(message: string, placeholder: string, stats: {[key: string]: string}) {
+        private parseLink(message: string, placeholder: string, stats: { [key: string]: string }) {
             let format = ""
             const res = this.parse(message)
             for (const i of Object.keys(stats)) {

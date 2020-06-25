@@ -10,10 +10,10 @@
                 <Card width="98%">
                     <CardTitle type="number" number=1>{{ $t("signatureHandler.start")}}</CardTitle>
                     <v-flex xs8 lg4 class="ml-4">
-                        <EditFormRow :title="$t('signatureHandler.algorithm')" :editable="true">
+                        <EditFormRow :title="$t('signatureHandler.algorithm') + '*'" :editable="true">
                             <v-combobox class="combobox" hide-details outlined dense :items="algorithms" v-model="selectedAlgorithm"/>
                         </EditFormRow>
-                        <EditFormRow :title="$t('signatureHandler.name')" :editable="true">
+                        <EditFormRow :title="$t('signatureHandler.name') + '*'" :editable="true">
                             <EditFormTitleEdit v-model="flowName"/>
                         </EditFormRow>
                         <EditFormRow :title="$t('signatureHandler.data')" :editable="true">
@@ -49,11 +49,17 @@
                                 </v-col>
                             </v-row>
                         </EditFormRow>
+                        <div class="mandatory">
+                           {{ $t("signatureHandler.mandatory") }}
+                        </div>
                     </v-flex>
+
                     <CardTitle type="number" number=2 class="mt-8">{{ $t("signatureHandler.uploadFiles")}}</CardTitle>
                     <v-flex xs8 lg4 class="ml-4">
                         <EditFormRow :editable="true" :title="$t('signatureHandler.upload')">
-                            <v-file-input prepend-icon="" class="file" prepend-inner-icon="publish" outlined dense v-model="files" multiple/>
+                            <div @dragover.prevent @drop.prevent="drop" class="width_100">
+                                <v-file-input prepend-icon="" prepend-inner-icon="publish" class="file" outlined filled dense v-model="files" multiple/>
+                            </div>
                         </EditFormRow>
                     </v-flex>
                     <v-data-table class="table-header"
@@ -138,8 +144,18 @@
         max-width: 320px;
     }
 
+    .width_100 {
+        width: 100%;
+    }
+
+
     .vertical_align_top {
         vertical-align: top;
+    }
+
+    .mandatory {
+        margin-top: 30px;
+        font-size: 12px;
     }
 </style>
 
@@ -170,6 +186,10 @@
         private dataValues: Array<string> = []
         private newKey: string = ""
         private newValue: string = ""
+
+        private drop(e: any) {
+            this.files = e.dataTransfer.files
+        }
 
         @Watch("files")
         private update() {

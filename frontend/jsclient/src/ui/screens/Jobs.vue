@@ -188,6 +188,16 @@
             sortDesc: [],
         }
 
+        private allChannels: Array<string> = [...new Set(this.$modules.tokens.getTokens().map((t) => t.name))]
+
+        private created() {
+            if (this.$modules.jobs.isFiltered) {
+                this.pagination = this.$modules.jobs.getPagination()
+                this.filter = this.$modules.jobs.getFilter
+                this.$modules.jobs.saveFilter(false)
+            }
+        }
+
         private get loading() {
             return this.$modules.jobs.getLoading
         }
@@ -199,8 +209,6 @@
         private get jobCount() {
             return this.$modules.jobs.getJobCount
         }
-
-        private allChannels: Array<string> = [...new Set(this.$modules.tokens.getTokens().map((t) => t.name))]
 
 
         private get headers() {
