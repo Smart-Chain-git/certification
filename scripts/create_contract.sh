@@ -11,15 +11,10 @@ CONTRACT_ID=`grep "New contract" originate.log | grep "originated" | cut -d" " -
 echo
 echo "CONTRACT_ID=["$CONTRACT_ID"]"
 echo
-if [ -f ../compose-config/application-daemon.yml.save ]
-then
-	echo "recreation"
-else
-	cp ../compose-config/application-daemon.yml ../compose-config/application-daemon.yml.save
-fi
-sed "s/KT1KPzcYY3Yb7gFGZWa1Eu9wu7t9eU764cDx/$CONTRACT_ID/g" ../compose-config/application-daemon.yml.save > app.yml
 
-mv app.yml ../compose-config/application-daemon.yml
+sed "s/CONTRACT_ADDRESS/$CONTRACT_ID/g" ../compose-config/application-daemon.template.yml > ../compose-config/application-daemon.all.yml
+
+
 
 echo "------------------------------------------------------------"
 cat ../compose-config/application-daemon.yml
@@ -27,6 +22,6 @@ echo "------------------------------------------------------------"
 
 docker restart tezos-signature-daemon
 
-echo "tezos-signature-daemon restarted"
+echo "tezos-signature-daemon restarted with ["$CONTRACT_ID"]"
 
 exit 0
