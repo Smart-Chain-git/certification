@@ -72,7 +72,7 @@ class CheckServiceImpl(
                     )
                 }
                 JobStateType.INJECTED -> throw CheckException.TransactionNotDeepEnough(
-                    currentDepth = job.blockDepth!!,
+                    currentDepth = job.blockDepth ?: 0 ,
                     expectedDepth = minDepth
                 )
                 JobStateType.VALIDATED -> {
