@@ -57,7 +57,7 @@ services:
     ports:
       - "9090:8080"
     volumes:
-      - "./compose-config/application-rest.yml:/app/application.yml:ro"
+      - "./compose-config/application-rest.all.yml:/app/application.yml:ro"
     depends_on:
       - mongodb
       - daemon
@@ -67,7 +67,7 @@ services:
     restart: unless-stopped
     build: backend/daemon
     volumes:
-      - "./compose-config/application-daemon.yml:/app/application.yml:ro"
+      - "./compose-config/application-daemon.all.yml:/app/application.yml:ro"
     depends_on:
       - mongodb
       - mail
