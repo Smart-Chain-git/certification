@@ -52,21 +52,15 @@ daemon:
     timeout: 10m
   poller:
     fixedRate: 10000
-jasypt:
-  encryptor:
-    password: secret
-    algorithm: PBEWITHHMACSHA512ANDAES_256
-    iv-generator-classname: org.jasypt.iv.RandomIvGenerator
 jwt:
   secret: ffe50f21d8359de7245dc13777812c2a
   issuer: "Tezos@Signature"
 tezos:
-  keys:
-    admin:
-      publicKey: "edpkvGfYw3LyB1UcCahKQk4rF2tvbMUk8GFiTuMjL75uGXrpvKXhjn"
-      secretKey: ENC(Sjy2KdrcmMKKyo294ZaFmpuw2gIEj7jArV/0PM530EOGm4MGXrIP6OWY4It6HTpKks0GinKiA+vWJdAZRpbSyA==)
+  account:
+    publicKey: "edpkvGfYw3LyB1UcCahKQk4rF2tvbMUk8GFiTuMjL75uGXrpvKXhjn"
+    secretKey: "edsk3QoqBuvdamxouPhin7swCvkQNgq4jP5KZPbwWNnwdZpSpJiEbq"
   contract:
-    address: "KT1ACtpTwAUsLPYaBRhtysFXmhtbT2wDLecw" # To replace by the actual contract address.
+    address: "" # To replace by the actual contract address.
   node:
     url: "http://node:20000"
   indexer:

@@ -117,10 +117,6 @@
                     <v-col class="col-1"> </v-col>
                 </v-row>
             </v-flex>
-            <div class="text-center">
-                <IconButton v-if="!checkResponse" leftIcon="double_arrow" @click="check" color="var(--var-color-blue-sword)" :disabled="file === null">{{ $t("signatureCheck.generate")}}</IconButton>
-                <IconButton v-else leftIcon="double_arrow" @click="reload" color="var(--var-color-blue-sword)" >{{ $t("signatureCheck.regenerate")}}</IconButton>
-            </div>
                 <v-flex v-if="checkResponse" class="mb-5">
                     <v-row>
                         <v-col class="col-2"></v-col>
@@ -153,10 +149,8 @@
                     </v-row>
                 </v-flex>
                 <div class="text-center">
-                    <IconButton leftIcon="double_arrow" @click="check" color="var(--var-color-blue-sword)"
-                                :disabled="!file">{{ (!fileHash) ? $t("signatureCheck.generate") :
-                        $t("signatureCheck.regenerate")}}
-                    </IconButton>
+                    <IconButton v-if="!checkResponse" leftIcon="double_arrow" @click="check" color="var(--var-color-blue-sword)" :disabled="!file">{{ $t("signatureCheck.generate")}}</IconButton>
+                    <IconButton v-else leftIcon="double_arrow" @click="reload" color="var(--var-color-blue-sword)" >{{ $t("signatureCheck.regenerate")}}</IconButton>
                 </div>
 
                 <v-flex id="bottom">
