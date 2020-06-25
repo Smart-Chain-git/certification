@@ -28,7 +28,7 @@
 
     @Component
     export default class CardTitle extends Vue {
-        @Prop(String) private readonly type!: string
+        @Prop({type: String, default: "icon"}) private readonly type!: string
         @Prop(String) private readonly icon!: string
         @Prop(Number) private readonly number!: number
     }

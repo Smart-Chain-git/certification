@@ -27,6 +27,7 @@ export default class JobsModule extends VuexModule {
         dates: [],
         channelName: "",
     }
+    private keepFilter: boolean = false
 
     constructor(options: any) {
         super(options)
@@ -130,8 +131,17 @@ export default class JobsModule extends VuexModule {
         this.filter = deepcopy<FilterOption>(f)
     }
 
-    get getFilter() {
+    public get getFilter() {
         return deepcopy<FilterOption>(this.filter)
+    }
+
+    @Mutation
+    public saveFilter(val: boolean) {
+        this.keepFilter = val
+    }
+
+    public get isFiltered() {
+        return this.keepFilter
     }
 
     @Mutation

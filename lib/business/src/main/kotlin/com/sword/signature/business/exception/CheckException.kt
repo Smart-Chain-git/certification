@@ -20,8 +20,8 @@ sealed class CheckException(
 
     class UnknownRootHash(val rootHash: String) : CheckException(4, "UNKNOWN_ROOT_HASH")
     class DocumentKnownUnknownRootHash(
-        val signer: String,
-        val publicKey: String,
+        val signer: String?,
+        val publicKey: String?,
         val date: OffsetDateTime
     ) : CheckException(5, "DOCUMENT_KNOWN_UNKNOWN_ROOT_HASH")
 
@@ -33,5 +33,7 @@ sealed class CheckException(
     ) : CheckException(8, "TRANSACTION_NOT_DEEP_ENOUGH")
 
     class IncoherentData() : CheckException(9, "INCOHERENT_DATA")
-    class NoTransaction() : CheckException(10, "NO_TRANSACTION")
+    class NoTransaction(
+        val rootHash: String
+    ) : CheckException(10, "NO_TRANSACTION")
 }

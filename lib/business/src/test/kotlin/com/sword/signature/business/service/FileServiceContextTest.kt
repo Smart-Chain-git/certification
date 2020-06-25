@@ -1,5 +1,6 @@
 package com.sword.signature.business.service
 
+import com.sword.signature.business.exception.MissingRightException
 import com.sword.signature.business.model.Account
 import com.sword.signature.business.model.FileFilter
 import com.sword.signature.business.model.Proof
@@ -222,7 +223,7 @@ class FileServiceContextTest @Autowired constructor(
 
         @Test
         fun `simple user can not get all files`() {
-            assertThrows<IllegalAccessException> {
+            assertThrows<MissingRightException> {
                 runBlocking {
                     fileService.getFiles(
                         requester = simpleAccount
@@ -233,7 +234,7 @@ class FileServiceContextTest @Autowired constructor(
 
         @Test
         fun `simple user can not get others' files`() {
-            assertThrows<IllegalAccessException> {
+            assertThrows<MissingRightException> {
                 runBlocking {
                     fileService.getFiles(
                         requester = simpleAccount,
@@ -250,7 +251,7 @@ class FileServiceContextTest @Autowired constructor(
                     fileService.getFiles(
                         requester = simpleAccount,
                         filter = FileFilter(accountId = simpleAccount.id)
-                    ).asFlow().toList()
+                    ).toList()
                 }
             val expected = listOf(file3Id, file4Id)
             assertEquals(expected.size, files.size)
@@ -263,7 +264,7 @@ class FileServiceContextTest @Autowired constructor(
                 runBlocking {
                     fileService.getFiles(
                         requester = adminAccount
-                    ).asFlow().toList()
+                    ).toList()
                 }
             val expected = listOf(file11Id, file12Id, file13Id, file2Id, file3Id, file4Id)
             assertEquals(expected.size, files.size)
@@ -277,7 +278,7 @@ class FileServiceContextTest @Autowired constructor(
                     fileService.getFiles(
                         requester = adminAccount,
                         filter = FileFilter(accountId = adminAccount.id)
-                    ).asFlow().toList()
+                    ).toList()
                 }
             val expected = listOf(file11Id, file12Id, file13Id, file2Id)
             assertEquals(expected.size, files.size)
@@ -291,7 +292,7 @@ class FileServiceContextTest @Autowired constructor(
                     fileService.getFiles(
                         requester = adminAccount,
                         filter = FileFilter(accountId = simpleAccount.id)
-                    ).asFlow().toList()
+                    ).toList()
                 }
             val expected = listOf(file3Id, file4Id)
             assertEquals(expected.size, files.size)
@@ -305,7 +306,7 @@ class FileServiceContextTest @Autowired constructor(
                     fileService.getFiles(
                         requester = secondAdmin,
                         filter = FileFilter(accountId = adminAccount.id)
-                    ).asFlow().toList()
+                    ).toList()
                 }
             val expected = listOf(file11Id, file12Id, file13Id, file2Id)
             assertEquals(expected.size, files.size)
@@ -319,7 +320,7 @@ class FileServiceContextTest @Autowired constructor(
                     fileService.getFiles(
                         requester = adminAccount,
                         filter = FileFilter(id = file13Id)
-                    ).asFlow().toList()
+                    ).toList()
                 }
             val expected = listOf(file13Id)
             assertEquals(expected.size, files.size)
@@ -333,7 +334,7 @@ class FileServiceContextTest @Autowired constructor(
                     fileService.getFiles(
                         requester = adminAccount,
                         filter = FileFilter(name = "Single")
-                    ).asFlow().toList()
+                    ).toList()
                 }
             val expected = listOf(file3Id, file4Id)
             assertEquals(expected.size, files.size)
@@ -347,7 +348,7 @@ class FileServiceContextTest @Autowired constructor(
                     fileService.getFiles(
                         requester = adminAccount,
                         filter = FileFilter(hash = "7d70baefd8e6284346d5021dde2288a5aaf4ce03220ac7653ca3f697be4cf39b")
-                    ).asFlow().toList()
+                    ).toList()
                 }
             val expected = listOf(file4Id)
             assertEquals(expected.size, files.size)
@@ -361,7 +362,7 @@ class FileServiceContextTest @Autowired constructor(
                     fileService.getFiles(
                         requester = adminAccount,
                         filter = FileFilter(jobId = "5e8c36c49df469062bc658c1")
-                    ).asFlow().toList()
+                    ).toList()
                 }
             val expected = listOf(file11Id, file12Id, file13Id)
             assertEquals(expected.size, files.size)
@@ -375,7 +376,7 @@ class FileServiceContextTest @Autowired constructor(
                     fileService.getFiles(
                         requester = adminAccount,
                         filter = FileFilter(dateStart = LocalDate.of(2020, 4, 8))
-                    ).asFlow().toList()
+                    ).toList()
                 }
             val expected = listOf(file2Id, file3Id, file4Id)
             assertEquals(expected.size, files.size)
@@ -389,7 +390,7 @@ class FileServiceContextTest @Autowired constructor(
                     fileService.getFiles(
                         requester = adminAccount,
                         filter = FileFilter(dateEnd = LocalDate.of(2020, 4, 8))
-                    ).asFlow().toList()
+                    ).toList()
                 }
             val expected = listOf(file11Id, file12Id, file13Id, file2Id)
             assertEquals(expected.size, files.size)

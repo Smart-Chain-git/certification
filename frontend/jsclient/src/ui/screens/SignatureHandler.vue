@@ -10,10 +10,10 @@
                 <Card width="98%">
                     <CardTitle type="number" number=1>{{ $t("signatureHandler.start")}}</CardTitle>
                     <v-flex xs8 lg4 class="ml-4">
-                        <EditFormRow :title="$t('signatureHandler.algorithm')" :editable="true">
+                        <EditFormRow :title="$t('signatureHandler.algorithm') + '*'" :editable="true">
                             <v-combobox class="combobox" hide-details outlined dense :items="algorithms" v-model="selectedAlgorithm"/>
                         </EditFormRow>
-                        <EditFormRow :title="$t('signatureHandler.name')" :editable="true">
+                        <EditFormRow :title="$t('signatureHandler.name') + '*'" :editable="true">
                             <EditFormTitleEdit v-model="flowName"/>
                         </EditFormRow>
                         <EditFormRow :title="$t('signatureHandler.data')" :editable="true">
@@ -44,13 +44,19 @@
                                 </v-col>
                             </v-row>
                         </EditFormRow>
+                        <div class="mandatory">
+                           {{ $t("signatureHandler.mandatory") }}
+                        </div>
                     </v-flex>
+
                     <CardTitle type="number" number=2 class="mt-8">{{ $t("signatureHandler.uploadFiles")}}</CardTitle>
                     <v-flex xs8 lg4 class="ml-4">
                         <v-row>
                             <v-col class="col-3">{{ $t("signatureHandler.upload")}}</v-col>
                             <v-col class="col-8">
-                                <v-file-input class="file" outlined dense v-model="files" multiple/>
+                                <div @dragover.prevent @drop.prevent="drop">
+                                    <v-file-input class="file" outlined dense v-model="files" multiple/>
+                                </div>
                             </v-col>
                         </v-row>
                     </v-flex>
@@ -129,6 +135,11 @@
     .file {
         max-width: 320px;
     }
+
+    .mandatory {
+        margin-top: 30px;
+        font-size: 12px;
+    }
 </style>
 
 <script lang="ts">
@@ -158,6 +169,10 @@
         private dataValues: Array<string> = []
         private newKey: string = ""
         private newValue: string = ""
+
+        private drop(e: any) {
+            this.files = e.dataTransfer.files
+        }
 
         @Watch("files")
         private update() {
