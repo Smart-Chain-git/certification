@@ -218,8 +218,8 @@
           "line3": "Le processus de signature peut avoir inclus des documents supplémentaires en même temps. Nous avons utilisé un système connu sous le nom d'arbre Merkel pour générer une signature unique sur plusieurs documents simultanément. Cet arbre Merkel est identifié par son hachage racine {0}." ,
           "line4": "Votre document, ainsi que le hachage racine, a été signé dans la transaction Tezos Blockchain {0}, présent dans le bloc Tezos {1}, le {2}. Il est désormais stocké dans un contrat intelligent",
           "line5": "Le document a été signé par une entité connue par sa clé publique Tezos unique {0}. L'opérateur de cette plateforme de vérification a reçu au préalable la confirmation que sa clé publique appartient à {1}.",
-          "line6": "Cliquez sur {#} pour obtenir un fichier de preuve expliquant la relation entre l'impression numérique de votre document et le hachage racine de l'arbre Merkle. Avec ce fichier de preuve, vous pouvez prouver à quiconque que votre document a été signé et horodaté. Si vous le faites ne l'avez pas déjà, veuillez le conserver en lieu sûr avec votre document d'origine. ",
-          "line7": "Cliquez sur {#} pour obtenir les informations techniques sur l'endroit où les informations sont stockées dans le contrat intelligent Tezos DigiSign (adresse du contrat: {0})."
+          "line6": "Cliquez {#} pour obtenir un fichier de preuve expliquant la relation entre l'impression numérique de votre document et le hachage racine de l'arbre Merkle. Avec ce fichier de preuve, vous pouvez prouver à quiconque que votre document a été signé et horodaté. Si vous le faites ne l'avez pas déjà, veuillez le conserver en lieu sûr avec votre document d'origine. ",
+          "line7": "Cliquez {#} pour obtenir les informations techniques sur l'endroit où les informations sont stockées dans le contrat intelligent Tezos DigiSign (adresse du contrat: {0})."
         }
       },
       "message2": {
@@ -237,7 +237,7 @@
           "line7": "Si votre document était différent de celui qui a été signé, le hachage racine serait différent",
           "line8": "Nous sommes alors entrés dans la blockchain, et nous pouvons confirmer que votre document avec le Root Hash, a été signé dans la transaction Tezos Blockchain {0}, présent dans le bloc Tezos {1}, le {2 }. Il est désormais stocké dans un contrat intelligent. ",
           "line9": "Le document a été signé par une entité connue par sa clé publique Tezos unique {0}. Sur la base de notre base de données interne, l'opérateur de cette plateforme de vérification a reçu au préalable la confirmation que sa clé publique appartient à {1}" ,
-          "line10": "Cliquez sur {#} pour obtenir les informations techniques sur l'endroit où les informations sont stockées dans le contrat intelligent Tezos DigiSign (adresse du contrat: {0})."
+          "line10": "Cliquez {#} pour obtenir les informations techniques sur l'endroit où les informations sont stockées dans le contrat intelligent Tezos DigiSign (adresse du contrat: {0})."
         }
       },
       "info": {

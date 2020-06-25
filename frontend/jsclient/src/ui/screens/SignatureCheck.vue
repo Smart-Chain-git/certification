@@ -59,11 +59,11 @@
                                         {{ parse("signatureCheck.success.message1.block2.line3") }}<br/>
                                         {{ parse("signatureCheck.success.message1.block2.line4") }}<br/>
                                         {{ parse("signatureCheck.success.message1.block2.line5") }}<br/><br/>
-                                        <span v-html="parseLink('signatureCheck.success.message1.block2.line6', 'here',{
+                                        <span v-html="parseLink('signatureCheck.success.message1.block2.line6', {
                                         'download' : checkResponse.proof.file_name + '.json',
                                         'href' : 'data:text/json:charset=utf-8,' + encodeURIComponent(JSON.stringify(checkResponse.proof))
                                     })"/><br/><br/>
-                                        <span v-html="parseLink('signatureCheck.success.message1.block2.line7', 'here', {'href' : '/settings'})"/>
+                                        <span v-html="parseLink('signatureCheck.success.message1.block2.line7', {'href' : '/settings'})"/>
                                     </div>
                                     <div v-if="checkResponse.check_status === 2">
                                         {{parse("signatureCheck.success.message2.block2.line1")}}<br/><br/>
@@ -117,37 +117,6 @@
                     <v-col class="col-1"> </v-col>
                 </v-row>
             </v-flex>
-                <v-flex v-if="checkResponse" class="mb-5">
-                    <v-row>
-                        <v-col class="col-2"></v-col>
-                        <v-col class="col-8 small">{{ $t("signatureCheck.success.info.title")}}</v-col>
-                    </v-row>
-                    <v-row>
-                        <v-col class="col-2"></v-col>
-                        <v-col class="col-4 small">
-                            <h3>{{ $t("signatureCheck.success.info.col1.title")}}</h3>
-                            <ol>
-                                <li>{{ $t("signatureCheck.success.info.col1.step1")}}</li>
-                                <li>{{ $t("signatureCheck.success.info.col1.step2")}}</li>
-                                <li>{{ $t("signatureCheck.success.info.col1.step3")}}</li>
-                                <li>{{ $t("signatureCheck.success.info.col1.step4")}}</li>
-                            </ol>
-                        </v-col>
-                        <v-col class="col-5 small">
-                            <h3>{{ $t("signatureCheck.success.info.col2.title")}}</h3>
-                            <ol>
-                                <li>{{ $t("signatureCheck.success.info.col2.step1")}}</li>
-                                <li>{{ $t("signatureCheck.success.info.col2.step2")}}</li>
-                                <li>{{ $t("signatureCheck.success.info.col2.step3")}}</li>
-                                <li>{{ $t("signatureCheck.success.info.col2.step4")}}</li>
-                                <li>{{ $t("signatureCheck.success.info.col2.step5")}}</li>
-                                <li>{{ $t("signatureCheck.success.info.col2.step6")}}</li>
-                                <li>{{ $t("signatureCheck.success.info.col2.step7")}}</li>
-                            </ol>
-                        </v-col>
-                        <v-col class="col-1"></v-col>
-                    </v-row>
-                </v-flex>
                 <div class="text-center">
                     <IconButton v-if="!checkResponse" leftIcon="double_arrow" @click="check" color="var(--var-color-blue-sword)" :disabled="!file">{{ $t("signatureCheck.generate")}}</IconButton>
                     <IconButton v-else leftIcon="double_arrow" @click="reload" color="var(--var-color-blue-sword)" >{{ $t("signatureCheck.regenerate")}}</IconButton>
@@ -346,13 +315,13 @@
             }
         }
 
-        private parseLink(message: string, placeholder: string, stats: { [key: string]: string }) {
+        private parseLink(message: string, stats: { [key: string]: string }) {
             let format = ""
             const res = this.parse(message)
             for (const i of Object.keys(stats)) {
                 format = format + i + "=\"" + stats[i] + "\" "
             }
-            return res?.replace("{#}", "<a " + format + ">" + placeholder + "</a>")
+            return res?.replace("{#}", "<a " + format + ">" + this.$t("signatureCheck.here").toString()  + "</a>")
         }
 
         private check() {
