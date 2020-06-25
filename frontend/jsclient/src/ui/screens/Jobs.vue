@@ -216,7 +216,7 @@
                 {text: this.$t("job.list.name"), align: "center", value: "flowName", width: "30%"},
                 {text: this.$t("job.list.creationDate"), align: "center", value: "createdDate", width: "15%"},
                 {text: this.$t("job.list.statusDate"), align: "center", value: "stateDate", width: "15%"},
-                {text: this.$t("job.list.status"), align: "center", value: "state", width:"10%"},
+                {text: this.$t("job.list.status"), align: "center", value: "state", width: "10%"},
                 {text: this.$t("job.list.docs"), align: "center", value: "docs", width: "10%"},
                 {text: this.$t("job.list.channel"), align: "center", value: "channelName", width: "10%"},
                 {text: "", sortable: false, width: "10%"},
