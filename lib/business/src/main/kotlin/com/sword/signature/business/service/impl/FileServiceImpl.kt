@@ -1,5 +1,6 @@
 package com.sword.signature.business.service.impl
 
+import com.sword.signature.business.exception.MissingRightException
 import com.sword.signature.business.model.*
 import com.sword.signature.business.model.mapper.toBusiness
 import com.sword.signature.business.service.FileService
@@ -13,17 +14,14 @@ import com.sword.signature.model.repository.JobRepository
 import com.sword.signature.model.repository.TreeElementRepository
 import com.sword.signature.tezos.reader.service.TezosReaderService
 import com.sword.signature.tezos.reader.tzindex.model.TzContract
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.reactive.asFlow
-import kotlinx.coroutines.reactive.awaitFirst
-import kotlinx.coroutines.reactive.awaitFirstOrNull
-import kotlinx.coroutines.reactive.awaitSingle
+import kotlinx.coroutines.reactive.*
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
-import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 @Service
@@ -117,7 +115,7 @@ class FileServiceImpl(
             blockHash = job.blockHash,
             signerAddress = job.signerAddress,
             creatorAddress = job.contractAddress?.let { getContractCreator(it) },
-            urls =urlNodes
+            urls = urlNodes
         )
 
         return Mono.just(proof)
@@ -127,15 +125,34 @@ class FileServiceImpl(
         requester: Account,
         filter: FileFilter?,
         pageable: Pageable
-    ): Flux<TreeElement.LeafTreeElement> {
+    ): Flow<TreeElement.LeafTreeElement> {
 
         // Check right to perform operation.
         if (!requester.isAdmin && requester.id != filter?.accountId) {
-            // TODO: replace later by MissingRightException once merged.
-            throw IllegalAccessException("User ${requester.login} does not have to access this resource.")
+            throw MissingRightException(requester)
         }
 
-        val files = if (filter != null) {
+        val fileCriteria = buildFileCriteria(filter)
+        val files = treeElementRepository.findAll(fileCriteria.toPredicate(), pageable.sort)
+
+        return files.asFlow().paginate(pageable).map { it.toBusiness() as TreeElement.LeafTreeElement }
+    }
+
+    override suspend fun countFiles(
+        requester: Account,
+        filter: FileFilter?
+    ): Long {
+        // Check right to perform operation.
+        if (!requester.isAdmin && requester.id != filter?.accountId) {
+            throw MissingRightException(requester)
+        }
+
+        val fileCriteria = buildFileCriteria(filter)
+        return treeElementRepository.count(fileCriteria.toPredicate()).awaitLast()
+    }
+
+    private suspend fun buildFileCriteria(filter: FileFilter?): FileCriteria {
+        if (filter != null) {
             val jobCriteria: JobCriteria? =
                 if (filter.accountId != null || filter.dateStart != null || filter.dateEnd != null)
                     JobCriteria(
@@ -147,20 +164,16 @@ class FileServiceImpl(
             val allowedJobsIds: List<String>? =
                 jobCriteria?.let { jobRepository.findAll(jobCriteria.toPredicate()).asFlow().map { it.id!! }.toList() }
 
-            val documentCriteria = FileCriteria(
+            return FileCriteria(
                 id = filter.id,
                 name = filter.name,
                 hash = filter.hash,
                 jobId = filter.jobId,
                 jobIds = allowedJobsIds
             )
-
-            treeElementRepository.findAll(documentCriteria.toPredicate(), pageable.sort)
         } else {
-            treeElementRepository.findAll(FileCriteria().toPredicate(), pageable.sort)
+            return FileCriteria()
         }
-
-        return files.map { it.toBusiness() as TreeElement.LeafTreeElement }
     }
 
     private suspend fun findSibling(id: String, parentId: String?): TreeElementEntity? {
