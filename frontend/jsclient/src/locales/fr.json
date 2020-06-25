@@ -179,7 +179,7 @@
       },
       "unknown_root_hash": {
         "title": "Document non horodaté dans Tezos Blockchain",
-        "message": "Nous sommes désolés, votre fichier de preuve correspond au document que vous souhaitez vérifier et semble légitime. Cependant, nous ne pouvons pas trouver dans la blockchain une preuve de sa signature. Le hachage racine de l'arbre Merkle mentionné ({0} ) n'est pas présent dans la blockchain "
+        "message": "Nous sommes désolés, votre fichier de preuve correspond au document que vous souhaitez vérifier et semble légitime. Cependant, nous ne pouvons pas trouver dans la blockchain une preuve de sa signature. Le hachage racine de l'arbre Merkle mentionné ({0}) n'est pas présent dans la blockchain "
       },
       "document_known_unknown_root_hash": {
         "title": "Document trouvé dans Tezos DigiSign mais non horodaté dans Tezos Blockchain",
@@ -203,7 +203,7 @@
       },
       "no_transaction": {
         "title": "Document non horodaté dans Tezos Blockchain",
-        "message": ": Nous sommes désolés, votre fichier de preuve correspond au document que vous souhaitez vérifier et semble légitime. Cependant, nous ne pouvons pas trouver dans la blockchain une preuve de sa signature. Le hachage racine de l'arbre Merkle mentionné ({0 }) n'est pas présent dans la blockchain "
+        "message": ": Nous sommes désolés, votre fichier de preuve correspond au document que vous souhaitez vérifier et semble légitime. Cependant, nous ne pouvons pas trouver dans la blockchain une preuve de sa signature. Le hachage racine de l'arbre Merkle mentionné ({0}) n'est pas présent dans la blockchain "
       }
     },
     "success": {

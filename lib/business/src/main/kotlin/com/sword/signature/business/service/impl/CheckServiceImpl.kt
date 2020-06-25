@@ -173,8 +173,8 @@ class CheckServiceImpl(
             val transaction: TzOp? = tezosReaderService.getTransaction(providedProof.transactionHash)
             val depth: Long? = tezosReaderService.getTransactionDepth(providedProof.transactionHash)
             if (transaction == null) {
-                LOGGER.error("Provided transaction '{}' not found in the blockchain.", providedProof.documentHash)
-                throw CheckException.NoTransaction()
+                LOGGER.error("Provided transaction '{}' not found in the blockchain.", providedProof.transactionHash)
+                throw CheckException.NoTransaction(rootHash = providedProof.rootHash)
             }
 
             if (transaction.bigMapDiff[0].meta.contract != providedProof.contractAddress) {

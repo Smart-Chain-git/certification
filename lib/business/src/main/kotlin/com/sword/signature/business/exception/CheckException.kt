@@ -33,5 +33,7 @@ sealed class CheckException(
     ) : CheckException(8, "TRANSACTION_NOT_DEEP_ENOUGH")
 
     class IncoherentData() : CheckException(9, "INCOHERENT_DATA")
-    class NoTransaction() : CheckException(10, "NO_TRANSACTION")
+    class NoTransaction(
+        val rootHash: String
+    ) : CheckException(10, "NO_TRANSACTION")
 }
