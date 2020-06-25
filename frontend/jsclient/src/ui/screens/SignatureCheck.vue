@@ -336,7 +336,7 @@
                             this.checkResponse.hash_document_proof!])
 
                     case "signatureCheck.errors.unknown_root_hash.message":
-                        return SignatureCheck.format(res, [this.checkResponse.proof.hash_root])
+                        return SignatureCheck.format(res, [this.checkResponse.hash_root!])
 
                     case "signatureCheck.errors.document_known_unknown_root_hash.message":
                         return SignatureCheck.format(res, [
@@ -344,7 +344,7 @@
                             this.checkResponse.public_key!, this.checkResponse.date!.toString()])
 
                     case "signatureCheck.errors.no_transaction.message":
-                        return SignatureCheck.format(res, [this.checkResponse.proof.hash_root])
+                        return SignatureCheck.format(res, [this.checkResponse.hash_root!])
 
                     default:
                         return res
