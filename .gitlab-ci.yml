@@ -19,21 +19,15 @@ variables:
   # Disable daemon for Gradle
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
 
+# Fix double pipelines on merge requests.
+include:
+  - template: 'Workflows/Branch-Pipelines.gitlab-ci.yml'
+
 # Before each stage's script.
 before_script:
   - echo `pwd` # debug
   - echo "$CI_BUILD_NAME, $CI_BUILD_REF_NAME $CI_BUILD_STAGE" # debug
   - export GRADLE_USER_HOME=`pwd`/.gradle
-
-# There use to be a `cache` key here. We removed it because it was actually
-# slower than downloading again the resources.
-# All gradle dependencies are fetched from the Nexus. It was slower to unzip the
-# cache before the stage and zip it back after the stage.
-cache:
-  key: tezosservers
-  paths:
-    - frontend/jsclient/node_modules/
-
 
 #
 # Stage: test
@@ -107,24 +101,6 @@ publishJar:
       - tags
   script:
     - gradle publish -PmavenProxyUrl=$MAVEN_PROXY_URL -PnexusUrl=$NEXUS_URL -PnexusUser=$NEXUS_USER -PnexusPassword=$NEXUS_PASSWORD -PreleasesRepo=$RELEASES_REPO -PsnapshotsRepo=$SNAPSHOTS_REPO
-# Build a docker image for the web app and push it to the registry.
-publishDockerUi:
-  stage: publish
-  dependencies:
-    - build
-  tags:
-    - dockerBuild
-  script:
-    # Create the unpacked folder.
-    - mkdir frontend/ui/build/unpacked
-    # Unpack the jar for light docker image.
-    - (cd frontend/ui/build/unpacked; jar -xf ../libs/*.jar)
-    # Build the docker image tagged either with git branch name or tag.
-    - docker build -t $REGISTRY_URL/sword/signature-web:$CI_COMMIT_REF_NAME frontend/ui
-    # Push the image to the registry.
-    - docker push $REGISTRY_URL/sword/signature-web:$CI_COMMIT_REF_NAME
-    # Remove image from runner local registry.
-    - docker rmi $REGISTRY_URL/sword/signature-web:$CI_COMMIT_REF_NAME
 
 publishDockerRSocket:
   stage: publish
@@ -143,6 +119,10 @@ publishDockerRSocket:
     - docker push $REGISTRY_URL/sword/signature-rsocket:$CI_COMMIT_REF_NAME
     # Remove image from runner local registry.
     - docker rmi $REGISTRY_URL/sword/signature-rsocket:$CI_COMMIT_REF_NAME
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master" || $CI_COMMIT_TAG'
+      when: on_success
+    - when: manual
 
 publishDockerRest:
   stage: publish
@@ -161,6 +141,10 @@ publishDockerRest:
     - docker push $REGISTRY_URL/sword/signature-rest:$CI_COMMIT_REF_NAME
     # Remove image from runner local registry.
     - docker rmi $REGISTRY_URL/sword/signature-rest:$CI_COMMIT_REF_NAME
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master" || $CI_COMMIT_TAG'
+      when: on_success
+    - when: manual
 
 publishDockerDaemon:
   stage: publish
@@ -179,3 +163,7 @@ publishDockerDaemon:
     - docker push $REGISTRY_URL/sword/signature-daemon:$CI_COMMIT_REF_NAME
     # Remove image from runner local registry.
     - docker rmi $REGISTRY_URL/sword/signature-daemon:$CI_COMMIT_REF_NAME
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master" || $CI_COMMIT_TAG'
+      when: on_success
+    - when: manual

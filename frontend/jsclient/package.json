@@ -11,10 +11,7 @@
     "i18n:report": "vue-cli-service i18n:report --src './src/**/*.?(js|vue)' --locales './src/locales/**/*.json'",
     "test:e2e": "vue-cli-service test:e2e",
     "test:unit": "vue-cli-service test:unit",
-    "test:unit-watch": "vue-cli-service test:unit --watch",
-    "cypress:open": "cypress open",
-    "cypress:run": "cypress run",
-    "ci": "start-server-and-test serve http://localhost:8081 cypress:run"
+    "test:unit-watch": "vue-cli-service test:unit --watch"
   },
   "dependencies": {
     "@mdi/font": "^5.3.45",
@@ -59,7 +56,6 @@
     "@vue/test-utils": "^1.0.3",
     "axios-mock-adapter": "^1.18.1",
     "babel-node": "^0.0.1-security",
-    "cypress": "^4.7.0",
     "lint-staged": "^10.2.6",
     "node-sass": "^4.14.1",
     "null-loader": "^4.0.0",
