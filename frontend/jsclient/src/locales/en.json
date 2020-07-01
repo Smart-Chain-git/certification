@@ -115,6 +115,7 @@
     "records": "records"
   },
   "signatureCheck": {
+	"hash": "Document hash",
     "check": "Check your files",
     "about": "About the project",
     "contact": "Contact us",

@@ -147,6 +147,7 @@
     "records": "résultats"
 	},
   "signatureCheck": {
+	"hash": "Hash du document",
     "check": "Vérifier vos fichiers",
     "about": "A propos",
     "contact": "Contactez nous",

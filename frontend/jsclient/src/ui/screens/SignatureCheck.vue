@@ -8,8 +8,13 @@
                     {{ $t("signatureCheck.text1") }}<br/>
                     {{ $t("signatureCheck.text2") }}
                 </p>
+				<h2 v-if="hashdocument != null">{{ $t("signatureCheck.hash") }} : {{ hashdocument }}</h2>
                 <v-flex class="mt-5">
-                    <v-row>
+				
+						
+					
+					
+                    <v-row v-if="hashdocument == null">
                         <v-col class="col-4 align-right"><h1>{{ $t("signatureCheck.upload") }}</h1></v-col>
                         <v-col class="col-5">
                             <div @dragover.prevent @drop.prevent="dropFile">
@@ -19,7 +24,7 @@
                             </div>
                         </v-col>
                     </v-row>
-                    <v-row>
+                    <v-row v-if="hashdocument == null">
                         <v-col class="col-4 align-right"><h1>{{ $t("signatureCheck.uploadProof") }}</h1><span>{{ $t("signatureCheck.optional")}}</span>
                         </v-col>
                         <v-col class="col-5">
@@ -118,8 +123,8 @@
                 </v-row>
             </v-flex>
                 <div class="text-center">
-                    <IconButton v-if="!checkResponse" leftIcon="double_arrow" @click="check" color="var(--var-color-blue-sword)" :disabled="!file">{{ $t("signatureCheck.generate")}}</IconButton>
-                    <IconButton v-else leftIcon="double_arrow" @click="reload" color="var(--var-color-blue-sword)" >{{ $t("signatureCheck.regenerate")}}</IconButton>
+                    <IconButton v-if="!checkResponse" leftIcon="double_arrow" @click="check" color="var(--var-color-blue-sword)" :disabled="!file && !hashdocument">{{ $t("signatureCheck.generate")}}</IconButton>
+                    <IconButton v-else leftIcon="double_arrow" @click="fullReload" color="var(--var-color-blue-sword)" >{{ $t("signatureCheck.regenerate")}}</IconButton>
                 </div>
 
                 <v-flex id="bottom">
@@ -137,6 +142,11 @@
         color: var(--var-color-blue-sword);
         text-align: center;
         padding-bottom: 1rem;
+    }
+
+	.edit-form-title-input {
+        max-width: 540px;
+        width: 540px;
     }
 
     span {
@@ -187,14 +197,24 @@
         margin-right: 15px;
         text-align: justify;
     }
+	
+	.edit-form-hash-input {
+        max-width: 540px;
+        width: 540px;
+    }
+	
 </style>
 <script lang="ts">
     import {SignatureCheckRequest, SignatureCheckResponse} from "@/api/types"
     import {Component, Vue} from "vue-property-decorator"
     import * as CryptoJS from "crypto-js"
 
+	
+	
     @Component
     export default class SignatureCheck extends Vue {
+
+		
 
         private static format(str: string, values: Array<string>) {
             for (let i = 0 ; i < values.length ; ++i) {
@@ -208,8 +228,16 @@
         private fileHash: string = ""
         private proofHash: string | undefined = undefined
 
+		
+		private beforeMount(){
+			console.log(this.$route.query.hashdocument)
+			this.hashdocument = this.$route.query.hashdocument
+			
+			
+		}
         private mounted() {
             this.reload()
+			
         }
 
         private dropFile(e: any) {
@@ -227,6 +255,9 @@
         private resetProof() {
             this.proof = null
         }
+
+
+		
 
         private get checkResponse(): SignatureCheckResponse | undefined {
             return this.$modules.signatures.getCheckResponse()
@@ -325,7 +356,13 @@
         }
 
         private check() {
-            if (this.file !== null) {
+			//console.log("hashdocument=" + this.hashdocument)
+			if (this.hashdocument !== undefined && this.hashdocument !==null){
+						//console.log("check hashdocument")
+						this.fileHash = this.hashdocument
+						this.send()
+			}
+            else if (this.file !== null) {
                 const reader = new FileReader()
                 reader.onloadend = (e) => {
                     const wordArray = CryptoJS.lib.WordArray.create(e.target!.result)
@@ -351,6 +388,12 @@
                 proof: this.proofHash,
             }
             this.$modules.signatures.check(sigCheck)
+        }
+
+        private fullReload() {
+            this.hashdocument=null
+			this.reload()
+            
         }
 
         private reload() {
