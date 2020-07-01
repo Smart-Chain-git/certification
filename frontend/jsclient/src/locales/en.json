@@ -174,7 +174,7 @@
       },
       "no_transaction": {
         "title": "Document not timestamped in Tezos Blockchain ",
-        "message": ": We are sorry, your proof file corresponds to the document you want to check and looks legitimate. However, we cannot find in the blockchain a proof of its signature. The root hash of the mentioned Merkle Tree ({0}) is not present in the blockchain"
+        "message": "We are sorry, your proof file corresponds to the document you want to check and looks legitimate. However, we cannot find in the blockchain a proof of its signature. The root hash of the mentioned Merkle Tree ({0}) is not present in the blockchain"
       },
       "generic": {
         "title": "Document hash not found in TEZOS DigiSign",
