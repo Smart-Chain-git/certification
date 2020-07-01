@@ -272,7 +272,6 @@
 
             const signatures: SignatureMultiRequest = {
                 algorithm: this.selectedAlgorithm,
-                callBackUrl: "",
                 flowName: this.flowName,
                 files: filesUpload,
                 customFields: customFieldsUpload,
