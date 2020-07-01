@@ -137,10 +137,11 @@ export interface TokenCreateRequest {
 export interface SignatureMultiRequest {
     algorithm: string,
     flowName: string,
-    callBackUrl: string,
+    callBackUrl?: string,
     customFields: {[key: string]: string}
     files: Array<SignatureRequest>
 }
+
 
 export interface SignatureRequest {
     metadata: SignMetaData,
