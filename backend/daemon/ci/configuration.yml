@@ -65,6 +65,14 @@ tezos:
       hash: "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb"
       publicKey: "edpkvGfYw3LyB1UcCahKQk4rF2tvbMUk8GFiTuMjL75uGXrpvKXhjn"
       secretKey: ENC(JSL6Nm4NlDjrQmmIP9HXZ4MmL8QsNxXPPdCJPNxlLwiWHKaFluKHoM3mJgUL35s2pmZvPqB3JXdxAQcvh4POz/AjNY/U9Cso2NufOqU64WN9VD6ugJeifXbmuA8Xbrpp)
+    vpoulain:
+      hash: "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcj1"
+      publicKey: "edpkvUDXBMrAFDBpGRLu1WiHoehVKGXCjNnhk8p7nrRN4rQhRrqCoe"
+      secretKey: "edsk3Lem7UpkvfNfiXCxHMVavVmZRj45WDGhUNrwKjgJhBXhyLLhb3"
+    ipereira:
+      hash: "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcj0"
+      publicKey: "edpkvUDXBMrAFDBpGRLu1WiHoehVKGXCjNnhk8p7nrRN4rQhRrqCoe"
+      secretKey: "edsk3Lem7UpkvfNfiXCxHMVavVmZRj45WDGhUNrwKjgJhBXhyLLhb3"
     frodon:
       hash: "tz1aSkwEot3L2kmUvcoxzjMomb9mvBNuzFK6"
       publicKey: "edpkurPsQ8eUApnLUJ9ZPDvu98E8VNj4KtJa1aZr16Cr5ow5VHKnz4"

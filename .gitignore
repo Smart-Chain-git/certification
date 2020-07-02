@@ -23,3 +23,6 @@ java_pid*
 
 # Tezos
 tezos-client
+
+#contract
+contract/originate.log
