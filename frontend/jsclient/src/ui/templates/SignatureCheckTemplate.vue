@@ -3,7 +3,7 @@
         <div class="background">
             <img src="@/ui/assets/reception-background.png" alt="reception background">
         </div>
-        <NavbarTop showLogo="true" backgroundColor="var(--var-color-blue-sword)" textColor="white"/>
+        <NavbarTop :showLogo="true" backgroundColor="var(--var-color-blue-sword)" textColor="white"/>
         <v-content>
             <v-flex class="white">
                 <v-btn text to="/signature-check">

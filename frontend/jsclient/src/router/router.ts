@@ -62,18 +62,10 @@ const router = new Router({
                     path: "",
                     component: SignatureCheck,
                 },
-            ],
-        },
-		{
-			
-            path: "/signature-check/:hashdoc",
-            component: SignatureCheckTemplate,
-            beforeEnter:  loadMeIfLogged,
-            children: [
                 {
-                    path: "",
+                    path: ":hashdoc",
                     component: SignatureCheck,
-					props: true,
+                    props: true,
                 },
             ],
         },
