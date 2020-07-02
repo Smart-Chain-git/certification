@@ -206,14 +206,14 @@
 </style>
 <script lang="ts">
     import {SignatureCheckRequest, SignatureCheckResponse} from "@/api/types"
-    import {Component, Vue} from "vue-property-decorator"
+    import {Component, Prop, Vue} from "vue-property-decorator"
     import * as CryptoJS from "crypto-js"
 
 	
 	
     @Component
     export default class SignatureCheck extends Vue {
-
+		@Prop({default: undefined}) private readonly hashdoc!: string
 		
 
         private static format(str: string, values: Array<string>) {
@@ -227,14 +227,14 @@
         private proof: File | null = null
         private fileHash: string = ""
         private proofHash: string | undefined = undefined
-
+		private hashdocument: string | null | undefined = undefined
+		
 		
 		private beforeMount(){
-			console.log(this.$route.query.hashdocument)
-			this.hashdocument = this.$route.query.hashdocument
-			
-			
+			this.hashdocument = this.hashdoc
 		}
+		
+		
         private mounted() {
             this.reload()
 			
