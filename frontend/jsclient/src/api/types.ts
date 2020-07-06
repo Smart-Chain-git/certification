@@ -127,6 +127,7 @@ export interface Token {
     revoked: boolean,
     creationDate: Date,
     expirationDate?: Date,
+    jwtToken: string
 }
 
 export interface TokenCreateRequest {

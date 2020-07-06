@@ -38,7 +38,15 @@
                         <template v-slot:body="{items}">
                             <tbody>
                             <tr :key="token.id" v-for="token in items" :class="!canRevoke(token) ? 'outline_revoked' : 'outline'">
-                                <td class="text-center">{{token.name }}</td>
+                                <td class="text-center">
+                                    <v-row>
+                                        <v-col class="col-11 text-center">{{token.name }}</v-col>
+                                        <v-col class="col-1 align-right">
+                                            <CopyTooltip :copy="token.jwtToken" :label="$t('channelManagement.tokenJwt')+' :'"
+                                                         :actionText="$t('channelManagement.copyToken')"/>
+                                        </v-col>
+                                    </v-row>
+                                </td>
                                 <td class="text-center">{{token.creationDate | formatDate}}</td>
                                 <td class="text-center">{{token.expirationDate | formatDate}}</td>
                                 <td class="text-center">

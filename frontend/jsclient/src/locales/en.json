@@ -86,7 +86,9 @@
     "creationDate": "Date",
     "expirationDate": "Expiration Date",
     "add": "Create",
-    "revoke": "Revoke"
+    "revoke": "Revoke",
+    "tokenJwt": "Token",
+    "copyToken": "Copy"
   },
   "menu": {
     "dashboard": "Dashboard",

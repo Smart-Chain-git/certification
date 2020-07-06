@@ -118,7 +118,9 @@
     "expirationDate": "Date d'expiration",
     "add": "Créer",
     "revoke": "Révoquer",
-    "date": "Date"
+    "date": "Date",
+    "tokenJwt": "Token",
+    "copyToken": "Copier"
   },
   "menu": {
     "dashboard": "Tableau de bord",
