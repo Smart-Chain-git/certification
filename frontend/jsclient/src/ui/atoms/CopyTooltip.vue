@@ -16,7 +16,7 @@
             <v-icon class="tooltip-icon" @click="show = !show">info</v-icon>
         </template>
         <template v-slot:default>
-            <span>{{ label }} {{ copy }}</span>
+            <span>{{ label }} {{ copyTrim }}</span>
             <span @click="copyElm(copy)" class="copyElm text-center" >{{ actionText }}</span>
         </template>
     </v-tooltip>
@@ -51,6 +51,9 @@
         @Prop(String) private readonly actionText!: string
         private show: boolean = false
 
+        public get copyTrim() {
+            return (this.copy.length > 30) ? this.copy.substr(0,30) + "..." : this.copy
+        }
 
         private copyElm(ID: string) {
             // assign ID to a custom HTML element and copy its content to clipboard
