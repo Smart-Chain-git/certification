@@ -1,0 +1,18 @@
+{
+  "accounts": {
+    "update": [
+      {
+        "_id": {
+          "$oid": "5e74a073a386f170f3850b4b"
+        },
+		"login": "admin",
+        "email": "admin@signature.com",
+        "password": "$2a$10$YxuYC0jAxSp/S0PYZg8mXuHGterSIGfJzZa/hnuMLDIQK/vwYLQHu",
+        "fullName": "Administrator",
+        "isAdmin": true
+        "publicKey": "edpkurPsQ8eUApnLUJ9ZPDvu98E8VNj4KtJa1aZr16Cr5ow5VHKnz4",
+        "hash": "tz1aSkwEot3L2kmUvcoxzjMomb9mvBNuzFK6"
+      }
+    ]
+  }
+}
