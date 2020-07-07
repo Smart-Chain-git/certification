@@ -1,0 +1,21 @@
+{
+  "accounts": {
+    "update": [
+       {
+        "_id": {
+          "$oid": "aca05302a59411eabb370242"
+        },
+        "login": "frodon",
+        "email": "frodon@signature.com",
+        "password": "$2a$10$YxuYC0jAxSp/S0PYZg8mXuHGterSIGfJzZa/hnuMLDIQK/vwYLQHu",
+        "fullName": "Frodon Sacquet",
+        "company": "Digisign",
+        "country": "France",
+        "publicKey": "edpkurPsQ8eUApnLUJ9ZPDvu98E8VNj4KtJa1aZr16Cr5ow5VHKnz4",
+        "hash": "tz1aSkwEot3L2kmUvcoxzjMomb9mvBNuzFK6",
+        "isAdmin": false,
+        "disabled": false
+      }
+    ]
+  }
+}
