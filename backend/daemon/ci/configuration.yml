@@ -77,6 +77,10 @@ tezos:
       hash: "tz1aSkwEot3L2kmUvcoxzjMomb9mvBNuzFK6"
       publicKey: "edpkurPsQ8eUApnLUJ9ZPDvu98E8VNj4KtJa1aZr16Cr5ow5VHKnz4"
       secretKey: ENC(EFoPAjYioeFXm5ZcilJ6JpSlq9okGkfV0ol+TKZv6VtZjOQck6epYc/r4+iDJKWUIXcD6pXQsN1NFEnskZJH8Ul0Jy4y+e3Zhuv62zcs3k1slfmU6UnnIAKaY/eTUS00)
+    nlab:
+      hash: "tz1i71WJKrQxDNi2q9pfJMGSd7Ekcg1fdZ1x"
+      publicKey: "edpkv2A777oY3aZ4iPPgsVCD4pnTfQrpH4VuX4FVyYi1CHD1tBZb2V"
+      secretKey: "edsk3rLnexGUvfDNTy2CUsGod3MNwYVPWinb7pmtY6enj7tn7m1ZKC"
   contract:
     address: "KT1MDJeDXHDeq1SojdCoiQKx7ZktrV12Zpk7"
   node:
