@@ -81,6 +81,12 @@ fun JobCriteria.toPredicate(): Predicate {
         )
     }
 
+    if(jobState != null) {
+        predicates.add(
+            qJobEntity.state.eq(jobState)
+        )
+    }
+
     return andTogetherPredicates(predicates)
 }
 

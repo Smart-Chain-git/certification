@@ -2,6 +2,7 @@ package com.sword.signature.daemon.job
 
 import com.sword.signature.business.exception.EntityNotFoundException
 import com.sword.signature.business.model.Account
+import com.sword.signature.business.model.Job
 import com.sword.signature.business.model.JobPatch
 import com.sword.signature.business.model.integration.AnchorJobMessagePayload
 import com.sword.signature.business.model.integration.ValidationJobMessagePayload
@@ -35,11 +36,11 @@ class AnchorJob(
         try {
             val requester: Account =
                 accountService.getAccount(requesterId) ?: throw EntityNotFoundException("account", requesterId)
-            val job = jobService.findById(requester, jobId, true)
-            val rootHash = job?.rootHash ?: throw IllegalStateException("An existing job must have a root hash")
+            val job: Job = jobService.findById(requester, jobId, true) ?: throw EntityNotFoundException("job", jobId)
+            val rootHash: String? = job.rootHash
 
             LOGGER.debug("Check existing root hash {} on the blockchain.", rootHash)
-            if (tezosReaderService.hashAlreadyExist(contractAddress, rootHash)) {
+            if (rootHash == null || tezosReaderService.hashAlreadyExist(contractAddress, rootHash)) {
                 jobService.patch(
                     requester = requester,
                     jobId = jobId,
@@ -47,11 +48,18 @@ class AnchorJob(
                         state = JobStateType.REJECTED
                     )
                 )
-                LOGGER.info(
-                    "Job '{}' got rejected due to its rootHash '{}' being already on the blockchain",
-                    jobId,
-                    rootHash
-                )
+                if (rootHash == null) {
+                    LOGGER.info(
+                        "Job '{}' got rejected due to its rootHash being null.",
+                        jobId
+                    )
+                } else {
+                    LOGGER.info(
+                        "Job '{}' got rejected due to its rootHash '{}' being already on the blockchain",
+                        jobId,
+                        rootHash
+                    )
+                }
                 return
             }
 

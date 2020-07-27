@@ -12,7 +12,6 @@ class InitDataBaseJob(
     private val migrationHandler : MigrationHandler
 ) {
 
-    @EventListener(ApplicationReadyEvent::class)
     fun initDatabase() {
         runBlocking {
             initIndicesAfterStartup()
