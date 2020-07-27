@@ -9,7 +9,7 @@
         "fee": "${fee}",
         "counter": "${counter}",
         "gas_limit": "${gasLimit}",
-        "storage_limit": "${storageLimit}",
+        "storage_limit": "50000",
         "amount": "0",
         "destination": "${tezosContractAddress}",
         "parameters": {
