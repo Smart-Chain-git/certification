@@ -39,6 +39,12 @@ class AnchorJob(
             val job: Job = jobService.findById(requester, jobId, true) ?: throw EntityNotFoundException("job", jobId)
             val rootHash: String? = job.rootHash
 
+            // Check job status
+            if (job.state != JobStateType.INSERTED) {
+                LOGGER.info("Job '{}' is '{}' so it cannot be anchored", job.id, job.state)
+                return
+            }
+
             LOGGER.debug("Check existing root hash {} on the blockchain.", rootHash)
             if (rootHash == null || tezosReaderService.hashAlreadyExist(contractAddress, rootHash)) {
                 jobService.patch(
