@@ -25,7 +25,7 @@ class RecoverJob(
     fun recoverInjectedJobs() {
         val injectedJobs =
             runBlocking { jobService.findAll(adminAccount, JobCriteria(jobState = JobStateType.INSERTED)).toList() }
-        LOGGER.info("{} injected jobs retrieved at startup.", injectedJobs.size)
+        LOGGER.info("{} inserted jobs retrieved at startup.", injectedJobs.size)
 
         for (job in injectedJobs) {
             anchoringRetryMessageChannel.send(
@@ -37,7 +37,7 @@ class RecoverJob(
                 ).build()
             )
         }
-        LOGGER.info("{} injected jobs recovered.", injectedJobs.size)
+        LOGGER.info("{} inserted jobs recovered.", injectedJobs.size)
     }
 
     companion object {
