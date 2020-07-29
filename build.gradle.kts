@@ -24,8 +24,10 @@ allprojects {
 
     repositories {
         val mavenProxyUrl: String by extra
+        val ej4tezosArtifactoryUrl: String by extra
 
         mavenLocal()
+        maven { url = uri(ej4tezosArtifactoryUrl) }
         maven { url = uri(mavenProxyUrl); isAllowInsecureProtocol = true }
         maven { url = uri("https://repo.spring.io/snapshot") }
         maven { url = uri("https://repo.spring.io/milestone") }
