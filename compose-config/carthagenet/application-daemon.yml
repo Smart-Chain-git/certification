@@ -1,11 +1,11 @@
 sign:
   tree:
-    maximumLeaf: 1024
+    maximumLeaf: 1024 # Maximum leaves number per merkle tree.
 spring:
   data:
     mongodb:
       auto-index-creation: false
-      uri: mongodb://root:password@mongodb:27017/tezos-signature?authSource=admin
+      uri: mongodb://root:password@mongo:27017/tezos-signature?authSource=admin
   batch:
     initialize-schema: always
     datasource:
@@ -43,30 +43,30 @@ logging:
         security: info
 daemon:
   anchoring:
-    delay: 5m
+    delay: 5m # Anchoring retry delay.
   callback:
-    maxTry: 5
-    delay: 2m
+    maxTry: 5 # Max number of callback tries.
+    delay: 2m # Callback retry delay.
   validation:
-    delay: 10m
-    timeout: 10m
+    delay: 10m # Validation retry delay.
+    timeout: 10m # Validation timeout (trigger new anchoring operation).
   poller:
-    fixedRate: 10000
+    fixedRate: 10000 # Delay between each channel operation (in milliseconds).
 jasypt:
   encryptor:
-    password: secret
+    password: secret # Password for configuration passwords encryption.
     algorithm: PBEWITHHMACSHA512ANDAES_256
     iv-generator-classname: org.jasypt.iv.RandomIvGenerator
 jwt:
-  secret: ffe50f21d8359de7245dc13777812c2a
+  secret: ffe50f21d8359de7245dc13777812c2a # Secret for authentication tokens generation/parsing.
   issuer: "Tezos@Signature"
 tezos:
   keys:
     admin:
-      publicKey: "TO_REPLACE_WITH_YOUR_PUBLIC_KEY"
-      secretKey: "TO_REPLACE_WITH_YOUR_SECRET_KEY"
+      publicKey: "TO_REPLACE_WITH_YOUR_PUBLIC_KEY" # To replace with your public key.
+      secretKey: "TO_REPLACE_WITH_YOUR_SECRET_KEY" # To replace with your secret key.
   contract:
-    address: "KT1Uz3ZPgVqKYTt8jJpbeRaZkq8b8PqFkRyg" # Carthagenet contract address
+    address: "KT1Uz3ZPgVqKYTt8jJpbeRaZkq8b8PqFkRyg" # Carthagenet smart contract address.
   node:
     url: "https://carthagenet.smartpy.io"
   indexer:

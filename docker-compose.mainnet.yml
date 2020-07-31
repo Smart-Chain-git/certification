@@ -5,21 +5,22 @@ services:
   mongo:
     container_name: 'tezos-signature-mongo'
     image: 'mongo:4.2.3'
+    restart: unless-stopped
     ports:
       - '27017:27017'
+    volumes:
+      - 'mongo-data:/data/db'
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: password
       MONGO_INITDB_DATABASE: tezos-signature
-    volumes:
-      - 'mongo-data:/data/db'
-    restart: unless-stopped
   mongo-express:
     container_name: 'tezos-signature-mongo-express'
     image: 'mongo-express:0.54.0'
     ports:
       - '8081:8081'
     environment:
+      ME_CONFIG_MONGODB_SERVER: mongo
       ME_CONFIG_MONGODB_ADMINUSERNAME: root
       ME_CONFIG_MONGODB_ADMINPASSWORD: password
     restart: unless-stopped
@@ -36,24 +37,25 @@ services:
       FAKESMTP_AUTHENTICATION_USERNAME: username
       FAKESMTP_AUTHENTICATION_PASSWORD: password
     restart: unless-stopped
-  node:
-    container_name: tezos-signature-node
-    image: registry.gitlab.com/tezos/flextesa:image-tutobox-run
+  rest:
+    container_name: tezos-signature-rest
+    image: sword/signature-rest:test
+    build: frontend/rest
     ports:
-      - "18731:20000"
-    environment:
-      block_time: 10
-    command: carthagebox start
-    restart: unless-stopped
-  tzindex:
-    container_name: tezos-signature-tzindex
-    image: blockwatch/tzindex:v6.0.3
-    ports:
-      - "8000:8000"
-    environment:
-      TZ_RPC_HOST: "node"
-      TZ_RPC_PORT: "20000"
-    command: ["sh", "-c", "sleep 59 && tzindex run"]
+      - "9090:8080"
+    volumes:
+      - "./compose-config/mainnet/application-rest.yml:/app/application.yml:ro"
     restart: unless-stopped
     depends_on:
-      - node
+      - mongo
+      - daemon
+  daemon:
+    container_name: tezos-signature-daemon
+    image: sword/signature-daemon:test
+    build: backend/daemon
+    volumes:
+      - "./compose-config/mainnet/application-daemon.yml:/app/application.yml:ro"
+    restart: unless-stopped
+    depends_on:
+      - mongo
+      - mail

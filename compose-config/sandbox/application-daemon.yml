@@ -1,11 +1,11 @@
 sign:
   tree:
-    maximumLeaf: 1024
+    maximumLeaf: 1024 # Maximum leaves number per merkle tree.
 spring:
   data:
     mongodb:
       auto-index-creation: false
-      uri: mongodb://root:password@mongodb:27017/tezos-signature?authSource=admin
+      uri: mongodb://root:password@mongo:27017/tezos-signature?authSource=admin
   batch:
     initialize-schema: always
     datasource:
@@ -43,22 +43,22 @@ logging:
         security: info
 daemon:
   anchoring:
-    delay: 5m
+    delay: 5m # Anchoring retry delay.
   callback:
-    maxTry: 5
-    delay: 2m
+    maxTry: 5 # Max number of callback tries.
+    delay: 2m # Callback retry delay.
   validation:
-    delay: 1m
-    timeout: 10m
+    delay: 1m # Validation retry delay.
+    timeout: 10m # Validation timeout (trigger new anchoring operation).
   poller:
-    fixedRate: 10000
+    fixedRate: 10000 # Delay between each channel operation (in milliseconds).
 jasypt:
   encryptor:
-    password: secret
+    password: secret # Password for configuration passwords encryption.
     algorithm: PBEWITHHMACSHA512ANDAES_256
     iv-generator-classname: org.jasypt.iv.RandomIvGenerator
 jwt:
-  secret: ffe50f21d8359de7245dc13777812c2a
+  secret: ffe50f21d8359de7245dc13777812c2a # Secret for authentication tokens generation/parsing.
   issuer: "Tezos@Signature"
 tezos:
   keys:
@@ -71,7 +71,7 @@ tezos:
       publicKey: "edpkurPsQ8eUApnLUJ9ZPDvu98E8VNj4KtJa1aZr16Cr5ow5VHKnz4"
       secretKey: ENC(EFoPAjYioeFXm5ZcilJ6JpSlq9okGkfV0ol+TKZv6VtZjOQck6epYc/r4+iDJKWUIXcD6pXQsN1NFEnskZJH8Ul0Jy4y+e3Zhuv62zcs3k1slfmU6UnnIAKaY/eTUS00)
   contract:
-    address: "CONTRACT_ADDRESS" # To replace by the actual contract address.
+    address: "TEZOS_CONTRACT_ADDRESS" # To replace by the actual smart contract address.
   node:
     url: "http://node:20000"
   indexer:

@@ -12,7 +12,7 @@ clean:
 	rm -f *.tz *.pp.ligo *.bak
 
 originate: compile
-	$(CLIENT) originate contract hash_timestamping transferring 0 \
+	$(CLIENT) $(CLIENT_CONFIG) originate contract hash_timestamping transferring 0 \
 		from $(SIGNER) running hash_timestamping.tz \
 		--init '{}' --burn-cap 5 --force
 

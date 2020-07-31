@@ -1,6 +1,36 @@
-[Index](./README.md) | [Smart contract](contract/README.md) | [Docker Deployment](./DockerDeployment.md)
+[Index](../README.md) | [Smart contract](../contract/README.md) | [Docker Deployment](./DockerDeployment.md)
 
-# Docker Deployment (all microservices of the stack)
+# Docker Deployment
+
+## Deployment options
+
+* **Sandbox mode**:
+    * MongoDB database
+    * MongoDB administration UI
+    * FakeSMTP server
+    * Tezos sandbox node
+    * Tzindex block indexer
+    * Tezos Signature REST server (+ client)
+    * Tezos Signature daemon
+
+Notice: once containers are running, the smart contract needs to be originated same as the development mode.
+Then the daemon container needs to restart 
+
+* **Carthegenet mode**:
+    * MongoDB database
+    * MongoDB administration UI
+    * FakeSMTP server
+    * Tezos Signature REST server (+ client)
+    * Tezos Signature daemon
+
+* **Mainnet mode**:
+    * MongoDB database
+    * MongoDB administration UI
+    * FakeSMTP server
+    * Tezos Signature REST server (+ client)
+    * Tezos Signature daemon
+  
+The only difference between **Carthagenet mode** and **Mainnet mode** is the configuration (node URL, smart contract address, tezos keys).
 
 ## Tezos sandbox node
 
