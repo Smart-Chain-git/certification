@@ -39,7 +39,7 @@ services:
     restart: unless-stopped
   rest:
     container_name: tezos-signature-rest
-    image: sword/signature-rest:test
+    image: sword/signature-rest:local
     build: frontend/rest
     ports:
       - "9090:8080"
@@ -51,7 +51,7 @@ services:
       - daemon
   daemon:
     container_name: tezos-signature-daemon
-    image: sword/signature-daemon:test
+    image: sword/signature-daemon:local
     build: backend/daemon
     volumes:
       - "./compose-config/mainnet/application-daemon.yml:/app/application.yml:ro"
