@@ -14,11 +14,14 @@ stages:
 
 # Sets the environement variables before executing scripts.
 variables:
-  # timezone for TU that use date
+  # Timezone for unit tests that use date
   TZ: "Europe/Paris"
-  # Disable daemon for Gradle
+  # Disable daemon for gradle
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
   BUILD_IMAGE: "swordedi/ci-gradlenode:6.3-12"
+  DAEMON_IMAGE_NAME: "swordedi/tezos-digisign-daemon"
+  REST_IMAGE_NAME: "swordedi/tezos-digisign-daemon"
+  RSOCKET_IMAGE_NAME: "swordedi/tezos-digisign-daemon"
 
 # Fix double pipelines on merge requests.
 include:
@@ -34,7 +37,7 @@ before_script:
 # Stage: test
 #
 
-test unit:
+test:
   stage: test
   # We tell gitlab-ci to use a machine running the docker-runner from gitlab.
   # Here, we need the script to be run in a docker image (using the gradle image defined above).
@@ -72,102 +75,98 @@ build:
 # Stage: publish
 #
 
-sonar:
+publish:sonar:
   stage: publish
   dependencies:
     - build
   tags:
     - docker
-  # The (free) version of Sonar we use doesnt verify the branch on which the analysis is done.
-  # Because, there can be WIP on developement branches, is would destroy the graphs. Hence we run
-  # the sonar analysis only on master branch and release tags.
-  only:
-    refs:
-      - master
-      - tags
+  rules:
+    - if: '$CI_OWNER == "sword" && $CI_COMMIT_BRANCH == "master" || $CI_OWNER == "sword" && $CI_COMMIT_TAG'
+      when: on_success
   script:
     # Build and upload the result of sonarqube analysis.
     # http://sonarqube.sonar.10.20.2.179.xip.io/dashboard?id=com.kami%3Aoutside
     - gradle check jacocoRootReport sonarqube
+
 # Publish the JAR to the nexus
-publishJar:
+publish:jar:
   stage: publish
   dependencies:
     - build
   tags:
     - docker
-  only:
-    refs:
-      - master
-      - tags
+  rules:
+    - if: '$CI_OWNER == "sword" && $CI_COMMIT_BRANCH == "master" || $CI_OWNER == "sword" && $CI_COMMIT_TAG'
+      when: on_success
   script:
     - gradle publish -PmavenProxyUrl=$MAVEN_PROXY_URL -PnexusUrl=$NEXUS_URL -PnexusUser=$NEXUS_USER -PnexusPassword=$NEXUS_PASSWORD -PreleasesRepo=$RELEASES_REPO -PsnapshotsRepo=$SNAPSHOTS_REPO
 
-publishDockerRSocket:
+publish:docker:daemon:
   stage: publish
   dependencies:
     - build
   tags:
     - dockerBuild
-  script:
-    # Create the unpacked folder.
-    - mkdir frontend/rsocket/build/unpacked
-    # Unpack the jar for light docker image.
-    - (cd frontend/rsocket/build/unpacked; jar -xf ../libs/*.jar)
-    # Build the docker image tagged either with git branch name or tag.
-    - docker build -t $REGISTRY_URL/sword/signature-rsocket:$CI_COMMIT_REF_NAME frontend/rsocket
-    # Push the image to the registry.
-    - docker push $REGISTRY_URL/sword/signature-rsocket:$CI_COMMIT_REF_NAME
-    # Remove image from runner local registry.
-    - docker rmi $REGISTRY_URL/sword/signature-rsocket:$CI_COMMIT_REF_NAME
   rules:
     - if: '$CI_COMMIT_BRANCH == "master" || $CI_COMMIT_TAG'
       when: on_success
     - when: manual
       allow_failure: true
-
-publishDockerRest:
-  stage: publish
-  dependencies:
-    - build
-  tags:
-    - dockerBuild
-  script:
-    # Create the unpacked folder.
-    - mkdir frontend/rest/build/unpacked
-    # Unpack the jar for light docker image.
-    - (cd frontend/rest/build/unpacked; jar -xf ../libs/*.jar)
-    # Build the docker image tagged either with git branch name or tag.
-    - docker build -t $REGISTRY_URL/sword/signature-rest:$CI_COMMIT_REF_NAME frontend/rest
-    # Push the image to the registry.
-    - docker push $REGISTRY_URL/sword/signature-rest:$CI_COMMIT_REF_NAME
-    # Remove image from runner local registry.
-    - docker rmi $REGISTRY_URL/sword/signature-rest:$CI_COMMIT_REF_NAME
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "master" || $CI_COMMIT_TAG'
-      when: on_success
-    - when: manual
-      allow_failure: true
-
-publishDockerDaemon:
-  stage: publish
-  dependencies:
-    - build
-  tags:
-    - dockerBuild
   script:
     # Create the unpacked folder.
     - mkdir backend/daemon/build/unpacked
     # Unpack the jar for light docker image.
     - (cd backend/daemon/build/unpacked; jar -xf ../libs/*.jar)
     # Build the docker image tagged either with git branch name or tag.
-    - docker build -t $REGISTRY_URL/sword/signature-daemon:$CI_COMMIT_REF_NAME backend/daemon
+    - docker build -t $DAEMON_IMAGE_NAME:$CI_COMMIT_REF_NAME backend/daemon
     # Push the image to the registry.
-    - docker push $REGISTRY_URL/sword/signature-daemon:$CI_COMMIT_REF_NAME
+    - docker push $DAEMON_IMAGE_NAME:$CI_COMMIT_REF_NAME
     # Remove image from runner local registry.
-    - docker rmi $REGISTRY_URL/sword/signature-daemon:$CI_COMMIT_REF_NAME
+    - docker rmi $DAEMON_IMAGE_NAME:$CI_COMMIT_REF_NAME
+
+publish:docker:rest:
+  stage: publish
+  dependencies:
+    - build
+  tags:
+    - dockerBuild
   rules:
     - if: '$CI_COMMIT_BRANCH == "master" || $CI_COMMIT_TAG'
       when: on_success
     - when: manual
       allow_failure: true
+  script:
+    # Create the unpacked folder.
+    - mkdir frontend/rest/build/unpacked
+    # Unpack the jar for light docker image.
+    - (cd frontend/rest/build/unpacked; jar -xf ../libs/*.jar)
+    # Build the docker image tagged either with git branch name or tag.
+    - docker build -t $REST_IMAGE_NAME:$CI_COMMIT_REF_NAME frontend/rest
+    # Push the image to the registry.
+    - docker push $REST_IMAGE_NAME:$CI_COMMIT_REF_NAME
+    # Remove image from runner local registry.
+    - docker rmi $REST_IMAGE_NAME:$CI_COMMIT_REF_NAME
+
+publish:docker:rsocket:
+  stage: publish
+  dependencies:
+    - build
+  tags:
+    - dockerBuild
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master" || $CI_COMMIT_TAG'
+      when: on_success
+    - when: manual
+      allow_failure: true
+  script:
+    # Create the unpacked folder.
+    - mkdir frontend/rsocket/build/unpacked
+    # Unpack the jar for light docker image.
+    - (cd frontend/rsocket/build/unpacked; jar -xf ../libs/*.jar)
+    # Build the docker image tagged either with git branch name or tag.
+    - docker build -t $RSOCKET_IMAGE_NAME:$CI_COMMIT_REF_NAME frontend/rsocket
+    # Push the image to the registry.
+    - docker push $RSOCKET_IMAGE_NAME:$CI_COMMIT_REF_NAME
+    # Remove image from runner local registry.
+    - docker rmi $RSOCKET_IMAGE_NAME:$CI_COMMIT_REF_NAME
