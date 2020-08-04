@@ -126,7 +126,7 @@ publish:docker:daemon:
     # Create the unpacked folder.
     - mkdir backend/daemon/build/unpacked
     # Unpack the jar for light docker image.
-    - (cd backend/daemon/build/unpacked; jar -xf ../libs/*.jar)
+    - (cd backend/daemon/build/unpacked; unzip ../libs/*.jar)
     # Build the docker image tagged either with git branch name or tag.
     - docker build -t $DAEMON_IMAGE_NAME:$CI_COMMIT_REF_NAME backend/daemon
     # Push the image to the registry.
@@ -152,7 +152,7 @@ publish:docker:rest:
     # Create the unpacked folder.
     - mkdir frontend/rest/build/unpacked
     # Unpack the jar for light docker image.
-    - (cd frontend/rest/build/unpacked; jar -xf ../libs/*.jar)
+    - (cd frontend/rest/build/unpacked; unzip ../libs/*.jar)
     # Build the docker image tagged either with git branch name or tag.
     - docker build -t $REST_IMAGE_NAME:$CI_COMMIT_REF_NAME frontend/rest
     # Push the image to the registry.
@@ -178,7 +178,7 @@ publish:docker:rsocket:
     # Create the unpacked folder.
     - mkdir frontend/rsocket/build/unpacked
     # Unpack the jar for light docker image.
-    - (cd frontend/rsocket/build/unpacked; jar -xf ../libs/*.jar)
+    - (cd frontend/rsocket/build/unpacked; unzip ../libs/*.jar)
     # Build the docker image tagged either with git branch name or tag.
     - docker build -t $RSOCKET_IMAGE_NAME:$CI_COMMIT_REF_NAME frontend/rsocket
     # Push the image to the registry.
