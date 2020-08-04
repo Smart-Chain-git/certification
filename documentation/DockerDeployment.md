@@ -55,7 +55,7 @@ The only difference between **Carthagenet mode** and **Mainnet mode** is the con
 
 * Build and unpack all services
 ```
-./gradelw unpack
+./gradlew unpack
 ```
 
 * Build the images (after each code update)
