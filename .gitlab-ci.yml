@@ -21,8 +21,8 @@ variables:
   GRADLE_BUILD_IMAGE: "swordedi/ci-gradlenode:6.3-12"
   DOCKER_BUILD_IMAGE: "docker:19.03.12"
   DAEMON_IMAGE_NAME: "swordedi/tezos-digisign-daemon"
-  REST_IMAGE_NAME: "swordedi/tezos-digisign-daemon"
-  RSOCKET_IMAGE_NAME: "swordedi/tezos-digisign-daemon"
+  REST_IMAGE_NAME: "swordedi/tezos-digisign-rest"
+  RSOCKET_IMAGE_NAME: "swordedi/tezos-digisign-rsocket"
   # Specify to Docker where to create the certificates, Docker will
   # create them automatically on boot, and will create
   # `/certs/client` that will be shared between the service and job
