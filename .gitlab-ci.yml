@@ -130,7 +130,7 @@ publish:docker:daemon:
     - when: manual
       allow_failure: true
   before_script:
-    - echo $REGISTRY_PASSWORD | docker login -u $REGISTRY_USER $REGISTRY_URL
+    - echo $REGISTRY_PASSWORD | docker login -u $REGISTRY_USER $REGISTRY_URL --password-stdin
   script:
     # Create the unpacked folder.
     - mkdir backend/daemon/build/unpacked
@@ -159,7 +159,7 @@ publish:docker:rest:
     - when: manual
       allow_failure: true
   before_script:
-    - echo $REGISTRY_PASSWORD | docker login -u $REGISTRY_USER $REGISTRY_URL
+    - echo $REGISTRY_PASSWORD | docker login -u $REGISTRY_USER $REGISTRY_URL --password-stdin
   script:
     # Create the unpacked folder.
     - mkdir frontend/rest/build/unpacked
@@ -188,7 +188,7 @@ publish:docker:rsocket:
     - when: manual
       allow_failure: true
   before_script:
-    - echo $REGISTRY_PASSWORD | docker login -u $REGISTRY_USER $REGISTRY_URL
+    - echo $REGISTRY_PASSWORD | docker login -u $REGISTRY_USER $REGISTRY_URL --password-stdin
   script:
     # Create the unpacked folder.
     - mkdir frontend/rsocket/build/unpacked
