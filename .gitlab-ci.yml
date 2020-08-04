@@ -4,7 +4,7 @@
 
 # We use a gradle image to run all stages of the pipeline.
 # Each stage runs a bare (not wrapped) `gradle ...` command.
-image: $BUILD_IMAGE
+image: $GRADLE_BUILD_IMAGE
 
 # The pipeline consists of several stages. Each one is run in parallel.
 stages:
@@ -18,10 +18,16 @@ variables:
   TZ: "Europe/Paris"
   # Disable daemon for gradle
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
-  BUILD_IMAGE: "swordedi/ci-gradlenode:6.3-12"
+  GRADLE_BUILD_IMAGE: "swordedi/ci-gradlenode:6.3-12"
+  DOCKER_BUILD_IMAGE: "docker:19.03.12"
   DAEMON_IMAGE_NAME: "swordedi/tezos-digisign-daemon"
   REST_IMAGE_NAME: "swordedi/tezos-digisign-daemon"
   RSOCKET_IMAGE_NAME: "swordedi/tezos-digisign-daemon"
+  # Specify to Docker where to create the certificates, Docker will
+  # create them automatically on boot, and will create
+  # `/certs/client` that will be shared between the service and job
+  # container, thanks to volume mount from config.toml
+  DOCKER_TLS_CERTDIR: "/certs"
 
 # Fix double pipelines on merge requests.
 include:
@@ -103,6 +109,9 @@ publish:jar:
     - gradle publish -PmavenProxyUrl=$MAVEN_PROXY_URL -PnexusUrl=$NEXUS_URL -PnexusUser=$NEXUS_USER -PnexusPassword=$NEXUS_PASSWORD -PreleasesRepo=$RELEASES_REPO -PsnapshotsRepo=$SNAPSHOTS_REPO
 
 publish:docker:daemon:
+  image: $DOCKER_BUILD_IMAGE
+  services:
+    - '$DOCKER_BUILD_IMAGE-dind'
   stage: publish
   dependencies:
     - build
@@ -126,6 +135,9 @@ publish:docker:daemon:
     - docker rmi $DAEMON_IMAGE_NAME:$CI_COMMIT_REF_NAME
 
 publish:docker:rest:
+  image: $DOCKER_BUILD_IMAGE
+  services:
+    - '$DOCKER_BUILD_IMAGE-dind'
   stage: publish
   dependencies:
     - build
@@ -149,6 +161,9 @@ publish:docker:rest:
     - docker rmi $REST_IMAGE_NAME:$CI_COMMIT_REF_NAME
 
 publish:docker:rsocket:
+  image: $DOCKER_BUILD_IMAGE
+  services:
+    - '$DOCKER_BUILD_IMAGE-dind'
   stage: publish
   dependencies:
     - build
