@@ -33,6 +33,12 @@ variables:
 include:
   - template: 'Workflows/Branch-Pipelines.gitlab-ci.yml'
 
+# Cache for node modules
+cache:
+  key: tezos-digisign
+  paths:
+    - frontend/jsclient/node_modules/
+
 # Before each stage's script.
 before_script:
   - echo `pwd` # debug
