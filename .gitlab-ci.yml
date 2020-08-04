@@ -119,6 +119,7 @@ publish:docker:daemon:
   services:
     - '$DOCKER_BUILD_IMAGE-dind'
   stage: publish
+  cache: {}
   dependencies:
     - build
   tags:
@@ -128,6 +129,8 @@ publish:docker:daemon:
       when: on_success
     - when: manual
       allow_failure: true
+  before_script:
+    - echo $REGISTRY_PASSWORD | docker login -u $REGISTRY_USER $REGISTRY_URL
   script:
     # Create the unpacked folder.
     - mkdir backend/daemon/build/unpacked
@@ -145,6 +148,7 @@ publish:docker:rest:
   services:
     - '$DOCKER_BUILD_IMAGE-dind'
   stage: publish
+  cache: {}
   dependencies:
     - build
   tags:
@@ -154,6 +158,8 @@ publish:docker:rest:
       when: on_success
     - when: manual
       allow_failure: true
+  before_script:
+    - echo $REGISTRY_PASSWORD | docker login -u $REGISTRY_USER $REGISTRY_URL
   script:
     # Create the unpacked folder.
     - mkdir frontend/rest/build/unpacked
@@ -171,6 +177,7 @@ publish:docker:rsocket:
   services:
     - '$DOCKER_BUILD_IMAGE-dind'
   stage: publish
+  cache: {}
   dependencies:
     - build
   tags:
@@ -180,6 +187,8 @@ publish:docker:rsocket:
       when: on_success
     - when: manual
       allow_failure: true
+  before_script:
+    - echo $REGISTRY_PASSWORD | docker login -u $REGISTRY_USER $REGISTRY_URL
   script:
     # Create the unpacked folder.
     - mkdir frontend/rsocket/build/unpacked
