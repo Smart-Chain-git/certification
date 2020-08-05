@@ -40,6 +40,8 @@ export interface SignatureCheckResponse {
     hash_document_proof?: string,
     hash_document?: string,
     hash_root?: string,
+    origin_public_key?: string,
+    proof_file_origin_public_key?: string
 }
 
 export interface AuthRequest {

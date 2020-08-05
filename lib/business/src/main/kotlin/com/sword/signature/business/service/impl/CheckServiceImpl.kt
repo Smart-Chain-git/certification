@@ -199,7 +199,7 @@ class CheckServiceImpl(
                 )
                 throw CheckException.IncoherentOriginPublicKey(
                     originPublicKey = contract?.manager ?: "undefined",
-                    proofOriginPublicKey = providedProof.creatorAddress ?: "undefined"
+                    proofFileOriginPublicKey = providedProof.creatorAddress ?: "undefined"
                 )
             }
 

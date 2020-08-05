@@ -38,6 +38,6 @@ sealed class CheckException(
     ) : CheckException(10, "NO_TRANSACTION")
     class IncoherentOriginPublicKey(
         val originPublicKey: String,
-        val proofOriginPublicKey: String
+        val proofFileOriginPublicKey: String
     ) : CheckException(12, "INCORRECT_ORIGIN_PUBLIC_KEY")
 }

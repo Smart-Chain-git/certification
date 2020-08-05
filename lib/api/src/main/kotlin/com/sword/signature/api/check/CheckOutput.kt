@@ -30,6 +30,6 @@ sealed class CheckOutput(
         @JsonProperty("current_depth") val currentDepth: Long? = null,
         @JsonProperty("expected_depth") val expectedDepth: Long? = null,
         @JsonProperty("origin_public_key") val originPublicKey: String? = null,
-        @JsonProperty("proof_origin_public_key") val proofOriginPublicKey: String? = null
+        @JsonProperty("proof_file_origin_public_key") val proofFileOriginPublicKey: String? = null
     ) : CheckOutput(output = "KO")
 }

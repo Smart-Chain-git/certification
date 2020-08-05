@@ -209,6 +209,14 @@
       "no_transaction": {
         "title": "Document non horodaté dans Tezos Blockchain",
         "message": ": Nous sommes désolés, votre fichier de preuve correspond au document que vous souhaitez vérifier et semble légitime. Cependant, nous ne pouvons pas trouver dans la blockchain une preuve de sa signature. Le hachage racine de l'arbre Merkle mentionné ({0}) n'est pas présent dans la blockchain "
+      },
+      "incorrect_origin_public_key": {
+        "title" : "Le compte Tezos de la preuve n'est pas géré par notre plateforme.",
+        "message": "Nous sommes désolés, votre fichier de preuve fait référence à un compte Tezos inconnu de notre plateforme. En effet, le compte Tezos du fichier de preuve est {0} mais notre plateforme attend le compte Tezos {1}."
+      },
+      "generic": {
+        "title": "Hash de document non trouvé dans TEZOS DigiSign",
+        "message": "Nous sommes désolés, nous ne reconnaissons pas ce document. Etes-vous sûr d'avoir la même version du fichier qu'au moment de sa signature ? Si ce n'est pas le cas, merci de mettre en ligne la version originale. Si le document est bon et qu'un fichier de preuve vous a été fourni, merci de le mettre en ligne également."
       }
     },
     "success": {

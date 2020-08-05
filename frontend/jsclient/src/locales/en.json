@@ -178,6 +178,10 @@
         "title": "Document not timestamped in Tezos Blockchain ",
         "message": "We are sorry, your proof file corresponds to the document you want to check and looks legitimate. However, we cannot find in the blockchain a proof of its signature. The root hash of the mentioned Merkle Tree ({0}) is not present in the blockchain"
       },
+      "incorrect_origin_public_key": {
+        "title" : "The Tezos account of the proof file is not handled by our platform.",
+        "message": "We are sorry, your proof file references a Tezos account unknown by our platform. Indeed, the Tezos account referenced by the proof file is {0} but our platform expects the Tezos account {1}."
+      },
       "generic": {
         "title": "Document hash not found in TEZOS DigiSign",
         "message": "We are sorry, we do not recognize this document. Are your sure this document is in the exact same version that the one that has been signed? If not, please upload the original version. If the document is good and if you have been given a proof file, please upload it too."
