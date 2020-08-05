@@ -28,6 +28,8 @@ sealed class CheckOutput(
         @JsonProperty("public_key") val publicKey: String? = null,
         val date: OffsetDateTime? = null,
         @JsonProperty("current_depth") val currentDepth: Long? = null,
-        @JsonProperty("expected_depth") val expectedDepth: Long? = null
+        @JsonProperty("expected_depth") val expectedDepth: Long? = null,
+        @JsonProperty("origin_public_key") val originPublicKey: String? = null,
+        @JsonProperty("proof_origin_public_key") val proofOriginPublicKey: String? = null
     ) : CheckOutput(output = "KO")
 }

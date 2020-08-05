@@ -36,4 +36,8 @@ sealed class CheckException(
     class NoTransaction(
         val rootHash: String
     ) : CheckException(10, "NO_TRANSACTION")
+    class IncoherentOriginPublicKey(
+        val originPublicKey: String,
+        val proofOriginPublicKey: String
+    ) : CheckException(12, "INCORRECT_ORIGIN_PUBLIC_KEY")
 }

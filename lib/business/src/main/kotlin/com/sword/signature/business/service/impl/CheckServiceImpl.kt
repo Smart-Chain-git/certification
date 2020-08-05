@@ -18,6 +18,7 @@ import com.sword.signature.model.repository.AccountRepository
 import com.sword.signature.model.repository.JobRepository
 import com.sword.signature.model.repository.TreeElementRepository
 import com.sword.signature.tezos.reader.service.TezosReaderService
+import com.sword.signature.tezos.reader.tzindex.model.TzContract
 import com.sword.signature.tezos.reader.tzindex.model.TzOp
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.reactive.asFlow
@@ -72,7 +73,7 @@ class CheckServiceImpl(
                     )
                 }
                 JobStateType.INJECTED -> throw CheckException.TransactionNotDeepEnough(
-                    currentDepth = job.blockDepth ?: 0 ,
+                    currentDepth = job.blockDepth ?: 0,
                     expectedDepth = minDepth
                 )
                 JobStateType.VALIDATED -> {
@@ -172,6 +173,8 @@ class CheckServiceImpl(
             // Retrieve the transaction and depth
             val transaction: TzOp? = tezosReaderService.getTransaction(providedProof.transactionHash)
             val depth: Long? = tezosReaderService.getTransactionDepth(providedProof.transactionHash)
+            val contract: TzContract? = providedProof.contractAddress?.let { tezosReaderService.getContract(it) }
+
             if (transaction == null) {
                 LOGGER.error("Provided transaction '{}' not found in the blockchain.", providedProof.transactionHash)
                 throw CheckException.NoTransaction(rootHash = providedProof.rootHash)
@@ -185,6 +188,19 @@ class CheckServiceImpl(
                     transaction.bigMapDiff[0].meta.contract
                 )
                 throw CheckException.IncorrectTransaction()
+            }
+
+            if (contract?.manager != providedProof.creatorAddress) {
+                LOGGER.error(
+                    "Different contract manager found for transaction '{}': expected '{}', actual '{}'.",
+                    providedProof.transactionHash,
+                    contract?.manager,
+                    providedProof.creatorAddress
+                )
+                throw CheckException.IncoherentOriginPublicKey(
+                    originPublicKey = contract?.manager ?: "undefined",
+                    proofOriginPublicKey = providedProof.creatorAddress ?: "undefined"
+                )
             }
 
             if (transaction.bigMapDiff[0].key != providedProof.rootHash) {

@@ -161,5 +161,11 @@ fun com.sword.signature.business.exception.CheckException.toWeb(): CheckOutput.K
             error = message,
             rootHash = rootHash
         )
+
+        is CheckException.IncoherentOriginPublicKey -> CheckOutput.Ko(
+            error = message,
+            originPublicKey = originPublicKey,
+            proofOriginPublicKey = proofOriginPublicKey
+        )
     }
 }
