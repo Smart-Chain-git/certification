@@ -12,12 +12,13 @@ echo
 echo "CONTRACT_ID=["$CONTRACT_ID"]"
 echo
 
-sed "s/CONTRACT_ADDRESS/$CONTRACT_ID/g" ../compose-config/application-daemon.template.yml > ../compose-config/application-daemon.all.yml
+sed "s/TEZOS_CONTRACT_ADDRESS/$CONTRACT_ID/g" ../compose-config/sandbox/application-daemon.yml > ../compose-config/sandbox/application-daemon.yml.tmp
+mv ../compose-config/sandbox/application-daemon.yml.tmp ../compose-config/sandbox/application-daemon.yml
 
 
 
 echo "------------------------------------------------------------"
-cat ../compose-config/application-daemon.yml
+cat ../compose-config/sandbox/application-daemon.yml
 echo "------------------------------------------------------------"
 
 docker restart tezos-signature-daemon
