@@ -110,7 +110,7 @@
     "jobId": "Related Job",
     "hash": "Document hash",
     "name": "Document name",
-    "dates": "Dates",
+    "dates": "Creation date range",
     "proof": "Proof",
     "search": "Search",
     "back": "Back",
