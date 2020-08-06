@@ -184,14 +184,14 @@
         private pagination: PaginationOption = {
             itemsPerPage: 10,
             page: 1,
-            sortBy: [],
-            sortDesc: [],
+            sortBy: ["createdDate"],
+            sortDesc: [true],
         }
 
         private allChannels: Array<string> = [...new Set(this.$modules.tokens.getTokens().map((t) => t.name))]
 
         private created() {
-            if (this.$modules.jobs.isFiltered) {
+            if (this.$modules.jobs.isFiltered) {			
                 this.pagination = this.$modules.jobs.getPagination()
                 this.filter = this.$modules.jobs.getFilter
                 this.$modules.jobs.saveFilter(false)
