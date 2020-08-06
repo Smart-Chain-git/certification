@@ -29,6 +29,8 @@ jwt:
   issuer: "Tezos@Signature"
   duration : 2h
 tezos:
+  contract:
+    address: "KT1MDJeDXHDeq1SojdCoiQKx7ZktrV12Zpk7"
   indexer:
     url: "http://tzindex:8000"
   validation:

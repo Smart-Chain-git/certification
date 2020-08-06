@@ -32,6 +32,8 @@ jwt:
   secret: 098f6bcd4621d373cade4e832627b4f6
   issuer: "Tezos@Signature"
 tezos:
+  contract:
+    address: "KT1Tq22yXWayLbmBKwZUhVXMoYqxtzp9XvTk"
   indexer:
     url: "http://my-indexer-url.com"
   validation:

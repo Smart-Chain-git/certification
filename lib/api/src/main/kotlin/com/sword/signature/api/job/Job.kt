@@ -18,6 +18,7 @@ data class Job(
     var state: String,
     val contractAddress: String?,
     val transactionHash: String?,
+    val timestamp: OffsetDateTime?,
     val channelName: String?,
     val docsNumber: Int,
     val customFields: Map<String, String>?,

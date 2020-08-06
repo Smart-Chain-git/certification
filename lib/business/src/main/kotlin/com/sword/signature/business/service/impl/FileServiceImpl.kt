@@ -7,6 +7,7 @@ import com.sword.signature.business.service.FileService
 import com.sword.signature.common.criteria.FileCriteria
 import com.sword.signature.common.criteria.JobCriteria
 import com.sword.signature.common.criteria.TreeElementCriteria
+import com.sword.signature.common.enums.JobStateType
 import com.sword.signature.common.enums.TreeElementPosition
 import com.sword.signature.model.entity.TreeElementEntity
 import com.sword.signature.model.mapper.toPredicate
@@ -14,6 +15,7 @@ import com.sword.signature.model.repository.JobRepository
 import com.sword.signature.model.repository.TreeElementRepository
 import com.sword.signature.tezos.reader.service.TezosReaderService
 import com.sword.signature.tezos.reader.tzindex.model.TzContract
+import com.sword.signature.tezos.reader.tzindex.model.TzOp
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
@@ -37,12 +39,22 @@ class FileServiceImpl(
     override suspend fun getFileProof(requester: Account, fileId: String): Mono<Proof> {
 
         val leafElement = treeElementRepository.findById(fileId).awaitFirstOrNull() ?: return Mono.empty()
-        val job = jobRepository.findById(leafElement.jobId).awaitSingle()
+        var job = jobRepository.findById(leafElement.jobId).awaitSingle()
 
         // Check right to perform operation.
         if (!requester.isAdmin && requester.id != job.userId) {
-            // TODO: replace later by MissingRightException once merged.
-            throw IllegalAccessException("user ${requester.login} does not have role/permission to get job: ${job.id}")
+            throw MissingRightException(requester)
+        }
+
+        // Update job with transaction timestamp if required (legacy jobs).
+        if (job.state >= JobStateType.VALIDATED && job.transactionHash != null && job.timestamp == null) {
+            val transaction: TzOp? = tezosReaderService.getTransaction(job.transactionHash!!)
+            if (transaction == null) {
+                LOGGER.warn("The transaction '{}' should be present on the blockchain for a validated job.")
+            } else {
+                val updatedJob = job.copy(timestamp = transaction.bigMapDiff[0].value.timestamp)
+                job = jobRepository.save(updatedJob).awaitSingle()
+            }
         }
 
         LOGGER.debug("Retrieving proof for file {}.", leafElement.metadata?.fileName)
@@ -102,7 +114,7 @@ class FileServiceImpl(
         }
 
         val proof = Proof(
-            signatureDate = job.injectedDate,
+            signatureDate = job.timestamp,
             filename = leafElement.metadata?.fileName,
             algorithm = job.algorithm,
             documentHash = leafElement.hash,

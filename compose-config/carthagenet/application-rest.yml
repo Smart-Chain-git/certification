@@ -29,6 +29,8 @@ jwt:
   issuer: "Tezos@Signature"
   duration: 2h # Expiration duration of client session tokens.
 tezos:
+  contract:
+    address: "KT1Uz3ZPgVqKYTt8jJpbeRaZkq8b8PqFkRyg" # Carthagenet smart contract address.
   indexer:
     url: "https://api.carthagenet.tzstats.com"
   validation:
