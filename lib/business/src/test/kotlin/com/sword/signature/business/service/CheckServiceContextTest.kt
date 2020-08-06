@@ -52,7 +52,7 @@ class CheckServiceContextTest @Autowired constructor(
                 key = "10cba66df788a0848e397c396b993057c64bb29cadc78152246ad28c1a3b02ef",
                 keyHash = "exprukefU3KUcVMbUCVa9nh3TkRfdPiVLHYN3ehxorRsT6hYpcYFvM",
                 value = TzOp.BigMapDiff.Value(
-                    timestamp = OffsetDateTime.parse("2020-06-03T14:49:44Z"),
+                    timestamp = OffsetDateTime.parse("2020-06-03T14:48:35.142429Z"),
                     address = "tz1aSkwEot3L2kmUvcoxzjMomb9mvBNuzFK6"
                 ),
                 meta = TzOp.BigMapDiff.Meta(
@@ -291,11 +291,12 @@ class CheckServiceContextTest @Autowired constructor(
     @Nested
     inner class CheckDocumentWithProof {
 
+        private val documentHash = "c866779f483855455631c934d8933bf744f56dcc10833e8a73752ed086325a7a"
         private val proof = Proof(
-            signatureDate = OffsetDateTime.parse("2020-06-03T14:49:35.142429Z"),
+            signatureDate = OffsetDateTime.parse("2020-06-03T14:48:35.142429Z"),
             filename = "PDF_5.pdf",
             rootHash = "10cba66df788a0848e397c396b993057c64bb29cadc78152246ad28c1a3b02ef",
-            documentHash = "c866779f483855455631c934d8933bf744f56dcc10833e8a73752ed086325a7a",
+            documentHash = documentHash,
             hashes = listOf(
                 Pair(null, TreeElementPosition.RIGHT),
                 Pair(null, TreeElementPosition.RIGHT),
@@ -318,8 +319,24 @@ class CheckServiceContextTest @Autowired constructor(
             assertThrows<CheckException.IncorrectProofFile> {
                 runBlocking {
                     checkService.checkDocument(
-                        "c866779f483855455631c934d8933bf744f56dcc10833e8a73752ed086325a7a",
-                        incorrectProof
+                        documentHash = documentHash,
+                        providedProof = incorrectProof
+                    )
+                }
+            }
+        }
+
+        @Test
+        fun checkDocumentTestKODifferentContractFromConfiguration() {
+            val incorrectProof = proof.copy(
+                contractAddress = "valid address but different from configuration"
+            )
+
+            assertThrows<CheckException.IncorrectContractAddress> {
+                runBlocking {
+                    checkService.checkDocument(
+                        documentHash = documentHash,
+                        providedProof = incorrectProof
                     )
                 }
             }
@@ -327,11 +344,43 @@ class CheckServiceContextTest @Autowired constructor(
 
         @Test
         fun checkDocumentTestKODifferentDocumentHash() {
-            assertThrows<CheckException.HashInconsistent> {
+            assertThrows<CheckException.IncorrectHash> {
                 runBlocking {
                     checkService.checkDocument(
-                        "804f3c79ae5897a66c9545fac06c27421118ae8cfa17806269bac736f374bd01",
-                        proof
+                        documentHash = "804f3c79ae5897a66c9545fac06c27421118ae8cfa17806269bac736f374bd01",
+                        providedProof = proof
+                    )
+                }
+            }
+        }
+
+        @Test
+        fun checkDocumentTestKOUnknownAlgorithm() {
+            val incorrectProof = proof.copy(
+                algorithm = "Unknown algorithm"
+            )
+
+            assertThrows<CheckException.UnknownHashAlgorithm> {
+                runBlocking {
+                    checkService.checkDocument(
+                        documentHash = documentHash,
+                        providedProof = incorrectProof
+                    )
+                }
+            }
+        }
+
+        @Test
+        fun checkDocumentTestKOHashDifferentAlgorithm() {
+            val incorrectProof = proof.copy(
+                algorithm = "SHA-512"
+            )
+
+            assertThrows<CheckException.IncorrectHashAlgorithm> {
+                runBlocking {
+                    checkService.checkDocument(
+                        documentHash = documentHash,
+                        providedProof = incorrectProof
                     )
                 }
             }
@@ -349,8 +398,8 @@ class CheckServiceContextTest @Autowired constructor(
             assertThrows<CheckException.IncorrectRootHash> {
                 runBlocking {
                     checkService.checkDocument(
-                        "c866779f483855455631c934d8933bf744f56dcc10833e8a73752ed086325a7a",
-                        incorrectProof
+                        documentHash = documentHash,
+                        providedProof = incorrectProof
                     )
                 }
             }
@@ -358,12 +407,14 @@ class CheckServiceContextTest @Autowired constructor(
 
         @Test
         fun checkDocumentTestKONoTransactionFound() {
-            coEvery { tezosReaderService.getTransaction("ooG3vVwQA51f6YiHd41wvomejuzkBWKJEgvGiYQ4zQK4jrXBFCi") } returns null
+            coEvery { tezosReaderService.getTransaction(transaction.hash) } returns null
+            coEvery { tezosReaderService.getTransactionDepth(transaction.hash) } returns 100
+            coEvery { tezosReaderService.getContract(contract.address) } returns contract
             assertThrows<CheckException.NoTransaction> {
                 runBlocking {
                     checkService.checkDocument(
-                        "c866779f483855455631c934d8933bf744f56dcc10833e8a73752ed086325a7a",
-                        proof
+                        documentHash = documentHash,
+                        providedProof = proof
                     )
                 }
             }
@@ -371,17 +422,57 @@ class CheckServiceContextTest @Autowired constructor(
 
         @Test
         fun checkDocumentTestKODifferentContractAddress() {
-            coEvery { tezosReaderService.getTransaction("ooG3vVwQA51f6YiHd41wvomejuzkBWKJEgvGiYQ4zQK4jrXBFCi") } returns transaction
-            coEvery { tezosReaderService.getTransactionDepth("ooG3vVwQA51f6YiHd41wvomejuzkBWKJEgvGiYQ4zQK4jrXBFCi") } returns 100
-
             val incorrectProof = proof.copy(
                 contractAddress = "Incorrect contract address"
             )
-            assertThrows<CheckException.IncorrectTransaction> {
+
+            coEvery { tezosReaderService.getTransaction(transaction.hash) } returns transaction
+            coEvery { tezosReaderService.getTransactionDepth(transaction.hash) } returns 100
+            coEvery { tezosReaderService.getContract(incorrectProof.contractAddress!!) } returns contract
+
+            assertThrows<CheckException.IncorrectContractAddress> {
                 runBlocking {
                     checkService.checkDocument(
-                        "c866779f483855455631c934d8933bf744f56dcc10833e8a73752ed086325a7a",
-                        incorrectProof
+                        documentHash = documentHash,
+                        providedProof = incorrectProof
+                    )
+                }
+            }
+        }
+
+        @Test
+        fun checkDocumentTestKODifferentSignerAddress() {
+            coEvery { tezosReaderService.getTransaction(transaction.hash) } returns transaction
+            coEvery { tezosReaderService.getTransactionDepth(transaction.hash) } returns 100
+            coEvery { tezosReaderService.getContract(contract.address) } returns contract
+
+            val incorrectProof = proof.copy(
+                signerAddress = "Incorrect signer address"
+            )
+            assertThrows<CheckException.IncorrectPublicKey> {
+                runBlocking {
+                    checkService.checkDocument(
+                        documentHash = documentHash,
+                        providedProof = incorrectProof
+                    )
+                }
+            }
+        }
+
+        @Test
+        fun checkDocumentTestKODifferentSignatureDate() {
+            coEvery { tezosReaderService.getTransaction(transaction.hash) } returns transaction
+            coEvery { tezosReaderService.getTransactionDepth(transaction.hash) } returns 100
+            coEvery { tezosReaderService.getContract(contract.address) } returns contract
+
+            val incorrectProof = proof.copy(
+                signatureDate = OffsetDateTime.parse("2020-06-03T14:49:35.142429Z")
+            )
+            assertThrows<CheckException.IncorrectSignatureDate> {
+                runBlocking {
+                    checkService.checkDocument(
+                        documentHash = documentHash,
+                        providedProof = incorrectProof
                     )
                 }
             }
@@ -391,6 +482,7 @@ class CheckServiceContextTest @Autowired constructor(
         fun checkDocumentTestKODifferentRootHash() {
             coEvery { tezosReaderService.getTransaction("ooG3vVwQA51f6YiHd41wvomejuzkBWKJEgvGiYQ4zQK4jrXBFCi") } returns transaction
             coEvery { tezosReaderService.getTransactionDepth("ooG3vVwQA51f6YiHd41wvomejuzkBWKJEgvGiYQ4zQK4jrXBFCi") } returns 100
+            coEvery { tezosReaderService.getContract(contract.address) } returns contract
 
             val incorrectProof = proof.copy(
                 documentHash = "804f3c79ae5897a66c9545fac06c27421118ae8cfa17806269bac736f374bd01",
@@ -399,41 +491,44 @@ class CheckServiceContextTest @Autowired constructor(
             assertThrows<CheckException.IncorrectTransaction> {
                 runBlocking {
                     checkService.checkDocument(
-                        "804f3c79ae5897a66c9545fac06c27421118ae8cfa17806269bac736f374bd01",
-                        incorrectProof
+                        documentHash = "804f3c79ae5897a66c9545fac06c27421118ae8cfa17806269bac736f374bd01",
+                        providedProof = incorrectProof
                     )
                 }
             }
         }
 
         @Test
-        fun checkDocumentTestKODifferentSignerAddress() {
-            coEvery { tezosReaderService.getTransaction("ooG3vVwQA51f6YiHd41wvomejuzkBWKJEgvGiYQ4zQK4jrXBFCi") } returns transaction
-            coEvery { tezosReaderService.getTransactionDepth("ooG3vVwQA51f6YiHd41wvomejuzkBWKJEgvGiYQ4zQK4jrXBFCi") } returns 100
-
-            val incorrectProof = proof.copy(
-                signerAddress = "Incorrect signer address"
+        fun checkDocumentTestKODifferentContractManager() {
+            val contractWithDifferentManager = contract.copy(
+                manager = "Different manager address"
             )
-            assertThrows<CheckException.IncorrectTransaction> {
+
+            coEvery { tezosReaderService.getTransaction(transaction.hash) } returns transaction
+            coEvery { tezosReaderService.getTransactionDepth(transaction.hash) } returns 100
+            coEvery { tezosReaderService.getContract(contractWithDifferentManager.address) } returns contractWithDifferentManager
+
+            assertThrows<CheckException.IncoherentOriginPublicKey> {
                 runBlocking {
                     checkService.checkDocument(
-                        "c866779f483855455631c934d8933bf744f56dcc10833e8a73752ed086325a7a",
-                        incorrectProof
+                        documentHash = documentHash,
+                        providedProof = proof
                     )
                 }
             }
         }
+
 
         @Test
         fun checkDocumentTestKONoDepthFound() {
-            coEvery { tezosReaderService.getTransaction("ooG3vVwQA51f6YiHd41wvomejuzkBWKJEgvGiYQ4zQK4jrXBFCi") } returns transaction
-            coEvery { tezosReaderService.getTransactionDepth("ooG3vVwQA51f6YiHd41wvomejuzkBWKJEgvGiYQ4zQK4jrXBFCi") } returns null
+            coEvery { tezosReaderService.getTransaction(transaction.hash) } returns transaction
+            coEvery { tezosReaderService.getTransactionDepth(transaction.hash) } returns null
 
             assertThrows<CheckException.TransactionNotDeepEnough> {
                 runBlocking {
                     checkService.checkDocument(
-                        "c866779f483855455631c934d8933bf744f56dcc10833e8a73752ed086325a7a",
-                        proof
+                        documentHash = documentHash,
+                        providedProof = proof
                     )
                 }
             }
@@ -441,14 +536,15 @@ class CheckServiceContextTest @Autowired constructor(
 
         @Test
         fun checkDocumentTestKOInsufficientDepth() {
-            coEvery { tezosReaderService.getTransaction("ooG3vVwQA51f6YiHd41wvomejuzkBWKJEgvGiYQ4zQK4jrXBFCi") } returns transaction
-            coEvery { tezosReaderService.getTransactionDepth("ooG3vVwQA51f6YiHd41wvomejuzkBWKJEgvGiYQ4zQK4jrXBFCi") } returns 25
+            coEvery { tezosReaderService.getTransaction(transaction.hash) } returns transaction
+            coEvery { tezosReaderService.getTransactionDepth(transaction.hash) } returns 25
+            coEvery { tezosReaderService.getContract(contract.address) } returns contract
 
             assertThrows<CheckException.TransactionNotDeepEnough> {
                 runBlocking {
                     checkService.checkDocument(
-                        "c866779f483855455631c934d8933bf744f56dcc10833e8a73752ed086325a7a",
-                        proof
+                        documentHash = documentHash,
+                        providedProof = proof
                     )
                 }
             }
@@ -456,22 +552,22 @@ class CheckServiceContextTest @Autowired constructor(
 
         @Test
         fun checkDocumentTestOKNotInDatabase() {
-            coEvery { tezosReaderService.getTransaction("ooG3vVwQA51f6YiHd41wvomejuzkBWKJEgvGiYQ4zQK4jrXBFCi") } returns transaction
-            coEvery { tezosReaderService.getTransactionDepth("ooG3vVwQA51f6YiHd41wvomejuzkBWKJEgvGiYQ4zQK4jrXBFCi") } returns 100
-            coEvery { tezosReaderService.getContract("KT1Tq22yXWayLbmBKwZUhVXMoYqxtzp9XvTk") } returns contract
+            coEvery { tezosReaderService.getTransaction(transaction.hash) } returns transaction
+            coEvery { tezosReaderService.getTransactionDepth(transaction.hash) } returns 100
+            coEvery { tezosReaderService.getContract(contract.address) } returns contract
 
 
             val response = runBlocking {
                 checkService.checkDocument(
-                    "c866779f483855455631c934d8933bf744f56dcc10833e8a73752ed086325a7a",
-                    proof
+                    documentHash = documentHash,
+                    providedProof = proof
                 )
             }
 
             SoftAssertions().apply {
                 assertEquals(2, response.status)
                 assertEquals(
-                    "c866779f483855455631c934d8933bf744f56dcc10833e8a73752ed086325a7a",
+                    documentHash,
                     response.proof.documentHash
                 )
                 assertEquals(
@@ -495,8 +591,8 @@ class CheckServiceContextTest @Autowired constructor(
 
             val response = runBlocking {
                 checkService.checkDocument(
-                    "c866779f483855455631c934d8933bf744f56dcc10833e8a73752ed086325a7a",
-                    proof
+                    documentHash = documentHash,
+                    providedProof = proof
                 )
             }
 
@@ -506,7 +602,7 @@ class CheckServiceContextTest @Autowired constructor(
                 assertEquals(jobId, response.jobId)
                 assertEquals(adminFullName, response.signer)
                 assertEquals(
-                    "c866779f483855455631c934d8933bf744f56dcc10833e8a73752ed086325a7a",
+                    documentHash,
                     response.proof.documentHash
                 )
                 assertEquals(
@@ -530,8 +626,8 @@ class CheckServiceContextTest @Autowired constructor(
 
             val response = runBlocking {
                 checkService.checkDocument(
-                    "c866779f483855455631c934d8933bf744f56dcc10833e8a73752ed086325a7a",
-                    proof
+                    documentHash = documentHash,
+                    providedProof = proof
                 )
             }
 
@@ -541,7 +637,7 @@ class CheckServiceContextTest @Autowired constructor(
                 assertEquals(jobId, response.jobId)
                 assertEquals(adminFullName, response.signer)
                 assertEquals(
-                    "c866779f483855455631c934d8933bf744f56dcc10833e8a73752ed086325a7a",
+                    documentHash,
                     response.proof.documentHash
                 )
                 assertEquals(

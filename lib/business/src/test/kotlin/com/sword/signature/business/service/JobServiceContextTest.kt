@@ -85,6 +85,8 @@ class JobServiceContextTest @Autowired constructor(
     private val singleFileJobId = "5e8c36c49df469062bc658c8"
     private val singleUserJob1Id = "5e8c36c49df469062bc658c9"
     private val singleUserJob2Id = "5e8c36c49df469062bc658d0"
+    private val singleUserJob3Id = "5e8c36c49df469062bc658d6"
+    private val singleUserJob4Id = "5e8c36c49df469062bc658d7"
 
     private val multipleFileJob = Job(
         id = multipleFileJobId,
@@ -176,7 +178,10 @@ class JobServiceContextTest @Autowired constructor(
 
                 val actual = jobService.findAll(adminAccount).map { it.id }.toList()
 
-                val expected = listOf(multipleFileJobId, singleFileJobId, singleUserJob1Id, singleUserJob2Id)
+                val expected = listOf(
+                    multipleFileJobId, singleFileJobId, singleUserJob1Id, singleUserJob2Id,
+                    singleUserJob3Id, singleUserJob4Id
+                )
 
                 assertThat(actual).containsExactlyInAnyOrderElementsOf(expected)
             }
@@ -187,9 +192,10 @@ class JobServiceContextTest @Autowired constructor(
             runBlocking {
 
                 val actual =
-                    jobService.findAll(adminAccount, JobCriteria(id = "5e8c36c49df469062bc658d0")).map { it.id }.toList()
+                    jobService.findAll(adminAccount, JobCriteria(id = "5e8c36c49df469062bc658d0")).map { it.id }
+                        .toList()
 
-                val expected = listOf( singleUserJob2Id)
+                val expected = listOf(singleUserJob2Id)
 
                 assertThat(actual).containsExactlyInAnyOrderElementsOf(expected)
             }
@@ -215,10 +221,11 @@ class JobServiceContextTest @Autowired constructor(
             runBlocking {
 
                 val actual =
-                    jobService.findAll(adminAccount, JobCriteria(dateStart = LocalDate.of(2020,4,8))).map { it.id }
+                    jobService.findAll(adminAccount, JobCriteria(dateStart = LocalDate.of(2020, 4, 8))).map { it.id }
                         .toList()
 
-                val expected = listOf( singleFileJobId,singleUserJob1Id,singleUserJob2Id)
+                val expected =
+                    listOf(singleFileJobId, singleUserJob1Id, singleUserJob2Id, singleUserJob3Id, singleUserJob4Id)
 
                 assertThat(actual).containsExactlyInAnyOrderElementsOf(expected)
             }
@@ -229,7 +236,7 @@ class JobServiceContextTest @Autowired constructor(
             runBlocking {
 
                 val actual =
-                    jobService.findAll(adminAccount, JobCriteria(dateEnd = LocalDate.of(2020,4,8))).map { it.id }
+                    jobService.findAll(adminAccount, JobCriteria(dateEnd = LocalDate.of(2020, 4, 8))).map { it.id }
                         .toList()
 
                 val expected = listOf(multipleFileJobId, singleFileJobId)
@@ -237,6 +244,7 @@ class JobServiceContextTest @Autowired constructor(
                 assertThat(actual).containsExactlyInAnyOrderElementsOf(expected)
             }
         }
+
         @Test
         fun `filter by channel name`() {
             runBlocking {
@@ -245,7 +253,7 @@ class JobServiceContextTest @Autowired constructor(
                     jobService.findAll(adminAccount, JobCriteria(channelName = "ine edit")).map { it.id }
                         .toList()
 
-                val expected = listOf( singleFileJobId,singleUserJob1Id)
+                val expected = listOf(singleFileJobId, singleUserJob1Id)
 
                 assertThat(actual).containsExactlyInAnyOrderElementsOf(expected)
             }
@@ -257,10 +265,13 @@ class JobServiceContextTest @Autowired constructor(
                 val pageable = PageRequest.of(0, 30, Sort.Direction.ASC, "channelName")
 
                 val actual =
-                    jobService.findAll(requester=adminAccount, pageable=pageable).map { it.id }
+                    jobService.findAll(requester = adminAccount, pageable = pageable).map { it.id }
                         .toList()
 
-                val expected = listOf(multipleFileJobId,singleUserJob2Id, singleFileJobId,singleUserJob1Id)
+                val expected = listOf(
+                    multipleFileJobId, singleUserJob2Id, singleUserJob3Id, singleUserJob4Id, singleFileJobId,
+                    singleUserJob1Id
+                )
 
                 assertThat(actual).containsExactlyElementsOf(expected)
             }
@@ -271,10 +282,17 @@ class JobServiceContextTest @Autowired constructor(
             runBlocking {
                 val pageable = PageRequest.of(0, 30, Sort.Direction.DESC, "flowName")
                 val actual =
-                    jobService.findAll(requester=adminAccount, pageable=pageable).map { it.id }
+                    jobService.findAll(requester = adminAccount, pageable = pageable).map { it.id }
                         .toList()
 
-                val expected = listOf(singleUserJob2Id,singleUserJob1Id,multipleFileJobId, singleFileJobId)
+                val expected = listOf(
+                    singleUserJob4Id,
+                    singleUserJob3Id,
+                    singleUserJob2Id,
+                    singleUserJob1Id,
+                    multipleFileJobId,
+                    singleFileJobId
+                )
                 assertThat(actual).containsExactlyElementsOf(expected)
             }
         }
@@ -284,10 +302,10 @@ class JobServiceContextTest @Autowired constructor(
             runBlocking {
                 val pageable = PageRequest.of(0, 2, Sort.Direction.DESC, "flowName")
                 val actual =
-                    jobService.findAll(requester=adminAccount, pageable=pageable).map { it.id }
+                    jobService.findAll(requester = adminAccount, pageable = pageable).map { it.id }
                         .toList()
 
-                val expected = listOf(singleUserJob2Id,singleUserJob1Id)
+                val expected = listOf(singleUserJob4Id, singleUserJob3Id)
                 assertThat(actual).containsExactlyElementsOf(expected)
             }
         }
@@ -297,14 +315,13 @@ class JobServiceContextTest @Autowired constructor(
             runBlocking {
                 val pageable = PageRequest.of(1, 2, Sort.Direction.DESC, "flowName")
                 val actual =
-                    jobService.findAll(requester=adminAccount, pageable=pageable).map { it.id }
+                    jobService.findAll(requester = adminAccount, pageable = pageable).map { it.id }
                         .toList()
 
-                val expected = listOf(multipleFileJobId, singleFileJobId)
+                val expected = listOf(singleUserJob2Id, singleUserJob1Id)
                 assertThat(actual).containsExactlyElementsOf(expected)
             }
         }
-
 
 
     }

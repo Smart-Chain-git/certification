@@ -1,10 +1,8 @@
 package com.sword.signature.business.service.impl
 
 import com.sword.signature.business.exception.CheckException
-import com.sword.signature.business.model.Account
-import com.sword.signature.business.model.CheckResponse
-import com.sword.signature.business.model.Job
-import com.sword.signature.business.model.Proof
+import com.sword.signature.business.model.*
+import com.sword.signature.business.model.mapper.toBusiness
 import com.sword.signature.business.service.CheckService
 import com.sword.signature.business.service.FileService
 import com.sword.signature.business.service.JobService
@@ -15,6 +13,7 @@ import com.sword.signature.model.entity.AccountEntity
 import com.sword.signature.model.entity.QTreeElementEntity
 import com.sword.signature.model.entity.TreeElementEntity
 import com.sword.signature.model.repository.AccountRepository
+import com.sword.signature.model.repository.AlgorithmRepository
 import com.sword.signature.model.repository.JobRepository
 import com.sword.signature.model.repository.TreeElementRepository
 import com.sword.signature.tezos.reader.service.TezosReaderService
@@ -33,11 +32,13 @@ import java.util.function.Supplier
 class CheckServiceImpl(
     val treeElementRepository: TreeElementRepository,
     val jobRepository: JobRepository,
+    val algorithmRepository: AlgorithmRepository,
     val accountRepository: AccountRepository,
     val tezosReaderService: TezosReaderService,
     val fileService: FileService,
     val jobService: JobService,
-    @Value("\${tezos.validation.minDepth}") private val minDepth: Long
+    @Value("\${tezos.validation.minDepth}") private val minDepth: Long,
+    @Value("\${tezos.contract.address}") private val contractAddress: String
 ) : CheckService {
 
     private val adminAccount =
@@ -147,7 +148,7 @@ class CheckServiceImpl(
             }
 
         } else {
-            // Check the proof file
+            // Check the proof file.
             try {
                 checkNotNull(providedProof.transactionHash)
             } catch (e: Exception) {
@@ -155,15 +156,44 @@ class CheckServiceImpl(
                 throw CheckException.IncorrectProofFile()
             }
 
+            // Check proof file contract compliance with contract in configuration.
+            if (contractAddress != providedProof.contractAddress) {
+                LOGGER.error(
+                    "Proof file contract address ({}) does not match the contract file in the configuration ({}).",
+                    providedProof.contractAddress, providedProof
+                )
+                throw CheckException.IncorrectContractAddress(
+                    contractAddress = contractAddress,
+                    proofFileContractAddress = providedProof.contractAddress ?: UNDEFINED_VALUE
+                )
+            }
+
+            // Check the compliance of the proof file document hash with the document hash.
             if (documentHash != providedProof.documentHash) {
                 LOGGER.error(
                     "Provided hash ({}) is not compliant with proof hash ({}).",
                     documentHash,
                     providedProof.documentHash
                 )
-                throw CheckException.HashInconsistent(
-                    documentHash = documentHash,
-                    proofDocumentHash = providedProof.documentHash
+                throw CheckException.IncorrectHash(
+                    hash = documentHash,
+                    proofFileHash = providedProof.documentHash
+                )
+            }
+
+            // Check the algorithm existence.
+            val algorithm: Algorithm = algorithmRepository.findByName(providedProof.algorithm)?.toBusiness()
+                ?: throw CheckException.UnknownHashAlgorithm(proofFileAlgorithm = providedProof.algorithm)
+
+            // Check the document hash compliance with the algorithm.
+            if (!algorithm.checkHashDigest(documentHash)) {
+                LOGGER.error(
+                    "The document hash ({}) does not match with the proof algorithm ({}).",
+                    documentHash, providedProof.algorithm
+                )
+                throw CheckException.IncorrectHashAlgorithm(
+                    hash = documentHash,
+                    proofFileAlgorithm = providedProof.algorithm
                 )
             }
 
@@ -173,13 +203,15 @@ class CheckServiceImpl(
             // Retrieve the transaction and depth
             val transaction: TzOp? = tezosReaderService.getTransaction(providedProof.transactionHash)
             val depth: Long? = tezosReaderService.getTransactionDepth(providedProof.transactionHash)
-            val contract: TzContract? = providedProof.contractAddress?.let { tezosReaderService.getContract(it) }
+            val contract: TzContract? = tezosReaderService.getContract(providedProof.contractAddress)
 
+            // Check the transaction existence.
             if (transaction == null) {
                 LOGGER.error("Provided transaction '{}' not found in the blockchain.", providedProof.transactionHash)
                 throw CheckException.NoTransaction(rootHash = providedProof.rootHash)
             }
 
+            // Check transaction contract address compliance with the proof contract address.
             if (transaction.bigMapDiff[0].meta.contract != providedProof.contractAddress) {
                 LOGGER.error(
                     "Different contract found for transaction '{}': expected '{}', actual '{}'.",
@@ -187,9 +219,38 @@ class CheckServiceImpl(
                     providedProof.contractAddress,
                     transaction.bigMapDiff[0].meta.contract
                 )
+                throw CheckException.IncorrectContractAddress(
+                    contractAddress = transaction.bigMapDiff[0].meta.contract,
+                    proofFileContractAddress = providedProof.contractAddress
+                )
+            }
+
+            // Check the transaction signer address compliance with the proof signer address.
+            if (transaction.bigMapDiff[0].value.address != providedProof.signerAddress) {
+                LOGGER.error(
+                    "Different signer found for transaction '{}': expected '{}', actual '{}'.",
+                    providedProof.transactionHash,
+                    providedProof.signerAddress,
+                    transaction.bigMapDiff[0].value.address
+                )
+                throw CheckException.IncorrectPublicKey(
+                    publicKey = transaction.bigMapDiff[0].value.address,
+                    proofFilePublicKey = providedProof.signerAddress ?: UNDEFINED_VALUE
+                )
+            }
+
+            // Check the root hash compliance.
+            if (transaction.bigMapDiff[0].key != providedProof.rootHash) {
+                LOGGER.error(
+                    "Different rootHash found for transaction '{}': expected '{}', actual '{}'.",
+                    providedProof.transactionHash,
+                    providedProof.rootHash,
+                    transaction.bigMapDiff[0].key
+                )
                 throw CheckException.IncorrectTransaction()
             }
 
+            // Check the contract manager address compliance.
             if (contract?.manager != providedProof.creatorAddress) {
                 LOGGER.error(
                     "Different contract manager found for transaction '{}': expected '{}', actual '{}'.",
@@ -203,24 +264,17 @@ class CheckServiceImpl(
                 )
             }
 
-            if (transaction.bigMapDiff[0].key != providedProof.rootHash) {
+            // Check the signature date compliance.
+            if (transaction.bigMapDiff[0].value.timestamp != providedProof.signatureDate) {
                 LOGGER.error(
-                    "Different rootHash found for transaction '{}': expected '{}', actual '{}'.",
-                    providedProof.transactionHash,
-                    providedProof.rootHash,
-                    transaction.bigMapDiff[0].key
+                    "Different signature date found for transaction '{}': expected '{}', actual '{}'.",
+                    transaction.bigMapDiff[0].value.timestamp,
+                    providedProof.signatureDate
                 )
-                throw CheckException.IncorrectTransaction()
-            }
-
-            if (transaction.bigMapDiff[0].value.address != providedProof.signerAddress) {
-                LOGGER.error(
-                    "Different signer found for transaction '{}': expected '{}', actual '{}'.",
-                    providedProof.transactionHash,
-                    providedProof.signerAddress,
-                    transaction.bigMapDiff[0].value.address
+                throw CheckException.IncorrectSignatureDate(
+                    signatureDate = transaction.bigMapDiff[0].value.timestamp,
+                    proofFileSignatureDate = providedProof.signatureDate
                 )
-                throw CheckException.IncorrectTransaction()
             }
 
             if (depth == null || depth < minDepth) {
@@ -247,7 +301,10 @@ class CheckServiceImpl(
 
             // Check the database
             val documentsAndJob =
-                getDocumentsAndJobsFromHash(documentHash).filter { it.second.rootHash == providedProof.rootHash }
+                getDocumentsAndJobsFromHash(documentHash).filter {
+                    it.second.rootHash == providedProof.rootHash
+                            && it.second.state >= JobStateType.VALIDATED
+                }
             if (documentsAndJob.isEmpty()) {
                 return defaultResponse.get()
             }
@@ -406,5 +463,6 @@ class CheckServiceImpl(
 
     companion object {
         private val LOGGER = LoggerFactory.getLogger(CheckServiceImpl::class.java)
+        private val UNDEFINED_VALUE = "undefined"
     }
 }
