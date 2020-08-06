@@ -10,7 +10,7 @@
                 <v-divider vertical/>
                 <v-menu bottom left>
                     <template v-slot:activator="{ on }">
-                        <v-btn class="mr-4" text v-on="on" v-if="isUserConnected">
+                        <v-btn class="mr-4-notransform" text v-on="on" v-if="isUserConnected">
                             <v-icon :color="textColor" class="mr-1">person</v-icon>
                             <div :style="{ color: `${textColor}` }">
                                 {{ $t('menu.hello')}} {{ meName }}
@@ -65,9 +65,16 @@
         --var-color-light-orange-sword: #506b77;
     }
 
+ 
+
     img {
         margin-bottom: 15px;
     }
+
+	.v-application .mr-4-notransform {
+	  margin-right: 16px !important;
+	  text-transform:none;
+	}
 
     .v-list-item:hover {
         border-left: solid var(--var-color-orange-sword) 10px !important;
