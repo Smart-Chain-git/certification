@@ -23,7 +23,7 @@ export default new VueI18n({
 export function tableFooter(i18n: (key: string) => any): any {
     return {
         "items-per-page-options" : [5, 10, 15, 50],
-        "items-per-page-text": i18n("message.footer.items-per-page-text"),
+        "items-per-page-text": i18n("message.footer.items-per-page-text") + '\xa0',
         "page-text": i18n("message.footer.page-text"),
     }
 }

@@ -48,7 +48,7 @@
                                         />
                                     </v-col>
                                     <v-col class="col-4">
-                                        <IconButton @click="search()"
+                                        <IconButton @click="initSearch()"
                                                     color="var(--var-color-blue-sword)"
                                                     leftIcon="zoom_in">
                                             {{ $t("job.list.search") }}
@@ -245,6 +245,13 @@
                 }
             }
         }
+
+        private initSearch() {
+			this.pagination.page=1
+			this.search()
+
+        }
+
 
         @Watch("pagination")
         private search() {

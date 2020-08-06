@@ -307,7 +307,7 @@
   },
   "message": {
     "footer": {
-      "items-per-page-text": "Rows per page",
+      "items-per-page-text": "Rows per page :",
       "page-text": "{0}-{1} of {2}"
     }
   },
