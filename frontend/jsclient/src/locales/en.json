@@ -178,9 +178,33 @@
         "title": "Document not timestamped in Tezos Blockchain ",
         "message": "We are sorry, your proof file corresponds to the document you want to check and looks legitimate. However, we cannot find in the blockchain a proof of its signature. The root hash of the mentioned Merkle Tree ({0}) is not present in the blockchain"
       },
+      "incorrect_hash": {
+        "title": "The hash of the document is not the hash of the proof file",
+        "message": "We are sorry, your proof file does not correspond to the document you want to check. Indeed, the hash of your document ({0}) is not the hash of the proof file ({1})."
+      },
       "incorrect_origin_public_key": {
         "title" : "The Tezos account of the proof file is not handled by our platform.",
         "message": "We are sorry, your proof file references a Tezos account unknown by our platform. Indeed, the Tezos account referenced by the proof file is {0} but our platform expects the Tezos account {1}."
+      },
+      "incorrect_signature_date": {
+        "title": "The signature date of the proof file is not correct",
+        "message": "We are sorry, your proof file has a wrong signature date: {0}. The signature date anchored in the Tezos blockchain is: {1}."
+      },
+      "incorrect_hash_algorithm": {
+        "title": "The hash algorithm is not correct",
+        "message": "We are sorry, your proof file has a wrong hash algorithm: {0}. It does not fit with the hash provided: {1}."
+      },
+      "unknown_hash_algorithm": {
+        "title": "The hash algorithm is not correct",
+        "message": "We are sorry, your proof file has a wrong hash algorithm: {0}. The server does not know it."
+      },
+      "incorrect_public_key": {
+        "title": "The public key of the proof file is not correct",
+        "message": "We are sorry, your proof file has a wrong signer public key: {0}. The public key anchored in the Tezos blockchain is: {1}."
+      },
+      "incorrect_contract_address": {
+        "title": "The contract address of the proof file is not correct",
+        "message": "We are sorry, your proof file has a wrong contract address: {0}. The Digisign server expects the contract address: {1}."
       },
       "generic": {
         "title": "Document hash not found in TEZOS DigiSign",

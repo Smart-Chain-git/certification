@@ -41,7 +41,15 @@ export interface SignatureCheckResponse {
     hash_document?: string,
     hash_root?: string,
     origin_public_key?: string,
-    proof_file_origin_public_key?: string
+    proof_file_origin_public_key?: string,
+    hash?: string,
+    proof_file_hash?: string,
+    signature_date?: Date,
+    proof_file_signature_date?: Date,
+    proof_file_algorithm?: string,
+    proof_file_public_key?: string,
+    contract_address?: string,
+    proof_file_contract_address?: string,
 }
 
 export interface AuthRequest {

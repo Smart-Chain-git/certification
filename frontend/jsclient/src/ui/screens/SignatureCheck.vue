@@ -209,15 +209,14 @@ import * as CryptoJS from "crypto-js"
 
 @Component
 export default class SignatureCheck extends Vue {
-  @Prop({default: null}) private readonly hashdoc!: string | null
-
   private static format(str: string, values: Array<string>) {
-    console.log(values)
     for (let i = 0; i < values.length; ++i) {
       str = str.replace("{" + i + "}", values[i])
     }
     return str
   }
+
+  @Prop({default: null}) private readonly hashdoc!: string | null
 
   private file: File | null = null
   private proof: File | null = null
@@ -267,7 +266,6 @@ export default class SignatureCheck extends Vue {
   private parse(message: string, idx: number = 0) {
     if (this.checkResponse) {
       const res: string = this.$t(message).toString()
-      console.log(res)
 
       switch (message) {
         case "signatureCheck.success.message1.block1.message":
@@ -330,10 +328,29 @@ export default class SignatureCheck extends Vue {
         case "signatureCheck.errors.no_transaction.message":
           return SignatureCheck.format(res, [this.checkResponse.hash_root!])
 
+        case "signatureCheck.errors.incorrect_hash.message":
+          return SignatureCheck.format(res, [this.checkResponse.hash!, this.checkResponse.proof_file_hash!])
+
         case "signatureCheck.errors.incorrect_origin_public_key.message":
-          console.log("Yolo")
           return SignatureCheck.format(res, [this.checkResponse.proof_file_origin_public_key!,
             this.checkResponse.origin_public_key!])
+
+        case "signatureCheck.errors.incorrect_signature_date.message":
+          return SignatureCheck.format(res, [this.formatTimestamp(this.checkResponse.proof_file_signature_date),
+            this.formatTimestamp(this.checkResponse.signature_date)])
+
+        case "signatureCheck.errors.incorrect_hash_algorithm.message":
+          return SignatureCheck.format(res, [this.checkResponse.proof_file_algorithm!, this.checkResponse.hash!])
+
+        case "signatureCheck.errors.unknown_hash_algorithm.message":
+          return SignatureCheck.format(res, [this.checkResponse.proof_file_algorithm!])
+
+        case "signatureCheck.errors.incorrect_public_key.message":
+          return SignatureCheck.format(res, [this.checkResponse.proof_file_public_key!, this.checkResponse.public_key!])
+
+        case "signatureCheck.errors.incorrect_contract_address.message":
+          return SignatureCheck.format(res, [this.checkResponse.proof_file_contract_address!,
+            this.checkResponse.contract_address!])
 
         default:
           return res
@@ -348,6 +365,19 @@ export default class SignatureCheck extends Vue {
       format = format + i + "=\"" + stats[i] + "\" "
     }
     return res?.replace("{#}", "<a " + format + ">" + this.$t("signatureCheck.here").toString() + "</a>")
+  }
+
+  private formatTimestamp(date?: Date) {
+    if (date === undefined) {
+      return "UNDEFINED"
+    }
+    switch (this.$i18n.locale) {
+      case "fr":
+        return this.$moment(date).format("DD/MM/YYYY HH:mm:ss")
+      default:
+        return this.$moment(date).format("YYYY/MM/DD HH:mm:ss")
+    }
+
   }
 
   private check() {
@@ -377,7 +407,7 @@ export default class SignatureCheck extends Vue {
   private send() {
     const sigCheck: SignatureCheckRequest = {
       documentHash: this.fileHash,
-      proof: this.proofHash
+      proof: this.proofHash,
     }
     this.$modules.signatures.check(sigCheck)
   }
