@@ -64,7 +64,7 @@
                                 <td class="text-center">{{doc.hash}}</td>
                                 <td class="text-center"><a @click="gotoDetail(doc.jobId)">{{doc.jobId}}</a></td>
                                 <td class="text-center">
-                                    <IconButton leftIcon="check" @click="getProof(doc.id)" color="var(--var-color-blue-sword)">{{ $t("documents.proof") }}</IconButton>
+                                    <IconButton v-if="doc.jobStateName=='VALIDATED'" leftIcon="check" @click="getProof(doc.id)" color="var(--var-color-blue-sword)">{{ $t("documents.proof") }}</IconButton>
                                 </td>
                             </tr>
                             </tbody>

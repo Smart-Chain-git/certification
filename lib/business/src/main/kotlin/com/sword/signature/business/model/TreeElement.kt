@@ -8,7 +8,8 @@ sealed class TreeElement(
     val hash: String,
     val parentId: String?,
     val position: TreeElementPosition?,
-    val jobId: String
+    val jobId: String,
+    val job : Job? = null
 ) {
 
     class LeafTreeElement(
@@ -17,8 +18,9 @@ sealed class TreeElement(
         parentId: String? = null,
         position: TreeElementPosition? = null,
         jobId: String,
+        job : Job? = null,
         val metadata: FileMetadata
-    ) : TreeElement(id = id, hash = hash, parentId = parentId, position = position, jobId = jobId) {
+    ) : TreeElement(id = id, hash = hash, parentId = parentId, position = position, jobId = jobId, job = job) {
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
             if (other !is LeafTreeElement) return false
@@ -41,7 +43,8 @@ sealed class TreeElement(
         hash: String,
         parentId: String? = null,
         position: TreeElementPosition? = null,
-        jobId: String
+        jobId: String,
+        job : Job? = null
     ) : TreeElement(id = id, hash = hash, parentId = parentId, position = position, jobId = jobId)
 
     override fun equals(other: Any?): Boolean {
