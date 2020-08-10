@@ -17,49 +17,50 @@
 -->
 
 <template>
-    <v-row fluid class="mx-0 edit-form-input-row">
-        <v-flex xl4 md4 xs12 class="f-title pr-5">
-            {{ title }}
-            <slot name="icon"/>
-        </v-flex>
-        <v-flex xl8 md8 xs12>
-            <v-row row class="ma-0 mt-1">
-                <slot class="font-weight-bold" v-if="editable"/>
-                <span v-else class="font-weight-bold mt-3">
+  <v-row fluid class="mx-0 edit-form-input-row">
+    <v-flex xl4 md4 xs12 class="f-title pr-5">
+      {{ title }}
+      <slot name="icon"/>
+    </v-flex>
+    <v-flex xl8 md8 xs12>
+      <v-row row class="ma-0 mt-1">
+        <slot class="font-weight-bold" v-if="editable"/>
+        <span v-else class="font-weight-bold mt-3">
                     {{ value }}
                 </span>
-            </v-row>
-        </v-flex>
-    </v-row>
+      </v-row>
+    </v-flex>
+  </v-row>
 </template>
 
 <style type="text/css" scoped>
 
-    .edit-form-input-row {
-        min-height: 3rem;
-        margin-bottom: .2rem;
-    }
+.edit-form-input-row {
+  min-height: 3rem;
+  margin-bottom: .2rem;
+  overflow-wrap: anywhere;
+}
 
-    .f-title {
-        font-size: 14px !important;
-        height: 24px !important;
-        line-height: 24px !important;
-        margin-top: calc(1.5rem - 12px) !important;
-    }
+.f-title {
+  font-size: 14px !important;
+  height: 24px !important;
+  line-height: 24px !important;
+  margin-top: calc(1.5rem - 12px) !important;
+}
 
-    .edit-form-input-row > .flex {
-        flex-grow: 0;
-    }
+.edit-form-input-row > .flex {
+  flex-grow: 0;
+}
 
 </style>
 
 <script lang="ts">
-    import {Component, Prop, Vue} from "vue-property-decorator"
+import {Component, Prop, Vue} from "vue-property-decorator"
 
-    @Component
-    export default class EditFormRow extends Vue {
-        @Prop(String) private readonly title!: string
-        @Prop({default: null}) private readonly value!: string
-        @Prop(Boolean) private readonly editable!: boolean
-    }
+@Component
+export default class EditFormRow extends Vue {
+  @Prop(String) private readonly title!: string
+  @Prop({default: null}) private readonly value!: string
+  @Prop(Boolean) private readonly editable!: boolean
+}
 </script>
