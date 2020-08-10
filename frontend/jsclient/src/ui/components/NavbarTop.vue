@@ -11,7 +11,7 @@
         <v-divider vertical/>
         <v-menu bottom left>
           <template v-slot:activator="{ on }">
-            <v-btn class="mr-4" text v-on="on" v-if="isUserConnected">
+            <v-btn class="mr-4-notransform" text v-on="on" v-if="isUserConnected">
               <v-icon :color="textColor" class="mr-1">person</v-icon>
               <div :style="{ color: `${textColor}` }">
                 {{ $t('menu.hello') }} {{ meName }}
@@ -39,7 +39,6 @@
               </v-list-item-action>
               <v-list-item-title>{{ $t('menu.profile') }}</v-list-item-title>
             </v-list-item>
-
             <v-list-item to="/channel-management">
               <v-list-item-action class="centered-icon">
                 <v-icon color="var(--var-color-blue-sword)">queue</v-icon>
@@ -70,12 +69,18 @@ img {
   margin-bottom: 15px;
 }
 
+.v-application .mr-4-notransform {
+  margin-right: 16px !important;
+  text-transform: none;
+}
+
 .v-list-item:hover {
   border-left: solid var(--var-color-orange-sword) 10px !important;
   box-sizing: content-box;
   padding-left: 6px;
 }
 </style>
+
 <script lang="ts">
 import {Component, Prop, Vue} from "vue-property-decorator"
 
@@ -106,4 +111,3 @@ export default class NavbarTop extends Vue {
   }
 }
 </script>
-

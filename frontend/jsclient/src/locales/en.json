@@ -110,7 +110,7 @@
     "jobId": "Related Job",
     "hash": "Document hash",
     "name": "Document name",
-    "dates": "Dates",
+    "dates": "Creation date range",
     "proof": "Proof",
     "search": "Search",
     "back": "Back",
@@ -273,7 +273,7 @@
       "back": "Back",
       "id": "ID",
       "name": "Name",
-      "date": "Date",
+      "date": "Creation date",
       "statusDate": "Status Date",
       "status": "Status",
       "docs": "Docs",
@@ -292,7 +292,7 @@
       "status": "Status",
       "docs": "Docs",
       "channel": "Channel",
-      "dates": "Date range",
+      "dates": "Creation date range",
       "search": "Search",
       "records": "records",
       "export": "Export .csv",
@@ -335,7 +335,7 @@
   },
   "message": {
     "footer": {
-      "items-per-page-text": "Rows per page",
+      "items-per-page-text": "Rows per page:",
       "page-text": "{0}-{1} of {2}"
     }
   },
