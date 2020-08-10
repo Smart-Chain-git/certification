@@ -83,7 +83,7 @@
       "back": "Retour",
       "id": "ID",
       "name": "Nom",
-      "date": "Date",
+      "date": "Date de création",
       "statusDate": "Date de statut",
       "status": "Statut",
       "docs": "Docs",
@@ -102,7 +102,7 @@
       "status": "Statut",
       "docs": "Docs",
       "channel": "Canal",
-      "dates": "Dates",
+      "dates": "Date de création",
       "search": "Rechercher",
       "records": "résultats",
       "export": "Exporter .csv",
@@ -142,7 +142,7 @@
     "jobId": "Job concerné",
     "hash": "Hash du document",
     "name": "Nom du document",
-    "dates": "Dates",
+    "dates": "Date de création",
     "proof": "Preuve",
     "search": "Rechercher",
     "back": "Retour",
@@ -303,7 +303,7 @@
   },
   "message": {
     "footer": {
-      "items-per-page-text": "Lignes par page",
+      "items-per-page-text": "Lignes par page :",
       "page-text": "{0}-{1} sur {2}"
     }
   },
