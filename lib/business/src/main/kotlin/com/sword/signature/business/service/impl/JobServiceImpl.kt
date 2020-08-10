@@ -76,7 +76,7 @@ class JobServiceImpl(
         val leaves =
             if (withLeaves) {
                 treeElementRepository.findAll(treeElementPredicate).asFlow()
-                    .map { it.toBusiness() as TreeElement.LeafTreeElement }.toList()
+                    .map { it.toBusiness(job.toBusiness()) as TreeElement.LeafTreeElement }.toList()
             } else {
                 null
             }

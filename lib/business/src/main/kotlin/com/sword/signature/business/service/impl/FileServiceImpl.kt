@@ -1,5 +1,6 @@
 package com.sword.signature.business.service.impl
 
+import com.sword.signature.business.exception.EntityNotFoundException
 import com.sword.signature.business.exception.MissingRightException
 import com.sword.signature.business.model.*
 import com.sword.signature.business.model.mapper.toBusiness
@@ -122,24 +123,18 @@ class FileServiceImpl(
     }
 
 
-
-
-    suspend fun getJob(jobId : String, jobs: MutableMap<String, Job?>): Job? {
-        var job: Job? = null;
+    suspend fun getJob(jobId: String, jobs: MutableMap<String, Job>): Job {
+        val job: Job
         if (jobs.containsKey(jobId)) {
-            job = jobs[jobId];
-            LOGGER.debug("jobId={} was in the hash map" ,jobId);
+            job = jobs[jobId]!!
+            LOGGER.debug("Job (id={}) was retrieved from cache.", jobId)
+        } else {
+            job = jobRepository.findById(jobId).awaitFirstOrNull()?.toBusiness()
+                ?: throw EntityNotFoundException("Job", jobId)
+            LOGGER.debug("Job (id={}) was retrieved from database and put into cache.", jobId)
+            jobs[jobId] = job
         }
-        else {
-            LOGGER.debug("jobId={}" ,jobId);
-            val jobEntity = jobRepository.findById(jobId).awaitFirstOrNull();
-            LOGGER.debug("jobId={} found", jobId );
-            jobEntity?.let {
-                job = jobEntity.toBusiness();
-            }
-            jobs[jobId] = job;
-        }
-        return job;
+        return job
     }
 
     override suspend fun getFiles(
@@ -153,13 +148,14 @@ class FileServiceImpl(
             throw MissingRightException(requester)
         }
 
+        LOGGER.debug("Find the list of documents.")
+
         val fileCriteria = buildFileCriteria(filter)
         val files = treeElementRepository.findAll(fileCriteria.toPredicate(), pageable.sort)
+        val jobs = hashMapOf<String, Job>();
 
-        val jobs = hashMapOf<String, Job?>();
-        LOGGER.debug("Find the list of documents");
-
-        return files.asFlow().paginate(pageable).map { it.toBusiness(getJob(it.jobId, jobs)) as TreeElement.LeafTreeElement }
+        return files.asFlow().paginate(pageable)
+            .map { it.toBusiness(getJob(it.jobId, jobs)) as TreeElement.LeafTreeElement }
     }
 
 

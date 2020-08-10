@@ -129,7 +129,7 @@ class SignServiceImpl(
         )
 
         return jobEntity.toBusiness(files = inserted.filter { it.type == TreeElementType.LEAF }
-            .map { it.toBusiness() as TreeElement.LeafTreeElement }.toList())
+            .map { it.toBusiness(jobEntity.toBusiness()) as TreeElement.LeafTreeElement }.toList())
     }
 
     companion object {
