@@ -91,6 +91,7 @@
 import {tableFooter} from "@/plugins/i18n"
 import {FileFilterOption, PaginationOption} from "@/store/types"
 import {Component, Vue, Watch} from "vue-property-decorator"
+import {saveAs} from "file-saver"
 
 @Component
 export default class Documents extends Vue {
@@ -177,11 +178,9 @@ export default class Documents extends Vue {
 
   private getProof(fileId: string) {
     this.$modules.files.loadProof(fileId).then(() => {
-      const a = document.createElement("a")
-      a.setAttribute("download", this.$modules.files.getProof()!.file_name + ".json")
-      a.setAttribute("href", "data:text/json:charset=utf-8," +
-          encodeURIComponent(JSON.stringify(this.$modules.files.getProof())))
-      a.click()
+      const blob = new Blob([JSON.stringify(this.$modules.files.getProof())],
+          {type: "application/json;charset=utf-8"})
+      saveAs(blob, this.$modules.files.getProof()!.file_name + ".json")
     })
   }
 
