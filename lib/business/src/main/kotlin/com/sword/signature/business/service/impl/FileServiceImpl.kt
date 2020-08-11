@@ -1,5 +1,6 @@
 package com.sword.signature.business.service.impl
 
+import com.sword.signature.business.exception.EntityNotFoundException
 import com.sword.signature.business.exception.MissingRightException
 import com.sword.signature.business.model.*
 import com.sword.signature.business.model.mapper.toBusiness
@@ -133,6 +134,21 @@ class FileServiceImpl(
         return Mono.just(proof)
     }
 
+
+    suspend fun getJob(jobId: String, jobs: MutableMap<String, Job>): Job {
+        val job: Job
+        if (jobs.containsKey(jobId)) {
+            job = jobs[jobId]!!
+            LOGGER.debug("Job (id={}) was retrieved from cache.", jobId)
+        } else {
+            job = jobRepository.findById(jobId).awaitFirstOrNull()?.toBusiness()
+                ?: throw EntityNotFoundException("Job", jobId)
+            LOGGER.debug("Job (id={}) was retrieved from database and put into cache.", jobId)
+            jobs[jobId] = job
+        }
+        return job
+    }
+
     override suspend fun getFiles(
         requester: Account,
         filter: FileFilter?,
@@ -144,11 +160,16 @@ class FileServiceImpl(
             throw MissingRightException(requester)
         }
 
+        LOGGER.debug("Find the list of documents.")
+
         val fileCriteria = buildFileCriteria(filter)
         val files = treeElementRepository.findAll(fileCriteria.toPredicate(), pageable.sort)
+        val jobs = hashMapOf<String, Job>();
 
-        return files.asFlow().paginate(pageable).map { it.toBusiness() as TreeElement.LeafTreeElement }
+        return files.asFlow().paginate(pageable)
+            .map { it.toBusiness(getJob(it.jobId, jobs)) as TreeElement.LeafTreeElement }
     }
+
 
     override suspend fun countFiles(
         requester: Account,

@@ -10,5 +10,6 @@ data class JobFile(
     val hash: String,
     val jobId: String,
     val metadata: SignMetadata,
-    val proof: Proof?
+    val proof: Proof?,
+    val jobStateName: String?
 )

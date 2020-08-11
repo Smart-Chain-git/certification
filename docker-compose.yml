@@ -1,19 +1,31 @@
 version: '3'
 volumes:
   mongo-data:
+  mongo-backup:
 services:
   mongo:
     container_name: 'tezos-signature-mongo'
     image: 'mongo:4.2.3'
     ports:
       - '27017:27017'
+    volumes:
+      - 'mongo-data:/data/db'
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: password
       MONGO_INITDB_DATABASE: tezos-signature
-    volumes:
-      - 'mongo-data:/data/db'
     restart: unless-stopped
+  mongo-backup:
+    container_name: 'tezos-signature-mongo-backup'
+    image: istepanov/mongodump:4.2
+    environment:
+      MONGO_URI: 'mongodb://root:password@mongo:27017'
+      CRON_SCHEDULE: '*/10 * * * *'
+    volumes:
+      - mongo-backup:/backup
+    restart: unless-stopped
+    depends_on:
+      - mongo
   mongo-express:
     container_name: 'tezos-signature-mongo-express'
     image: 'mongo-express:0.54.0'

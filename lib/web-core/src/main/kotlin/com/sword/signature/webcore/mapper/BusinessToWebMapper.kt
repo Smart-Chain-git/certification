@@ -63,9 +63,10 @@ fun TreeElement.LeafTreeElement.toWeb(proof: com.sword.signature.business.model.
     JobFile(
         id = id,
         hash = hash,
-        jobId = jobId,
+        jobId = job.id,
         metadata = metadata.toWeb(),
-        proof = proof?.toWeb()
+        proof = proof?.toWeb(),
+        jobStateName = job.state.name
     )
 
 fun com.sword.signature.business.model.Proof.toWeb() = Proof(
