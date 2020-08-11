@@ -23,6 +23,7 @@ export interface Proof {
     origin_public_key: string,
     public_key: string,
     origin: string,
+    urls?: Array<URLNode>
 }
 
 export interface SignatureCheckResponse {
@@ -39,7 +40,13 @@ export interface SignatureCheckResponse {
     output: string,
     hash_document_proof?: string,
     hash_document?: string,
-    hash_root?: string,
+    hash_root?: string
+}
+
+export interface URLNode {
+    url: string,
+    type: string,
+    comment: string
 }
 
 export interface AuthRequest {
