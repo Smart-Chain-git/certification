@@ -27,11 +27,11 @@ export interface Proof {
 }
 
 export interface SignatureCheckResponse {
-    check_status: number,
-    check_process: Array<string>,
+    check_status?: number,
+    check_process?: Array<string>,
     signer?: string,
-    timestamp: Date,
-    proof: Proof
+    timestamp?: Date,
+    proof?: Proof
     error?: string,
     current_depth?: number,
     expected_depth?: number,

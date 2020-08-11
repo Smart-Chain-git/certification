@@ -1,10 +1,5 @@
-
 import {signatureApi} from "@/api/signatureApi"
-import {
-    SignatureCheckRequest,
-    SignatureCheckResponse, SignatureMultiRequest,
-    SignatureResponse,
-} from "@/api/types"
+import {SignatureCheckRequest, SignatureCheckResponse, SignatureMultiRequest, SignatureResponse} from "@/api/types"
 import {Action, Module, Mutation, VuexModule} from "vuex-class-modules"
 
 
@@ -18,7 +13,13 @@ export default class SignaturesModule extends VuexModule {
     public check(sigCheck: SignatureCheckRequest) {
         signatureApi.check(sigCheck).then((response: SignatureCheckResponse) => {
             this.setCheckResponse(response)
-        })
+        }).catch((_: Error) => {
+                this.setCheckResponse({
+                    output: "KO",
+                    error: "INTERNAL_SERVOR_ERROR",
+                })
+            },
+        )
     }
 
     public async signMulti(sign: SignatureMultiRequest) {

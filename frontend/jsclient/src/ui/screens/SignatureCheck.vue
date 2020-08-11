@@ -278,39 +278,39 @@ export default class SignatureCheck extends Vue {
                         this.checkResponse.timestamp!.toString()])
 
                 case "signatureCheck.success.message1.block2.line1":
-                    return SignatureCheck.format(res, [this.checkResponse.proof.file_name])
+                    return SignatureCheck.format(res, [this.checkResponse.proof!.file_name])
 
                 case "signatureCheck.success.message1.block2.line2":
                 case "signatureCheck.success.message2.block2.line1":
-                    return SignatureCheck.format(res, [this.checkResponse.proof.algorithm,
-                        this.checkResponse.proof.hash_document])
+                    return SignatureCheck.format(res, [this.checkResponse.proof!.algorithm,
+                        this.checkResponse.proof!.hash_document])
 
                 case "signatureCheck.success.message1.block2.line3":
                 case "signatureCheck.success.message2.block2.line2":
                 case "signatureCheck.success.message2.block2.line6":
-                    return SignatureCheck.format(res, [this.checkResponse.proof.hash_root])
+                    return SignatureCheck.format(res, [this.checkResponse.proof!.hash_root])
 
                 case "signatureCheck.success.message1.block2.line4":
                 case "signatureCheck.success.message2.block2.line8":
-                    return SignatureCheck.format(res, [this.checkResponse.proof.transaction_hash!,
-                        this.checkResponse.proof.block_hash!, this.checkResponse.timestamp!.toString()])
+                    return SignatureCheck.format(res, [this.checkResponse.proof!.transaction_hash!,
+                        this.checkResponse.proof!.block_hash!, this.checkResponse.timestamp!.toString()])
 
                 case "signatureCheck.success.message2.block2.line4":
-                    return SignatureCheck.format(res, [this.checkResponse.proof.hash_document])
+                    return SignatureCheck.format(res, [this.checkResponse.proof!.hash_document])
 
                 case "signatureCheck.success.message1.block2.line5":
                 case "signatureCheck.success.message2.block2.line9":
-                    return SignatureCheck.format(res, [this.checkResponse.proof.origin_public_key,
+                    return SignatureCheck.format(res, [this.checkResponse.proof!.origin_public_key,
                         this.checkResponse.signer || this.$t("signatureCheck.unknown").toString()])
 
                 case "signatureCheck.success.message1.block2.line7":
                 case "signatureCheck.success.message2.block2.line10":
-                    return SignatureCheck.format(res, [this.checkResponse.proof.contract_address])
+                    return SignatureCheck.format(res, [this.checkResponse.proof!.contract_address])
 
                 case "signatureCheck.success.message2.block2.line5":
-                    const hash = this.checkResponse.proof.hash_list[idx]
+                    const hash = this.checkResponse.proof!.hash_list[idx]
                     return SignatureCheck.format(res, [hash.position!, hash.hash || "",
-                        this.checkResponse.check_process[idx]])
+                        this.checkResponse.check_process![idx]])
 
                 case "signatureCheck.errors.hash_inconsistent.message":
                     return SignatureCheck.format(res, [this.checkResponse.hash_document!,
@@ -373,11 +373,11 @@ export default class SignatureCheck extends Vue {
     }
 
     private get storageURL(): string | undefined {
-        const urlNodes: Array<URLNode> | undefined = this.checkResponse?.proof.urls
+        const urlNodes: Array<URLNode> | undefined = this.checkResponse?.proof?.urls
         if (urlNodes === undefined) {
             return undefined
         }
-        for (let urlNode of urlNodes) {
+        for (const urlNode of urlNodes) {
             if (urlNode.type === "API_TEZOS_STORAGE") {
                 return urlNode.url
             }

@@ -209,6 +209,10 @@
       "no_transaction": {
         "title": "Document non horodaté dans Tezos Blockchain",
         "message": ": Nous sommes désolés, votre fichier de preuve correspond au document que vous souhaitez vérifier et semble légitime. Cependant, nous ne pouvons pas trouver dans la blockchain une preuve de sa signature. Le hachage racine de l'arbre Merkle mentionné ({0}) n'est pas présent dans la blockchain "
+      },
+      "internal_servor_error": {
+        "title": "Le serveur n'a pas pu traité votre demande",
+        "message": "Le serveur a rencontré une erreur interne lors du traitement de votre requête. Veuillez confirmer que le format du fichier de preuve est correct auprès du fournisseur."
       }
     },
     "success": {
