@@ -50,25 +50,4 @@ class CheckHandler(
             throw e
         }
     }
-
-    @RequestMapping(
-        value = ["/check"],
-        produces = ["application/json"],
-        consumes = ["application/json"],
-        method = [RequestMethod.POST]
-    )
-    suspend fun checkDocumentJson(
-        @RequestBody checkRequest: CheckRequest
-    ): CheckOutput {
-        val proof = checkRequest.proof?.let {
-            objectMapper.readValue(String(Base64.getDecoder().decode(it)), Proof::class.java)
-        }
-        return try {
-            checkService.checkDocument(checkRequest.documentHash, proof?.toBusiness()).toWeb()
-        } catch (e: CheckException) {
-            e.toWeb()
-        } catch (e: Exception) {
-            throw e
-        }
-    }
 }

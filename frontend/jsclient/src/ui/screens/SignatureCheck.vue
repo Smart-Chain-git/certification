@@ -351,16 +351,7 @@ export default class SignatureCheck extends Vue {
             reader.onloadend = (e) => {
                 const wordArray = CryptoJS.lib.WordArray.create(e.target!.result)
                 this.fileHash = CryptoJS.SHA256(wordArray).toString()
-                if (this.proof !== null) {
-                    const readerProof = new FileReader()
-                    readerProof.onloadend = (e2) => {
-                        this.proofHash = e2.target!.result!.toString().substr("data:application/json;base64,".length)
-                        this.send()
-                    }
-                    readerProof.readAsDataURL(this.proof!)
-                } else {
-                    this.send()
-                }
+              this.send()
             }
             reader.readAsArrayBuffer(this.file!)
         }
@@ -388,7 +379,7 @@ export default class SignatureCheck extends Vue {
     private send() {
         const sigCheck: SignatureCheckRequest = {
             documentHash: this.fileHash,
-            proof: this.proofHash,
+            proof: this.proof == null ? undefined : this.proof,
         }
         this.$modules.signatures.check(sigCheck)
     }

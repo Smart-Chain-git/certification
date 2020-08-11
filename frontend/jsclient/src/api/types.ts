@@ -1,7 +1,7 @@
 
 export interface SignatureCheckRequest {
     documentHash: string,
-    proof?: string,
+    proof?: File,
 }
 
 export interface Hash {

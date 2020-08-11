@@ -1,8 +1,4 @@
-import {
-    SignatureCheckRequest,
-    SignatureCheckResponse, SignatureMultiRequest,
-    SignatureResponse,
-} from "@/api/types"
+import {SignatureCheckRequest, SignatureCheckResponse, SignatureMultiRequest, SignatureResponse,} from "@/api/types"
 import {AxiosRequestConfig, AxiosResponse} from "axios"
 
 import {Api} from "@/api/api"
@@ -19,7 +15,13 @@ export class SignatureApi extends Api {
     }
 
     public check(sigCheck: SignatureCheckRequest): Promise<SignatureCheckResponse> {
-        return this.post<SignatureCheckResponse, SignatureCheckRequest>(API_CHECK, {}, sigCheck)
+        const formData = new FormData()
+        formData.append("documentHash", sigCheck.documentHash)
+        if (sigCheck.proof !== undefined) {
+            formData.append("proof", sigCheck.proof)
+        }
+
+        return this.post<SignatureCheckResponse, FormData>(API_CHECK, {'Content-Type': 'multipart/form-data'}, formData)
             .then((response: AxiosResponse<SignatureCheckResponse>) => {
                 return response.data
             })

@@ -192,7 +192,7 @@
       },
       "incorrect_proof_file": {
         "title": "Le fichier de preuve ne peut pas être analysé",
-        "message": "Le fichier de preuve que vous avez fourni n'est pas une preuve Tezos DigiSign V0 valide. Êtes-vous sûr que ce fichier de preuve a été généré par un outil respectant le protocole Tezos DigiSign V0?"
+        "message": "Le fichier de preuve que vous avez fourni n'est pas une preuve Tezos DigiSign V0 valide. Êtes-vous sûr que ce fichier de preuve a été généré par un outil respectant le protocole Tezos DigiSign V0 ?"
       },
       "incorrect_transaction": {
         "title": "Le fichier de preuve n'est pas cohérent",
