@@ -21,6 +21,7 @@ export default class AccountsModule extends VuexModule {
     private responseInterceptor: number | null = null
     private currentAccount: Account | undefined = undefined
     private httpStatus: number = 0
+    private httpErrorMessage: string = ""
     private currentTokenAccount: Account | undefined = undefined
     private currentTokenError: number = 200
 
@@ -199,9 +200,11 @@ export default class AccountsModule extends VuexModule {
     public async createAccount(account: AccountCreate) {
         await accountApi.create(account).then((response: Account) => {
             this.setHttpStatus(200)
+            this.setHttpErrorMessage("")
             Vue.set(this.accounts, response.id, response)
         }).catch((error) => {
             this.setHttpStatus(error.response.status)
+            this.setHttpErrorMessage(error.response.data.message)
         })
     }
 
@@ -214,10 +217,19 @@ export default class AccountsModule extends VuexModule {
         return this.httpStatus
     }
 
+    @Mutation
+    public setHttpErrorMessage(message: string) {
+        this.httpErrorMessage = message
+    }
+
+    public get getHttpErrorMessage(): string {
+        return this.httpErrorMessage
+    }
+
     @Action
     public async loadActivationToken(token: string) {
         this.setToken(token)
-        this.initToken()
+        await this.initToken()
     }
 
     @Action

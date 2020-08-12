@@ -330,7 +330,10 @@
       "weak": "Password must meet following requirements : 8 characters long, 1 uppercase, 1 lowercase, 1 number, 1 special character."
     },
     "account": {
-      "duplicate": "This login is already taken."
+      "duplicate": {
+        "login": "This login is already taken.",
+        "email": "This email address is already used by an existing account."
+      }
     },
     "back": {
       "generic": "Informations could not be saved, please contact your administrator."
