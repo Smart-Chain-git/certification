@@ -91,8 +91,8 @@
                     </v-col>
                   </v-row>
                 </td>
-                <td class="text-center">{{ job.createdDate | formatDate }}</td>
-                <td class="text-center">{{ job.stateDate | formatDate }}</td>
+                <td class="text-center">{{ job.createdDate | formatTimestamp }}</td>
+                <td class="text-center">{{ job.stateDate | formatTimestamp }}</td>
                 <td class="text-center">{{ job.state }}</td>
                 <td class="text-center">{{ job.docsNumber }}</td>
                 <td class="text-center">{{ job.channelName }}</td>

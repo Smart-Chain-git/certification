@@ -3,6 +3,9 @@
     "lang": "fr",
     "date-format": "DD/MM/Y"
   },
+  "moment": {
+    "unknown-date": "Date indéfinie"
+  },
   "first-day-of-week": "1",
   "login": {
     "login": "Identifiant",

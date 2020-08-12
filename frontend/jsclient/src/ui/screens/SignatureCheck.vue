@@ -341,8 +341,9 @@ export default class SignatureCheck extends Vue {
             this.checkResponse.origin_public_key!])
 
         case "signatureCheck.errors.incorrect_signature_date.message":
-          return SignatureCheck.format(res, [this.formatTimestamp(this.checkResponse.proof_file_signature_date),
-            this.formatTimestamp(this.checkResponse.signature_date)])
+          return SignatureCheck.format(res, [
+            this.$options.filters!.formatTimestamp(this.checkResponse.proof_file_signature_date),
+            this.$options.filters!.formatTimestamp(this.checkResponse.signature_date)])
 
         case "signatureCheck.errors.incorrect_hash_algorithm.message":
           return SignatureCheck.format(res, [this.checkResponse.proof_file_algorithm!, this.checkResponse.hash!])
@@ -370,19 +371,6 @@ export default class SignatureCheck extends Vue {
       format = format + i + "=\"" + stats[i] + "\" "
     }
     return res?.replace("{#}", "<a " + format + ">" + this.$t("signatureCheck.here").toString() + "</a>")
-  }
-
-  private formatTimestamp(date?: Date) {
-    if (date === undefined) {
-      return "UNDEFINED"
-    }
-    switch (this.$i18n.locale) {
-      case "fr":
-        return this.$moment(date).format("DD/MM/YYYY HH:mm:ss")
-      default:
-        return this.$moment(date).format("YYYY/MM/DD HH:mm:ss")
-    }
-
   }
 
   private check() {

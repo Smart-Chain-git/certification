@@ -1,6 +1,6 @@
 <template>
   <v-overflow-btn
-      v-model="$i18n.locale"
+      v-model="currentLocale"
       :items="langs"
       :dark="textColor === 'white'"
   >
@@ -38,6 +38,15 @@ export default class LocaleChanger extends Vue {
       flag: "fr",
     },
   ]
+
+  private get currentLocale(): string {
+    return this.$i18n.locale
+  }
+
+  private set currentLocale(locale: string) {
+    this.$i18n.locale = locale
+    this.$moment.locale(locale)
+  }
 }
 </script>
 

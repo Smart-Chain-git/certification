@@ -3,6 +3,9 @@
     "lang": "en",
     "date-format": "DD/MM/Y"
   },
+  "moment": {
+    "unknown-date": "Undefined date"
+  },
   "first-day-of-week": "1",
   "login": {
     "login": "Login",
