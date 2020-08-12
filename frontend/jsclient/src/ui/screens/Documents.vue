@@ -126,7 +126,7 @@ export default class Documents extends Vue {
 
   private get headers() {
     return [
-      {text: this.$t("documents.name"), align: "center", value: "id", width: "25%"},
+      {text: this.$t("documents.name"), align: "center", value: "metadata.fileName", width: "25%"},
       {text: this.$t("documents.hash"), align: "center", value: "hash", width: "25%"},
       {text: this.$t("documents.jobId"), align: "center", value: "jobId", width: "25%"},
       {text: "", sortable: false, width: "25%"},
