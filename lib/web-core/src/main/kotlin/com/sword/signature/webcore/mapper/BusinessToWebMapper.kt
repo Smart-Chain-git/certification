@@ -55,7 +55,8 @@ fun com.sword.signature.business.model.Job.toWeb() = Job(
     channelName = channelName,
     docsNumber = docsNumber,
     customFields = customFields,
-    rootHash = rootHash
+    rootHash = rootHash,
+    timestamp = timestamp
 )
 
 fun TreeElement.LeafTreeElement.toWeb(proof: com.sword.signature.business.model.Proof? = null) =
@@ -161,6 +162,47 @@ fun com.sword.signature.business.exception.CheckException.toWeb(): CheckOutput.K
         is CheckException.NoTransaction -> CheckOutput.Ko(
             error = message,
             rootHash = rootHash
+        )
+
+        is CheckException.IncorrectHash -> CheckOutput.Ko(
+            error = message,
+            hash = hash,
+            proofFileHash = proofFileHash
+        )
+
+        is CheckException.IncoherentOriginPublicKey -> CheckOutput.Ko(
+            error = message,
+            originPublicKey = originPublicKey,
+            proofFileOriginPublicKey = proofFileOriginPublicKey
+        )
+
+        is CheckException.IncorrectSignatureDate -> CheckOutput.Ko(
+            error = message,
+            signatureDate = signatureDate,
+            proofFileSignatureDate = proofFileSignatureDate
+        )
+
+        is CheckException.IncorrectHashAlgorithm -> CheckOutput.Ko(
+            error = message,
+            hash = hash,
+            proofFileAlgorithm = proofFileAlgorithm
+        )
+
+        is CheckException.UnknownHashAlgorithm -> CheckOutput.Ko(
+            error=message,
+            proofFileAlgorithm = proofFileAlgorithm
+        )
+
+        is CheckException.IncorrectPublicKey -> CheckOutput.Ko(
+            error=message,
+            publicKey = publicKey,
+            proofFilePublicKey = proofFilePublicKey
+        )
+
+        is CheckException.IncorrectContractAddress -> CheckOutput.Ko(
+            error = message,
+            contractAddress = contractAddress,
+            proofFileContractAddress = proofFileContractAddress
         )
     }
 }

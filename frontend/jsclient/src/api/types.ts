@@ -1,4 +1,3 @@
-
 export interface SignatureCheckRequest {
     documentHash: string,
     proof?: File,
@@ -40,7 +39,17 @@ export interface SignatureCheckResponse {
     output: string,
     hash_document_proof?: string,
     hash_document?: string,
-    hash_root?: string
+    hash_root?: string,
+    origin_public_key?: string,
+    proof_file_origin_public_key?: string,
+    hash?: string,
+    proof_file_hash?: string,
+    signature_date?: Date,
+    proof_file_signature_date?: Date,
+    proof_file_algorithm?: string,
+    proof_file_public_key?: string,
+    contract_address?: string,
+    proof_file_contract_address?: string,
 }
 
 export interface URLNode {
@@ -146,7 +155,7 @@ export interface SignatureMultiRequest {
     algorithm: string,
     flowName: string,
     callBackUrl?: string,
-    customFields: {[key: string]: string}
+    customFields: { [key: string]: string }
     files: Array<SignatureRequest>
 }
 
@@ -159,7 +168,7 @@ export interface SignatureRequest {
 export interface SignMetaData {
     fileName: string,
     fileSize: number,
-    customFields?: {[key: string]: string},
+    customFields?: { [key: string]: string },
 }
 
 export interface SignatureResponse {
@@ -170,10 +179,11 @@ export interface SignatureResponse {
 export interface AccountValidation {
     password: string
 }
+
 export interface SignMetaData {
     fileName: string,
     fileSize: number,
-    customFields?: {[key: string]: string},
+    customFields?: { [key: string]: string },
 }
 
 

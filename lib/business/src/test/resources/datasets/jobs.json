@@ -5,7 +5,7 @@
 				"$oid": "5e8c36c49df469062bc658c1"
 			},
 			"createdDate": "2020-04-07T08:16:04.028Z",
-			"numbreOfTry": 0,
+			"numberOfTry": 0,
 			"algorithm": "SHA-256",
 			"userId": "5e74a073a386f170f3850b4b",
 			"flowName": "ARS_20180626_02236_130006",
@@ -18,7 +18,7 @@
 				"$oid": "5e8c36c49df469062bc658c8"
 			},
 			"createdDate": "2020-04-08T08:16:04.114Z",
-			"numbreOfTry": 0,
+			"numberOfTry": 0,
 			"algorithm": "SHA-256",
 			"userId": "5e74a073a386f170f3850b4b",
 			"flowName": "ARS_20180626_02236_130006",
@@ -32,7 +32,7 @@
 				"$oid": "5e8c36c49df469062bc658c9"
 			},
 			"createdDate": "2020-05-07T08:16:04.114Z",
-			"numbreOfTry": 0,
+			"numberOfTry": 0,
 			"algorithm": "SHA-256",
 			"userId": "ljghdslkgjsdglhjdslghjdsklgjdgskldjglgdsjgdlskgjdslknjcvhuire",
 			"flowName": "single user job1",
@@ -45,13 +45,48 @@
 				"$oid": "5e8c36c49df469062bc658d0"
 			},
 			"createdDate": "2020-05-07T08:17:04.114Z",
-			"numbreOfTry": 0,
+			"numberOfTry": 0,
 			"algorithm": "SHA-256",
 			"userId": "ljghdslkgjsdglhjdslghjdsklgjdgskldjglgdsjgdlskgjdslknjcvhuire",
 			"flowName": "single user job2",
 			"stateDate": "2020-04-07T08:16:04.113Z",
 			"state": "INSERTED",
 			"channelName" : "Alberta"
+		},
+		{
+			"_id": {
+				"$oid": "5e8c36c49df469062bc658d6"
+			},
+			"createdDate": "2020-05-07T08:17:04.115Z",
+			"injectedDate": "2020-05-07T09:17:04.115Z",
+			"validatedDate": "2020-05-07T10:17:04.115Z",
+			"numberOfTry": 1,
+			"algorithm": "SHA-256",
+			"userId": "ljghdslkgjsdglhjdslghjdsklgjdgskldjglgdsjgdlskgjdslknjcvhuire",
+			"flowName": "single user job3",
+			"stateDate": "2020-05-07T10:17:04.115Z",
+			"state": "VALIDATED",
+			"channelName" : "Validation",
+			"contractAddress": "KT1Tq22yXWayLbmBKwZUhVXMoYqxtzp9XvTk",
+			"transactionHash": "opEUqHyA46QF7Jgr96DzqoZBiWekpg9swzyzJzDA4AZ9DvCWxcH",
+			"timestamp": "2020-05-07T10:17:09.117Z"
+		},
+		{
+			"_id": {
+				"$oid": "5e8c36c49df469062bc658d7"
+			},
+			"createdDate": "2020-05-07T08:17:04.115Z",
+			"injectedDate": "2020-05-07T09:17:04.115Z",
+			"validatedDate": "2020-05-07T10:17:04.115Z",
+			"numberOfTry": 1,
+			"algorithm": "SHA-256",
+			"userId": "ljghdslkgjsdglhjdslghjdsklgjdgskldjglgdsjgdlskgjdslknjcvhuire",
+			"flowName": "single user job4",
+			"stateDate": "2020-05-07T10:17:04.115Z",
+			"state": "VALIDATED",
+			"channelName" : "Validation",
+			"contractAddress": "KT1Tq22yXWayLbmBKwZUhVXMoYqxtzp9XvTk",
+			"transactionHash": "opEUqHyA46QF7Jgr96DzqoZBiWekpg9swzyzJzDA4AZ1DvCWxcH"
 		}
 	],
 	"treeElements": [
@@ -153,6 +188,28 @@
 				"fileName": "single_2.pdf"
 			},
 			"jobId": "5e8c36c49df469062bc658d0",
+			"type": "LEAF"
+		},
+		{
+			"_id": {
+				"$oid": "5eea37887e88a86920d0d1dd"
+			},
+			"hash": "7d70baefd8e6284346d5021dde2288a5aaf4ce03220ac7653ca3f697be4cf39c",
+			"metadata": {
+				"fileName": "single_3.pdf"
+			},
+			"jobId": "5e8c36c49df469062bc658d6",
+			"type": "LEAF"
+		},
+		{
+			"_id": {
+				"$oid": "5eea37887e88a86920d0d1de"
+			},
+			"hash": "7d70baefd8e6284346d5021dde2288a5aaf4ce03220ac7653ca3f697be4cf39d",
+			"metadata": {
+				"fileName": "single_4.pdf"
+			},
+			"jobId": "5e8c36c49df469062bc658d7",
 			"type": "LEAF"
 		}
 	]

@@ -1,12 +1,14 @@
 package com.sword.signature.business.service
 
+import com.ninjasquad.springmockk.MockkBean
 import com.sword.signature.business.exception.MissingRightException
-import com.sword.signature.business.model.Account
-import com.sword.signature.business.model.FileFilter
-import com.sword.signature.business.model.Proof
-import com.sword.signature.business.model.URLNode
+import com.sword.signature.business.model.*
 import com.sword.signature.common.enums.TreeElementPosition
 import com.sword.signature.model.migration.MigrationHandler
+import com.sword.signature.tezos.reader.service.TezosReaderService
+import com.sword.signature.tezos.reader.tzindex.model.TzContract
+import com.sword.signature.tezos.reader.tzindex.model.TzOp
+import io.mockk.coEvery
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.reactive.awaitFirstOrNull
@@ -25,12 +27,16 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate
 import java.nio.file.Path
 import java.time.LocalDate
+import java.time.OffsetDateTime
 
 class FileServiceContextTest @Autowired constructor(
     override val mongoTemplate: ReactiveMongoTemplate,
     override val migrationHandler: MigrationHandler,
     private val fileService: FileService
 ) : AbstractServiceContextTest() {
+
+    @MockkBean
+    private lateinit var tezosReaderService: TezosReaderService
 
     val adminAccount = Account(
         id = "5e74a073a386f170f3850b4b",
@@ -81,6 +87,8 @@ class FileServiceContextTest @Autowired constructor(
     private val job2Id = "5e8c36c49df469062bc658c8"
     private val job3Id = "5e8c36c49df469062bc658c9"
     private val job4Id = "5e8c36c49df469062bc658d0"
+    private val job5Id = "5e8c36c49df469062bc658d6"
+    private val job6Id = "5e8c36c49df469062bc658d7"
 
     private val file11Id = "5e8ed52fb1606a18565cbb92" // jobId: 5e8c36c49df469062bc658c1
     private val file12Id = "5e8ed52fb1606a18565cbb93" // jobId: 5e8c36c49df469062bc658c1
@@ -88,6 +96,8 @@ class FileServiceContextTest @Autowired constructor(
     private val file2Id = "5e8ed52fb1606a18565cbb97" // jobId: 5e8c36c49df469062bc658c8
     private val file3Id = "5eea37705609738dde237658" // jobId: 5e8c36c49df469062bc658c9
     private val file4Id = "5eea37887e88a86920d0d1dc" // jobId: 5e8c36c49df469062bc658d0
+    private val file5Id = "5eea37887e88a86920d0d1dd" // jobId: 5e8c36c49df469062bc658d6
+    private val file6Id = "5eea37887e88a86920d0d1de" // jobId: 5e8c36c49df469062bc658d7
 
     @BeforeEach
     fun refreshDatabase() {
@@ -99,6 +109,13 @@ class FileServiceContextTest @Autowired constructor(
     inner class GetFileProof {
         private val blockchain = "TEZOS_TEST"
         private val webProviderURLNode = URLNode.fromWebProviderUrl(url ="WEB_PROVIDER_TEST")
+        private val contractAddress = "KT1Tq22yXWayLbmBKwZUhVXMoYqxtzp9XvTk"
+        private val contract = TzContract(
+            address = contractAddress,
+            manager = "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb",
+            height = 3,
+            bigMapIds = listOf(0)
+        )
 
         @Test
         fun `not existing file proof should return null for authorized person`() {
@@ -123,7 +140,7 @@ class FileServiceContextTest @Autowired constructor(
                 runBlocking {
                     fileService.getFileProof(requester = simpleAccount, fileId = file13Id).awaitFirstOrNull()
                 }
-            }.isInstanceOf(IllegalAccessException::class.java)
+            }.isInstanceOf(MissingRightException::class.java)
         }
 
         @ParameterizedTest
@@ -136,6 +153,102 @@ class FileServiceContextTest @Autowired constructor(
                 val actual = fileService.getFileProof(requester = adminAccount, fileId = fileId).awaitFirstOrNull()
                 assertThat(actual).isNotNull.isEqualTo(expectedProof)
             }
+        }
+
+        @Test
+        fun `get fileProof with validated job`() {
+            val documentHash = "7d70baefd8e6284346d5021dde2288a5aaf4ce03220ac7653ca3f697be4cf39c"
+            val transactionHash = "opEUqHyA46QF7Jgr96DzqoZBiWekpg9swzyzJzDA4AZ9DvCWxcH"
+            val apiStorageURLNode = URLNode(
+                url ="http://127.0.0.1:8000/explorer/bigmap/"+contract.bigMapIds[0]+"/" + documentHash,
+                type = URLNodeType.API_TEZOS_STORAGE,
+                comment = "You can check the hash's anchorage in the tezos blockchain with this URL."
+            )
+
+            val apiTransactionURLNode = URLNode(
+                url= "http://127.0.0.1:8000/explorer/op/$transactionHash",
+                type = URLNodeType.API_TEZOS_TRANSACTION,
+                comment = "You can check the transaction in the tezos blockchain with this URL."
+            )
+            val expectedProof = Proof(
+                filename = "single_3.pdf",
+                algorithm = "SHA-256",
+                rootHash = documentHash,
+                documentHash = documentHash,
+                hashes = emptyList(),
+                blockChain = blockchain,
+                urls = listOf(apiStorageURLNode, apiTransactionURLNode, webProviderURLNode),
+                contractAddress = contractAddress,
+                transactionHash = "opEUqHyA46QF7Jgr96DzqoZBiWekpg9swzyzJzDA4AZ9DvCWxcH",
+                signatureDate = OffsetDateTime.parse("2020-05-07T10:17:09.117Z"),
+                creatorAddress = contract.manager
+            )
+            val actual = runBlocking {
+                coEvery { tezosReaderService.getContract(contractAddress) } returns contract
+                fileService.getFileProof(requester = adminAccount, fileId = file5Id).awaitFirstOrNull()
+            }
+            assertThat(actual).isNotNull.isEqualTo(expectedProof)
+        }
+
+        @Test
+        fun `get fileProof with validated job and unset contractTimestamp`() {
+            val documentHash = "7d70baefd8e6284346d5021dde2288a5aaf4ce03220ac7653ca3f697be4cf39d"
+            val transactionHash = "opEUqHyA46QF7Jgr96DzqoZBiWekpg9swzyzJzDA4AZ1DvCWxcH"
+            val timestamp = OffsetDateTime.parse("2020-05-10T10:17:09.117Z")
+            val transaction = TzOp(
+                hash = "ooG3vVwQA51f6YiHd41wvomejuzkBWKJEgvGiYQ4zQK4jrXBFCi",
+                block = "BMeaiFq5S6EuPVR3ctvNGWT7dufc35SjNkHyiKFbTKiC22DH23f",
+                time = OffsetDateTime.parse("2020-06-03T14:50:04Z"),
+                height = 15,
+                bigMapDiff = listOf(
+                    TzOp.BigMapDiff(
+                        key = "10cba66df788a0848e397c396b993057c64bb29cadc78152246ad28c1a3b02ef",
+                        keyHash = "exprukefU3KUcVMbUCVa9nh3TkRfdPiVLHYN3ehxorRsT6hYpcYFvM",
+                        value = TzOp.BigMapDiff.Value(
+                            timestamp = timestamp,
+                            address = "tz1aSkwEot3L2kmUvcoxzjMomb9mvBNuzFK6"
+                        ),
+                        meta = TzOp.BigMapDiff.Meta(
+                            contract = contractAddress,
+                            bigmapId = contract.bigMapIds[0],
+                            time = OffsetDateTime.parse("2020-06-03T14:50:04Z"),
+                            height = 15,
+                            block = "BMeaiFq5S6EuPVR3ctvNGWT7dufc35SjNkHyiKFbTKiC22DH23f"
+                        ),
+                        action = "update"
+                    )
+                )
+            )
+            val apiStorageURLNode = URLNode(
+                url ="http://127.0.0.1:8000/explorer/bigmap/"+contract.bigMapIds[0]+"/" + documentHash,
+                type = URLNodeType.API_TEZOS_STORAGE,
+                comment = "You can check the hash's anchorage in the tezos blockchain with this URL."
+            )
+
+            val apiTransactionURLNode = URLNode(
+                url= "http://127.0.0.1:8000/explorer/op/$transactionHash",
+                type = URLNodeType.API_TEZOS_TRANSACTION,
+                comment = "You can check the transaction in the tezos blockchain with this URL."
+            )
+            val expectedProof = Proof(
+                filename = "single_4.pdf",
+                algorithm = "SHA-256",
+                rootHash = documentHash,
+                documentHash = documentHash,
+                hashes = emptyList(),
+                blockChain = blockchain,
+                urls = listOf(apiStorageURLNode, apiTransactionURLNode, webProviderURLNode),
+                contractAddress = contractAddress,
+                transactionHash = "opEUqHyA46QF7Jgr96DzqoZBiWekpg9swzyzJzDA4AZ1DvCWxcH",
+                signatureDate = timestamp,
+                creatorAddress = contract.manager
+            )
+            val actual = runBlocking {
+                coEvery { tezosReaderService.getContract(contractAddress) } returns contract
+                coEvery { tezosReaderService.getTransaction(transactionHash) } returns transaction
+                fileService.getFileProof(requester = adminAccount, fileId = file6Id).awaitFirstOrNull()
+            }
+            assertThat(actual).isNotNull.isEqualTo(expectedProof)
         }
 
         private val multipleFileJobId = "5e8c36c49df469062bc658c1"
@@ -253,7 +366,7 @@ class FileServiceContextTest @Autowired constructor(
                         filter = FileFilter(accountId = simpleAccount.id)
                     ).toList()
                 }
-            val expected = listOf(file3Id, file4Id)
+            val expected = listOf(file3Id, file4Id, file5Id, file6Id)
             assertEquals(expected.size, files.size)
             assertThat(files.map { it.id }).containsExactlyInAnyOrderElementsOf(expected)
         }
@@ -266,7 +379,7 @@ class FileServiceContextTest @Autowired constructor(
                         requester = adminAccount
                     ).toList()
                 }
-            val expected = listOf(file11Id, file12Id, file13Id, file2Id, file3Id, file4Id)
+            val expected = listOf(file11Id, file12Id, file13Id, file2Id, file3Id, file4Id, file5Id, file6Id)
             assertEquals(expected.size, files.size)
             assertThat(files.map { it.id }).containsExactlyInAnyOrderElementsOf(expected)
         }
@@ -294,7 +407,7 @@ class FileServiceContextTest @Autowired constructor(
                         filter = FileFilter(accountId = simpleAccount.id)
                     ).toList()
                 }
-            val expected = listOf(file3Id, file4Id)
+            val expected = listOf(file3Id, file4Id, file5Id, file6Id)
             assertEquals(expected.size, files.size)
             assertThat(files.map { it.id }).containsExactlyInAnyOrderElementsOf(expected)
         }
@@ -336,7 +449,7 @@ class FileServiceContextTest @Autowired constructor(
                         filter = FileFilter(name = "Single")
                     ).toList()
                 }
-            val expected = listOf(file3Id, file4Id)
+            val expected = listOf(file3Id, file4Id, file5Id, file6Id)
             assertEquals(expected.size, files.size)
             assertThat(files.map { it.id }).containsExactlyInAnyOrderElementsOf(expected)
         }
@@ -378,7 +491,7 @@ class FileServiceContextTest @Autowired constructor(
                         filter = FileFilter(dateStart = LocalDate.of(2020, 4, 8))
                     ).toList()
                 }
-            val expected = listOf(file2Id, file3Id, file4Id)
+            val expected = listOf(file2Id, file3Id, file4Id, file5Id, file6Id)
             assertEquals(expected.size, files.size)
             assertThat(files.map { it.id }).containsExactlyInAnyOrderElementsOf(expected)
         }

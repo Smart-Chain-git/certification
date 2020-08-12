@@ -10,12 +10,6 @@ class URLNode(
         val ROOTHASH_PLACEHOLDER = "\$rootHash"
         val TRANSACTION_HASH_PLACEHOLDER = "\$transactionHash"
 
-        fun WebSignerURLNode(url: String) = URLNode(
-            url = url,
-            type = URLNodeType.WEB_SIGNER,
-            comment = "URL to check the signer."
-        )
-
         fun fromApiStorageUrl(
             url: String,
             bigMapId: String,

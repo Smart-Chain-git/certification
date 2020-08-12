@@ -32,6 +32,8 @@ jwt:
   issuer: "Tezos@Signature"
   duration: 2h
 tezos:
+  contract:
+    address: "TEZOS_CONTRACT_ADDRESS" # To replace by the actual smart contract address.
   indexer:
     url: "http://127.0.0.1:8000"
   validation:

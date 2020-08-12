@@ -98,6 +98,7 @@ docker-compose -f docker-compose.sandbox.yml up -d
 (cd contract; make originate)
 ```
 * Then, edit the file **compose-config/sandbox/application-daemon.yml** and replace the property *tezos.contract.address* by the contract address.
+* Do the same update to the file **compose-config/sandbox/application-rest.yml**.
 * Finally, restart the daemon container:
 ```
 docker restart tezos-signature-daemon

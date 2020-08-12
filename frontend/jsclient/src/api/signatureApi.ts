@@ -1,4 +1,4 @@
-import {SignatureCheckRequest, SignatureCheckResponse, SignatureMultiRequest, SignatureResponse,} from "@/api/types"
+import {SignatureCheckRequest, SignatureCheckResponse, SignatureMultiRequest, SignatureResponse} from "@/api/types"
 import {AxiosRequestConfig, AxiosResponse} from "axios"
 
 import {Api} from "@/api/api"
@@ -21,7 +21,7 @@ export class SignatureApi extends Api {
             formData.append("proof", sigCheck.proof)
         }
 
-        return this.post<SignatureCheckResponse, FormData>(API_CHECK, {'Content-Type': 'multipart/form-data'}, formData)
+        return this.post<SignatureCheckResponse, FormData>(API_CHECK, {"Content-Type": "multipart/form-data"}, formData)
             .then((response: AxiosResponse<SignatureCheckResponse>) => {
                 return response.data
             })

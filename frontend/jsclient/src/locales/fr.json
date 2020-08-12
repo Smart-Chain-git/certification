@@ -12,8 +12,8 @@
     "gcu": "Conditions générales d'utilisation",
     "back": "Retour"
   },
-  "firstLogin" : {
-    "title" :"Bienvenue sur TEZOS DigiSign.",
+  "firstLogin": {
+    "title": "Bienvenue sur TEZOS DigiSign.",
     "message1": "Avant votre première connexion, merci de choisir",
     "message2": "un mot de passe et de confirmer votre choix.",
     "password": "Créer mon mot de passe",
@@ -34,7 +34,7 @@
     "documentsSigned": "documents signés",
     "jobsCreated": "jobs créés",
     "jobsProcessed": "jobs éxécutés",
-    "monthStatistics" : "Statistiques de {0}",
+    "monthStatistics": "Statistiques de {0}",
     "more": "Voir plus"
   },
   "account": {
@@ -52,10 +52,10 @@
     },
     "edit": {
       "title": {
-        "manage" : "Gestion des utilisateurs",
+        "manage": "Gestion des utilisateurs",
         "profile": "Mon compte"
       },
-      "subTitle":{
+      "subTitle": {
         "create": "Créer un utilisateur",
         "edit": "Editer un utilisateur"
       },
@@ -110,7 +110,7 @@
     }
   },
   "channelManagement": {
-    "title":"Gestion des canaux",
+    "title": "Gestion des canaux",
     "new": "Nouveau token",
     "all": "Tous les tokens",
     "name": "Nom",
@@ -136,7 +136,6 @@
     "login": "Connexion",
     "logout": "Déconnexion"
   },
-
   "documents": {
     "title": "Liste des documents",
     "jobId": "Job concerné",
@@ -147,16 +146,16 @@
     "search": "Rechercher",
     "back": "Retour",
     "records": "résultats"
-	},
+  },
   "signatureCheck": {
-	"hash": "Hash du document",
+    "hash": "Hash du document",
     "check": "Vérifier vos fichiers",
     "about": "A propos",
     "contact": "Contactez nous",
-    "unknown" : "Organisation inconnue",
+    "unknown": "Organisation inconnue",
     "title": "Bienvenue sur la page de vérification de Tezos DigiSign.",
     "subtitle": "Vous pouvez ici vérifier l'authenticité des documents signés à l'aide du protocole et des outils Tezos DigiSign.",
-    "text1":"Nous vous invitons à glisser-déposer ou à télécharger le fichier que vous souhaitez vérifier. Si ce fichier a été signé par Sword Group ou par un partenaire de Sword Group qui nous a informé de leurs signatures, et si ce fichier n'a pas été modifié depuis sa signature, nous vous confirmerons immédiatement son authenticité.",
+    "text1": "Nous vous invitons à glisser-déposer ou à télécharger le fichier que vous souhaitez vérifier. Si ce fichier a été signé par Sword Group ou par un partenaire de Sword Group qui nous a informé de leurs signatures, et si ce fichier n'a pas été modifié depuis sa signature, nous vous confirmerons immédiatement son authenticité.",
     "text2": "Si notre plateforme ne reconnaît pas le fichier, mais si vous savez que le fichier a été certifié en utilisant Tezos DigiSign, vous devriez avoir reçu un document de preuve. Ce document, au format JSON, nous donnera toutes les informations dont nous avons besoin pour vérifier l'authenticité du document. Dans ce cas, nous vous invitons à télécharger à la fois le fichier à vérifier et le document de preuve avant de cliquer sur le bouton de vérification.",
     "upload": "Téléversez votre fichier",
     "uploadProof": "Téléversez votre fichier de preuve",
@@ -210,9 +209,41 @@
         "title": "Document non horodaté dans Tezos Blockchain",
         "message": ": Nous sommes désolés, votre fichier de preuve correspond au document que vous souhaitez vérifier et semble légitime. Cependant, nous ne pouvons pas trouver dans la blockchain une preuve de sa signature. Le hachage racine de l'arbre Merkle mentionné ({0}) n'est pas présent dans la blockchain "
       },
+      "incorrect_hash": {
+        "title": "Le hash du document est différent du hash de la preuve",
+        "message": "Nous sommes désolés, votre fichier de preuve ne correspond pas au document que vous voulez vérifier. En effet, le hash du document ({0}) n'est pas le hash du fichier de preuve ({1})."
+      },
+      "incorrect_origin_public_key": {
+        "title": "Le compte Tezos de la preuve n'est pas géré par notre plateforme.",
+        "message": "Nous sommes désolés, votre fichier de preuve fait référence à un compte Tezos inconnu de notre plateforme. En effet, le compte Tezos du fichier de preuve est {0} mais notre plateforme attend le compte Tezos {1}."
+      },
+      "incorrect_signature_date": {
+        "title": "La date de signature du fichier de preuve est incorrecte",
+        "message": "Nous sommes désolés, votre fichier de preuve a une date de signature incorrecte : {0}. La date de signature sur le blockchain Tezos est : {1}."
+      },
+      "incorrect_hash_algorithm": {
+        "title": "L'algorithme de hash est incorrect",
+        "message": "Nous sommes désolés, votre fichier a le mauvais algorithme de hash : {0}. Il ne correspond pas au hash fourni : {1}."
+      },
+      "unknown_hash_algorithm": {
+        "title": "L'algorithme de hash est incorrect",
+        "message": "Nons sommes désolé, votre fichier a le mauvais algorithme de hash : {0}. Le serveur ne le reconnaît pas."
+      },
+      "incorrect_public_key": {
+        "title": "La clé publique du fichier de preuve est incorrecte",
+        "message": "Nous sommes désolés, le fichier de preuve a la mauvaise clé publique  du signataire : {0}. La clé publique ancrée sur la blockchain Tezos est : {1}."
+      },
+      "incorrect_contract_address": {
+        "title": "L'adresse du contract du fichier de preuve est incorrecte",
+        "message": "Nous sommes désolés, le fichier de preuve a la mauvaise adresse du contract : {0}. Le serveur Digisign attend l'adresse de contrat suivante : {1}."
+      },
       "internal_servor_error": {
         "title": "Le serveur n'a pas pu traité votre demande",
         "message": "Le serveur a rencontré une erreur interne lors du traitement de votre requête. Veuillez confirmer que le format du fichier de preuve est correct auprès du fournisseur."
+      },
+      "generic": {
+        "title": "Hash de document non trouvé dans TEZOS DigiSign",
+        "message": "Nous sommes désolés, nous ne reconnaissons pas ce document. Etes-vous sûr d'avoir la même version du fichier qu'au moment de sa signature ? Si ce n'est pas le cas, merci de mettre en ligne la version originale. Si le document est bon et qu'un fichier de preuve vous a été fourni, merci de le mettre en ligne également."
       }
     },
     "success": {
@@ -224,7 +255,7 @@
         "block2": {
           "line1": "Nous connaissions votre fichier sous le nom {0}.",
           "line2": "En utilisant l'algorithme {0}, votre fichier génère l'impression numérique ci-dessous (hachage): {1}",
-          "line3": "Le processus de signature peut avoir inclus des documents supplémentaires en même temps. Nous avons utilisé un système connu sous le nom d'arbre Merkel pour générer une signature unique sur plusieurs documents simultanément. Cet arbre Merkel est identifié par son hachage racine {0}." ,
+          "line3": "Le processus de signature peut avoir inclus des documents supplémentaires en même temps. Nous avons utilisé un système connu sous le nom d'arbre Merkel pour générer une signature unique sur plusieurs documents simultanément. Cet arbre Merkel est identifié par son hachage racine {0}.",
           "line4": "Votre document, ainsi que le hachage racine, a été signé dans la transaction Tezos Blockchain {0}, présent dans le bloc Tezos {1}, le {2}. Il est désormais stocké dans un contrat intelligent",
           "line5": "Le document a été signé par une entité connue par sa clé publique Tezos unique {0}. L'opérateur de cette plateforme de vérification a reçu au préalable la confirmation que sa clé publique appartient à {1}.",
           "line6": "Cliquez {#} pour obtenir un fichier de preuve expliquant la relation entre l'impression numérique de votre document et le hachage racine de l'arbre Merkle. Avec ce fichier de preuve, vous pouvez prouver à quiconque que votre document a été signé et horodaté. Si vous le faites ne l'avez pas déjà, veuillez le conserver en lieu sûr avec votre document d'origine. ",
@@ -245,7 +276,7 @@
           "line6": "Ce dernier résultat se trouve en haut de l'arbre Merkle. Nous l'appelons le hachage racine de l'arbre Merkle: {0}",
           "line7": "Si votre document était différent de celui qui a été signé, le hachage racine serait différent",
           "line8": "Nous sommes alors entrés dans la blockchain, et nous pouvons confirmer que votre document avec le Root Hash, a été signé dans la transaction Tezos Blockchain {0}, présent dans le bloc Tezos {1}, le {2 }. Il est désormais stocké dans un contrat intelligent. ",
-          "line9": "Le document a été signé par une entité connue par sa clé publique Tezos unique {0}. Sur la base de notre base de données interne, l'opérateur de cette plateforme de vérification a reçu au préalable la confirmation que sa clé publique appartient à {1}" ,
+          "line9": "Le document a été signé par une entité connue par sa clé publique Tezos unique {0}. Sur la base de notre base de données interne, l'opérateur de cette plateforme de vérification a reçu au préalable la confirmation que sa clé publique appartient à {1}",
           "line10": "Cliquez {#} pour obtenir les informations techniques sur l'endroit où les informations sont stockées dans le contrat intelligent Tezos DigiSign (adresse du contrat: {0})."
         }
       },
@@ -274,10 +305,10 @@
   "signatureHandler": {
     "title": "Requête de signature",
     "fileName": "Nom",
-    "size":"Taille",
+    "size": "Taille",
     "hash": "Hash",
     "keyValue": "Clés & Valeurs",
-    "sign" : "Signer",
+    "sign": "Signer",
     "cancel": "Annuler",
     "upload": "Téléverser",
     "uploadFiles": "Téléversez vos fichiers",
@@ -318,7 +349,7 @@
     }
   },
   "disableConfirm": {
-    "title":"Désactiver l'utilisateur",
+    "title": "Désactiver l'utilisateur",
     "subTitle": "Êtes-vous sûr(e) de vouloir désactiver cet utilisateur ?",
     "content": "",
     "confirmButton": "Confirmer",

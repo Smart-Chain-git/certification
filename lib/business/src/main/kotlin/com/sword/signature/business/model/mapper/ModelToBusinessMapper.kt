@@ -48,6 +48,7 @@ fun JobEntity.toBusiness(rootHash: String? = null, files: List<TreeElement.LeafT
     algorithm = algorithm,
     userId = userId,
     transactionHash = transactionHash,
+    timestamp = timestamp,
     blockDepth = blockDepth,
     blockHash = blockHash,
     createdDate = createdDate,

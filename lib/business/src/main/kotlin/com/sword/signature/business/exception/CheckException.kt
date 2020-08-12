@@ -36,4 +36,38 @@ sealed class CheckException(
     class NoTransaction(
         val rootHash: String
     ) : CheckException(10, "NO_TRANSACTION")
+
+    class IncorrectHash(
+        val hash: String,
+        val proofFileHash: String
+    ) : CheckException(11, "INCORRECT_HASH")
+
+    class IncoherentOriginPublicKey(
+        val originPublicKey: String,
+        val proofFileOriginPublicKey: String
+    ) : CheckException(12, "INCORRECT_ORIGIN_PUBLIC_KEY")
+
+    class IncorrectSignatureDate(
+        val signatureDate: OffsetDateTime,
+        val proofFileSignatureDate: OffsetDateTime?
+    ) : CheckException(13, "INCORRECT_SIGNATURE_DATE")
+
+    class IncorrectHashAlgorithm(
+        val hash: String,
+        val proofFileAlgorithm: String
+    ) : CheckException(14, "INCORRECT_HASH_ALGORITHM")
+
+    class UnknownHashAlgorithm(
+        val proofFileAlgorithm: String
+    ) : CheckException(15, "UNKNOWN_HASH_ALGORITHM")
+
+    class IncorrectPublicKey(
+        val publicKey: String,
+        val proofFilePublicKey: String
+    ) : CheckException(16, "INCORRECT_PUBLIC_KEY")
+
+    class IncorrectContractAddress(
+        val contractAddress: String,
+        val proofFileContractAddress: String
+    ) : CheckException(17, "INCORRECT_CONTRACT_ADDRESS")
 }

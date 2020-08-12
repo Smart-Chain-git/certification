@@ -86,13 +86,13 @@
                     return order * a.name.localeCompare(b.name)
 
                 case "expirationDate":
-                    const a2 = a["expirationDate"] ? Number(new Date(a.expirationDate)) : Number(new Date(0))
-                    const b2 = b["expirationDate"] ? Number(new Date(b.expirationDate)) : Number(new Date(0))
+                    const a2 = a.expirationDate ? Number(new Date(a.expirationDate)) : Number(new Date(0))
+                    const b2 = b.expirationDate ? Number(new Date(b.expirationDate)) : Number(new Date(0))
                     return order * (b2 - a2)
 
                 case "creationDate":
-                    const a3 = a["creationDate"] ? Number(new Date(a.creationDate)) : Number(new Date(0))
-                    const b3 = b["creationDate"] ? Number(new Date(b.creationDate)) : Number(new Date(0))
+                    const a3 = a.creationDate ? Number(new Date(a.creationDate)) : Number(new Date(0))
+                    const b3 = b.creationDate ? Number(new Date(b.creationDate)) : Number(new Date(0))
                     return order * (b3 - a3)
 
                 case "revoked":
@@ -160,7 +160,7 @@
             if (token.revoked) {
                 return false
             }
-            if (!token["expirationDate"]) {
+            if (!token.expirationDate) {
                 return true
             }
             return (new Date(token.expirationDate) > new Date(moment().format("YYYY-MM-DD")))

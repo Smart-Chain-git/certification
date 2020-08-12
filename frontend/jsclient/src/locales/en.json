@@ -12,8 +12,8 @@
     "gcu": "Terms of Use",
     "back": "Back"
   },
-  "firstLogin" : {
-    "title" :"Welcome on board!",
+  "firstLogin": {
+    "title": "Welcome on board!",
     "message1": "Please change your password to activate your account",
     "message2": "",
     "password": "New password",
@@ -34,7 +34,7 @@
     "documentsSigned": "documents signed",
     "jobsCreated": "jobs created",
     "jobsProcessed": "jobs processed",
-    "monthStatistics" : "{0} statistics",
+    "monthStatistics": "{0} statistics",
     "more": "View more"
   },
   "account": {
@@ -55,7 +55,7 @@
         "manage": "Manage users",
         "profile": "My account"
       },
-      "subTitle":{
+      "subTitle": {
         "create": "Add an user",
         "edit": "Edit an user"
       },
@@ -78,7 +78,7 @@
     }
   },
   "channelManagement": {
-    "title":"Channel management",
+    "title": "Channel management",
     "new": "New token",
     "all": "All tokens",
     "date": "Date",
@@ -104,7 +104,6 @@
     "login": "Sign in",
     "logout": "Sign out"
   },
-
   "documents": {
     "title": "Documents List",
     "jobId": "Related Job",
@@ -117,11 +116,11 @@
     "records": "records"
   },
   "signatureCheck": {
-	"hash": "Document hash",
+    "hash": "Document hash",
     "check": "Check your files",
     "about": "About the project",
     "contact": "Contact us",
-    "unknown" : "Unknown organization",
+    "unknown": "Unknown organization",
     "title": "Welcome to the Tezos DigiSign verification page.",
     "subtitle": "You can here check the authenticity of documents signed using the Tezos DigiSign protocol and tools.",
     "text1": "We invite you to drag and drop or upload the file you want to check. If this file has been signed by Sword Group or by a Sword Group partners who informed us of their signatures, and if this file has not been modified since its signature, we will confirm you immediately its authenticity.",
@@ -177,6 +176,34 @@
       "no_transaction": {
         "title": "Document not timestamped in Tezos Blockchain ",
         "message": "We are sorry, your proof file corresponds to the document you want to check and looks legitimate. However, we cannot find in the blockchain a proof of its signature. The root hash of the mentioned Merkle Tree ({0}) is not present in the blockchain"
+      },
+      "incorrect_hash": {
+        "title": "The hash of the document is not the hash of the proof file",
+        "message": "We are sorry, your proof file does not correspond to the document you want to check. Indeed, the hash of your document ({0}) is not the hash of the proof file ({1})."
+      },
+      "incorrect_origin_public_key": {
+        "title": "The Tezos account of the proof file is not handled by our platform.",
+        "message": "We are sorry, your proof file references a Tezos account unknown by our platform. Indeed, the Tezos account referenced by the proof file is {0} but our platform expects the Tezos account {1}."
+      },
+      "incorrect_signature_date": {
+        "title": "The signature date of the proof file is not correct",
+        "message": "We are sorry, your proof file has a wrong signature date: {0}. The signature date anchored in the Tezos blockchain is: {1}."
+      },
+      "incorrect_hash_algorithm": {
+        "title": "The hash algorithm is not correct",
+        "message": "We are sorry, your proof file has a wrong hash algorithm: {0}. It does not fit with the hash provided: {1}."
+      },
+      "unknown_hash_algorithm": {
+        "title": "The hash algorithm is not correct",
+        "message": "We are sorry, your proof file has a wrong hash algorithm: {0}. The server does not know it."
+      },
+      "incorrect_public_key": {
+        "title": "The public key of the proof file is not correct",
+        "message": "We are sorry, your proof file has a wrong signer public key: {0}. The public key anchored in the Tezos blockchain is: {1}."
+      },
+      "incorrect_contract_address": {
+        "title": "The contract address of the proof file is not correct",
+        "message": "We are sorry, your proof file has a wrong contract address: {0}. The Digisign server expects the contract address: {1}."
       },
       "internal_servor_error": {
         "title": "The server could not handle your request",
@@ -278,7 +305,7 @@
   "signatureHandler": {
     "title": "Signature request",
     "fileName": "File name",
-    "size":"Size",
+    "size": "Size",
     "hash": "Hash",
     "keyValue": "Keys & Values",
     "sign": "Sign",

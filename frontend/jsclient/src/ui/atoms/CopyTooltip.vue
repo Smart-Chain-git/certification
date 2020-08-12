@@ -52,7 +52,7 @@
         private show: boolean = false
 
         public get copyTrim() {
-            return (this.copy.length > 30) ? this.copy.substr(0,30) + "..." : this.copy
+            return (this.copy.length > 30) ? this.copy.substr(0, 30) + "..." : this.copy
         }
 
         private copyElm(ID: string) {
