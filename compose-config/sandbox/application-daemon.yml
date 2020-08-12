@@ -43,6 +43,7 @@ logging:
         security: info
 daemon:
   anchoring:
+    maxTry: 5 # Max number of anchoring tries.
     delay: 5m # Anchoring retry delay.
   callback:
     maxTry: 5 # Max number of callback tries.

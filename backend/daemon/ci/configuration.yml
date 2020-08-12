@@ -42,10 +42,11 @@ logging:
         security: info
 daemon:
   anchoring:
+    maxTry: 5
     delay: 5m
   callback:
-    maxTry : 5
-    delay : 2m
+    maxTry: 5
+    delay: 2m
   validation:
     delay: 1m
     timeout: 10m

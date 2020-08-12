@@ -27,18 +27,18 @@ class AnchorJob(
     private val anchoringRetryMessageChannel: MessageChannel,
     private val validationMessageChannel: MessageChannel,
     @Value("\${tezos.contract.address}") private val contractAddress: String,
+    @Value("\${daemon.anchoring.maxTry}") private val maxTry: Int,
     private val tezosConfig: TezosConfig
 ) {
     suspend fun anchor(payload: AnchorJobMessagePayload) {
         val requesterId = payload.requesterId
         val jobId = payload.jobId
 
-        try {
-            val requester: Account =
-                accountService.getAccount(requesterId) ?: throw EntityNotFoundException("account", requesterId)
-            val job: Job = jobService.findById(requester, jobId, true) ?: throw EntityNotFoundException("job", jobId)
-            val rootHash: String? = job.rootHash
+        val requester = getRequester(requesterId)
+        val job: Job = getJob(requester, jobId)
+        val rootHash: String? = job.rootHash
 
+        try {
             // Check job status
             if (job.state != JobStateType.INSERTED) {
                 LOGGER.info("Job '{}' is '{}' so it cannot be anchored", job.id, job.state)
@@ -99,10 +99,25 @@ class AnchorJob(
                 )
             )
         } catch (e: Exception) {
-            LOGGER.error("Anchoring of job ({}) failed.", jobId, e)
-            // Set the anchoring for retry later.
-            anchoringRetryMessageChannel.sendPayload(payload)
-            throw e
+            LOGGER.error("Anchoring try number {} of job ({}) failed.", job.numberOfTry, jobId, e)
+
+            if (job.numberOfTry < maxTry) {
+                LOGGER.error("Anchoring of job ({}) will be retried later.", jobId)
+                // Increment the try counter.
+                jobService.patch(
+                    requester = requester,
+                    jobId = jobId,
+                    patch = JobPatch(
+                        numberOfTry = job.numberOfTry + 1
+                    )
+                )
+                // Set the anchoring for retry later.
+                anchoringRetryMessageChannel.sendPayload(payload)
+                // Rethrow the exception.
+                throw e
+            } else {
+                LOGGER.error("Last anchoring try of job ({}) failed", jobId)
+            }
         }
     }
 
@@ -115,6 +130,14 @@ class AnchorJob(
         val secretKey: String =
             accountKeys["secretKey"] ?: throw IllegalStateException("Secret key not provided for $accountLogin.")
         return Pair(publicKey, secretKey)
+    }
+
+    private suspend fun getRequester(requesterId: String): Account {
+        return accountService.getAccount(requesterId) ?: throw EntityNotFoundException("account", requesterId)
+    }
+
+    private suspend fun getJob(requester: Account, jobId: String): Job {
+        return jobService.findById(requester, jobId, true) ?: throw EntityNotFoundException("job", jobId)
     }
 
     companion object {

@@ -45,10 +45,11 @@ logging:
       ej4tezos: info
 daemon:
   anchoring:
+    maxTry: 5 # Max number of anchoring tries.
     delay: 1m # Anchoring retry delay.
   callback:
-    maxTry : 5 # Max number of callback tries.
-    delay : 2m # Callback retry delay.
+    maxTry: 5 # Max number of callback tries.
+    delay: 2m # Callback retry delay.
   validation:
     delay: 1m # Validation retry delay.
     timeout: 10m # Validation timeout (trigger new anchoring operation).
