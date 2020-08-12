@@ -33,6 +33,13 @@
             </v-col>
           </v-row>
         </v-flex>
+        <div class="text-center custom-bottom-margin">
+          <IconButton leftIcon="double_arrow" @click="check"
+                      color="var(--var-color-blue-sword)" :disabled="!file && !hashdocument">{{
+              $t("signatureCheck.generate")
+            }}
+          </IconButton>
+        </div>
         <v-flex v-if="checkResponse">
           <v-row class="banner" justify="center" align="center">
             <v-col class="col-2">
@@ -125,12 +132,8 @@
           </v-row>
         </v-flex>
         <div class="text-center">
-          <IconButton v-if="!checkResponse" leftIcon="double_arrow" @click="check"
-                      color="var(--var-color-blue-sword)" :disabled="!file && !hashdocument">{{
-              $t("signatureCheck.generate")
-            }}
-          </IconButton>
-          <IconButton v-else leftIcon="double_arrow" @click="fullReload" color="var(--var-color-blue-sword)">
+          <IconButton v-if="checkResponse" leftIcon="double_arrow" @click="fullReload"
+                      color="var(--var-color-blue-sword)">
             {{ $t("signatureCheck.regenerate") }}
           </IconButton>
         </div>
@@ -200,13 +203,16 @@ span {
   margin-right: 15px;
   text-align: justify;
 }
+
+.custom-bottom-margin {
+  margin-bottom: 30px;
+}
 </style>
 
 <script lang="ts">
 import {SignatureCheckRequest, SignatureCheckResponse, URLNode} from "@/api/types"
 import {Component, Prop, Vue} from "vue-property-decorator"
 import * as CryptoJS from "crypto-js"
-
 
 @Component
 export default class SignatureCheck extends Vue {
@@ -223,7 +229,6 @@ export default class SignatureCheck extends Vue {
   private proof: File | null = null
   private fileHash: string = ""
   private hashdocument: string | null = this.hashdoc
-
 
   private mounted() {
     this.reload()
