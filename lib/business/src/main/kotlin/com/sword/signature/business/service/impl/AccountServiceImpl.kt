@@ -152,7 +152,6 @@ class AccountServiceImpl(
         )
 
         val updatedAccount = accountRepository.save(toPatch).awaitSingle().toBusiness()
-
         LOGGER.debug("Account with id ({}) activated.", accountId)
 
         return updatedAccount

@@ -397,6 +397,11 @@ class CheckServiceImpl(
         return branchHashes
     }
 
+    /**
+     * Check the validity of a proof file merkle tree by computing the merkle tree root from the leaf value.
+     * @param proof Proof to evaluate.
+     * @return The list of intermediary nodes hashes.
+     */
     private fun checkProofTree(proof: Proof): List<String> {
         val branchHashes = mutableListOf<String>()
 
@@ -430,6 +435,12 @@ class CheckServiceImpl(
         return branchHashes
     }
 
+    /**
+     * Check the compliance of a proof file merkle tree with the database.
+     * @param proof Proof to evaluate.
+     * @param treeElement Merkle tree leaf at the end of the branch.
+     * @return The list of intermediary nodes hashes.
+     */
     private suspend fun checkBranch(proof: Proof, treeElement: TreeElementEntity): Boolean {
         var current = treeElement
         var index = 0

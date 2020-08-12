@@ -1,6 +1,5 @@
 package com.sword.signature.business.visitor
 
-
 import com.sword.signature.business.model.FileMetadata
 import com.sword.signature.business.model.mapper.toModel
 import com.sword.signature.common.enums.TreeElementPosition
@@ -17,21 +16,28 @@ import kotlinx.coroutines.reactive.awaitSingle
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+/**
+ * Tree visitor that persists a tree in database.
+ */
 class SaveRepositoryTreeVisitor(
     private val jobId: String,
     private val treeElementRepository: TreeElementRepository
 ) {
 
     /**
-     * visite l'arbre et retourne un flow d'element créé dans la BDD
+     * Visit a tree and persist its elements in the database.
+     * @param rootTreeElement Root of the tree.
+     * @return The list of persisted tree elements.
      */
-
-    fun visitTree(rooTreeElement: TreeElement<String>?): Flow<TreeElementEntity> {
+    fun visitTree(rootTreeElement: TreeElement<String>?): Flow<TreeElementEntity> {
         return flow {
-            visitTreeElement(rooTreeElement, null, null)
+            visitTreeElement(rootTreeElement, null, null)
         }
     }
 
+    /**
+     * Flow collector which visit each tree element.
+     */
     private suspend fun FlowCollector<TreeElementEntity>.visitTreeElement(
         treeElement: TreeElement<String>?,
         parentId: String?,
@@ -89,13 +95,12 @@ class SaveRepositoryTreeVisitor(
                 position = position
             )
         ).awaitSingle()
+
         // Send back the created leaf to the caller.
         emit(inserted)
-
     }
 
     companion object {
         val LOGGER: Logger = LoggerFactory.getLogger(SaveRepositoryTreeVisitor::class.java)
     }
-
 }
