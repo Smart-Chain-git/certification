@@ -28,6 +28,16 @@ sealed class CheckOutput(
         @JsonProperty("public_key") val publicKey: String? = null,
         val date: OffsetDateTime? = null,
         @JsonProperty("current_depth") val currentDepth: Long? = null,
-        @JsonProperty("expected_depth") val expectedDepth: Long? = null
+        @JsonProperty("expected_depth") val expectedDepth: Long? = null,
+        @JsonProperty("origin_public_key") val originPublicKey: String? = null,
+        @JsonProperty("proof_file_origin_public_key") val proofFileOriginPublicKey: String? = null,
+        val hash: String? = null,
+        @JsonProperty("proof_file_hash") val proofFileHash: String? = null,
+        @JsonProperty("signature_date") val signatureDate: OffsetDateTime? = null,
+        @JsonProperty("proof_file_signature_date") val proofFileSignatureDate: OffsetDateTime? = null,
+        @JsonProperty("proof_file_algorithm") val proofFileAlgorithm: String? = null,
+        @JsonProperty("proof_file_public_key") val proofFilePublicKey: String? = null,
+        @JsonProperty("contract_address") val contractAddress: String? = null,
+        @JsonProperty("proof_file_contract_address") val proofFileContractAddress: String? = null
     ) : CheckOutput(output = "KO")
 }

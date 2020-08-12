@@ -29,6 +29,8 @@ jwt:
   issuer: "Tezos@Signature"
   duration: 2h # Expiration duration of client session tokens.
 tezos:
+  contract:
+    address: "TEZOS_CONTRACT_ADDRESS" # To replace by the actual smart contract address.
   indexer:
     url: "http://tzindex:8000"
   validation:

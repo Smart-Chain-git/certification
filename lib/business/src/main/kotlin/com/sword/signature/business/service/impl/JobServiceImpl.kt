@@ -94,6 +94,7 @@ class JobServiceImpl(
         val toPatch = job.copy(
             numberOfTry = patch.numberOfTry ?: job.numberOfTry,
             transactionHash = patch.transactionHash ?: job.transactionHash,
+            timestamp = patch.timestamp ?: job.timestamp,
             blockHash = patch.blockHash ?: job.blockHash,
             blockDepth = patch.blockDepth ?: job.blockDepth,
             state = patch.state ?: job.state,

@@ -56,6 +56,7 @@ class ValidationJob(
                         requester = requester,
                         jobId = jobId,
                         patch = JobPatch(
+                            timestamp = transaction.bigMapDiff[0].value.timestamp,
                             state = JobStateType.VALIDATED,
                             blockHash = transaction.block,
                             blockDepth = transactionDepth

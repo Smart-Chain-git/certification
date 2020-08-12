@@ -24,6 +24,8 @@ data class Job(
 
     val transactionHash: String? = null,
 
+    val timestamp: OffsetDateTime? = null,
+
     val blockHash: String? = null,
     /**
      * Block depth at validation date.

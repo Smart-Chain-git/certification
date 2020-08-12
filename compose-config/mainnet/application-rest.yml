@@ -29,6 +29,8 @@ jwt:
   issuer: "Tezos@Signature"
   duration: 2h # Expiration duration of client session tokens.
 tezos:
+  contract:
+    address: "KT1Acfs1M5FXHGYQpvdKUwGbZtrUkqrisweJ" # Mainnet smart contract address
   indexer:
     url: "https://api.tzstats.com"
   validation:

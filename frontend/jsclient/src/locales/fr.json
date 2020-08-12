@@ -209,6 +209,38 @@
       "no_transaction": {
         "title": "Document non horodaté dans Tezos Blockchain",
         "message": ": Nous sommes désolés, votre fichier de preuve correspond au document que vous souhaitez vérifier et semble légitime. Cependant, nous ne pouvons pas trouver dans la blockchain une preuve de sa signature. Le hachage racine de l'arbre Merkle mentionné ({0}) n'est pas présent dans la blockchain "
+      },
+      "incorrect_hash": {
+        "title": "Le hash du document est différent du hash de la preuve",
+        "message": "Nous sommes désolés, votre fichier de preuve ne correspond pas au document que vous voulez vérifier. En effet, le hash du document ({0}) n'est pas le hash du fichier de preuve ({1})."
+      },
+      "incorrect_origin_public_key": {
+        "title" : "Le compte Tezos de la preuve n'est pas géré par notre plateforme.",
+        "message": "Nous sommes désolés, votre fichier de preuve fait référence à un compte Tezos inconnu de notre plateforme. En effet, le compte Tezos du fichier de preuve est {0} mais notre plateforme attend le compte Tezos {1}."
+      },
+      "incorrect_signature_date": {
+        "title": "La date de signature du fichier de preuve est incorrecte",
+        "message": "Nous sommes désolés, votre fichier de preuve a une date de signature incorrecte : {0}. La date de signature sur le blockchain Tezos est : {1}."
+      },
+      "incorrect_hash_algorithm": {
+        "title": "L'algorithme de hash est incorrect",
+        "message": "Nous sommes désolés, votre fichier a le mauvais algorithme de hash : {0}. Il ne correspond pas au hash fourni : {1}."
+      },
+      "unknown_hash_algorithm": {
+        "title": "L'algorithme de hash est incorrect",
+        "message": "Nons sommes désolé, votre fichier a le mauvais algorithme de hash : {0}. Le serveur ne le reconnaît pas."
+      },
+      "incorrect_public_key": {
+        "title": "La clé publique du fichier de preuve est incorrecte",
+        "message": "Nous sommes désolés, le fichier de preuve a la mauvaise clé publique  du signataire : {0}. La clé publique ancrée sur la blockchain Tezos est : {1}."
+      },
+      "incorrect_contract_address": {
+        "title": "L'adresse du contract du fichier de preuve est incorrecte",
+        "message": "Nous sommes désolés, le fichier de preuve a la mauvaise adresse du contract : {0}. Le serveur Digisign attend l'adresse de contrat suivante : {1}."
+      },
+      "generic": {
+        "title": "Hash de document non trouvé dans TEZOS DigiSign",
+        "message": "Nous sommes désolés, nous ne reconnaissons pas ce document. Etes-vous sûr d'avoir la même version du fichier qu'au moment de sa signature ? Si ce n'est pas le cas, merci de mettre en ligne la version originale. Si le document est bon et qu'un fichier de preuve vous a été fourni, merci de le mettre en ligne également."
       }
     },
     "success": {
