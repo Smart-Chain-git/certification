@@ -32,5 +32,3 @@ class AlgorithmHandler(
         return algorithms.map { it.toWeb() }
     }
 }
-
-

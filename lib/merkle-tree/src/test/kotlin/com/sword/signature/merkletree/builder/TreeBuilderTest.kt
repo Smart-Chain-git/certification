@@ -32,11 +32,11 @@ class TreeBuilderTest {
         val merkleTree: TreeElement<String>? = TreeBuilder<String>("SHA-256").elements(elements).build()
         LOGGER.info("Time to build tree with {} leaves: {}ms.", number, System.currentTimeMillis() - init)
         assertTrue(merkleTree is TreeNode)
-        assertEquals(expectedHeight,(merkleTree as TreeNode).height)
+        assertEquals(expectedHeight, (merkleTree as TreeNode).height)
     }
 
     fun sizeProvider(): Stream<Arguments> {
-        val parametre = listOf(
+        val parameters = listOf(
             Arguments.of(100, 7),
             Arguments.of(1_000, 10),
             Arguments.of(10_000, 14),
@@ -45,7 +45,7 @@ class TreeBuilderTest {
             Arguments.of(1_000_000, 20)
         )
 
-        return parametre.stream()
+        return parameters.stream()
     }
 
 

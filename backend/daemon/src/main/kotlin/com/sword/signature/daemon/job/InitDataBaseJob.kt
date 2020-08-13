@@ -3,15 +3,12 @@ package com.sword.signature.daemon.job
 import com.sword.signature.model.migration.MigrationHandler
 import kotlinx.coroutines.runBlocking
 import org.slf4j.LoggerFactory
-import org.springframework.boot.context.event.ApplicationReadyEvent
-import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Component
 
 @Component
 class InitDataBaseJob(
-    private val migrationHandler : MigrationHandler
+    private val migrationHandler: MigrationHandler
 ) {
-
     fun initDatabase() {
         runBlocking {
             initIndicesAfterStartup()
@@ -34,9 +31,7 @@ class InitDataBaseJob(
         LOGGER.info("Application of migrations data finished in {}ms.", System.currentTimeMillis() - init)
     }
 
-
     companion object {
         private val LOGGER = LoggerFactory.getLogger(InitDataBaseJob::class.java)
     }
-
 }

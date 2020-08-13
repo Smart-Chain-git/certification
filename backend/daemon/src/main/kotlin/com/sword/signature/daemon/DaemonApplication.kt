@@ -6,8 +6,6 @@ import org.springframework.boot.runApplication
 @SpringBootApplication
 class DaemonApplication
 
-
-
 fun main(args: Array<String>) {
     runApplication<DaemonApplication>(*args)
 }

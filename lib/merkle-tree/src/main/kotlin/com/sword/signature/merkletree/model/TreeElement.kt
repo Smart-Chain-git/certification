@@ -1,7 +1,5 @@
 package com.sword.signature.merkletree.model
 
-
-
 /**
  * Element of a merkle tree.
  * @param T Type of the value stored in each tree element.

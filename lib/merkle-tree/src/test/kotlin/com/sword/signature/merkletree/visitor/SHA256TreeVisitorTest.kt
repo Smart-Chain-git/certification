@@ -13,7 +13,6 @@ import org.junit.jupiter.params.provider.MethodSource
 import org.slf4j.LoggerFactory
 import java.util.stream.Stream
 
-
 class SHA256TreeVisitorTest {
     @Test
     fun visitRootTest() {
@@ -34,7 +33,7 @@ class SHA256TreeVisitorTest {
     }
 
     fun hashProvider(): Stream<Arguments> {
-        val parametre = listOf(
+        val parameters = listOf(
             Arguments.of(100, "d306b461a6899c9d55ba4883159a3dde064646eaca5b7a3b6c488788bf00a4eb"),
             Arguments.of(1_000, "60c1a80fa56be9fa87c8143df0c45761b2c60d642366e216c1e73e9c43b83c4d"),
             Arguments.of(10_000, "6e962a8705e257101ef6b8e13a02a53576f0fdde1034e008a60ed6f3e6fcce6d"),
@@ -42,9 +41,8 @@ class SHA256TreeVisitorTest {
             Arguments.of(100_000, "60902d239f3e2b2bf9933f91a864de844d47602483eae0e86f14ab52e83d768a")
         )
 
-        return parametre.stream()
+        return parameters.stream()
     }
-
 
     companion object {
         private val LOGGER = LoggerFactory.getLogger(SHA256TreeVisitorTest::class.java)

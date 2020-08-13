@@ -20,12 +20,12 @@ import java.time.Duration
 
 @RestController
 @RequestMapping("\${api.base-path:/api}")
-class AuthHandler (
+class AuthHandler(
     private val accountService: AccountService,
     private val bCryptPasswordEncoder: BCryptPasswordEncoder,
     private val jwtTokenService: JwtTokenService,
     @Value("\${jwt.duration}") private val tokenDuration: Duration
-){
+) {
 
     @RequestMapping(
         value = ["/auth"],
@@ -37,15 +37,16 @@ class AuthHandler (
         @Parameter(
             description = "request of autentification",
             required = true
-        )@RequestBody request: AuthRequest
+        ) @RequestBody request: AuthRequest
     ): AuthResponse {
-        val user = accountService.getAccountByLoginOrEmail(request.user)?:throw BadCredentialsException("Invalid credentials")
+        val user = accountService.getAccountByLoginOrEmail(request.user)
+            ?: throw BadCredentialsException("Invalid credentials")
 
-        if (!bCryptPasswordEncoder.matches(request.password , user.password)) {
+        if (!bCryptPasswordEncoder.matches(request.password, user.password)) {
             throw BadCredentialsException("Invalid credentials")
         }
 
-        val token = jwtTokenService.generateVolatileToken(user.id,tokenDuration)
+        val token = jwtTokenService.generateVolatileToken(user.id, tokenDuration)
 
         return AuthResponse(token = token)
     }
@@ -60,8 +61,4 @@ class AuthHandler (
     ): Account {
         return user.account.toWeb()
     }
-
-
-
-
 }

@@ -1,11 +1,13 @@
 package com.sword.signature.daemon.configuration
 
-import com.sword.signature.business.model.integration.*
+import com.sword.signature.business.model.integration.AnchorJobMessagePayload
+import com.sword.signature.business.model.integration.CallBackJobMessagePayload
+import com.sword.signature.business.model.integration.ValidationJobMessagePayload
+import com.sword.signature.business.model.mail.TransactionalMail
 import com.sword.signature.daemon.job.AnchorJob
 import com.sword.signature.daemon.job.CallBackJob
 import com.sword.signature.daemon.job.MailJob
 import com.sword.signature.daemon.job.ValidationJob
-import com.sword.signature.business.model.mail.TransactionalMail
 import kotlinx.coroutines.reactor.mono
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
@@ -27,20 +29,6 @@ class DaemonIntegrationConfiguration(
     private val callBackJob: CallBackJob,
     private val validationJob: ValidationJob
 ) {
-
-
-// je garde pour mémoire si on doit un jour recharger les message en bourrin
-//    @Bean
-//    fun filesFlow(reactiveMongoTemplate: ReactiveMongoOperations) = integrationFlow(
-//            jobService.findAllByUser(adminAccount, adminAccount).map { GenericMessage(it) }.asPublisher()
-//        ) {
-//            filter<Job> { it.state == JobStateType.INSERTED }
-//            transform<Job> { AnchorJobMessagePayload(it.id) }
-//            channel(jobToAnchorsMessageChannel)
-//        }
-//    }
-
-
     @Bean
     @ServiceActivator(
         inputChannel = "anchoringMessageChannel",

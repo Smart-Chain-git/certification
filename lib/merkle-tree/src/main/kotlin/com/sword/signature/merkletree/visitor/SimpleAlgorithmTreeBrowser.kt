@@ -14,15 +14,13 @@ class SimpleAlgorithmTreeBrowser(
     private val algorithm: String
 ) : TreeVisitor<String, Unit> {
 
-
-    override fun visitTree(rooTreeElement: TreeElement<String>?)  {
-        if(rooTreeElement!=null) {
-            visitTreeElement(rooTreeElement)
+    override fun visitTree(rootTreeElement: TreeElement<String>?) {
+        if (rootTreeElement != null) {
+            visitTreeElement(rootTreeElement)
         }
     }
 
     private fun visitTreeElement(treeElement: TreeElement<String>): String {
-
         return if (treeElement is TreeNode) {
             visitTreeNode(treeElement)
         } else {

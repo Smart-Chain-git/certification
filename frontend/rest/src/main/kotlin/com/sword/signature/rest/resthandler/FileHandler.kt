@@ -11,7 +11,6 @@ import com.sword.signature.webcore.mapper.toWeb
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.count
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.reactive.awaitFirstOrNull
 import org.springframework.format.annotation.DateTimeFormat
@@ -111,5 +110,4 @@ class FileHandler(
 
         return fileService.countFiles(requester = user.account, filter = filter)
     }
-
 }

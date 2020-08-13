@@ -15,8 +15,7 @@ data class TokenEntity(
     @Indexed(unique = true)
     val jwtToken: String,
     val expirationDate: LocalDate? = null,
-    val creationDate: LocalDate = LocalDate.of(1978,2,25),  //TODO remove the default value DIRTY !!
+    val creationDate: LocalDate = LocalDate.of(1978,2,25),  // TODO: remove the default value DIRTY !!
     val accountId: String,
     val revoked: Boolean = false
-) {
-}
+)

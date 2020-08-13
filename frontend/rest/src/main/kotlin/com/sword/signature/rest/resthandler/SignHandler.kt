@@ -92,5 +92,3 @@ class SignHandler(
         return jobs.map { it.toWebSignResponse() }
     }
 }
-
-

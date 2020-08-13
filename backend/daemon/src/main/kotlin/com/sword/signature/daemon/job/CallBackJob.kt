@@ -8,13 +8,8 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.messaging.MessageChannel
 import org.springframework.stereotype.Component
-import org.springframework.web.reactive.function.client.ClientRequest
-import org.springframework.web.reactive.function.client.ExchangeFilterFunction
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.awaitExchange
-import reactor.core.publisher.Mono
-import java.net.URI
-import java.util.function.Consumer
 
 @Component
 class CallBackJob(
@@ -70,4 +65,3 @@ class CallBackJob(
         private val LOGGER = logger()
     }
 }
-

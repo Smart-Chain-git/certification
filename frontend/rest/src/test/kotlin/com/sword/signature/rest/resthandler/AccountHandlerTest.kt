@@ -1,7 +1,7 @@
 package com.sword.signature.rest.resthandler
 
 import com.sword.signature.business.exception.PasswordTooWeakException
-import com.sword.signature.rest.checkPassword
+import com.sword.signature.rest.authentication.checkPassword
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 

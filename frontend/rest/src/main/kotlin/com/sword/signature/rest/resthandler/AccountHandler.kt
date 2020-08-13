@@ -9,7 +9,7 @@ import com.sword.signature.business.model.AccountValidation
 import com.sword.signature.business.model.mail.SignUpMail
 import com.sword.signature.business.service.AccountService
 import com.sword.signature.business.service.MailService
-import com.sword.signature.rest.checkPassword
+import com.sword.signature.rest.authentication.checkPassword
 import com.sword.signature.webcore.authentication.*
 import com.sword.signature.webcore.mapper.toWeb
 import io.swagger.v3.oas.annotations.Operation
@@ -167,6 +167,4 @@ class AccountHandler(
             return account.toWeb()
         }
     }
-
 }
-

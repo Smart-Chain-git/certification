@@ -3,7 +3,6 @@ package com.sword.signature.rest.data
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 
-
 class SortedUnpaged(private val sort: Sort) : Pageable {
 
     override fun isPaged() = false
@@ -25,6 +24,4 @@ class SortedUnpaged(private val sort: Sort) : Pageable {
     }
 
     override fun first() = this
-
-
 }

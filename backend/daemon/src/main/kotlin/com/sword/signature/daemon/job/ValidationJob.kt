@@ -49,7 +49,7 @@ class ValidationJob(
                 if (transactionDepth >= minDepth) {
                     LOGGER.info("Transaction {} for job {} validated.", transactionHash, jobId)
 
-                    // Retrieving the transaction
+                    // Retrieve the transaction.
                     val transaction: TzOp = tezosReaderService.getTransaction(transactionHash)
                         ?: throw IllegalStateException("The transaction ($transactionHash) should not be null there since its depth has been found before.")
                     val job = jobService.patch(

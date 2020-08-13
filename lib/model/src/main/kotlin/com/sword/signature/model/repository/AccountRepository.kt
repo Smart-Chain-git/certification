@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository
 @Repository
 interface AccountRepository : ReactiveMongoRepository<AccountEntity, String> {
 
-
     @Query("{ \$or: [ { login: ?0 }, { email: ?0 } ] }")
     suspend fun findFirstByLoginOrEmail(loginOrEmail: String): AccountEntity?
 }

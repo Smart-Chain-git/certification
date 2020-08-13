@@ -60,13 +60,13 @@ class TreeBuilder<T>(
      */
     private fun createNodes(depth: Int): TreeNode<T> {
 
-        //creation de toutes les feuilles
+        // Creation of all leaves.
         var intermediary: List<TreeElement<T>> = elements!!.map {
             TreeLeaf(value = it.first, isRoot = false, algorithm = algorithm, metadata = it.second)
         }
 
         (1..depth).forEach { currentDepth ->
-            //regroupement de tout les element par deux
+            // Group all elements bu pairs.
             intermediary = intermediary.chunked(2) {
                 TreeNode(
                     value = null,

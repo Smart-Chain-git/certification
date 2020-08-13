@@ -19,7 +19,7 @@ class JwtTokenServiceTest {
     private val expirationTime = OffsetDateTime.of(2020, 1, 3, 15, 30, 0, 0, ZoneOffset.UTC)
 
     @BeforeAll
-    fun initMock() {
+    fun initStaticMocks() {
         mockkStatic(OffsetDateTime::class)
     }
 
@@ -38,7 +38,13 @@ class JwtTokenServiceTest {
         val token = jwtTokenService.generatePersistantToken(accountId)
         val actual = jwtTokenService.parseToken(token)
 
-        val expected = LoginTokenInfo(id = accountId, persisted = true, creationTime = creationTime, expirationTime = null, login = "")
+        val expected = LoginTokenInfo(
+            id = accountId,
+            persisted = true,
+            creationTime = creationTime,
+            expirationTime = null,
+            login = ""
+        )
         Assertions.assertThat(actual).isEqualTo(expected)
     }
 
@@ -51,7 +57,13 @@ class JwtTokenServiceTest {
         val token = jwtTokenService.generateVolatileToken(accountId, Duration.ofHours(2))
         val actual = jwtTokenService.parseToken(token)
 
-        val expected = LoginTokenInfo(id = accountId, persisted = false, creationTime = creationTime, expirationTime = expirationTime, login = "")
+        val expected = LoginTokenInfo(
+            id = accountId,
+            persisted = false,
+            creationTime = creationTime,
+            expirationTime = expirationTime,
+            login = ""
+        )
         Assertions.assertThat(actual).isEqualTo(expected)
     }
 }

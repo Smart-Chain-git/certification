@@ -11,6 +11,4 @@ class AlgorithmEntity(
     @Indexed(unique = true)
     val name: String,
     val digestLength: Int
-) {
-
-}
+)

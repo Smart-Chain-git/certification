@@ -80,7 +80,7 @@ data class JobEntity(
     /**
      * number of documents withing this jobs
      */
-    val docsNumber: Int = 1, //TODO remove the default value DIRTY !!
+    val docsNumber: Int = 1, // TODO: remove the default value DIRTY !!
 
     /**
      * Address of the transaction signer.
