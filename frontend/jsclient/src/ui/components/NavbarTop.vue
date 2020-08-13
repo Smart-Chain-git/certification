@@ -7,7 +7,7 @@
       <!-- Takes all the space (puts the next element at the end of the row). -->
       <div class="flex-grow-1"/>
       <v-toolbar-items>
-        <LocaleChanger :text-color="textColor"/>
+        <LocaleChanger :text-color="textColor" id="local-changer"/>
         <v-divider vertical/>
         <v-menu bottom left>
           <template v-slot:activator="{ on }">
@@ -78,6 +78,15 @@ img {
   border-left: solid var(--var-color-orange-sword) 10px !important;
   box-sizing: content-box;
   padding-left: 6px;
+}
+
+#local-changer {
+  .v-select__slot {
+    padding-left: 5px;
+  }
+  .v-input__slot {
+    border-style: none;
+  }
 }
 </style>
 
