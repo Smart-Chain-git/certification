@@ -21,8 +21,8 @@ echo "------------------------------------------------------------"
 cat ../compose-config/sandbox/application-daemon.yml
 echo "------------------------------------------------------------"
 
-docker restart tezos-signature-daemon
+docker restart tezos-digisign-daemon
 
-echo "tezos-signature-daemon restarted with ["$CONTRACT_ID"]"
+echo "tezos-digisign-daemon restarted with ["$CONTRACT_ID"]"
 
 exit 0
