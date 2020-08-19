@@ -37,9 +37,9 @@ echo "rest------------------------------------------------------------"
 cat ../compose-config/sandbox/application-rest.d.yml
 echo "------------------------------------------------------------"
 
+echo "trying to restart tezos-digisign-daemon and tezos-digisign-rest with ["$CONTRACT_ID"]"
 docker restart tezos-digisign-daemon
 docker restart tezos-digisign-rest
 
-echo "tezos-digisign-daemon and tezos-digisign-rest restarted with ["$CONTRACT_ID"]"
 
 exit 0
