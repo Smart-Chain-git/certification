@@ -37,7 +37,7 @@ Launch all the services
 `cd ..`  
 `docker-compose -f docker-compose.sandbox.d.yml up -d`  
   
-Connect to the website:  
+Connect to the website (the login/password is admin/Sword@35):  
 `http://localhost:9090/index.html#/signature-check`
   
 Connect to the Tezos Index and check the storage (after signing a document):  
