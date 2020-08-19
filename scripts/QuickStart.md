@@ -1,5 +1,7 @@
 # Tezos Digisign - Quick Start
 
+This quick start deployment does not need any compilation. It uses the docker images in docker hub.
+
 ## Requirements
 
 * Docker (for development) and Docker compose.
@@ -9,7 +11,10 @@
 Launch the Tezos nodes (sandbox)  
 `docker-compose -f docker-compose.sandbox.d.yml up -d node`
   
-Create the contract (wait 30 seconds after the previous command)  
+Install the Tezos client  
+`./install_tezos_client.sh`
+  
+Create the contract (wait 30 seconds after the launch of the Tezos node)  
 `cd scripts`  
 `./create_contract.sh`
   
@@ -22,9 +27,9 @@ The logs are:
     web:
       provider: "http://127.0.0.1:9090"
 ------------------------------------------------------------
+trying to restart tezos-digisign-daemon and tezos-digisign-rest with [KT1Qk67N2sbKfr9Q22UBLBxLXkpXGKP1nEUR]
 Error response from daemon: No such container: tezos-digisign-daemon
 Error response from daemon: No such container: tezos-digisign-rest
-tezos-digisign-daemon and tezos-digisign-rest restarted with [KT1T2fwtc5U4n45y4RSMzf9TqMP7CMVrEmGT]
 ```  
 The 2 last errors are normal  
   
@@ -42,7 +47,10 @@ Connect to the database with mongo express:
 `http://localhost:8081/#/login`
   
 Check the api with swagger:  
-`http://localhost:9090/webjars/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config`
+`http://localhost:9090/webjars/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config`  
+  
+Check the fake SMTP server:  
+`http://localhost:5080/`
 
 
 
