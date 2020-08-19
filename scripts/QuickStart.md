@@ -41,7 +41,7 @@ Connect to the Tezos Index and check the storage (after signing a document):
 Connect to the database with mongo express:  
 `http://localhost:8081/#/login`
   
-Check the api with swagger:
+Check the api with swagger:  
 `http://localhost:9090/webjars/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config`
 
 
