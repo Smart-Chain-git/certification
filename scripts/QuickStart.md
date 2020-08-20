@@ -51,6 +51,9 @@ Launch all the services
 `cd ..`  
 `docker-compose -f docker-compose.sandbox.d.yml up -d`  
   
+  
+In a Web browser, you can connect to Digisign:     
+  
 Connect to the website (the login/password is admin/Sword@35):  
 `http://localhost:9090/index.html#/signature-check`
   
@@ -72,7 +75,7 @@ Check the fake SMTP server:
 Quit the linux machine:  
 `exit`  
 
-stop the VM:  
+Stop the VM:  
 `vagrant halt`  
 
 
