@@ -1,4 +1,4 @@
-import {Job, JobCriteria} from "@/api/types"
+import {Job, JobCriteria, MerkelTree} from "@/api/types"
 import {AxiosRequestConfig, AxiosResponse} from "axios"
 
 import {Api} from "@/api/api"
@@ -32,6 +32,13 @@ export class JobApi extends Api {
     public count(criteria: JobCriteria = {}): Promise<number> {
         return this.get<number>(API_GET_COUNT, criteria)
             .then((response: AxiosResponse<number>) => {
+                return response.data
+            })
+    }
+
+    public getTree(id: string): Promise<MerkelTree> {
+        return this.get<MerkelTree>(API_GET + "/" + id + "/merkelTree")
+            .then((response: AxiosResponse<MerkelTree>) => {
                 return response.data
             })
     }

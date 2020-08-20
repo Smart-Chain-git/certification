@@ -230,9 +230,22 @@ export interface Proof {
     origin: string
 }
 
+
 export interface DashBoardStat {
     jobsCreatedCount: number,
     jobsProcessedCount: number,
     documentsSignedCount: number
+}
+
+
+export  interface MerkelTree {
+    algorithm: string,
+    root: TreeNode,
+}
+
+export  interface TreeNode {
+    hash: string,
+    left?: Node,
+    right?: Node,
 }
 

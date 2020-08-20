@@ -1,6 +1,5 @@
-
 import {FilterOption, PaginationOption} from "@/store/types"
-import {Job, JobCriteria} from "@/api/types"
+import {Job, JobCriteria, MerkelTree} from "@/api/types"
 import {Action, Module, Mutation, VuexModule} from "vuex-class-modules"
 import {jobApi} from "@/api/jobApi"
 import AccountsModule from "@/store/modules/AccountsModule"
@@ -143,6 +142,11 @@ export default class JobsModule extends VuexModule {
     public get isFiltered() {
         return this.keepFilter
     }
+
+    public loadTree(id: string): Promise<MerkelTree> {
+        return jobApi.getTree(id)
+    }
+
 
     @Mutation
     private setLoading(isLoading: boolean) {
