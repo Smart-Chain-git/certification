@@ -28,11 +28,11 @@ Launch the Tezos nodes (sandbox)
 `docker-compose -f docker-compose.sandbox.d.yml up -d node`
   
 Install the Tezos client  
-`cd scripts` 
-`./install_tezos_client.sh`
+`cd scripts`  
+`./install_tezos_client.sh`  
   
 Create the contract (wait 30 seconds after the launch of the Tezos node)   
-`./create_contract.sh`
+`./create_contract.sh`  
   
 The logs are:  
 ```
@@ -66,5 +66,13 @@ Check the api with swagger:
 Check the fake SMTP server:  
 `http://localhost:5080/`
 
+
+## Stop the VM with vagrant
+
+Quit the linux machine:  
+`exit`  
+
+stop the VM:  
+`vagrant halt`  
 
 
