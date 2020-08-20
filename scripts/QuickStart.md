@@ -1,14 +1,26 @@
 # Tezos Digisign - Quick Start
 
 This quick start deployment does not need any compilation. It uses the docker images in docker hub.
+To build the VM with the requirement, it's possible to use vangrant+VirtualBox. A vagrant file with the right external port and ansible script is available: http://edivgitlab.swordgroup.lan/tezos/signature/deployment.
 
 ## Requirements
 
 * Docker (for development) and Docker compose.
 
+## VM deployment with vagrant
+
+VirtualBox and Vagrant must have been installed on your computer.
+After downloading http://edivgitlab.swordgroup.lan/tezos/signature/deployment, go into the tezos-node-light and launch the command:  
+`vagrant up`
+  
+connect to the VM:
+`vagrant ssh`  
+
+
+
 ## Deployment
 
-Retrieve the code dgisign  
+Retrieve the code digisign  
 `git clone http://edivgitlab.swordgroup.lan/tezos/signature/tezos-servers`
 `cd tezos-servers` 
 
