@@ -1,15 +1,14 @@
 package com.sword.signature.business.service.impl
 
 import com.sword.signature.business.exception.EntityNotFoundException
-import com.sword.signature.business.model.Account
-import com.sword.signature.business.model.Job
-import com.sword.signature.business.model.JobPatch
-import com.sword.signature.business.model.TreeElement
+import com.sword.signature.business.exception.ServiceException
+import com.sword.signature.business.model.*
 import com.sword.signature.business.model.mapper.toBusiness
 import com.sword.signature.business.service.JobService
 import com.sword.signature.common.criteria.JobCriteria
 import com.sword.signature.common.criteria.TreeElementCriteria
 import com.sword.signature.common.enums.JobStateType
+import com.sword.signature.common.enums.TreeElementPosition
 import com.sword.signature.common.enums.TreeElementType
 import com.sword.signature.model.entity.QTreeElementEntity
 import com.sword.signature.model.mapper.toPredicate
@@ -84,6 +83,45 @@ class JobServiceImpl(
 
         return job.toBusiness(rootHash, leaves)
     }
+
+    override suspend fun getMerkelTree(requester: Account, jobId: String): MerkelTree? {
+        val job = jobRepository.findById(jobId).awaitFirstOrNull() ?: return null
+        LOGGER.debug("id : {}, found {}", jobId, job)
+        if (!requester.isAdmin && requester.id != job.userId) {
+            throw IllegalAccessException("user ${requester.login} does not have role/permission to get job: ${job.id}")
+        }
+
+        // Retrieve the nodes
+        val treeElementPredicate = TreeElementCriteria(jobId = jobId).toPredicate()
+        val elements = treeElementRepository.findAll(treeElementPredicate).asFlow().toList()
+            .associateBy { it.id }
+        val nodes = elements.mapValues { MerkelTree.Node(hash = it.value.hash) }
+        var rootNode :MerkelTree.Node?=null
+        elements.forEach {
+            if(it.value.parentId !=null) {
+                val parentNode = nodes.getValue(it.value.parentId)
+                val node = nodes.getValue(it.key)
+                if (it.value.position == TreeElementPosition.LEFT) {
+                    parentNode.left = node
+                } else {
+                    parentNode.right = node
+                }
+            } else {
+                rootNode = nodes.getValue(it.key)
+            }
+        }
+        if(rootNode==null){
+            throw ServiceException("error while getting the tree for JobId $jobId")
+        }
+
+        LOGGER.debug("Job {}: tree retrieved {}.", jobId, rootNode)
+
+        return MerkelTree(
+            algorithm = job.algorithm,
+            root = rootNode!!
+        )
+    }
+
 
     override suspend fun patch(requester: Account, jobId: String, patch: JobPatch): Job {
         val job = jobRepository.findById(jobId).awaitFirstOrNull() ?: throw EntityNotFoundException("job", jobId)

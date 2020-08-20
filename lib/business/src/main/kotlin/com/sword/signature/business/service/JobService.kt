@@ -3,6 +3,7 @@ package com.sword.signature.business.service
 import com.sword.signature.business.model.Account
 import com.sword.signature.business.model.Job
 import com.sword.signature.business.model.JobPatch
+import com.sword.signature.business.model.MerkelTree
 import com.sword.signature.common.criteria.JobCriteria
 import kotlinx.coroutines.flow.Flow
 import org.springframework.data.domain.Pageable
@@ -36,6 +37,14 @@ interface JobService {
     suspend fun findById(requester: Account, jobId: String, withLeaves: Boolean = false): Job?
 
     /**
+     * Retrieve the merkel tree of a Job
+     * @param requester The account requesting the job.
+     * @param jobId Id of the job to retrieve.
+     * @return The MerkelTree if it exists, null otherwise.
+     */
+    suspend fun getMerkelTree(requester: Account, jobId: String): MerkelTree?
+
+    /**
      * Update a job with provided fields.
      * @param requester The account requesting the job.
      * @param jobId Id of the job to update.
@@ -43,6 +52,7 @@ interface JobService {
      * @return The updated job.
      */
     suspend fun patch(requester: Account, jobId: String, patch: JobPatch): Job
+
 
 
 }

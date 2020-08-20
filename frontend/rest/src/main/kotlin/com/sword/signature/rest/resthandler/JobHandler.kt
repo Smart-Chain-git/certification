@@ -3,6 +3,7 @@ package com.sword.signature.rest.resthandler
 
 import com.sword.signature.api.job.Job
 import com.sword.signature.api.job.JobFile
+import com.sword.signature.api.merkel.MerkelTree
 import com.sword.signature.business.exception.EntityNotFoundException
 import com.sword.signature.business.service.FileService
 import com.sword.signature.business.service.JobService
@@ -138,6 +139,24 @@ class JobHandler(
             }
         }
     }
+
+
+    @Operation(security = [SecurityRequirement(name = "bearer-key")])
+    @RequestMapping(
+        value = ["/jobs/{jobId}/merkelTree"],
+        produces = ["application/json"],
+        method = [RequestMethod.GET]
+    )
+    suspend fun merkelTree(
+        @AuthenticationPrincipal user: CustomUserDetails,
+        @Parameter(description = "job Id") @PathVariable(value = "jobId") jobId: String
+    ): MerkelTree {
+        val tree = jobService.getMerkelTree(requester = user.account, jobId = jobId)
+            ?: throw EntityNotFoundException("job", jobId)
+        return tree.toWeb()
+
+    }
+
 
 
 }

@@ -6,6 +6,7 @@ import com.sword.signature.api.algorithm.Algorithm
 import com.sword.signature.api.check.CheckOutput
 import com.sword.signature.api.job.Job
 import com.sword.signature.api.job.JobFile
+import com.sword.signature.api.merkel.MerkelTree
 import com.sword.signature.api.proof.Proof
 import com.sword.signature.api.sign.SignMetadata
 import com.sword.signature.api.sign.SignResponse
@@ -206,4 +207,17 @@ fun CheckException.toWeb(): CheckOutput.Ko {
             proofFileContractAddress = proofFileContractAddress
         )
     }
+}
+
+fun com.sword.signature.business.model.MerkelTree.toWeb() = MerkelTree(
+    algorithm = algorithm,
+    root = root.toWeb()
+)
+
+fun com.sword.signature.business.model.MerkelTree.Node.toWeb(): MerkelTree.Node {
+    return MerkelTree.Node(
+        hash = hash,
+        left = left?.toWeb(),
+        right = right?.toWeb()
+    )
 }
