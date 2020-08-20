@@ -13,7 +13,7 @@ VirtualBox and Vagrant must have been installed on your computer.
 After downloading http://edivgitlab.swordgroup.lan/tezos/signature/deployment, go into the tezos-node-light and launch the command:  
 `vagrant up`
   
-connect to the VM:
+connect to the VM:  
 `vagrant ssh`  
 
 
@@ -21,8 +21,8 @@ connect to the VM:
 ## Deployment
 
 Retrieve the code digisign  
-`git clone http://edivgitlab.swordgroup.lan/tezos/signature/tezos-servers`
-`cd tezos-servers` 
+`git clone http://edivgitlab.swordgroup.lan/tezos/signature/tezos-servers`  
+`cd tezos-servers`  
 
 Launch the Tezos nodes (sandbox)  
 `docker-compose -f docker-compose.sandbox.d.yml up -d node`
