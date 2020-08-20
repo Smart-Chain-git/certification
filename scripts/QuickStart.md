@@ -8,30 +8,32 @@ This quick start deployment does not need any compilation. It uses the docker im
 
 ## Deployment
 
+Retrieve the code dgisign  
+`git clone http://edivgitlab.swordgroup.lan/tezos/signature/tezos-servers`
+`cd tezos-servers` 
+
 Launch the Tezos nodes (sandbox)  
 `docker-compose -f docker-compose.sandbox.d.yml up -d node`
   
 Install the Tezos client  
+`cd scripts` 
 `./install_tezos_client.sh`
   
-Create the contract (wait 30 seconds after the launch of the Tezos node)  
-`cd scripts`  
+Create the contract (wait 30 seconds after the launch of the Tezos node)   
 `./create_contract.sh`
   
 The logs are:  
 ```
-  urls:
+...
     api:
       storage: "http://127.0.0.1:8000/explorer/bigmap/$bigmapId/$rootHash"
       transaction: "http://127.0.0.1:8000/explorer/op/$transactionHash"
     web:
       provider: "http://127.0.0.1:9090"
 ------------------------------------------------------------
-trying to restart tezos-digisign-daemon and tezos-digisign-rest with [KT1Qk67N2sbKfr9Q22UBLBxLXkpXGKP1nEUR]
-Error response from daemon: No such container: tezos-digisign-daemon
-Error response from daemon: No such container: tezos-digisign-rest
+Configuration of tezos-digisign-daemon and tezos-digisign-rest with [KT18yjgmJ6pLkYsT6se4ETc4L4NFa6pPZJnq] completed
 ```  
-The 2 last errors are normal  
+KT18yjgmJ6pLkYsT6se4ETc4L4NFa6pPZJnq is the id of the smart contract  
   
 Launch all the services  
 `cd ..`  
