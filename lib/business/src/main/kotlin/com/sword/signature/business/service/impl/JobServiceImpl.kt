@@ -42,8 +42,8 @@ class JobServiceImpl(
         } else {
             jobRepository.findAll(criteria.toPredicate(), pageable.sort)
         }.asFlow()
-        .paginate(pageable)
-        .map { it.toBusiness() }
+            .paginate(pageable)
+            .map { it.toBusiness() }
 
     }
 
@@ -98,6 +98,7 @@ class JobServiceImpl(
             blockHash = patch.blockHash ?: job.blockHash,
             blockDepth = patch.blockDepth ?: job.blockDepth,
             state = patch.state ?: job.state,
+            callBackStatus = patch.callBackStatus ?: job.callBackStatus,
             injectedDate = if (patch.state == JobStateType.INJECTED) {
                 OffsetDateTime.now()
             } else {

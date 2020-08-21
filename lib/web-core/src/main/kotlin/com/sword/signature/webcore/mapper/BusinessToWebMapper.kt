@@ -49,6 +49,7 @@ fun com.sword.signature.business.model.Job.toWeb() = Job(
     algorithm = algorithm,
     flowName = flowName,
     stateDate = stateDate,
+    callBackStatus = callBackStatus.name,
     state = state.name,
     contractAddress = contractAddress,
     transactionHash = transactionHash,
@@ -119,7 +120,7 @@ fun com.sword.signature.business.model.CheckResponse.toWeb() = CheckOutput.Ok(
     proof = proof.toWeb()
 )
 
-fun com.sword.signature.business.exception.CheckException.toWeb(): CheckOutput.Ko {
+fun CheckException.toWeb(): CheckOutput.Ko {
     return when (this) {
         is CheckException.HashNotPresent -> CheckOutput.Ko(
             error = message,
@@ -189,12 +190,12 @@ fun com.sword.signature.business.exception.CheckException.toWeb(): CheckOutput.K
         )
 
         is CheckException.UnknownHashAlgorithm -> CheckOutput.Ko(
-            error=message,
+            error = message,
             proofFileAlgorithm = proofFileAlgorithm
         )
 
         is CheckException.IncorrectPublicKey -> CheckOutput.Ko(
-            error=message,
+            error = message,
             publicKey = publicKey,
             proofFilePublicKey = proofFilePublicKey
         )

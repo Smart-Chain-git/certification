@@ -16,6 +16,7 @@ data class Job(
     val flowName: String,
     var stateDate: OffsetDateTime,
     var state: String,
+    val callBackStatus:String,
     val contractAddress: String?,
     val transactionHash: String?,
     val timestamp: OffsetDateTime?,

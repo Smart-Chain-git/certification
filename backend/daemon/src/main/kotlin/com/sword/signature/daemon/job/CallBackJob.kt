@@ -1,6 +1,10 @@
 package com.sword.signature.daemon.job
 
+import com.sword.signature.business.model.Account
+import com.sword.signature.business.model.JobPatch
 import com.sword.signature.business.model.integration.CallBackJobMessagePayload
+import com.sword.signature.business.service.JobService
+import com.sword.signature.common.enums.NotificationStatusType
 import com.sword.signature.daemon.logger
 import com.sword.signature.daemon.sendPayload
 import org.springframework.beans.factory.annotation.Value
@@ -13,11 +17,17 @@ import org.springframework.web.reactive.function.client.awaitExchange
 
 @Component
 class CallBackJob(
+    private val jobService: JobService,
     private val webClientBuilder: WebClient.Builder,
     @Value("\${daemon.callback.maxTry}") private val maxTry: Int,
     private val callbackRetryMessageChannel: MessageChannel
 ) {
     private val jobIdPlaceholder = "\$jobId"
+
+    private val dummyAdminAccount = Account(
+        id = "", login = "", password = "", fullName = "", email = "", company = null,
+        country = null, publicKey = null, hash = null, isAdmin = true, disabled = false, firstLogin = false
+    )
 
     /**
      * Callback the signer of the job.
@@ -48,17 +58,32 @@ class CallBackJob(
             LOGGER.error("Error during callbackJob : {}.", e.message)
             isError = true
         }
+        val newCallBackStatus: NotificationStatusType
         if (isError) {
             LOGGER.warn("Failed to call '{}' for the {} time.", updatedCallBackUrl, callBackJobMessage.numberOfTry)
             if (callBackJobMessage.numberOfTry < maxTry) {
                 LOGGER.warn("Will try again later.")
+                newCallBackStatus = NotificationStatusType.PENDING
                 callbackRetryMessageChannel.sendPayload(callBackJobMessage.copy(numberOfTry = callBackJobMessage.numberOfTry + 1))
             } else {
+                newCallBackStatus = NotificationStatusType.FAILURE
                 LOGGER.warn("It was the last try.")
             }
         } else {
+            newCallBackStatus = NotificationStatusType.COMPLETED
             LOGGER.debug("Callback {} success", updatedCallBackUrl)
         }
+        if (newCallBackStatus != NotificationStatusType.PENDING) {
+            // so updating in database
+            jobService.patch(
+                requester = dummyAdminAccount,
+                jobId = callBackJobMessage.jobId,
+                patch = JobPatch(
+                    callBackStatus = newCallBackStatus
+                )
+            )
+        }
+
     }
 
     companion object {

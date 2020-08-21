@@ -16,6 +16,7 @@
       "flowName": "web_2020-06-03T07:48:26.865622",
       "stateDate": "2020-06-03T15:01:45.346712Z",
       "state": "VALIDATED",
+      "callBackStatus": "PENDING",
       "contractAddress": "KT1Tq22yXWayLbmBKwZUhVXMoYqxtzp9XvTk",
       "signerAddress": "tz1aSkwEot3L2kmUvcoxzjMomb9mvBNuzFK6",
       "timestamp": "2020-06-03T14:48:35.142429Z"

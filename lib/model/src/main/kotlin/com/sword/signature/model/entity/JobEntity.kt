@@ -1,6 +1,7 @@
 package com.sword.signature.model.entity
 
 import com.sword.signature.common.enums.JobStateType
+import com.sword.signature.common.enums.NotificationStatusType
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.index.Indexed
@@ -66,6 +67,8 @@ data class JobEntity(
      * url to call when job is anchored
      */
     val callBackUrl: String?,
+
+    val callBackStatus: NotificationStatusType = NotificationStatusType.NONE, // default value for old job
 
     /**
      * Address of the smart contract in the blockchain.

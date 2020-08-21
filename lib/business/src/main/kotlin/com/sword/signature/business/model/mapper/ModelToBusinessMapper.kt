@@ -61,6 +61,7 @@ fun JobEntity.toBusiness(rootHash: String? = null, files: List<TreeElement.LeafT
     rootHash = rootHash,
     files = files,
     callBackUrl = callBackUrl,
+    callBackStatus = callBackStatus,
     contractAddress = contractAddress,
     channelName = channelName,
     docsNumber = docsNumber,
