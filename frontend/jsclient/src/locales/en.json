@@ -282,6 +282,7 @@
       "date": "Creation date",
       "statusDate": "Status Date",
       "status": "Status",
+      "callBackStatus": "Callback status",
       "docs": "Docs",
       "channel": "Channel",
       "block": "Block",

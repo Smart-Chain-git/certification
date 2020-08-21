@@ -117,6 +117,7 @@ export interface Job {
     flowName: string,
     stateDate: Date,
     state: string,
+    callBackStatus: string,
     contractAddress?: string,
     transactionHash?: string,
     channelName?: string,

@@ -89,6 +89,7 @@
       "date": "Date de création",
       "statusDate": "Date de statut",
       "status": "Statut",
+      "callBackStatus": "Status du callback",
       "docs": "Docs",
       "channel": "Canal",
       "block": "Blocks",
