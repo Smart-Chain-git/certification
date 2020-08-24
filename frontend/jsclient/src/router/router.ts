@@ -27,6 +27,7 @@ import {
 import Vue from "vue"
 import Router from "vue-router"
 import multiguard from "vue-router-multiguard"
+import {loadDashBoard} from "@/router/guards/loadStat"
 
 Vue.use(Router)
 
@@ -131,7 +132,7 @@ const router = new Router({
                 {
                     path: "dashboard",
                     component: Dashboard,
-                    beforeEnter: loadJobs(8),
+                    beforeEnter: multiguard([loadDashBoard(), loadJobs(8)]),
                 },
                 {
                     path: "jobs",

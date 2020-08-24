@@ -228,3 +228,10 @@ export interface Proof {
     public_key: string,
     origin: string
 }
+
+export interface DashBoardStat {
+    jobsCreatedCount: number,
+    jobsProcessedCount: number,
+    documentsSignedCount: number
+}
+
