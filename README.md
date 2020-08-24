@@ -22,7 +22,8 @@ Tezos DigiSign is a solution built on top of the Tezos blockchain for reliably t
 
 The Tezos DigiSign solution has the following many advantages.
 
-
+|Advantage|Comment|
+|------------- |-------------
 |Independence|Signing documents does not require the use of a trusted third party, SaaS subscription or any software
 |Cost savings|The cost of the transaction is the same regardless of the number of documents signed. The unit price to sign a document is several thousand times cheaper than that practiced by the providers offering a solution based on a centralized PKI infrastructure
 |Confidentiality|Document does not need to be sent to Tezos DigiSign to be signed, it does not leave the IS and the company network. No need to archive the signed copy of the document with a third party (the signer should just keep proof of signature)
@@ -37,6 +38,7 @@ If the cost becomes negligible, the interest in signing the document becomes maj
   
 ### B2B uses cases
 
+|Domain|Comment|
 |------------- |-------------
 |Billing|Have a proof in the case of litigation, timestamp to verify a payment date to be respected or to fight fraud  
 |Sales|Prove the authenticity of a quote or a commercial proposal, check its validity date  
@@ -52,6 +54,8 @@ If the cost becomes negligible, the interest in signing the document becomes maj
 
 ### B2C use cases
 
+|Domain|Comment|
+|------------- |-------------
 |Proof of address|Allow a person to present proof of address certified by the issuing company and whose authenticity can be easily proven  
 |Bank statement|Prove to a credit company you have funds at a specific time (e.g. mortgage application).  
 |Online purchase certificate|Prove to a repairer that a product is under warranty.  
