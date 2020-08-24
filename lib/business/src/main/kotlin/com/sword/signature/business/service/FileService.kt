@@ -6,8 +6,7 @@ import com.sword.signature.business.model.Proof
 import com.sword.signature.business.model.TreeElement
 import kotlinx.coroutines.flow.Flow
 import org.springframework.data.domain.Pageable
-import reactor.core.publisher.Flux
-import reactor.core.publisher.Mono
+
 
 interface FileService {
 
@@ -30,7 +29,7 @@ interface FileService {
      * @param fileId Id of the file to compute the proof of.
      * @return Proof of the file.
      */
-    suspend fun getFileProof(requester: Account, fileId: String): Mono<Proof>
+    suspend fun getFileProof(requester: Account, fileId: String): Proof?
 
     /**
      * Count the number of files matching the filter.

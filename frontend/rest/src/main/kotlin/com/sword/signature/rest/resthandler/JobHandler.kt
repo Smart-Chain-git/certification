@@ -17,7 +17,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.reactive.awaitFirstOrNull
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
@@ -132,7 +131,7 @@ class JobHandler(
             ?: throw EntityNotFoundException("job", jobId)
         return flow {
             job.files?.forEach { leaf ->
-                val proof = fileService.getFileProof(requester = user.account, fileId = leaf.id).awaitFirstOrNull()
+                val proof = fileService.getFileProof(requester = user.account, fileId = leaf.id)
                     ?: throw EntityNotFoundException("file", leaf.id)
 
                 emit(leaf.toWeb(proof))

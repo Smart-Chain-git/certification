@@ -129,7 +129,7 @@ class CheckServiceImpl(
                     }
 
                     // Compute the file proof.
-                    val computedProof = fileService.getFileProof(adminAccount, treeElement.id!!).awaitFirstOrNull()
+                    val computedProof = fileService.getFileProof(adminAccount, treeElement.id!!)
                         ?: throw CheckException.IncoherentData()
                     // Retrieve the signer.
                     val signer: AccountEntity? = accountRepository.findById(job.userId).awaitFirstOrNull()
@@ -317,7 +317,7 @@ class CheckServiceImpl(
             }
             // Generate a fresh proof
             val freshProof: Proof =
-                fileService.getFileProof(adminAccount, treeElement.id!!).awaitFirstOrNull()
+                fileService.getFileProof(adminAccount, treeElement.id!!)
                     ?: return defaultResponse.get()
             // Retrieve the signer.
             val signer: AccountEntity? = accountRepository.findById(job.userId).awaitFirstOrNull()
