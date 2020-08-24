@@ -327,7 +327,7 @@ class CheckServiceImpl(
                 fileId = treeElement.id!!,
                 jobId = job.id,
                 signer = signer?.fullName,
-                timestamp = OffsetDateTime.now(),
+                timestamp = transaction.bigMapDiff[0].value.timestamp,
                 trace = branchHashes,
                 proof = freshProof
             )
