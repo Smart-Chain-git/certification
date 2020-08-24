@@ -1,7 +1,7 @@
 # Tezos Digisign - Quick Start
 
 This quick start deployment does not need any compilation. It uses the docker images in docker hub.
-To build the VM with the requirement, it's possible to use vangrant+VirtualBox. A vagrant file with the right external port and ansible script is available: http://edivgitlab.swordgroup.lan/tezos/signature/deployment.
+To build the VM with the requirement, it's possible to use vangrant+VirtualBox. A vagrant file with the right external port and ansible script is available: [deployment](../deployment/tezos-node-light).
 
 ## Requirements
 
@@ -10,7 +10,7 @@ To build the VM with the requirement, it's possible to use vangrant+VirtualBox. 
 ## VM deployment with vagrant
 
 VirtualBox and Vagrant must have been installed on your computer.
-After downloading http://edivgitlab.swordgroup.lan/tezos/signature/deployment, go into the tezos-node-light and launch the command:  
+After downloading [deployment](../deployment/tezos-node-light), go into the tezos-node-light and launch the command:  
 `vagrant up`
   
 connect to the VM:  
@@ -21,7 +21,7 @@ connect to the VM:
 ## Deployment
 
 Retrieve the code digisign  
-`git clone http://edivgitlab.swordgroup.lan/tezos/signature/tezos-servers`  
+`git clone https://gitlab.com/sword-edi/tezos-digisign`  
 `cd tezos-servers`  
 
 Launch the Tezos nodes (sandbox)  
@@ -79,3 +79,5 @@ Stop the VM:
 `vagrant halt`  
 
 
+## Warning
+If you stop the sanbox node, the smart contract and all the blockchain of the sandbox will be lost. You'll have to recreate the contract after launching the sandbox.
