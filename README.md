@@ -22,22 +22,13 @@ Tezos DigiSign is a solution built on top of the Tezos blockchain for reliably t
 
 The Tezos DigiSign solution has the following many advantages.
 
-Independence : Signing documents does not require the use of a trusted third party, SaaS subscription or any software
-  
-Cost savings : The cost of the transaction is the same regardless of the number of documents signed
-The unit price to sign a document is several thousand times cheaper than that practiced by the providers offering a solution based on a centralized PKI infrastructure
-  
-Confidentiality	: Document does not need to be sent to Tezos DigiSign to be signed, it does not leave the IS and the company network
-No need to archive the signed copy of the document with a third party (the signer should just keep proof of signature)
-  
-Multiformat : Any type of file can be signed, there is no limitation on format, weight and size
-Network traffic is optimized because documents do not pass through the network
-  
-Transparency : Proof of signature is stored in the blockchain within a Smart Contract accessible without permission, in a public and transparent way
-It is easy to prove the authenticity, integrity and timestamp of a document
-  
-Immutability : Once stored in the blockchain, proof of signature cannot be deleted and are accessible to anyone by reading the Smart Contract
-Proof of signature remain accessible as long as the blockchain network is active, the retention period is not limited in time
+
+|Independence|Signing documents does not require the use of a trusted third party, SaaS subscription or any software
+|Cost savings|The cost of the transaction is the same regardless of the number of documents signed. The unit price to sign a document is several thousand times cheaper than that practiced by the providers offering a solution based on a centralized PKI infrastructure
+|Confidentiality|Document does not need to be sent to Tezos DigiSign to be signed, it does not leave the IS and the company network. No need to archive the signed copy of the document with a third party (the signer should just keep proof of signature)
+|Multiformat|Any type of file can be signed, there is no limitation on format, weight and size. Network traffic is optimized because documents do not pass through the network
+|Transparency|Proof of signature is stored in the blockchain within a Smart Contract accessible without permission, in a public and transparent way. It is easy to prove the authenticity, integrity and timestamp of a document
+|Immutability|Once stored in the blockchain, proof of signature cannot be deleted and are accessible to anyone by reading the Smart Contract. Proof of signature remain accessible as long as the blockchain network is active, the retention period is not limited in time
 
 ## Multiple use cases
 
@@ -46,41 +37,27 @@ If the cost becomes negligible, the interest in signing the document becomes maj
   
 ### B2B uses cases
 
-Billing : Have a proof in the case of litigation, timestamp to verify a payment date to be respected or to fight fraud  
-
-Sales : Prove the authenticity of a quote or a commercial proposal, check its validity date  
-
-Insurance : Facilitate the signing of a subcontract with easy verification of the subcontractor's insurances  
-
-Loan : Timestamp and signature of the documents required to apply for a business loan (proof of ID and address, business bank statements, financial accounts, VAT returns, …)  
-
-Human Resources : Timestamp for sensitive mail within the company, which may be used by HR teams  
-
-Legal : A signed non-disclosure agreement is often just scanned. Timestamping and signing it on blockchain add legal value to it.  
-
-Diploma and certification : Prove the authenticity of a diploma or professional accreditation (for accountant, certified auditor, doctor, …)  
-
-Research and development : Generate proof of anteriority on R&D documents that can be used when filing a patent  
-
-Press and media : Prove a press release is original and fight fake news
+|------------- |-------------
+|Billing|Have a proof in the case of litigation, timestamp to verify a payment date to be respected or to fight fraud  
+|Sales|Prove the authenticity of a quote or a commercial proposal, check its validity date  
+|Insurance|Facilitate the signing of a subcontract with easy verification of the subcontractor's insurances  
+|Loan|Timestamp and signature of the documents required to apply for a business loan (proof of ID and address, business bank statements, financial accounts, VAT returns, …)  
+|Human Resources|Timestamp for sensitive mail within the company, which may be used by HR teams  
+|Legal|A signed non-disclosure agreement is often just scanned. Timestamping and signing it on blockchain add legal value to it.  
+|Diploma and certification|Prove the authenticity of a diploma or professional accreditation (for accountant, certified auditor, doctor, …)  
+|Research and development|Generate proof of anteriority on R&D documents that can be used when filing a patent  
+|Press and media|Prove a press release is original and fight fake news
 
 
 
 ### B2C use cases
 
-Proof of address : Allow a person to present proof of address certified by the issuing company and whose authenticity can be easily proven  
-
-Bank statement : Prove to a credit company you have funds at a specific time (e.g. mortgage application).  
-
-Online purchase certificate : Prove to a repairer that a product is under warranty.  
-
-Authenticity / ownership certificate : Prove that a good (e.g. a luxury watch) is an original, prove its legitimate possession.  
-
-Car insurance certificate : Prove to a car dealership that a vehicle is insured without waiting to receive the proof-of-insurance card.  
-
-Diploma : Prove to a recruiter the authenticity of a diploma obtained  
-
-Construction permit : Present a document whose authenticity can be verified by all stakeholders  
-
-Photography : Generate proof of anteriority (timestamped and signed) to defend intellectual property on a photo to be published  
+|Proof of address|Allow a person to present proof of address certified by the issuing company and whose authenticity can be easily proven  
+|Bank statement|Prove to a credit company you have funds at a specific time (e.g. mortgage application).  
+|Online purchase certificate|Prove to a repairer that a product is under warranty.  
+|Authenticity / ownership certificate|Prove that a good (e.g. a luxury watch) is an original, prove its legitimate possession.  
+|Car insurance certificate|Prove to a car dealership that a vehicle is insured without waiting to receive the proof-of-insurance card.  
+|Diploma|Prove to a recruiter the authenticity of a diploma obtained  
+|Construction permit|Present a document whose authenticity can be verified by all stakeholders  
+|Photography|Generate proof of anteriority (timestamped and signed) to defend intellectual property on a photo to be published  
 
