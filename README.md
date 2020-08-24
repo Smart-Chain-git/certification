@@ -47,23 +47,40 @@ If the cost becomes negligible, the interest in signing the document becomes maj
 ### B2B uses cases
 
 Billing : Have a proof in the case of litigation, timestamp to verify a payment date to be respected or to fight fraud  
+
 Sales : Prove the authenticity of a quote or a commercial proposal, check its validity date  
+
 Insurance : Facilitate the signing of a subcontract with easy verification of the subcontractor's insurances  
+
 Loan : Timestamp and signature of the documents required to apply for a business loan (proof of ID and address, business bank statements, financial accounts, VAT returns, …)  
+
 Human Resources : Timestamp for sensitive mail within the company, which may be used by HR teams  
+
 Legal : A signed non-disclosure agreement is often just scanned. Timestamping and signing it on blockchain add legal value to it.  
+
 Diploma and certification : Prove the authenticity of a diploma or professional accreditation (for accountant, certified auditor, doctor, …)  
+
 Research and development : Generate proof of anteriority on R&D documents that can be used when filing a patent  
+
 Press and media : Prove a press release is original and fight fake news
+
 
 
 ### B2C use cases
 
 Proof of address : Allow a person to present proof of address certified by the issuing company and whose authenticity can be easily proven  
+
 Bank statement : Prove to a credit company you have funds at a specific time (e.g. mortgage application).  
+
 Online purchase certificate : Prove to a repairer that a product is under warranty.  
+
 Authenticity / ownership certificate : Prove that a good (e.g. a luxury watch) is an original, prove its legitimate possession.  
+
 Car insurance certificate : Prove to a car dealership that a vehicle is insured without waiting to receive the proof-of-insurance card.  
+
 Diploma : Prove to a recruiter the authenticity of a diploma obtained  
+
 Construction permit : Present a document whose authenticity can be verified by all stakeholders  
+
 Photography : Generate proof of anteriority (timestamped and signed) to defend intellectual property on a photo to be published  
+
