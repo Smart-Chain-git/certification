@@ -15,8 +15,8 @@ sealed class CheckOutput(
         val jobId: String?,
         val signer: String?,
         val timestamp: OffsetDateTime,
-        @JsonProperty("check_process") val process: List<String>,
-        val proof: Proof
+        @JsonProperty("check_process") val process: List<String>?,
+        val proof: Proof?
     ) : CheckOutput(output = "OK")
 
     class Ko(
@@ -29,6 +29,8 @@ sealed class CheckOutput(
         val date: OffsetDateTime? = null,
         @JsonProperty("current_depth") val currentDepth: Long? = null,
         @JsonProperty("expected_depth") val expectedDepth: Long? = null,
+        @JsonProperty("current_age") val currentAge: String? = null,
+        @JsonProperty("expected_age") val expectedAge: String? = null,
         @JsonProperty("origin_public_key") val originPublicKey: String? = null,
         @JsonProperty("proof_file_origin_public_key") val proofFileOriginPublicKey: String? = null,
         val hash: String? = null,

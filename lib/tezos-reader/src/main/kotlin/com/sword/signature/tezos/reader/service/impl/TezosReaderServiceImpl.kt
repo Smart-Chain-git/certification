@@ -2,6 +2,7 @@ package com.sword.signature.tezos.reader.service.impl
 
 import com.sword.signature.tezos.reader.service.TezosReaderService
 import com.sword.signature.tezos.reader.tzindex.TzIndexConnector
+import com.sword.signature.tezos.reader.tzindex.model.TzBigMapEntry
 import com.sword.signature.tezos.reader.tzindex.model.TzContract
 import com.sword.signature.tezos.reader.tzindex.model.TzOp
 import org.springframework.stereotype.Service
@@ -40,4 +41,15 @@ class TezosReaderServiceImpl(
         }
         return false
     }
+
+    override suspend fun getHashFromContract(contractAddress: String, hash: String): TzBigMapEntry? {
+        val contract = tzIndexConnector.getContract(contractAddress)
+        if (contract != null && contract.bigMapIds.isNotEmpty()) {
+            val bigMapId = contract.bigMapIds[0]
+            return tzIndexConnector.getBigMapEntry(bigMapId.toString(), hash)
+        }
+        return null
+    }
+
+
 }

@@ -8,6 +8,6 @@ data class CheckResponse (
     val jobId: String? = null,
     val signer: String? = null,
     val timestamp: OffsetDateTime,
-    val trace: List<String>,
-    val proof: Proof
+    val trace: List<String>?,
+    val proof: Proof?
 )

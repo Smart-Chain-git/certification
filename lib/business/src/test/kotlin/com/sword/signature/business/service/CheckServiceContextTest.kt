@@ -6,6 +6,7 @@ import com.sword.signature.business.model.Proof
 import com.sword.signature.common.enums.TreeElementPosition
 import com.sword.signature.model.migration.MigrationHandler
 import com.sword.signature.tezos.reader.service.TezosReaderService
+import com.sword.signature.tezos.reader.tzindex.model.TzBigMapEntry
 import com.sword.signature.tezos.reader.tzindex.model.TzContract
 import com.sword.signature.tezos.reader.tzindex.model.TzOp
 import io.mockk.coEvery
@@ -79,10 +80,45 @@ class CheckServiceContextTest @Autowired constructor(
 
         @Test
         fun checkDocumentTestKODocumentNotFound() {
+            coEvery {
+                tezosReaderService.getHashFromContract(
+                    any(),
+                    "c866779f483855455631c934d8933bf744f56dcc10833e8a73752ed086325a7a"
+                )
+            } returns null
             assertThrows<CheckException.HashNotPresent> {
                 runBlocking { checkService.checkDocument("c866779f483855455631c934d8933bf744f56dcc10833e8a73752ed086325a7a") }
             }
         }
+
+        @Test
+        fun checkDocumentTestOKDocumentNotFoundButInChaine() {
+            coEvery {
+                tezosReaderService.getHashFromContract(
+                    any(),
+                    "c866779f483855455631c934d8933bf744f56dcc10833e8a73752ed086325a7b"
+                )
+            } returns TzBigMapEntry(
+                key = "clef??",
+                keyHash = "c866779f483855455631c934d8933bf744f56dcc10833e8a73752ed086325a7b",
+                value = TzBigMapEntry.Value(
+                    timestamp = OffsetDateTime.now().minusSeconds(5),
+                    address = "adresss"
+                ),
+                meta = TzBigMapEntry.Meta(
+                    contract = "46546516519568465165",
+                    bigMapId = 1,
+                    block = "bli1114",
+                    height = 14,
+                    time = OffsetDateTime.now().minusSeconds(5)
+                )
+
+            )
+            assertThrows<CheckException.TransactionNotOldEnough> {
+                runBlocking { checkService.checkDocument("c866779f483855455631c934d8933bf744f56dcc10833e8a73752ed086325a7b") }
+            }
+        }
+
 
         @Test
         fun checkDocumentTestKOTreeError() {
@@ -242,11 +278,11 @@ class CheckServiceContextTest @Autowired constructor(
                 assertEquals(adminFullName, response.signer)
                 assertEquals(
                     "c866779f483855455631c934d8933bf744f56dcc10833e8a73752ed086325a7a",
-                    response.proof.documentHash
+                    response.proof?.documentHash
                 )
                 assertEquals(
                     "10cba66df788a0848e397c396b993057c64bb29cadc78152246ad28c1a3b02ef",
-                    response.proof.rootHash
+                    response.proof?.rootHash
                 )
             }.assertAll()
         }
@@ -278,11 +314,11 @@ class CheckServiceContextTest @Autowired constructor(
                 assertEquals(adminFullName, response.signer)
                 assertEquals(
                     "c866779f483855455631c934d8933bf744f56dcc10833e8a73752ed086325a7a",
-                    response.proof.documentHash
+                    response.proof?.documentHash
                 )
                 assertEquals(
                     "c866779f483855455631c934d8933bf744f56dcc10833e8a73752ed086325a7a",
-                    response.proof.rootHash
+                    response.proof?.rootHash
                 )
             }.assertAll()
         }
@@ -568,11 +604,11 @@ class CheckServiceContextTest @Autowired constructor(
                 assertEquals(2, response.status)
                 assertEquals(
                     documentHash,
-                    response.proof.documentHash
+                    response.proof?.documentHash
                 )
                 assertEquals(
                     "10cba66df788a0848e397c396b993057c64bb29cadc78152246ad28c1a3b02ef",
-                    response.proof.rootHash
+                    response.proof?.rootHash
                 )
             }.assertAll()
         }
@@ -603,11 +639,11 @@ class CheckServiceContextTest @Autowired constructor(
                 assertEquals(adminFullName, response.signer)
                 assertEquals(
                     documentHash,
-                    response.proof.documentHash
+                    response.proof?.documentHash
                 )
                 assertEquals(
                     "10cba66df788a0848e397c396b993057c64bb29cadc78152246ad28c1a3b02ef",
-                    response.proof.rootHash
+                    response.proof?.rootHash
                 )
             }.assertAll()
         }
@@ -638,11 +674,11 @@ class CheckServiceContextTest @Autowired constructor(
                 assertEquals(adminFullName, response.signer)
                 assertEquals(
                     documentHash,
-                    response.proof.documentHash
+                    response.proof?.documentHash
                 )
                 assertEquals(
                     "10cba66df788a0848e397c396b993057c64bb29cadc78152246ad28c1a3b02ef",
-                    response.proof.rootHash
+                    response.proof?.rootHash
                 )
             }.assertAll()
         }

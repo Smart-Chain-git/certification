@@ -38,6 +38,7 @@ tezos:
     url: "http://my-indexer-url.com"
   validation:
     minDepth: 30
+    minAge: 2h
   chain: "TEZOS_TEST"
   urls:
     api:

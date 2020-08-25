@@ -1,5 +1,6 @@
 package com.sword.signature.tezos.reader.service
 
+import com.sword.signature.tezos.reader.tzindex.model.TzBigMapEntry
 import com.sword.signature.tezos.reader.tzindex.model.TzContract
 import com.sword.signature.tezos.reader.tzindex.model.TzOp
 
@@ -33,4 +34,12 @@ interface TezosReaderService {
      * @return Existence of the provided hash in the given contract storage.
      */
     suspend fun hashAlreadyExist(contractAddress: String, hash: String): Boolean
+
+    /**
+     * Check if the provided hash is already in the contract storage.
+     * @param contractAddress Address of the smart contract which storage may contain the provided hash.
+     * @param hash Hash to get from the BigMap.
+     * @return TzBigMapEntry associated to the provided hash in the given contract storage.
+     */
+    suspend fun getHashFromContract(contractAddress: String, hash: String): TzBigMapEntry?
 }

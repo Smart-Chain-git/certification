@@ -1,5 +1,6 @@
 package com.sword.signature.business.exception
 
+import java.time.Duration
 import java.time.OffsetDateTime
 
 sealed class CheckException(
@@ -25,14 +26,14 @@ sealed class CheckException(
         val date: OffsetDateTime
     ) : CheckException(5, "DOCUMENT_KNOWN_UNKNOWN_ROOT_HASH")
 
-    class IncorrectProofFile() : CheckException(6, "INCORRECT_PROOF_FILE")
-    class IncorrectTransaction() : CheckException(7, "INCORRECT_TRANSACTION")
+    class IncorrectProofFile : CheckException(6, "INCORRECT_PROOF_FILE")
+    class IncorrectTransaction : CheckException(7, "INCORRECT_TRANSACTION")
     class TransactionNotDeepEnough(
         val currentDepth: Long,
         val expectedDepth: Long
     ) : CheckException(8, "TRANSACTION_NOT_DEEP_ENOUGH")
 
-    class IncoherentData() : CheckException(9, "INCOHERENT_DATA")
+    class IncoherentData : CheckException(9, "INCOHERENT_DATA")
     class NoTransaction(
         val rootHash: String
     ) : CheckException(10, "NO_TRANSACTION")
@@ -70,4 +71,9 @@ sealed class CheckException(
         val contractAddress: String,
         val proofFileContractAddress: String
     ) : CheckException(17, "INCORRECT_CONTRACT_ADDRESS")
+
+    class TransactionNotOldEnough(
+        val currentAge: Duration,
+        val expectedAge: Duration
+    ) : CheckException(18, "TRANSACTION_NOT_OLD_ENOUGH")
 }

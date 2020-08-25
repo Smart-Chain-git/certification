@@ -38,6 +38,7 @@ tezos:
     url: "http://127.0.0.1:8000"
   validation:
     minDepth: 30
+    minAge: 2h
   chain: "TEZOS_CARTHAGENET_SANDBOX"
   urls:
     api:

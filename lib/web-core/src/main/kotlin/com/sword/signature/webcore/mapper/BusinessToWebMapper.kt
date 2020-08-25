@@ -13,6 +13,7 @@ import com.sword.signature.api.token.Token
 import com.sword.signature.business.exception.CheckException
 import com.sword.signature.business.model.FileMetadata
 import com.sword.signature.business.model.TreeElement
+import java.time.Duration
 
 fun com.sword.signature.business.model.Account.toWeb() = Account(
     id = id,
@@ -116,10 +117,10 @@ fun com.sword.signature.business.model.CheckResponse.toWeb() = CheckOutput.Ok(
     signer = signer,
     timestamp = timestamp,
     process = trace,
-    proof = proof.toWeb()
+    proof = proof?.toWeb()
 )
 
-fun com.sword.signature.business.exception.CheckException.toWeb(): CheckOutput.Ko {
+fun CheckException.toWeb(): CheckOutput.Ko {
     return when (this) {
         is CheckException.HashNotPresent -> CheckOutput.Ko(
             error = message,
@@ -189,12 +190,12 @@ fun com.sword.signature.business.exception.CheckException.toWeb(): CheckOutput.K
         )
 
         is CheckException.UnknownHashAlgorithm -> CheckOutput.Ko(
-            error=message,
+            error = message,
             proofFileAlgorithm = proofFileAlgorithm
         )
 
         is CheckException.IncorrectPublicKey -> CheckOutput.Ko(
-            error=message,
+            error = message,
             publicKey = publicKey,
             proofFilePublicKey = proofFilePublicKey
         )
@@ -204,5 +205,28 @@ fun com.sword.signature.business.exception.CheckException.toWeb(): CheckOutput.K
             contractAddress = contractAddress,
             proofFileContractAddress = proofFileContractAddress
         )
+        is CheckException.TransactionNotOldEnough -> CheckOutput.Ko(
+            error = message,
+            currentAge = currentAge.formatToString(),
+            expectedAge = expectedAge.formatToString()
+        )
     }
+}
+
+fun Duration.formatToString(): String {
+
+    val hours = toHoursPart()
+    val minutes = toMinutesPart()
+    val seconds = toSecondsPart()
+    return  if (hours > 0) {
+                "$hours h "
+            } else "" +
+                    if (minutes > 0) {
+                        "$minutes min "
+                    } else "" +
+                            if (seconds > 0) {
+                                "$seconds sec "
+                            } else ""
+
+
 }
