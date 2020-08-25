@@ -75,7 +75,7 @@ class CheckServiceImpl(
             JobStateType.REJECTED -> throw CheckException.HashNotPresent(documentHash = documentHash)
             JobStateType.INSERTED -> {
                 // Retrieve the signer.
-                val signer= accountRepository.findById(job.userId).awaitFirstOrNull()
+                val signer = accountRepository.findById(job.userId).awaitFirstOrNull()
                 throw CheckException.DocumentKnownUnknownRootHash(
                     signer = signer?.fullName,
                     publicKey = job.signerAddress,
@@ -157,13 +157,13 @@ class CheckServiceImpl(
         }
     }
 
-    private suspend fun checkSingleDocumentWithoutProof(documentHash: String) : CheckResponse {
+    private suspend fun checkSingleDocumentWithoutProof(documentHash: String): CheckResponse {
 
-        val content = tezosReaderService.getHashFromContract(contractAddress,documentHash)
-        if(content != null) {
+        val content = tezosReaderService.getHashFromContract(contractAddress, documentHash)
+        if (content != null) {
             val now = OffsetDateTime.now()
-            val age = Duration.between( content.value.timestamp, now).abs()
-            if(age < minAge) {
+            val age = Duration.between(content.value.timestamp, now).abs()
+            if (age < minAge) {
                 throw CheckException.TransactionNotOldEnough(currentAge = age, expectedAge = minAge)
             }
 
@@ -172,7 +172,13 @@ class CheckServiceImpl(
                 signer = content.value.address,
                 timestamp = content.value.timestamp,
                 trace = null,
-                proof = null
+                proof = Proof(
+                    algorithm = "",
+                    documentHash = documentHash,
+                    rootHash = documentHash,
+                    filename = "",
+                    contractAddress = contractAddress
+                )
             )
         }
 

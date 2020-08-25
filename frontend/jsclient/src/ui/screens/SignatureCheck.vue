@@ -311,7 +311,7 @@ export default class SignatureCheck extends Vue {
           return SignatureCheck.format(res, [this.checkResponse.proof!.transaction_hash!,
             this.checkResponse.proof!.block_hash!, this.checkResponse.timestamp!.toString()])
         case "signatureCheck.success.message3.block2.line8":
-          return SignatureCheck.format(res, [this.checkResponse.hash!, this.checkResponse.timestamp!.toString()])
+          return SignatureCheck.format(res, [this.checkResponse.proof!.hash_document!, this.checkResponse.timestamp!.toString()])
         case "signatureCheck.success.message2.block2.line4":
           return SignatureCheck.format(res, [this.checkResponse.proof!.hash_document])
 
@@ -325,7 +325,7 @@ export default class SignatureCheck extends Vue {
         case "signatureCheck.success.message2.block2.line10":
           return SignatureCheck.format(res, [this.checkResponse.proof!.contract_address])
         case "signatureCheck.success.message3.block2.line10":
-          return SignatureCheck.format(res, [this.checkResponse.signer!.contract_address])
+          return SignatureCheck.format(res, [this.checkResponse.proof!.contract_address])
 
         case "signatureCheck.success.message2.block2.line5":
           const hash = this.checkResponse.proof!.hash_list[idx]

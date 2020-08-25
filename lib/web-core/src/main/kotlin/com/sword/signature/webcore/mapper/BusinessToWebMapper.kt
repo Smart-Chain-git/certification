@@ -117,7 +117,7 @@ fun com.sword.signature.business.model.CheckResponse.toWeb() = CheckOutput.Ok(
     signer = signer,
     timestamp = timestamp,
     process = trace,
-    proof = proof?.toWeb()
+    proof = proof.toWeb()
 )
 
 fun CheckException.toWeb(): CheckOutput.Ko {
