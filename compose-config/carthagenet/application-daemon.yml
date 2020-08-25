@@ -74,3 +74,4 @@ tezos:
     url: "https://api.carthagenet.tzstats.com"
   validation:
     minDepth: 30
+    minAge: 2h

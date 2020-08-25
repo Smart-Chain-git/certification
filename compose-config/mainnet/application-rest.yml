@@ -35,6 +35,7 @@ tezos:
     url: "https://api.tzstats.com"
   validation:
     minDepth: 30
+    minAge: 2h
   chain: "TEZOS_MAINNET"
   urls:
     api:
