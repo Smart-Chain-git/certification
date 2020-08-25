@@ -244,6 +244,10 @@
         "title": "Le serveur n'a pas pu traité votre demande",
         "message": "Le serveur a rencontré une erreur interne lors du traitement de votre requête. Veuillez confirmer que le format du fichier de preuve est correct auprès du fournisseur."
       },
+      "transaction_not_old_enough": {
+        "title": "Le fichier de preuve est cohérent mais la signature est en cours d'encrage dans le blochain.",
+        "message": "la signature est en cours d'encrage dans la blockchain. Veuillez patienter un peu la fin de l'ancrage"
+      },
       "generic": {
         "title": "Hash de document non trouvé dans TEZOS DigiSign",
         "message": "Nous sommes désolés, nous ne reconnaissons pas ce document. Etes-vous sûr d'avoir la même version du fichier qu'au moment de sa signature ? Si ce n'est pas le cas, merci de mettre en ligne la version originale. Si le document est bon et qu'un fichier de preuve vous a été fourni, merci de le mettre en ligne également."
@@ -280,6 +284,17 @@
           "line7": "Si votre document était différent de celui qui a été signé, le hachage racine serait différent",
           "line8": "Nous sommes alors entrés dans la blockchain, et nous pouvons confirmer que votre document avec le Root Hash, a été signé dans la transaction Tezos Blockchain {0}, présent dans le bloc Tezos {1}, le {2 }. Il est désormais stocké dans un contrat intelligent. ",
           "line9": "Le document a été signé par une entité connue par sa clé publique Tezos unique {0}. Sur la base de notre base de données interne, l'opérateur de cette plateforme de vérification a reçu au préalable la confirmation que sa clé publique appartient à {1}",
+          "line10": "Cliquez {#} pour obtenir les informations techniques sur l'endroit où les informations sont stockées dans le contrat intelligent Tezos DigiSign (adresse du contrat: {0})."
+        }
+      },
+      "message3": {
+        "block1": {
+          "title": "Votre fichier est certifié.",
+          "message": "Il a été signé par {0} le {1}"
+        },
+        "block2": {
+          "line8": "Nous sommes entrés dans la blockchain, et nous pouvons confirmer que votre document avec le Hash {0}, a été signé dans la transaction Tezos Blockchain le {1}. Il est désormais stocké dans un contrat intelligent. ",
+          "line9": "Le document a été signé par une entité connue par sa clé publique Tezos unique {0}.",
           "line10": "Cliquez {#} pour obtenir les informations techniques sur l'endroit où les informations sont stockées dans le contrat intelligent Tezos DigiSign (adresse du contrat: {0})."
         }
       },

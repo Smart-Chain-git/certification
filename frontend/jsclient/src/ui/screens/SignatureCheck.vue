@@ -95,6 +95,12 @@
                     <span
                         v-html="parseLink('signatureCheck.success.message2.block2.line10', 'here', {'href' : this.storageURL})"/>
                   </div>
+                  <div v-if="checkResponse.check_status === 3">
+                    {{ parse("signatureCheck.success.message3.block2.line8") }}<br/><br/>
+                    {{ parse("signatureCheck.success.message3.block2.line9") }}<br/><br/>
+                    <span
+                        v-html="parseLink('signatureCheck.success.message3.block2.line10', 'here', {'href' : this.storageURL})"/>
+                  </div>
                 </v-expansion-panel-content>
               </v-expansion-panel>
             </v-expansion-panels>
@@ -282,6 +288,10 @@ export default class SignatureCheck extends Vue {
           return SignatureCheck.format(res, [
             this.checkResponse.signer || this.$t("signatureCheck.unknown").toString(),
             this.checkResponse.timestamp!.toString()])
+        case "signatureCheck.success.message3.block1.message":
+          return SignatureCheck.format(res, [
+            this.$t("signatureCheck.unknown").toString(),
+            this.checkResponse.timestamp!.toString()])
 
         case "signatureCheck.success.message1.block2.line1":
           return SignatureCheck.format(res, [this.checkResponse.proof!.file_name])
@@ -300,7 +310,8 @@ export default class SignatureCheck extends Vue {
         case "signatureCheck.success.message2.block2.line8":
           return SignatureCheck.format(res, [this.checkResponse.proof!.transaction_hash!,
             this.checkResponse.proof!.block_hash!, this.checkResponse.timestamp!.toString()])
-
+        case "signatureCheck.success.message3.block2.line8":
+          return SignatureCheck.format(res, [this.checkResponse.hash!, this.checkResponse.timestamp!.toString()])
         case "signatureCheck.success.message2.block2.line4":
           return SignatureCheck.format(res, [this.checkResponse.proof!.hash_document])
 
@@ -308,10 +319,13 @@ export default class SignatureCheck extends Vue {
         case "signatureCheck.success.message2.block2.line9":
           return SignatureCheck.format(res, [this.checkResponse.proof!.origin_public_key,
             this.checkResponse.signer || this.$t("signatureCheck.unknown").toString()])
-
+        case "signatureCheck.success.message3.block2.line9":
+          return SignatureCheck.format(res, [this.checkResponse.signer!])
         case "signatureCheck.success.message1.block2.line7":
         case "signatureCheck.success.message2.block2.line10":
           return SignatureCheck.format(res, [this.checkResponse.proof!.contract_address])
+        case "signatureCheck.success.message3.block2.line10":
+          return SignatureCheck.format(res, [this.checkResponse.signer!.contract_address])
 
         case "signatureCheck.success.message2.block2.line5":
           const hash = this.checkResponse.proof!.hash_list[idx]

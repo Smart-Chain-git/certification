@@ -34,6 +34,8 @@ export interface SignatureCheckResponse {
     error?: string,
     current_depth?: number,
     expected_depth?: number,
+    current_age?: string,
+    expected_age?: string,
     date?: Date,
     public_key?: string
     output: string,

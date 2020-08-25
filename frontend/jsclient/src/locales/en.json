@@ -212,6 +212,10 @@
         "title": "The server could not handle your request",
         "message": "The server encountered an unattended error while handling your request. Please confirm the proof file format correctness with the provider."
       },
+      "transaction_not_old_enough": {
+        "title": "Proof file is consistent but the signature is being anchored in the blochain.",
+        "message": "The signature is being anchored in the blockchain. Please wait a bit the completion of the anchorage."
+      },
       "generic": {
         "title": "Document hash not found in TEZOS DigiSign",
         "message": "We are sorry, we do not recognize this document. Are your sure this document is in the exact same version that the one that has been signed? If not, please upload the original version. If the document is good and if you have been given a proof file, please upload it too."
@@ -248,6 +252,17 @@
           "line7": "If your document was different in any way from the one that has been signed, the Root Hash would be different",
           "line8": "We then have been into the blockchain, and we can confirm that your document along with the Root Hash, has been signed in the Tezos Blockchain transaction {0}, present in the Tezos block {1}, the {2}. It is now stored in a smart contract.",
           "line9": "The document has been signed by an entity knows by its unique Tezos Public key {0}. Based on our internal database, the operator of this verification platform received beforehand confirmation that his public key is owned by {1}",
+          "line10": "Click {#} to get the technical information on where the information is stored in the Tezos DigiSign smart contract (contract address: {0})."
+        }
+      },
+      "message3": {
+        "block1": {
+          "title": "Your file is certified.",
+          "message": "It has been signed by {0} on the {1}"
+        },
+        "block2": {
+          "line8": "We have been into the blockchain, and we can confirm that your document along with the Hash {0}, has been signed in the Tezos Blockchain the {1}. It is now stored in a smart contract.",
+          "line9": "The document has been signed by an entity knows by its unique Tezos Public key {0}.",
           "line10": "Click {#} to get the technical information on where the information is stored in the Tezos DigiSign smart contract (contract address: {0})."
         }
       },
