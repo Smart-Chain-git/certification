@@ -120,7 +120,7 @@ class FileServiceContextTest @Autowired constructor(
         @Test
         fun `not existing file proof should return null for authorized person`() {
             runBlocking {
-                val fileProof = fileService.getFileProof(secondAdmin, "falseId").awaitFirstOrNull()
+                val fileProof = fileService.getFileProof(secondAdmin, "falseId")
                 assertThat(fileProof).isNull()
             }
         }
@@ -128,7 +128,7 @@ class FileServiceContextTest @Autowired constructor(
         @Test
         fun `not existing file proof should return null for everybody`() {
             runBlocking {
-                val fileProof = fileService.getFileProof(simpleAccount, "falseId").awaitFirstOrNull()
+                val fileProof = fileService.getFileProof(simpleAccount, "falseId")
                 assertThat(fileProof).isNull()
             }
         }
@@ -138,7 +138,7 @@ class FileServiceContextTest @Autowired constructor(
         fun `user can't get proof of another`() {
             Assertions.assertThatThrownBy {
                 runBlocking {
-                    fileService.getFileProof(requester = simpleAccount, fileId = file13Id).awaitFirstOrNull()
+                    fileService.getFileProof(requester = simpleAccount, fileId = file13Id)
                 }
             }.isInstanceOf(MissingRightException::class.java)
         }
@@ -150,7 +150,7 @@ class FileServiceContextTest @Autowired constructor(
             expectedProof: Proof
         ) {
             runBlocking {
-                val actual = fileService.getFileProof(requester = adminAccount, fileId = fileId).awaitFirstOrNull()
+                val actual = fileService.getFileProof(requester = adminAccount, fileId = fileId)
                 assertThat(actual).isNotNull.isEqualTo(expectedProof)
             }
         }
@@ -185,7 +185,7 @@ class FileServiceContextTest @Autowired constructor(
             )
             val actual = runBlocking {
                 coEvery { tezosReaderService.getContract(contractAddress) } returns contract
-                fileService.getFileProof(requester = adminAccount, fileId = file5Id).awaitFirstOrNull()
+                fileService.getFileProof(requester = adminAccount, fileId = file5Id)
             }
             assertThat(actual).isNotNull.isEqualTo(expectedProof)
         }
@@ -246,7 +246,7 @@ class FileServiceContextTest @Autowired constructor(
             val actual = runBlocking {
                 coEvery { tezosReaderService.getContract(contractAddress) } returns contract
                 coEvery { tezosReaderService.getTransaction(transactionHash) } returns transaction
-                fileService.getFileProof(requester = adminAccount, fileId = file6Id).awaitFirstOrNull()
+                fileService.getFileProof(requester = adminAccount, fileId = file6Id)
             }
             assertThat(actual).isNotNull.isEqualTo(expectedProof)
         }
