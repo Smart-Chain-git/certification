@@ -12,6 +12,11 @@ then
 	cat tc.log
 	exit 1
 fi
+
+echo "bob and alice activation"
+./bin/tezos-client transfer 1 from bob to alice  --burn-cap 0.257
+./bin/tezos-client transfer 1 from alice to bob  --burn-cap 0.257
+
 ./bin/tezos-client -A 127.0.0.1 -P 18731 originate contract hash_timestamping transferring 0 from alice running hash_timestamping.tz --init '{}' --burn-cap 5 --force 1> originate.log 2>tc.log
 NBR=`wc -l tc.log | cut -d" " -f1`
 if [ $NBR -gt 0 ]
