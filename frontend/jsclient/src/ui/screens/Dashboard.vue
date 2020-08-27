@@ -20,7 +20,7 @@
                 <Card height="90%">
                     <h2>{{ month }}</h2>
 
-                    <StatBoard :number="dashBoardStat.documentsSignedCount" :detail="$t('dashboard.documentsSigned')"/>
+                    <StatBoard :number="dashBoardStat.documentsSignedCount" :detail="$t('dashboard.documents')"/>
                     <StatBoard :number="dashBoardStat.jobsCreatedCount" :detail="$t('dashboard.jobsCreated')"/>
                     <StatBoard :number="dashBoardStat.jobsProcessedCount" :detail="$t('dashboard.jobsProcessed')"/>
                 </Card>

@@ -34,7 +34,7 @@
     "welcome": "Bienvenue sur application Tezos Digisign !",
     "content": "Grâce à cette application, vous serez capable de créer vos jobs et d'ajouter vos documents pour qu'ils soient signés. Vous pourrez également vérifier l'authenticité de vos documents.",
     "lastJobs": "Derniers jobs",
-    "documentsSigned": "documents signés",
+    "documents": "documents",
     "jobsCreated": "jobs créés",
     "jobsProcessed": "jobs éxécutés",
     "monthStatistics": "Statistiques de {0}",
