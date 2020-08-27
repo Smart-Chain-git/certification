@@ -241,7 +241,7 @@
         "message": "Nous sommes désolés, le fichier de preuve a la mauvaise adresse du contract : {0}. Le serveur Digisign attend l'adresse de contrat suivante : {1}."
       },
       "internal_servor_error": {
-        "title": "Le serveur n'a pas pu traité votre demande",
+        "title": "Le serveur n'a pas pu traiter votre demande",
         "message": "Le serveur a rencontré une erreur interne lors du traitement de votre requête. Veuillez confirmer que le format du fichier de preuve est correct auprès du fournisseur."
       },
       "generic": {
