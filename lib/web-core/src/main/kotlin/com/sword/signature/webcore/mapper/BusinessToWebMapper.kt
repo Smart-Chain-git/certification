@@ -6,6 +6,7 @@ import com.sword.signature.api.algorithm.Algorithm
 import com.sword.signature.api.check.CheckOutput
 import com.sword.signature.api.job.Job
 import com.sword.signature.api.job.JobFile
+import com.sword.signature.api.merkel.MerkelTree
 import com.sword.signature.api.proof.Proof
 import com.sword.signature.api.sign.SignMetadata
 import com.sword.signature.api.sign.SignResponse
@@ -50,6 +51,7 @@ fun com.sword.signature.business.model.Job.toWeb() = Job(
     algorithm = algorithm,
     flowName = flowName,
     stateDate = stateDate,
+    callBackStatus = callBackStatus.name,
     state = state.name,
     contractAddress = contractAddress,
     transactionHash = transactionHash,
@@ -211,6 +213,19 @@ fun CheckException.toWeb(): CheckOutput.Ko {
             expectedAge = expectedAge.formatToString()
         )
     }
+}
+
+fun com.sword.signature.business.model.MerkelTree.toWeb() = MerkelTree(
+    algorithm = algorithm,
+    root = root.toWeb()
+)
+
+fun com.sword.signature.business.model.MerkelTree.Node.toWeb(): MerkelTree.Node {
+    return MerkelTree.Node(
+        hash = hash,
+        left = left?.toWeb(),
+        right = right?.toWeb()
+    )
 }
 
 fun Duration.formatToString(): String {

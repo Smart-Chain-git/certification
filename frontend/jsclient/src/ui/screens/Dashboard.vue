@@ -20,9 +20,9 @@
                 <Card height="90%">
                     <h2>{{ month }}</h2>
 
-                    <StatBoard :number=102 :detail="$t('dashboard.documentsSigned')"/>
-                    <StatBoard :number=12 :detail="$t('dashboard.jobsCreated')"/>
-                    <StatBoard :number=6 :detail="$t('dashboard.jobsProcessed')"/>
+                    <StatBoard :number="dashBoardStat.documentsSignedCount" :detail="$t('dashboard.documents')"/>
+                    <StatBoard :number="dashBoardStat.jobsCreatedCount" :detail="$t('dashboard.jobsCreated')"/>
+                    <StatBoard :number="dashBoardStat.jobsProcessedCount" :detail="$t('dashboard.jobsProcessed')"/>
                 </Card>
             </v-flex>
             <v-flex xs12 lg9>
@@ -92,6 +92,10 @@
 
         private get month() {
             return this.$t("dashboard.monthStatistics").toString().replace("{0}", moment().format("MMMM"))
+        }
+
+        private get dashBoardStat() {
+          return this.$modules.stat.dashBoardStat
         }
 
         private get jobList() {

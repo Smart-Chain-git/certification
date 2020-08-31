@@ -7,6 +7,7 @@ import com.sword.signature.business.model.mapper.toBusiness
 import com.sword.signature.business.service.SignService
 import com.sword.signature.business.visitor.SaveRepositoryTreeVisitor
 import com.sword.signature.common.enums.JobStateType
+import com.sword.signature.common.enums.NotificationStatusType
 import com.sword.signature.common.enums.TreeElementType
 import com.sword.signature.merkletree.builder.TreeBuilder
 import com.sword.signature.merkletree.visitor.SimpleAlgorithmTreeBrowser
@@ -99,6 +100,7 @@ class SignServiceImpl(
                 algorithm = algorithm.name,
                 flowName = flowName,
                 callBackUrl = callBackUrl,
+                callBackStatus = if(callBackUrl==null) {NotificationStatusType.NONE} else {NotificationStatusType.PENDING},
                 state = JobStateType.INSERTED,
                 stateDate = OffsetDateTime.now(),
                 docsNumber = fileHashes.size,

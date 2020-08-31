@@ -317,7 +317,7 @@ export default class SignatureCheck extends Vue {
 
         case "signatureCheck.success.message1.block2.line5":
         case "signatureCheck.success.message2.block2.line9":
-          return SignatureCheck.format(res, [this.checkResponse.proof!.origin_public_key,
+          return SignatureCheck.format(res, [this.checkResponse.proof!.public_key,
             this.checkResponse.signer || this.$t("signatureCheck.unknown").toString()])
         case "signatureCheck.success.message3.block2.line9":
           return SignatureCheck.format(res, [this.checkResponse.signer!])

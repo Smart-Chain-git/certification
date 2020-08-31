@@ -7,6 +7,7 @@ import com.sword.signature.business.model.Job
 import com.sword.signature.business.model.JobPatch
 import com.sword.signature.common.criteria.JobCriteria
 import com.sword.signature.common.enums.JobStateType
+import com.sword.signature.common.enums.NotificationStatusType
 import com.sword.signature.model.migration.MigrationHandler
 import kotlinx.coroutines.flow.map
 
@@ -97,6 +98,7 @@ class JobServiceContextTest @Autowired constructor(
         flowName = "ARS_20180626_02236_130006",
         stateDate = OffsetDateTime.parse("2020-04-07T08:16:04.028Z"),
         state = JobStateType.INSERTED,
+        callBackStatus = NotificationStatusType.PENDING,
         docsNumber = 3
     )
 
@@ -109,6 +111,7 @@ class JobServiceContextTest @Autowired constructor(
         flowName = "ARS_20180626_02236_130006",
         stateDate = OffsetDateTime.parse("2020-04-07T08:16:04.113Z"),
         state = JobStateType.INSERTED,
+        callBackStatus = NotificationStatusType.PENDING,
         channelName = "chaine editique",
         docsNumber = 1
     )
@@ -506,6 +509,13 @@ class JobServiceContextTest @Autowired constructor(
                 multipleFileJobId,
                 JobPatch(state = JobStateType.VALIDATED),
                 multipleFileJob.copy(state = JobStateType.VALIDATED)
+            ),
+            Arguments.of(
+                "callback status to COMPLETED",
+                adminAccount,
+                multipleFileJobId,
+                JobPatch(callBackStatus = NotificationStatusType.COMPLETED),
+                multipleFileJob.copy(callBackStatus = NotificationStatusType.COMPLETED)
             )
 
         )

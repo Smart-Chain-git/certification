@@ -119,6 +119,7 @@ export interface Job {
     flowName: string,
     stateDate: Date,
     state: string,
+    callBackStatus: string,
     contractAddress?: string,
     transactionHash?: string,
     channelName?: string,
@@ -230,3 +231,23 @@ export interface Proof {
     public_key: string,
     origin: string
 }
+
+
+export interface DashBoardStat {
+    jobsCreatedCount: number,
+    jobsProcessedCount: number,
+    documentsSignedCount: number
+}
+
+
+export  interface MerkelTree {
+    algorithm: string,
+    root: TreeNode,
+}
+
+export  interface TreeNode {
+    hash: string,
+    left?: Node,
+    right?: Node,
+}
+

@@ -17,6 +17,7 @@
                         <EditFormRow :title="$t('job.detail.date')" :editable="false" :value="currentJob.createdDate"/>
                         <EditFormRow :title="$t('job.detail.statusDate')" :editable="false" :value="currentJob.stateDate"/>
                         <EditFormRow :title="$t('job.detail.status')" :editable="false" :value="currentJob.state"/>
+                        <EditFormRow :title="$t('job.detail.callBackStatus')" :editable="false" :value="currentJob.callBackStatus"/>
                         <EditFormRow :title="$t('job.detail.docs')" :editable="true">
                             <a class="mt-3" @click="gotoDocuments(currentJob.id)">{{ currentJob.docsNumber }}</a>
                         </EditFormRow>

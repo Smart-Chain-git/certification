@@ -10,7 +10,8 @@
       "userId": "5e74a073a386f170f3850b4b",
       "flowName": "web_2020-06-03T07:48:26.865622",
       "stateDate": "2020-06-03T15:01:45.346712Z",
-      "state": "REJECTED"
+      "state": "REJECTED",
+      "callBackStatus": "PENDING"
     }
   ]
 }

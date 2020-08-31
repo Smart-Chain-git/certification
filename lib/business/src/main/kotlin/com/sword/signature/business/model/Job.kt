@@ -1,6 +1,7 @@
 package com.sword.signature.business.model
 
 import com.sword.signature.common.enums.JobStateType
+import com.sword.signature.common.enums.NotificationStatusType
 import java.time.OffsetDateTime
 
 data class Job(
@@ -52,6 +53,7 @@ data class Job(
      * url to call when job is anchored
      */
     val callBackUrl: String? = null,
+    val callBackStatus: NotificationStatusType,
 
     /**
      * Hash of root element

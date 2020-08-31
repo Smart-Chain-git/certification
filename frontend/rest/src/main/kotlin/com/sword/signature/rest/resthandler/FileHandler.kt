@@ -12,7 +12,6 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.reactive.awaitFirstOrNull
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
@@ -35,7 +34,7 @@ class FileHandler(
         @PathVariable("fileId") fileId: String
     ): Proof {
         val proof: com.sword.signature.business.model.Proof =
-            fileService.getFileProof(requester = requester.account, fileId = fileId).awaitFirstOrNull()
+            fileService.getFileProof(requester = requester.account, fileId = fileId)
                 ?: throw EntityNotFoundException("file", fileId)
         return proof.toWeb()
     }

@@ -5,6 +5,7 @@ import SignaturesModule from "@/store/modules/SignatureModule"
 import JobsModule from "@/store/modules/JobsModule"
 import TokensModule from "@/store/modules/TokensModule"
 import store from "@/store/store"
+import StatModule from "@/store/modules/StatModule"
 
 const accounts = new AccountsModule({
     store,
@@ -33,6 +34,10 @@ const files = new FilesModule({
     accountsModule: accounts,
 })
 
+const stat = new StatModule({
+    store,
+    name: "stat",
+})
 
 const modules = {
     accounts,
@@ -40,6 +45,7 @@ const modules = {
     jobs,
     tokens,
     files,
+    stat,
 }
 
 export type Modules = typeof modules

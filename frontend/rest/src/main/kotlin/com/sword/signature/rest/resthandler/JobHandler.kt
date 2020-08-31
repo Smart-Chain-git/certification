@@ -3,6 +3,7 @@ package com.sword.signature.rest.resthandler
 
 import com.sword.signature.api.job.Job
 import com.sword.signature.api.job.JobFile
+import com.sword.signature.api.merkel.MerkelTree
 import com.sword.signature.business.exception.EntityNotFoundException
 import com.sword.signature.business.service.FileService
 import com.sword.signature.business.service.JobService
@@ -17,7 +18,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.reactive.awaitFirstOrNull
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
@@ -132,13 +132,31 @@ class JobHandler(
             ?: throw EntityNotFoundException("job", jobId)
         return flow {
             job.files?.forEach { leaf ->
-                val proof = fileService.getFileProof(requester = user.account, fileId = leaf.id).awaitFirstOrNull()
+                val proof = fileService.getFileProof(requester = user.account, fileId = leaf.id)
                     ?: throw EntityNotFoundException("file", leaf.id)
 
                 emit(leaf.toWeb(proof))
             }
         }
     }
+
+
+    @Operation(security = [SecurityRequirement(name = "bearer-key")])
+    @RequestMapping(
+        value = ["/jobs/{jobId}/merkelTree"],
+        produces = ["application/json"],
+        method = [RequestMethod.GET]
+    )
+    suspend fun merkelTree(
+        @AuthenticationPrincipal user: CustomUserDetails,
+        @Parameter(description = "job Id") @PathVariable(value = "jobId") jobId: String
+    ): MerkelTree {
+        val tree = jobService.getMerkelTree(requester = user.account, jobId = jobId)
+            ?: throw EntityNotFoundException("job", jobId)
+        return tree.toWeb()
+
+    }
+
 
 
 }

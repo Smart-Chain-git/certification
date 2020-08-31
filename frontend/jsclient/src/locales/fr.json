@@ -34,7 +34,7 @@
     "welcome": "Bienvenue sur application Tezos Digisign !",
     "content": "Grâce à cette application, vous serez capable de créer vos jobs et d'ajouter vos documents pour qu'ils soient signés. Vous pourrez également vérifier l'authenticité de vos documents.",
     "lastJobs": "Derniers jobs",
-    "documentsSigned": "documents signés",
+    "documents": "documents",
     "jobsCreated": "jobs créés",
     "jobsProcessed": "jobs éxécutés",
     "monthStatistics": "Statistiques de {0}",
@@ -89,6 +89,7 @@
       "date": "Date de création",
       "statusDate": "Date de statut",
       "status": "Statut",
+      "callBackStatus": "Status du callback",
       "docs": "Docs",
       "channel": "Canal",
       "block": "Blocks",
@@ -241,7 +242,7 @@
         "message": "Nous sommes désolés, le fichier de preuve a la mauvaise adresse du contract : {0}. Le serveur Digisign attend l'adresse de contrat suivante : {1}."
       },
       "internal_servor_error": {
-        "title": "Le serveur n'a pas pu traité votre demande",
+        "title": "Le serveur n'a pas pu traiter votre demande",
         "message": "Le serveur a rencontré une erreur interne lors du traitement de votre requête. Veuillez confirmer que le format du fichier de preuve est correct auprès du fournisseur."
       },
       "transaction_not_old_enough": {

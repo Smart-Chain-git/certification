@@ -97,6 +97,9 @@
                 <td class="text-center">{{ job.docsNumber }}</td>
                 <td class="text-center">{{ job.channelName }}</td>
                 <td class="text-center">
+                  <v-btn icon  @click="getTree(job.id)">
+                    <v-icon>mdi-file-tree</v-icon>
+                  </v-btn>
                   <v-btn icon @click="gotoDocument(job.id)">
                     <v-icon>description</v-icon>
                   </v-btn>
@@ -170,6 +173,7 @@
 import {tableFooter} from "@/plugins/i18n"
 import {FilterOption, PaginationOption} from "@/store/types"
 import {Component, Vue, Watch} from "vue-property-decorator"
+import {saveAs} from "file-saver"
 
 @Component
 export default class Jobs extends Vue {
@@ -274,5 +278,17 @@ export default class Jobs extends Vue {
     })
     this.$router.push("/documents/")
   }
+
+
+  private getTree(jobId: string) {
+    this.$modules.jobs.loadTree(jobId).then((tree) => {
+      const blob = new Blob([JSON.stringify(tree)],
+          {type: "application/json;charset=utf-8"})
+      saveAs(blob, jobId + "_tree.json")
+    })
+  }
+
+
+
 }
 </script>

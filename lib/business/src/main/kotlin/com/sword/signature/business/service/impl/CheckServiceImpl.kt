@@ -142,6 +142,11 @@ class CheckServiceImpl(
                     ?: throw CheckException.IncoherentData()
                 // Retrieve the signer.
                 val signer: AccountEntity? = accountRepository.findById(job.userId).awaitFirstOrNull()
+                    // Compute the file proof.
+                    val computedProof = fileService.getFileProof(adminAccount, treeElement.id!!)
+                        ?: throw CheckException.IncoherentData()
+                    // Retrieve the signer.
+                    val signer: AccountEntity? = accountRepository.findById(job.userId).awaitFirstOrNull()
 
                 return CheckResponse(
                     status = 1,
@@ -349,6 +354,16 @@ class CheckServiceImpl(
         val treeElement = documentsAndJob[0].first
         val job = documentsAndJob[0].second
 
+            // Check compliance
+            if (providedProof.transactionHash != job.transactionHash || !checkBranch(providedProof, treeElement)) {
+                return defaultResponse.get()
+            }
+            // Generate a fresh proof
+            val freshProof: Proof =
+                fileService.getFileProof(adminAccount, treeElement.id!!)
+                    ?: return defaultResponse.get()
+            // Retrieve the signer.
+            val signer: AccountEntity? = accountRepository.findById(job.userId).awaitFirstOrNull()
         // Check compliance
         if (providedProof.transactionHash != job.transactionHash || !checkBranch(providedProof, treeElement)) {
             return defaultResponse.get()
@@ -360,15 +375,16 @@ class CheckServiceImpl(
         // Retrieve the signer.
         val signer: AccountEntity? = accountRepository.findById(job.userId).awaitFirstOrNull()
 
-        return CheckResponse(
-            status = 1,
-            fileId = treeElement.id!!,
-            jobId = job.id,
-            signer = signer?.fullName,
-            timestamp = OffsetDateTime.now(),
-            trace = branchHashes,
-            proof = freshProof
-        )
+            return CheckResponse(
+                status = 1,
+                fileId = treeElement.id!!,
+                jobId = job.id,
+                signer = signer?.fullName,
+                timestamp = transaction.bigMapDiff[0].value.timestamp,
+                trace = branchHashes,
+                proof = freshProof
+            )
+        }
     }
 
 

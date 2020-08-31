@@ -37,9 +37,9 @@ class FileServiceImpl(
     @Value("\${tezos.urls.api.transaction:#{null}}") private val apiTransactionUrl: String?,
     @Value("\${tezos.urls.web.provider:#{null}}") private val webProviderUrl: String?
 ) : FileService {
-    override suspend fun getFileProof(requester: Account, fileId: String): Mono<Proof> {
+    override suspend fun getFileProof(requester: Account, fileId: String): Proof? {
 
-        val leafElement = treeElementRepository.findById(fileId).awaitFirstOrNull() ?: return Mono.empty()
+        val leafElement = treeElementRepository.findById(fileId).awaitFirstOrNull() ?: return null
         var job = jobRepository.findById(leafElement.jobId).awaitSingle()
 
         // Check right to perform operation.
@@ -114,7 +114,7 @@ class FileServiceImpl(
             urlNodes.add(URLNode.fromWebProviderUrl(url = it))
         }
 
-        val proof = Proof(
+        return Proof(
             signatureDate = job.timestamp,
             filename = leafElement.metadata?.fileName,
             algorithm = job.algorithm,
@@ -130,8 +130,6 @@ class FileServiceImpl(
             creatorAddress = job.contractAddress?.let { getContractCreator(it) },
             urls = urlNodes
         )
-
-        return Mono.just(proof)
     }
 
 
@@ -164,7 +162,7 @@ class FileServiceImpl(
 
         val fileCriteria = buildFileCriteria(filter)
         val files = treeElementRepository.findAll(fileCriteria.toPredicate(), pageable.sort)
-        val jobs = hashMapOf<String, Job>();
+        val jobs = hashMapOf<String, Job>()
 
         return files.asFlow().paginate(pageable)
             .map { it.toBusiness(getJob(it.jobId, jobs)) as TreeElement.LeafTreeElement }
