@@ -66,9 +66,6 @@ tezos:
     admin:
       publicKey: "TO_REPLACE_WITH_YOUR_PUBLIC_KEY" # To replace with your public key.
       secretKey: "TO_REPLACE_WITH_YOUR_SECRET_KEY" # To replace with your secret key.
-    nleriche:
-      publicKey: "TO_REPLACE_WITH_YOUR_PUBLIC_KEY" # To replace with your public key.
-      secretKey: "TO_REPLACE_WITH_YOUR_SECRET_KEY" # To replace with your secret key.
   contract:
     address: "KT1Uz3ZPgVqKYTt8jJpbeRaZkq8b8PqFkRyg" # Carthagenet smart contract address.
   node:
