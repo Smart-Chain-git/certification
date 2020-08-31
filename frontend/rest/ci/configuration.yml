@@ -35,6 +35,7 @@ tezos:
     url: "http://tzindex:8000"
   validation:
     minDepth: 30
+    minAge: 2h
   chain: "TEZOS_CARTHAGENET"
   urls:
     api:
