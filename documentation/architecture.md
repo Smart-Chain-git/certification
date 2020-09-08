@@ -34,6 +34,7 @@
 
 Setup the database, mail server, and local sandbox tezos node:
 * Launch mongoDB, mongo express (admin UI), fakeSMTP, and sandbox tezos node docker containers: `docker-compose up -d`
+* Please be aware that it requires some ports on the development machine to be available. You can change the `docker-compose.yml` file to use other ports. You may need to update the REST server and daemon `application.yml` to match the updated ports.
 * Access the mongoDB administration: [http://localhost:8081](http://localhost:8081)
 * Access the fakeSMTP UI: [http://localhost:5080](http://localhost:5080)
 * Reach the sandbox tezos node: [http://localhost:18731](http://localhost:18731)
@@ -42,15 +43,18 @@ Originate the smart contract in the local sandbox tezos node
 * Install the tezos-client, if not done already: `scripts/install_tezos_client.sh`
 * Originate the smart contract: `(cd contract; make originate)`
 Please note that the node data do not persist so if the node container restarts, the smart contract needs to be originated again.
+* Please note that your tezos client needs to be able to connect to a tezos node using HTTP so any existing configuration may conflict with this behavior. Please refer to the tezos documentation if you encounter that issue.
 * Optional: to update the client configuration with the current node host and port in order to execute other commands: `(cd contract; make updateClient)`
 
 Run the daemon:
 * Edit the configuration files: `backend/daemon/src/main/resources/application.yml`
 * Launch the web server: `./gradlew :backend:daemon:bootrun`
+* The **bootrun** command won't terminate until you chose to stop the daemon so you have to open a terminal per service.
 
 Run the REST server:
 * Edit the configuration files: `frontend/rest/src/main/resources/application.yml`
 * Launch REST web server: `./gradlew :frontend:rest:bootrun`
+* The **bootrun** command won't terminate until you chose to stop the REST server.
 * Reach the REST API: [http://localhost:9090](http://localhost:9090)
 * Access the Swagger documentation: [SwaggerUI](http://localhost:9090/swagger-ui.html)
 
