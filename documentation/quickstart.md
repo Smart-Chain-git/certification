@@ -3,7 +3,7 @@
 # Tezos Digisign - Quick Start
 
 This quick start deployment does not need any compilation. It uses the docker images in docker hub.
-To build the VM with the requirement, it's possible to use vangrant+VirtualBox. A vagrant file with the right external port and ansible script is available: [deployment](../deployment/tezos-node-light).  
+To build the VM with the requirement, it's possible to use vagrant+VirtualBox. A vagrant file with the right external port and ansible script is available: [deployment](../deployment/vagrant).  
 This deployment is based on the sandbox Tezos node.
 
 ## Requirements
@@ -13,7 +13,7 @@ This deployment is based on the sandbox Tezos node.
 ## VM deployment with vagrant
 
 VirtualBox and Vagrant must have been installed on your computer.
-After downloading [deployment](../deployment/tezos-node-light), go into the tezos-node-light and launch the command:  
+After downloading [deployment](../deployment/vagrant), go into the tezos-node-light and launch the command:  
 `vagrant up`
   
 connect to the VM:  
