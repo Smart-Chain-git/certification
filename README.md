@@ -1,4 +1,4 @@
-[Index](./README.md) | [Architecture](./architecture.md) | [Smart contract](contract/README.md) | [Docker Deployment](documentation/DockerDeployment.md) | [Quick Start](scripts/QuickStart.md)
+[Index](./README.md) | [Architecture](documentation/architecture.md) | [Smart contract](contract/README.md) | [Docker Deployment](documentation/docker-deployment.md) | [Quick Start](documentation/quickstart.md)
 
 # Tezos Digisign
 

@@ -1,4 +1,4 @@
-[Index](../README.md) | [Smart contract](../contract/README.md) | [Docker Deployment](./DockerDeployment.md)
+[Index](../README.md) | [Architecture](./architecture.md) | [Smart contract](../contract/README.md) | [Docker Deployment](./docker-deployment.md) | [Quick Start](./quickstart.md)
 
 # Docker Deployment
 

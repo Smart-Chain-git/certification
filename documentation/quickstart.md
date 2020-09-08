@@ -1,3 +1,5 @@
+[Index](../README.md) | [Architecture](./architecture.md) | [Smart contract](../contract/README.md) | [Docker Deployment](./docker-deployment.md) | [Quick Start](./quickstart.md)
+
 # Tezos Digisign - Quick Start
 
 This quick start deployment does not need any compilation. It uses the docker images in docker hub.
