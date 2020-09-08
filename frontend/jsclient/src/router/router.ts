@@ -18,6 +18,7 @@ import {
     JobDetail,
     Jobs,
     Login,
+    QuestionAndAnswer,
     ReceptionTemplate,
     Resources,
     SignatureCheck,
@@ -153,6 +154,10 @@ const router = new Router({
                     path: "signature-request",
                     component: SignatureHandler,
                     beforeEnter: checkUserHasPubKey,
+                },
+                {
+                    path: "question-and-answer",
+                    component: QuestionAndAnswer,
                 },
                 {
                     path: "resources",

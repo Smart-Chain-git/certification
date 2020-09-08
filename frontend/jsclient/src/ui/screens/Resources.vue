@@ -1,16 +1,39 @@
 <template>
-    <div>Resources</div>
+  <Card>
+    <vue-markdown id="markdown" :source="markdown"/>
+  </Card>
 </template>
 
 <script lang="ts">
-    import {Component, Vue} from "vue-property-decorator"
+import {Component, Vue} from "vue-property-decorator"
+import VueMarkdown from "vue-markdown"
+// @ts-ignore
+import ResourcesMarkdown from "@/documentation/Resources.md"
 
-    @Component
-    export default class Resources extends Vue {
-
-    }
+@Component({
+  components: {
+    VueMarkdown,
+  },
+})
+export default class Resources extends Vue {
+  private get markdown() {
+    return ResourcesMarkdown
+  }
+}
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+#markdown {
+  padding: 2em;
 
+  ::v-deep {
+    h1 {
+      color: var(--var-color-blue-sword);
+    }
+
+    ul {
+      margin-top: 1em;
+    }
+  }
+}
 </style>

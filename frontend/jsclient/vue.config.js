@@ -19,6 +19,12 @@ module.exports = {
         config.resolve
             .plugin('tsconfig-paths')
             .use(require('tsconfig-paths-webpack-plugin'))
+        // Add rule to load markdown files
+        config.module
+            .rule("markdown")
+            .test(/\.md$/i)
+            .use("raw-loader")
+            .loader("raw-loader")
     },
     outputDir: 'build/dist',
     transpileDependencies: ['vuetify'],

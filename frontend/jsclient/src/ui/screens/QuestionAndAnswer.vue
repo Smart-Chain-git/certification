@@ -4,7 +4,26 @@
   </Card>
 </template>
 
+<script lang="ts">
+import {Component, Vue} from "vue-property-decorator"
+import VueMarkdown from "vue-markdown"
+// @ts-ignore
+import QnAMarkdown from "@/documentation/QnA.md"
+
+@Component({
+  components: {
+    VueMarkdown,
+  },
+})
+export default class QuestionAndAnswer extends Vue {
+  private get markdown() {
+    return QnAMarkdown
+  }
+}
+</script>
+
 <style lang="scss" scoped>
+
 #markdown {
   padding: 2em;
 
@@ -19,22 +38,3 @@
   }
 }
 </style>
-
-<script lang="ts">
-import {Component, Vue} from "vue-property-decorator"
-import VueMarkdown from "vue-markdown"
-// @ts-ignore
-import ContactMarkdown from "@/documentation/Contact.md"
-
-@Component({
-  components: {
-    VueMarkdown,
-  },
-})
-export default class Contact extends Vue {
-  private get markdown() {
-    return ContactMarkdown
-  }
-}
-</script>
-

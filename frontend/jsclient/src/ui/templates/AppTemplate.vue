@@ -54,6 +54,12 @@
                 </v-list-item-action>
                 <v-list-item-title>{{ $t('menu.signatureCheck') }}</v-list-item-title>
               </v-list-item>
+              <v-list-item ref="side-menu-question-and-answer" to="/question-and-answer">
+                <v-list-item-action class="centered-icon">
+                  <v-icon>question_answer</v-icon>
+                </v-list-item-action>
+                <v-list-item-title>{{ $t('menu.question-and-answer') }}</v-list-item-title>
+              </v-list-item>
               <v-list-item ref="side-menu-resources" to="/resources">
                 <v-list-item-action class="centered-icon">
                   <v-icon>info</v-icon>
@@ -134,6 +140,13 @@
               <v-icon color="var(--var-color-orange-sword)">check_circle_outline</v-icon>
             </v-list-item-action>
             <v-list-item-title>{{ $t('menu.signatureCheck') }}</v-list-item-title>
+          </v-list-item>
+
+          <v-list-item ref="side-menu-question-and-answer" to="/question-and-answer">
+            <v-list-item-action>
+              <v-icon color="var(--var-color-orange-sword)">question_answer</v-icon>
+            </v-list-item-action>
+            <v-list-item-title>{{ $t('menu.question-and-answer') }}</v-list-item-title>
           </v-list-item>
 
           <v-list-item ref="side-menu-resources" to="/resources">
