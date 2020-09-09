@@ -63,3 +63,28 @@ If the cost becomes negligible, the interest in signing the document becomes maj
 |Construction permit|Present a document whose authenticity can be verified by all stakeholders  
 |Photography|Generate proof of anteriority (timestamped and signed) to defend intellectual property on a photo to be published  
 
+
+## Tezos Digisign : an open source project  
+
+This project has been developed by a CORE TEAM of skilled collaborators of the SWORD GROUP ([www.Sword-Group.com](http://www.Sword-Group.com)) and Blockchain EZ ([www.Blockchain-ez.com](http://www.Blockchain-ez.com)) companies, with the support of Nomadic Labs ([www.nomadic-labs.com](http://www.nomadic-labs.com)) and the Tezos Foundation ([www.tezos.foundation](http://www.tezos.foundation))  
+  
+None of these companies are responsible for the usage made by third parties of the Tezos DigiSign project. Sword Group, Blockchain EZ, Nomadic Labs and Tezos Foundation are brands that cannot be used without the written approval of the said organizations.  
+  
+If you want to be part of this CORE TEAM, please contact us (TEZOSDIGISIGN@sword-group.com).  
+  
+Tezos DigiSign is an Open Source project complying with the definition given by the Open Source Initiative, as in its 1.9 version ([https://opensource.org/docs/osd](https://opensource.org/docs/osd)). 
+  
+However, any organization using Tezos DigiSign must:
+* Declare its usage to TEZOSDIGISIGN@sword-group.com  
+* Accept its name to be communicated as a user of the solution for communication purposes by the core development team
+  * If  this is legally complicated for  your organization, details can be discussed : TEZOSDIGISIGN@sword-group.com
+* Include in your own software solution / website using Tezos DigiSign and its related documentation a reference to this gitlab page 
+  
+If you like it, use it and modify it, we would be thankful if you could provide to the community any improvement you make to the solution.  
+  
+If you need help for implementing the solution, or possibly customizing it, please contact the CORE TEAM (TEZOSDIGISIGN@sword-group.com).  
+
+
+
+
+
