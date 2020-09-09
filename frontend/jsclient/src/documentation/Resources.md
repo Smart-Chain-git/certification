@@ -85,6 +85,3 @@ If you like it, use it and modify it, we would be thankful if you could provide 
 If you need help for implementing the solution, or possibly customizing it, please contact the CORE TEAM (TEZOSDIGISIGN@sword-group.com).  
 
 
-
-
-
