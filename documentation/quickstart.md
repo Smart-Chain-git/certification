@@ -25,7 +25,7 @@ connect to the VM:
 
 Retrieve the code digisign  
 `git clone https://gitlab.com/sword-edi/tezos-digisign`  
-`cd tezos-servers`  
+`cd tezos-digisign`  
 
 Launch the Tezos nodes (sandbox)  
 `docker-compose -f docker-compose.sandbox.d.yml up -d node`
