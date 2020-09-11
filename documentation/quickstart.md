@@ -13,7 +13,7 @@ This deployment is based on the sandbox Tezos node.
 ## VM deployment with vagrant
 
 VirtualBox and Vagrant must have been installed on your computer.
-After downloading [deployment](../deployment/vagrant), go into the tezos-node-light and launch the command:  
+After downloading [deployment](../deployment/vagrant), go into the directory vagrant and launch the command:  
 `vagrant up`
   
 connect to the VM:  
