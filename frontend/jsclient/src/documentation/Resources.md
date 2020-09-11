@@ -1,4 +1,31 @@
-# Resources
+<style type="text/css">
+
+h2 {
+	margin-top: 20px;
+	margin-bottom: 10px;
+}
+
+h3 {
+	margin-top: 8px;
+	margin-bottom: 2px;
+}
+
+
+table {
+  border-collapse: collapse;
+}
+
+table th {
+  border: 1px solid black;
+}
+
+table td {
+  border: 1px solid black;
+  padding: 2px
+}
+</style>
+
+# About
 
 ## Introduction
 
@@ -49,7 +76,6 @@ If the cost becomes negligible, the interest in signing the document becomes maj
 |Press and media|Prove a press release is original and fight fake news
 
 
-
 ### B2C use cases
 
 |Domain|Comment|
@@ -83,5 +109,6 @@ However, any organization using Tezos DigiSign must:
 If you like it, use it and modify it, we would be thankful if you could provide to the community any improvement you make to the solution.  
   
 If you need help for implementing the solution, or possibly customizing it, please contact the CORE TEAM (TEZOSDIGISIGN@sword-group.com).  
+
 
 

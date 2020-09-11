@@ -1,3 +1,30 @@
+<style type="text/css">
+
+h2 {
+	margin-top: 20px;
+	margin-bottom: 10px;
+}
+
+h3 {
+	margin-top: 8px;
+	margin-bottom: 2px;
+}
+
+
+table {
+  border-collapse: collapse;
+}
+
+table th {
+  border: 1px solid black;
+}
+
+table td {
+  border: 1px solid black;
+  padding: 2px
+}
+</style>
+
 # About
 
 ## Introduction
@@ -47,7 +74,6 @@ If the cost becomes negligible, the interest in signing the document becomes maj
 |Diploma and certification|Prove the authenticity of a diploma or professional accreditation (for accountant, certified auditor, doctor, …)  
 |Research and development|Generate proof of anteriority on R&D documents that can be used when filing a patent  
 |Press and media|Prove a press release is original and fight fake news
-
 
 
 ### B2C use cases
