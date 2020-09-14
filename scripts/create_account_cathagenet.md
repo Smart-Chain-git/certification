@@ -1,6 +1,4 @@
-[Index](../README.md) | [Architecture](./architecture.md) | [Smart contract](../contract/README.md) | [Docker Deployment](./docker-deployment.md) | [Quick Start](./quickstart.md)
-
-# Tezos Digisign - Quick Start
+# Creation of users
 
 The create_account_cathagenet.sh scripts enables to create conveniently one user account.
 
@@ -17,4 +15,5 @@ Go to the Tezos Faucet [https://faucet.tzalpha.net/](https://faucet.tzalpha.net/
 Retrieve the json file and put it on your server  
   
 Launch the script 
-`create_account_cathagenet.sh <url> <token> <account> <handle> <fullname> <password>`
+`create_account_cathagenet.sh <url (url of the Tezos Digisign server)> <token> <account> <handle (name of the json file)> <fullname> <password>`  
+The password muste be 10 characters length and contains one uppercase letter, one lowercase letter, one number and one special character.
